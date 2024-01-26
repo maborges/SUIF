@@ -1,0 +1,96 @@
+/*==============================================================================================================*/
+body{
+margin-bottom:0px;
+margin-left:0px;
+margin-right:0px;
+margin-top:0px;
+font-family:Arial, Verdana, sans-serif;
+font-style:normal;
+}
+
+div#centro
+{ font-style:normal;
+}
+
+div#etiqueta{
+	width:265px;
+/*	border-bottom: 3px solid #000000;
+	border-top: 3px solid #000000;*/
+}
+
+
+div#etiqueta_peq{
+	width:265px;
+	border-bottom: 1px solid #000000;
+	border-top: 1px solid #000000;
+}
+
+
+div#placa{
+	width:535px;
+
+}
+
+.botao_invisivel{
+height:0px;
+visibility:hidden;
+}
+
+
+
+.recorte_acima {
+	border-top: 1px solid #000000;
+}
+
+.recorte_abaixo {
+	border-bottom: 1px solid #000000;
+}
+
+.borda_banco {
+	border: 2px solid #000000;
+}
+
+#tabela_extrato td {
+	border: 1px solid #000000;
+}
+
+#tabela_cotacao_1 td {
+	border: 2px solid #000000;
+}
+
+#tabela_cotacao_2 td {
+	border-bottom: 2px solid #000000;
+}
+
+
+div#tabela_1
+{
+	float:left;
+	height:26px;
+	border:0px solid #000;
+	color:#666;
+	font-size:11px;
+	text-align:right;
+	font-style:normal;
+}
+
+div#tabela_2
+{
+	float:left;
+	height:26px;
+	border:0px solid #000;
+	color:#666;
+	font-size:11px;
+	font-style:normal;
+}
+
+div#espaco_1
+{
+	float:left;
+	height:3px;
+	border:0px solid #000;
+	color:#666;
+	font-size:11px;
+	text-align:right;
+	font-style:normal;
+}
