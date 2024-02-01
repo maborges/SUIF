@@ -1,7 +1,10 @@
 <?php
+
+require_once("sankhya/Sankhya");
 include ("../../includes/config.php"); 
 include ("../../includes/conecta_bd.php");
 include ("../../includes/valida_cookies.php");
+
 $pagina = "cadastro_1_formulario";
 $titulo = "Cadastro de Pessoa";
 $modulo = "cadastros";
@@ -41,8 +44,16 @@ $numero_conta_form = $_POST["numero_conta_form"];
 $tipo_conta_form = $_POST["tipo_conta_form"];
 $tipo_chave_pix_form = $_POST["tipo_chave_pix_form"];
 $chave_pix_form = $_POST["chave_pix_form"];
+
+$result = Sankhya::login();
+
 // ========================================================================================================
 
+if(array_key_exists('login', $_POST)) {
+	echo "<script>console.log('testestestesetse')</script>";
+	$result = Sankhya::login();
+    echo "<script>console.log('sasasasasasasas')</script>";
+}
 
 // ====== MONTA MENSAGEM ===================================================================================
 if ($permissao[5] != "S")
@@ -810,8 +821,17 @@ jQuery(function($){
 	<button type='submit' class='botao_2' style='margin-left:10px; width:180px'>Cancelar</button>
 	</a>
 	</div>";}
+	
 
 	?>
+    <form method="post" action="<?php echo"$servidor/$diretorio_servidor"; ?>/cadastros/pessoas/cadastro_1_formulario.php">
+        <input type="submit" name="login"
+                class="button" value="login" />
+          
+        <input type="submit" name="button2"
+                class="button" value="Button2" />
+    </form>	
+
 </div>
 
 
