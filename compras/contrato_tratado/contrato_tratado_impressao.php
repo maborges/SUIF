@@ -201,7 +201,12 @@ else
 <body onLoad="imprimir()">
 
 <div id="centro" style="width:750px; border:0px solid #000; float:left">
-<div id="centro" style="width:640px; height:40px; border:0px solid #000; margin-top:60px; margin-left:80px; font-size:17px" align="center">
+
+<div id="centro" style="width:640px; height:20px; border:0px solid #000; margin-top:60px; margin-left:80px; font-size:17px" align="left">
+<?php echo "<b>N.&ordm; $numero_contrato</b>"; ?>
+</div>
+
+<div id="centro" style="width:640px; height:35px; border:0px solid #000; margin-left:80px; font-size:17px" align="center">
 <?php
 echo "<b>CONTRATO DE COMPRA E VENDA DE $produto_print</br>EM GRAOS CR&Uacute;S COM ENTREGA FUTURA</b>";
 ?>
@@ -365,7 +370,7 @@ Se a compradora tiver que utilizar-se de meios judiciais ou legais para receber 
 <!-- As partes elegem o foro de <?php // echo"$cidade_config"; ?>-ES, para dirimir quaisquer d&uacute;vidas do presente contrato, renunciado desde j&aacute;, a qualquer outro, por mais privilegiado que seja.-->
 </div>
 
-<div id="centro" style="width:640px; height:40px; border:0px solid #000; margin-left:80px;"></div>
+<div id="centro" style="width:640px; height:20px; border:0px solid #000; margin-left:80px;"></div>
 
 <div id="centro" style="width:640px; height:50px; border:0px solid #000; margin-top:0px; margin-left:80px; font-size:13px" align="center">
 <?php echo $cidade_config . "-" . $uf_config . ", " . $dia . " de " . $meses [$mes-1] . " de " . $ano; ?>
