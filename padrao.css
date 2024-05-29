@@ -1206,16 +1206,61 @@ div#rodape /* SERÁ INATIVADO */
 	color:#003466;
 }
 
-/* By Borges - Estilo da tag Dialog */
-dialog{
-	padding: 0;
-	border: 0px;
-	border-radius: 7px;
-	box-shadow: 0 0 px black;
-	flex-direction:column;
-	padding: 10px;
+/* By Borgus - Estilo da tag Dialog */
+dialog::blackdrop {
+	background-color: rgba(0, 0, 0, 0.3);
 }
 
-dialog::blackdrop{
-	background-color: rgba(0, 0, 0, 0.5);
+dialog {
+	padding: 10px;
+	border: none;
+	border-radius: .5rem;
+	box-shadow: 0 0 1em rgba(0 0 0 / .3);
+	flex-direction: column;
 }
+
+input:read-only {
+    background-color:#EEE;
+}
+
+.badge {
+	display: inline-block;
+	padding: 0.25em 0.5em;
+	font-size: 75%;
+	font-weight: 700;
+	line-height: 1;
+	text-align: center;
+	/*	white-space:  nowrap; */
+	vertical-align: baseline;
+	border-radius: 0.25rem;
+  }
+  
+  .badge-warning {
+	color: #ffffff;
+	background-color: #f0ad4e; /* Cor de fundo de um aviso de Bootstrap */
+  }
+
+  .badge-primary {
+	color: #ffffff;
+	background-color: #007bff; /* Cor de fundo da badge primária */
+  }
+  
+  .badge-secondary {
+	color: #ffffff;
+	background-color: #6c757d; /* Cor de fundo da badge secundária */
+  }
+  
+  .badge-success {
+	color: #ffffff;
+	background-color: #28a745; /* Cor de fundo da badge de sucesso */
+  }
+  
+  .badge-danger {
+	color: #ffffff;
+	background-color: #dc3545; /* Cor de fundo da badge de perigo */
+  }
+  
+  .badge-info {
+	color: #ffffff;
+	background-color: #17a2b8; /* Cor de fundo da badge de informação */
+  }

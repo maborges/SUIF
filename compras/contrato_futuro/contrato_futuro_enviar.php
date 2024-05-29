@@ -2,6 +2,7 @@
 include ('../../includes/config.php'); 
 include ('../../includes/conecta_bd.php');
 include ('../../includes/valida_cookies.php');
+include_once("../../helpers.php");
 $pagina = 'contrato_futuro_enviar';
 $menu = 'contratos';
 $titulo = 'Contrato Futuro';
@@ -17,44 +18,21 @@ $contador_num_compra = $numero_compra + 1;
 $altera_contador = mysqli_query ($conexao, "UPDATE configuracoes SET contador_numero_compra='$contador_num_compra'");
 // ========================================================================================================
 
-	
-// ============================================== CONVERTE DATA ====================================================	
-// Função para converter a data de formato nacional para formato americano. Muito útil para inserir data no mysql
-function ConverteData($data){
-
-	if (strstr($data, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-// =================================================================================================================
-
-
-// ============================================== CONVERTE VALOR ====================================================	
-function ConverteValor($valor){
-	$valor_1 = str_replace(".", "", $valor);
-	$valor_2 = str_replace(",", ".", $valor_1);
-	return $valor_2;
-}
-// =================================================================================================================
-
 
 // ======= RECEBENDO POST =================================================================================
 $filial = $filial_usuario;
 $numero_contrato = $_POST["numero_contrato"];
 $fornecedor = $_POST["fornecedor"];
 $cod_produto = $_POST["cod_produto"];
-$data_contrato = ConverteData($_POST["data_contrato"]);
+$data_contrato = Helpers::ConverteData($_POST["data_contrato"]);
 $data_contrato_2 = $_POST["data_contrato"];
-$vencimento = ConverteData($_POST["vencimento"]);
+$vencimento = Helpers::ConverteData($_POST["vencimento"]);
 $vencimento_2 = $_POST["vencimento"];	
 $quantidade = intval($_POST["quantidade"]);
 $quant_quilo_aux = intval($_POST["quantidade_quilo"]);
 $quantidade_adquirida = $_POST["quantidade_adquirida"];
 $cod_tipo = $_POST["cod_tipo"];
-$preco_produto = ConverteValor($_POST["preco_produto"]);
+$preco_produto = Helpers::ConverteValor($_POST["preco_produto"]);
 $preco_produto_print = $_POST["preco_produto"];
 
 if ($_POST["umidade"] == "")

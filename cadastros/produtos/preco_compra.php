@@ -2,6 +2,8 @@
 include ("../../includes/config.php"); 
 include ("../../includes/conecta_bd.php");
 include ("../../includes/valida_cookies.php");
+include ("../../helpers.php");
+
 $pagina = "preco_compra";
 $titulo = "Pre&ccedil;o de Compra";	
 $modulo = "cadastros";
@@ -9,27 +11,18 @@ $menu = "cadastro_produtos";
 // ================================================================================================================
 
 
-// ====== CONVERTE VALOR ==========================================================================================
-function ConverteValor($valor_x){
-	$valor_1 = str_replace("R$ ", "", $valor_x); //tira o símbolo
-	$valor_2 = str_replace(".", "", $valor_1); //tira o ponto
-	$valor_3 = str_replace(",", ".", $valor_2); //troca vírgula por ponto
-	return $valor_3;
-}
-// ================================================================================================================
-
-
 // ====== RECEBE POST ==============================================================================================
-$botao = $_POST["botao"];
-$codigo_w = $_POST["codigo_w"];
-$valor_maximo_form = ConverteValor($_POST["valor_maximo_form"]);
-$preco_print = $_POST["valor_maximo_form"];
-$nome_form = $_POST["nome_form"];
-$nome_imagem_produto = $_POST["nome_imagem_produto"];
+$botao = $_POST["botao"] ?? '';
+$codigo_w = $_POST["codigo_w"] ?? '';
+$valor_maximo_form = Helpers::ConverteValor($_POST["valor_maximo_form"] ?? '');
+$preco_print = $_POST["valor_maximo_form"] ?? '';
+$nome_form = $_POST["nome_form"] ?? '';
+$nome_imagem_produto = $_POST["nome_imagem_produto"] ?? '';
 
 $usuario_cadastro_form = $nome_usuario_print;
 $data_cadastro_form = date('Y-m-d', time());
 $hora_cadastro_form = date('G:i:s', time());
+$msg = '';
 // =================================================================================================================
 
 
@@ -278,8 +271,9 @@ else
 
 <table class='tabela_cabecalho'>
 <tr>
-<td width='100px'>C&oacute;digo</td>
-<td width='350px'>Nome</td>
+<td width='75px'>C&oacute;digo</td>
+<td width='75px'>Sankhya</td>
+<td width='300px'>Nome</td>
 <td width='130px'>Pre&ccedil;o</td>
 <td width='80px'>Unidade</td>
 <td width='350px'>&Uacute;ltima atualiza&ccedil;&atilde;o</td>
@@ -298,6 +292,7 @@ $aux_registro = mysqli_fetch_row($busca_registro);
 
 // ====== DADOS DO USUÁRIO ============================================================================
 $codigo_w = $aux_registro[0];
+$idSankhya_w = $aux_registro[42];
 $nome_w = $aux_registro[1];
 $cod_unidade_w = $aux_registro[7];
 $preco_maximo_w = "R$ " . number_format($aux_registro[21],2,",",".");
@@ -348,11 +343,12 @@ else
 
 
 echo "
-<td width='100px' align='center'>$codigo_w</td>
-<td width='350px' align='left'><div style='height:14px; margin-left:7px; overflow:hidden'>$nome_w</div></td>
-<td width='130px' align='center'>$preco_maximo_w</td>
-<td width='80px' align='center'>$un_descricao</td>
-<td width='350px' align='left'><div style='height:14px; margin-left:7px; overflow:hidden'>$dados_alteracao_w</div></td>";
+	<td width='75px' align='center'>$codigo_w</td>
+	<td width='75px' align='center'>$idSankhya_w</td>
+	<td width='300px' align='left'><div style='height:14px; margin-left:7px; overflow:hidden'>$nome_w</div></td>
+	<td width='130px' align='center'>$preco_maximo_w</td>
+	<td width='80px' align='center'>$un_descricao</td>
+	<td width='350px' align='left'><div style='height:14px; margin-left:7px; overflow:hidden'>$dados_alteracao_w</div></td>";
 
 // ====== BOTAO EDITAR ===================================================================================================
 	if ($permite_editar == "SIM")
@@ -363,6 +359,7 @@ echo "
 		<input type='hidden' name='pagina_mae' value='$pagina'>
 		<input type='hidden' name='botao' value='ALTERACAO'>
 		<input type='hidden' name='codigo_w' value='$codigo_w'>
+		<input type='hidden' name='idSankhya_w' value='$idSankhya_w'>
 		<input type='hidden' name='nome_form' value='$nome_w'>
 		<input type='hidden' name='valor_maximo_form' value='$preco_maximo_w'>
 		<input type='hidden' name='nome_imagem_produto' value='$nome_imagem_produto'>

@@ -1,5 +1,5 @@
 <?php
-include ("../../includes/conecta_bd.php");
+include("conecta_bd.php");
 
 // ====== BUSCA COOKIES ==========================================================================================
 if(isset($_COOKIE["u_suif"]))
@@ -12,6 +12,8 @@ if(isset($_COOKIE["filial_suif"]))
 	$filial_usuario = $_COOKIE["filial_suif"];
 if(isset($_COOKIE["nome_filial"]))
 	$nome_filial = $_COOKIE["nome_filial"];
+if(isset($_COOKIE["u_sankhya"]))
+	$idUserSankhya = $_COOKIE["u_sankhya"];
 // ===============================================================================================================
 
 
@@ -32,6 +34,7 @@ if(empty($username) or empty($senha_usuario))
 // ====== BUSCA CONFIGURAÇÕES DO SISTEMA =========================================================================
 $busca_config = mysqli_query ($conexao, "SELECT * FROM configuracoes");
 $config = mysqli_fetch_row($busca_config);
+$estoqueMascara = $config[30];
 // ===============================================================================================================
 
 

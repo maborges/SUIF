@@ -3,19 +3,12 @@
 include ('../../includes/config.php'); 
 include ('../../includes/conecta_bd.php');
 include ('../../includes/valida_cookies.php');
+include ("../../helpers.php");
+
 $pagina = 'romaneio_3_enviar';
 $titulo = 'Movimenta&ccedil;&atilde;o de Estoque - Romaneio';
 $modulo = 'estoque';
 $menu = 'movimentacao';
-// ================================================================================================================
-
-
-// ====== CONVERTE PESO ==========================================================================================
-function ConvertePeso($peso){
-	$peso_1 = str_replace(".", "", $peso);
-	$peso_2 = str_replace(",", "", $peso_1);
-	return $peso_2;
-}
 // ================================================================================================================
 
 
@@ -30,8 +23,8 @@ $cod_produto_form = $_POST["cod_produto_form"];
 $lote_form = $_POST["lote_form"];
 $movimentacao_form = $_POST["movimentacao_form"];
 $tipo_prod_form = $_POST["tipo_prod_form"];
-$peso_form = ConvertePeso($_POST["peso_form"]);
-$quant_bag_form = ConvertePeso($_POST["quant_bag_form"]);
+$peso_form = Helpers::ConvertePeso($_POST["peso_form"]);
+$quant_bag_form = Helpers::ConvertePeso($_POST["quant_bag_form"]);
 $umidade_form = $_POST["umidade_form"];
 $densidade_form = $_POST["densidade_form"];
 $impureza_form = $_POST["impureza_form"];

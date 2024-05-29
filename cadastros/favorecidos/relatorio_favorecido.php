@@ -10,11 +10,12 @@ $menu = "cadastro_favorecidos";
 
 
 // ======= RECEBENDO POST =========================================================================================
-$botao = $_POST["botao"];
-$pagina_mae = $_POST["pagina_mae"];
+$botao = $_POST["botao"] ?? '';
+$pagina_mae = $_POST["pagina_mae"] ?? '';
 
-$banco_busca = $_POST["banco_busca"];
-$status_busca = $_POST["status_busca"];
+$banco_busca = $_POST["banco_busca"] ?? '';
+$status_busca = $_POST["status_busca"] ?? '';
+$msg = '';
 // ================================================================================================================
 
 
@@ -36,6 +37,7 @@ else
 
 
 // ====== BUSCA CADASTRO ==========================================================================================
+$linha_favorecido = 0;
 if ($botao == "BUSCAR")
 {
 	$busca_favorecido = mysqli_query ($conexao, "SELECT * FROM cadastro_favorecido WHERE $mysql_banco AND $mysql_status ORDER BY nome");

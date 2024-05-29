@@ -1,22 +1,12 @@
 <?php
 include ("../../includes/config.php"); 
 include ("../../includes/valida_cookies.php");
+include ("../../helpers.php");
+
 $pagina = "relatorio_selec_fornecedor";
 $titulo = "Romaneios de Sa&iacute;da";
 $modulo = "estoque";
 $menu = "saida";
-// ================================================================================================================
-
-
-// ====== CONVERTE DATA ===========================================================================================
-function ConverteData($data_x){
-	if (strstr($data_x, "/"))
-	{
-	$d = explode ("/", $data_x);
-	$rstData = "$d[2]-$d[1]-$d[0]";
-	return $rstData;
-	}
-}
 // ================================================================================================================
 
 
@@ -25,9 +15,9 @@ $botao = $_POST["botao"];
 $data_hoje = date('d/m/Y');
 $nome_form = $_POST["nome_form"];
 $data_inicial_br = $_POST["data_inicial_busca"];
-$data_inicial_busca = ConverteData($_POST["data_inicial_busca"]);
+$data_inicial_busca = Helpers::ConverteData($_POST["data_inicial_busca"]);
 $data_final_br = $_POST["data_final_busca"];
-$data_final_busca = ConverteData($_POST["data_final_busca"]);
+$data_final_busca = Helpers::ConverteData($_POST["data_final_busca"]);
 $fornecedor_pesquisa = $_POST["fornecedor_pesquisa"];
 $nome_fornecedor = $_POST["nome_fornecedor"];
 $cod_produto_busca = $_POST["cod_produto_busca"];

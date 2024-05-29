@@ -3,43 +3,12 @@
 include ('../../includes/config.php'); 
 include ('../../includes/conecta_bd.php');
 include ('../../includes/valida_cookies.php');
+include ("../../helpers.php");
+
 $pagina = 'nota_fiscal';
 $titulo = 'Estoque - Nota Fiscal de Sa&iacute;da';
 $modulo = 'estoque';
 $menu = 'saida';
-// ========================================================================================================
-
-
-// ====== CONVERTE DATA ===========================================================================================
-// Função para converter a data de formato nacional para formato americano. Muito útil para inserir data no mysql
-function ConverteData($data_x){
-	if (strstr($data_x, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data_x);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-// ================================================================================================================
-
-
-// ====== CONVERTE VALOR ==========================================================================================
-function ConverteValor($valor){
-	$valor_1 = str_replace(".", "", $valor);
-	$valor_2 = str_replace(",", ".", $valor_1);
-	return $valor_2;
-}
-// ================================================================================================================
-
-
-// ====== CONVERTE PESO ==========================================================================================
-function ConvertePeso($peso){
-	$peso_1 = str_replace(".", "", $peso);
-	$peso_2 = str_replace(",", "", $peso_1);
-	return $peso_2;
-}
-// ================================================================================================================
-
 
 // ====== RECEBE POST ==============================================================================================
 $botao_relatorio = $_POST["botao_relatorio"];
@@ -66,11 +35,11 @@ $forma_pesagem_busca = $_POST["forma_pesagem_busca"];
 $filial_nf = $filial_usuario;
 $codigo_nf = $_POST["codigo_nf"];
 $fornecedor_nf = $_POST["fornecedor"];
-$data_emissao_nf = ConverteData($_POST["data_emissao"]);
+$data_emissao_nf = Helpers::ConverteData($_POST["data_emissao"]);
 $numero_nf = $_POST["numero_nf"];
 $unidade_nf = $_POST["unidade"];
-$quantidade_nf = ConvertePeso($_POST["quantidade"]);
-$valor_unitario_nf = ConverteValor($_POST["valor_unitario"]);
+$quantidade_nf = Helpers::ConvertePeso($_POST["quantidade"]);
+$valor_unitario_nf = Helpers::ConverteValor($_POST["valor_unitario"]);
 $valor_un_nf = $_POST["valor_unitario"];
 $observacao_nf = $_POST["observacao"];
 

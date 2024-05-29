@@ -2,6 +2,8 @@
 include ('../../includes/config.php'); 
 include ('../../includes/conecta_bd.php');
 include ('../../includes/valida_cookies.php');
+include ("../../helpers.php");
+
 $pagina = 'altera_vencimento';
 $titulo = 'Altera Data de Pagamento';
 $modulo = 'financeiro';
@@ -47,33 +49,10 @@ include ('../../includes/head.php');
 <div id="centro" style="height:450px; width:930px; border:0px solid #000; margin:auto">
 
 <?php
-// ============================================== CONVERTE DATA ====================================================	
-// Função para converter a data de formato nacional para formato americano. Muito útil para inserir data no mysql
-
-function ConverteData($data){
-
-	if (strstr($data, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-//echo ConverteData($data_emissao);
-// =================================================================================================================
-
-
-// ============================================== CONVERTE VALOR ====================================================	
-function ConverteValor($valor){
-
-	$valor_1 = str_replace(".", "", $valor);
-	$valor_2 = str_replace(",", ".", $valor_1);
-	return $valor_2;
-}
 // =================================================================================================================
 	$filial = $filial_usuario;
 	$cod_compra = $_POST["cod_compra"];
-	$data_pagamento = ConverteData($_POST["data_pagamento"]);
+	$data_pagamento = Helpers::ConverteData($_POST["data_pagamento"]);
 	$pagina_mae = $_POST["pagina_mae"];
 	$botao = $_POST["botao"];
 	$data_inicial = $_POST["data_inicial"];

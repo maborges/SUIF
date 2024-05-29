@@ -7,30 +7,6 @@ $pagina = 'romaneio_impressao';
 $titulo = 'Estoque - Romaneio de Sa&iacute;da';
 $modulo = 'estoque';
 $menu = 'saida';
-// ================================================================================================================
-
-
-// ====== CONVERTE DATA ===========================================================================================
-// Função para converter a data de formato nacional para formato americano. Muito útil para inserir data no mysql
-function ConverteData($data){
-	if (strstr($data, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-// ================================================================================================================
-
-
-// ====== CONVERTE VALOR ==========================================================================================
-function ConverteValor($valor){
-	$valor_1 = str_replace(".", "", $valor);
-	$valor_2 = str_replace(",", ".", $valor_1);
-	return $valor_2;
-}
-// ================================================================================================================
-
 
 // ====== RECEBE POST =============================================================================================
 $numero_romaneio = $_POST["numero_romaneio"];
@@ -148,7 +124,7 @@ $produto_apelido = $aux_bp[20];
 // ======================================================================================================
 
 
-// ====== SITUAÇÃO PRINT ===================================================================================
+// ====== SITUAï¿½ï¿½O PRINT ===================================================================================
 if ($situacao_romaneio == "PRE_ROMANEIO")
 {$situacao_print = "Pr&eacute;-Romaneio";}
 elseif ($situacao_romaneio == "EM_ABERTO")
@@ -201,7 +177,7 @@ $soma_nota_fiscal_print = number_format($soma_nota_fiscal[0],2,",",".");
 include ('../../includes/head_impressao.php');
 ?>
 
-<!-- ====== TÍTULO DA PÁGINA ====================================================================================== -->
+<!-- ====== Tï¿½TULO DA Pï¿½GINA ====================================================================================== -->
 <title>
 <?php echo "$titulo"; ?>
 </title>
@@ -214,7 +190,7 @@ include ('../../includes/head_impressao.php');
 </head>
 
 
-<!-- ====== INÍCIO ================================================================================================ -->
+<!-- ====== INï¿½CIO ================================================================================================ -->
 <body onLoad="imprimir()">
 
 <div id="centro" style="width:745px; border:0px solid #000; float:left">

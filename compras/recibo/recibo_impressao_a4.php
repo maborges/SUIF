@@ -2,35 +2,12 @@
 include ("../../includes/config.php"); 
 include ("../../includes/conecta_bd.php");
 include ("../../includes/valida_cookies.php");
+include ("../../helpers.php");
 $pagina = "recibo_impressao_a4";
 $titulo = "Recibo";
 $modulo = "compras";
 $menu = "contratos";
 // ================================================================================================================
-
-
-// ====== CONVERTE DATA ===========================================================================================
-// Função para converter a data de formato nacional para formato americano. Muito útil para inserir data no mysql
-function ConverteData($data_x){
-	if (strstr($data_x, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data_x);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-// ================================================================================================================
-
-
-// ====== CONVERTE VALOR ==========================================================================================
-function ConverteValor($valor_x){
-	$valor_1 = str_replace("R$ ", "", $valor_x); //tira o símbolo
-	$valor_2 = str_replace(".", "", $valor_1); //tira o ponto
-	$valor_3 = str_replace(",", ".", $valor_2); //troca vírgula por ponto
-	return $valor_3;
-}
-// ================================================================================================================
-
 
 // ======= RECEBENDO POST =================================================================================
 $botao = $_POST["botao"];
@@ -40,9 +17,9 @@ $filial = $filial_usuario;
 $numero_recibo = $_POST["numero_recibo"];
 
 $valor_form = $_POST["valor_form"];
-$valor_2 = ConverteValor($_POST["valor_form"]);
+$valor_2 = Helpers::ConverteValor($_POST["valor_form"]);
 $data_recibo_form = $_POST["data_recibo_form"];
-$data_recibo_aux = ConverteData($data_recibo_form);
+$data_recibo_aux = Helpers::ConverteData($data_recibo_form);
 $cod_produto_form = $_POST["cod_produto_form"];
 $nome_emissor_form = $_POST["nome_emissor_form"];
 $telefone_emissor_form = $_POST["telefone_emissor_form"];
@@ -122,7 +99,7 @@ $t = count($inteiro)-1-$i;
 $r .= $r ? " ".($valor > 1 ? $plural[$t] : $singular[$t]) : "";
 if ($valor == "000")$z++; elseif ($z > 0) $z--;
 if (($t==1) && ($z>0) && ($inteiro[0] > 0)) $r .= (($z>1) ? " de " : "").$plural[$t];
-if ($r) $rt = $rt . ((($i > 0) && ($i <= $fim) && ($inteiro[0] > 0) && ($z < 1)) ? ( ($i < $fim) ? ", " : " e ") : " ") . $r;
+if ($r) $rt = ((($i > 0) && ($i <= $fim) && ($inteiro[0] > 0) && ($z < 1)) ? ( ($i < $fim) ? ", " : " e ") : " ") . $r;
 }
  
 return($rt ? $rt : "zero");
@@ -140,7 +117,7 @@ include ("../../includes/head_impressao.php");
 ?>
 
 
-<!-- ====== TÍTULO DA PÁGINA ====================================================================================== -->
+<!-- ====== Tï¿½TULO DA Pï¿½GINA ====================================================================================== -->
 <title>
 <?php echo "$titulo"; ?>
 </title>
@@ -153,7 +130,7 @@ include ("../../includes/head_impressao.php");
 </head>
 
 
-<!-- ====== INÍCIO ================================================================================================ -->
+<!-- ====== INï¿½CIO ================================================================================================ -->
 <body onLoad="imprimir()">
 
 <div style="width:750px; border:0px solid #000; float:left">

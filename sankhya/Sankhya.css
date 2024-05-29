@@ -1,0 +1,230 @@
+.brg-Table {
+	font-size:10px;
+	color:#FFF;
+	margin:auto;
+}
+
+.brg-Table th {
+	margin:auto;
+    height:24px;
+	background-color:#006699;
+	text-align: center;
+    font-weight: normal;
+}
+
+.brg-Table td {
+	font-size:12px;
+	border: 0px solid #000;
+	margin: auto;
+    height: 24px;
+	background-color:#E0EEEE;
+	color:#003466; 
+    padding-left: 5px; 
+}
+
+.brg-center {
+    text-align: center;
+}
+
+.brg-form-center {
+    margin: 0 auto;
+  }
+
+.brg-auto-size {
+    width: auto;;
+}
+
+table.brg-Table tr:hover td {
+	background:#0C0;
+	background:linear-gradient(#0C0, #006400);
+	color:#FFF;
+}
+
+.brg-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.brg-flex-column {
+    flex-direction: column;
+}
+
+.brg-form-group {
+    display: flex;
+    flex-direction: column;
+    padding: 5px
+}
+
+.brg-gap-10 {
+    gap: 10px;
+}
+
+.brg-gap-20 {
+    gap: 20px;
+}
+
+.brg-gap-30 {
+    gap: 30px;
+}
+
+.brg-form-group label {
+    margin-bottom: 5px;
+}
+
+input:read-only {
+    background-color:#EEE;
+}
+
+/* 
+  Obs: para que o CSS abaixo funcione, é necessário que 
+       o elemento tenha sido definido como
+	   
+	   tabindex="-1" 
+	   aria-disabled="true"
+*/
+
+select[readonly] {
+    background-color:#EEE;
+}
+
+.brg-input-no-foco {
+    pointer-events: none;
+}
+
+.brg-flex-center {
+    justify-content: center;
+}
+
+.brg-flex-left {
+    justify-content: flex-start;
+}
+
+.brg-flex-right {
+    justify-content: flex-end;
+}
+
+.brg-action-button 
+{
+	background:#FCFCFC;
+	background:linear-gradient(#FCFCFC, #CCC);
+	border:0px solid #999;
+	border-radius:5px;
+	padding:8px 15px;
+	color:#444;
+	display:inline-block;
+	font-size:17px;
+	font-style:normal;
+	font-weight:normal;
+	font-family:"Calibri", sans-serif;
+	text-align:center;
+	box-shadow:1px 1px 2px #666;
+}
+
+.brg-action-button:hover 
+{
+	background:#FFF;
+	background:linear-gradient(#FFF, #999);
+	color:#009900;
+	box-shadow:2px 2px 2px #666;
+}
+
+
+
+dialog::backdrop {
+	background-color: rgb(0 0 0 / .3);
+}
+
+dialog {
+	border: none;
+	border-radius: .8rem;
+	box-shadow: 0 0 1em rgb( 0 0 0 / .3);
+}
+
+.badge {
+    color: #fff;
+	padding: 4px 8px;
+	text-align: center;
+	border-radius: 5px;
+  }
+
+.badge-primary {
+    background-color: #007bff;
+}
+
+.badge-secondary {
+    background-color: #6c757d;
+}
+
+.badge-success {
+    background-color: #28a745;
+}
+
+.badge-danger {
+    background-color: #dc3545;
+}
+
+.badge-warning {
+    color: #212529;
+    background-color: #ffc107;
+}
+
+.badge-info {
+    background-color: #17a2b8;
+}
+
+.badge-light {
+    color: #212529;
+    background-color: #f8f9fa;
+}
+
+.badge-dark {
+    background-color: #343a40;
+}
+
+/*
+  snackbar
+*/
+
+#snackbar {
+	visibility: hidden;
+	min-width: 250px;
+	margin-left: -125px;
+	background-color: blue;
+	color: #fff;
+	text-align: center;
+	border-radius: 2px;
+	padding: 16px;
+	position: fixed;
+	z-index: 1;
+	left: 50%;
+	bottom: 30px;
+	font-size: 17px;
+  }
+  
+  #snackbar.show {
+	visibility: visible;
+	-webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+	animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  }
+  
+  @-webkit-keyframes fadein {
+	from {bottom: 0; opacity: 0;} 
+	to {bottom: 30px; opacity: 1;}
+  }
+  
+  @keyframes fadein {
+	from {bottom: 0; opacity: 0;}
+	to {bottom: 30px; opacity: 1;}
+  }
+  
+  @-webkit-keyframes fadeout {
+	from {bottom: 30px; opacity: 1;} 
+	to {bottom: 0; opacity: 0;}
+  }
+  
+  @keyframes fadeout {
+	from {bottom: 30px; opacity: 1;}
+	to {bottom: 0; opacity: 0;}
+  }
+  
+

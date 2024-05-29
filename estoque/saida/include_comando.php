@@ -1,4 +1,6 @@
 ﻿<?php
+include ("../../helpers.php");
+
 // ======= RECEBENDO POST =========================================================================================
 $botao = $_POST["botao"];
 $botao_2 = $_POST["botao_2"];
@@ -6,9 +8,9 @@ $pagina_mae = $_POST["pagina_mae"];
 $data_hoje = date('Y-m-d', time());
 $data_hoje_br = date('d/m/Y', time());
 $data_inicial_br = $_POST["data_inicial_busca"];
-$data_inicial_busca = ConverteData($_POST["data_inicial_busca"]);
+$data_inicial_busca = Helpers::ConverteData($_POST["data_inicial_busca"]);
 $data_final_br = $_POST["data_final_busca"];
-$data_final_busca = ConverteData($_POST["data_final_busca"]);
+$data_final_busca = Helpers::ConverteData($_POST["data_final_busca"]);
 
 if ($botao == "BUSCAR")
 {
@@ -34,9 +36,9 @@ if (empty($data_inicial_br) or empty($data_final_br))
 	$data_final_busca = $data_hoje;}
 else
 	{$data_inicial_br = $_POST["data_inicial_busca"];
-	$data_inicial_busca = ConverteData($_POST["data_inicial_busca"]);
+	$data_inicial_busca = Helpers::ConverteData($_POST["data_inicial_busca"]);
 	$data_final_br = $_POST["data_final_busca"];
-	$data_final_busca = ConverteData($_POST["data_final_busca"]);}
+	$data_final_busca = Helpers::ConverteData($_POST["data_final_busca"]);}
 
 $mysql_filtro_data = "estoque.data BETWEEN '$data_inicial_busca' AND '$data_final_busca'";
 

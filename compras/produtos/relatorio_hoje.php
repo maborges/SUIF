@@ -7,29 +7,6 @@
 	$modulo = 'compras';
 	$menu = 'produtos';
 
-
-// ====== CONVERTE DATA ================================================================================	
-// Função para converter a data de formato nacional para formato americano. Usado para inserir data no mysql
-function ConverteData($data){
-	if (strstr($data, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-// ======================================================================================================
-
-
-// ====== CONVERTE VALOR =================================================================================	
-function ConverteValor($valor){
-	$valor_1 = str_replace(".", "", $valor);
-	$valor_2 = str_replace(",", ".", $valor_1);
-	return $valor_2;
-}
-// =======================================================================================================
-
-
 // ====== DADOS PARA BUSCA =================================================================================
 $data_hoje = date('Y-m-d', time());
 $filial = $filial_usuario;

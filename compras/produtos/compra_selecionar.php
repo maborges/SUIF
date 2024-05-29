@@ -9,8 +9,8 @@ $menu = 'produtos';
 
 
 // ======= RECEBENDO POST =================================================================================
-$fornecedor = $_POST["fornecedor"];
-$cod_produto = $_POST["cod_produto"];
+$fornecedor = $_POST["fornecedor"] ?? '';
+$cod_produto = $_POST["cod_produto"] ?? '';
 // ========================================================================================================
 
 
@@ -47,7 +47,7 @@ include ('../../includes/head.php');
 <div id="menu_geral">
 <?php include ('../../includes/menu_compras.php'); ?>
 
-<?php include ('../../includes/sub_menu_compras_produtos.php'); ?>
+<?php include ('../../includes/submenu_compras_produtos.php'); ?>
 </div> <!-- FIM menu_geral -->
 
 

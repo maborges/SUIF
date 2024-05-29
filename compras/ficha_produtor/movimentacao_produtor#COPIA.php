@@ -3,32 +3,12 @@
 include ('../../includes/config.php'); 
 include ('../../includes/conecta_bd.php');
 include ('../../includes/valida_cookies.php');
+include ("../../helpers.php");
+
 $pagina = 'movimentacao_produtor';
 $titulo = 'Movimenta&ccedil;&atilde;o Ficha do Produtor';
 $modulo = 'compras';
 $menu = 'ficha_produtor';
-// ================================================================================================================
-
-
-// ====== CONVERTE DATA ===========================================================================================
-// Função para converter a data de formato nacional para formato americano. Muito útil para inserir data no mysql
-function ConverteData($data){
-	if (strstr($data, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-// ================================================================================================================
-
-
-// ====== CONVERTE VALOR ==========================================================================================
-function ConverteValor($valor){
-	$valor_1 = str_replace(".", "", $valor);
-	$valor_2 = str_replace(",", ".", $valor_1);
-	return $valor_2;
-}
 // ================================================================================================================
 
 
@@ -46,16 +26,16 @@ $botao = $_POST["botao"];
 if ($botao == "seleciona")
 {
 $data_inicial_aux = $mes_atras;
-$data_inicial = ConverteData($mes_atras);
+$data_inicial = Helpers::ConverteData($mes_atras);
 $data_final_aux = $data_hoje;
-$data_final = ConverteData($data_hoje);
+$data_final = Helpers::ConverteData($data_hoje);
 }
 else
 {
 $data_inicial_aux = $_POST["data_inicial"];
-$data_inicial = ConverteData($_POST["data_inicial"]);
+$data_inicial = Helpers::ConverteData($_POST["data_inicial"]);
 $data_final_aux = $_POST["data_final"];
-$data_final = ConverteData($_POST["data_final"]);
+$data_final = Helpers::ConverteData($_POST["data_final"]);
 }
 
 $dia_atras = date('Y-m-d', strtotime('-1 days', strtotime($data_inicial)));

@@ -1,36 +1,13 @@
 <?php
 include("../../includes/config.php");
 include("../../includes/valida_cookies.php");
+include ("../../helpers.php");
+
 $pagina = "compra_rovereti_reenviar";
 $titulo = "Reenvio de Compra ao Rovereti";
 $modulo = "compras";
 $menu = "compras";
 // ================================================================================================================
-
-
-// ====== CONVERTE DATA ===========================================================================================
-function ConverteData($data_x)
-{
-	if (strstr($data_x, "/")) {
-		$d = explode("/", $data_x);
-		$rstData = "$d[2]-$d[1]-$d[0]";
-		return $rstData;
-	}
-}
-// ================================================================================================================
-
-
-// ========== ELIMINA MÁSCARAS CPF E CNPJ ================================================================
-function limpa_cpf_cnpj($limpa)
-{
-	$limpa = trim($limpa);
-	$limpa = str_replace(".", "", $limpa);
-	$limpa = str_replace(",", "", $limpa);
-	$limpa = str_replace("-", "", $limpa);
-	$limpa = str_replace("/", "", $limpa);
-	return $limpa;
-}
-// ========================================================================================================
 
 
 // ====== RETIRA ACENTUAÇÃO ===============================================================================
@@ -142,7 +119,7 @@ if ($botao == "ROVERETI") {
 	} else {
 		$cpf_cnpj = $aux_forn[4];
 	}
-	$cpf_aux = limpa_cpf_cnpj($cpf_cnpj); // ==== INTEGRAÇÃO ROVERETI =====
+	$cpf_aux = Helpers::limpa_cpf_cnpj($cpf_cnpj); // ==== INTEGRAÇÃO ROVERETI =====
 	$fornecedor_rovereti = str_replace($comAcentos, $semAcentos, $fornecedor_print); // ==== INTEGRAÇÃO ROVERETI =====
 	// ======================================================================================================
 

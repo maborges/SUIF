@@ -7,29 +7,6 @@ $titulo = 'Impress&atilde;o de Compra';
 $modulo = 'compras';
 $menu = 'produtos';
 
-
-// ====== CONVERTE DATA ================================================================================	
-// Função para converter a data de formato nacional para formato americano. Usado para inserir data no mysql
-function ConverteData($data){
-	if (strstr($data, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-// ======================================================================================================
-
-
-// ====== CONVERTE VALOR =================================================================================	
-function ConverteValor($valor){
-	$valor_1 = str_replace(".", "", $valor);
-	$valor_2 = str_replace(",", ".", $valor_1);
-	return $valor_2;
-}
-// =======================================================================================================
-
-
 // ====== DADOS PARA BUSCA =================================================================================
 $numero_compra = $_POST["numero_compra"];
 // =======================================================================================================
@@ -52,7 +29,7 @@ include ('../../includes/head_impressao.php');
 ?>
 
 
-<!-- ==================================   T Í T U L O   D A   P Á G I N A   ====================================== -->
+<!-- ==================================   T ï¿½ T U L O   D A   P ï¿½ G I N A   ====================================== -->
 <title>
 <?php echo "$titulo"; ?>
 </title>
@@ -65,7 +42,7 @@ include ('../../includes/head_impressao.php');
 </head>
 
 
-<!-- =============================================   I N Í C I O   =============================================== -->
+<!-- =============================================   I N ï¿½ C I O   =============================================== -->
 <body onLoad="imprimir()">
 
 <?php
@@ -147,11 +124,11 @@ else
 $versao_impressao_compra = $filial_config[8];
 
 
-// ====== 1.0 (GRANCAFÉ) ======
+// ====== 1.0 (GRANCAFï¿½) ======
 if ($versao_impressao_compra == "1.0")
 {include ('inc_compra_print_v_1.php');}
 
-// ====== 1.1 (GRANCAFÉ) ======
+// ====== 1.1 (GRANCAFï¿½) ======
 elseif ($versao_impressao_compra == "1.1")
 {include ('inc_compra_print_v_1_1.php');}
 

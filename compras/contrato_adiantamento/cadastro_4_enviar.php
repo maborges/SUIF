@@ -2,34 +2,12 @@
 include ("../../includes/config.php");
 include ("../../includes/conecta_bd.php");
 include ("../../includes/valida_cookies.php");
+include_once("../../helpers.php");
 $pagina = "cadastro_4_enviar";
 $titulo = "Contrato de Adiantamento";
 $modulo = "compras";
 $menu = "contratos";
 // ========================================================================================================
-
-
-// ====== CONVERTE DATA ===========================================================================================
-// Função para converter a data de formato nacional para formato americano. Muito útil para inserir data no mysql
-function ConverteData($data_x){
-	if (strstr($data_x, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data_x);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-// ================================================================================================================
-
-
-// ====== CONVERTE VALOR ==========================================================================================
-function ConverteValor($valor_x){
-	$valor_1 = str_replace("R$ ", "", $valor_x); //tira o símbolo
-	$valor_2 = str_replace(".", "", $valor_1); //tira o ponto
-	$valor_3 = str_replace(",", ".", $valor_2); //troca vírgula por ponto
-	return $valor_3;
-}
-// ================================================================================================================
 
 
 // ======= RECEBENDO POST =========================================================================================
@@ -42,11 +20,11 @@ $numero_contrato = $_POST["numero_contrato"];
 $fornecedor_pesquisa = $_POST["fornecedor_pesquisa"];
 $cod_seleciona_produto = $_POST["cod_seleciona_produto"];
 $data_contrato_form = $_POST["data_contrato_form"];
-$data_contrato_aux = ConverteData($data_contrato_form);
+$data_contrato_aux = Helpers::ConverteData($data_contrato_form);
 $data_vencimento_form = $_POST["data_vencimento_form"];
-$data_vencimento_aux = ConverteData($data_vencimento_form);
+$data_vencimento_aux = Helpers::ConverteData($data_vencimento_form);
 $valor_print = $_POST["valor_form"];
-$valor_form = ConverteValor($_POST["valor_form"]);
+$valor_form = Helpers::ConverteValor($_POST["valor_form"]);
 $safra_form = $_POST["safra_form"];
 $obs_form = $_POST["obs_form"];
 

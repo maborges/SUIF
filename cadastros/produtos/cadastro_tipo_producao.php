@@ -10,11 +10,11 @@ $menu = "cadastro_produtos";
 
 
 // ====== RECEBE POST ==============================================================================================
-$botao = $_POST["botao"];
-$nome_tipo_form = $_POST["nome_tipo_form"];
-$cod_produto_form = $_POST["cod_produto_form"];
-$id_w = $_POST["id_w"];
-$bloqueio_w = $_POST["bloqueio_w"];
+$botao = $_POST["botao"] ?? '';
+$nome_tipo_form = $_POST["nome_tipo_form"] ?? '';
+$cod_produto_form = $_POST["cod_produto_form"] ?? '';
+$id_w = $_POST["id_w"] ?? '';
+$bloqueio_w = $_POST["bloqueio_w"] ?? '';
 
 
 $usuario_cadastro_form = $nome_usuario_print;

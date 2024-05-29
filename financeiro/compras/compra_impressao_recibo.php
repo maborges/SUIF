@@ -12,7 +12,7 @@ include ('../../includes/head_impressao.php');
 
 
 
-<!-- ==================================   T Í T U L O   D A   P Á G I N A   ====================================== -->
+<!-- ==================================   T ï¿½ T U L O   D A   P ï¿½ G I N A   ====================================== -->
 <title>
 <?php echo "$titulo"; ?>
 </title>
@@ -25,25 +25,14 @@ include ('../../includes/head_impressao.php');
 </head>
 
 
-<!-- =============================================   I N Í C I O   =============================================== -->
+<!-- =============================================   I N ï¿½ C I O   =============================================== -->
 <body onLoad="imprimir()">
 
 <div style='border:1px solid #FFF'>
 <div id="centro" style="width:745px; border:0px solid #000; float:left; page-break-after:always">
 
 <?php
-// ============================================== CONVERTE DATA ====================================================	
-// Função para converter a data de formato nacional para formato americano. Muito útil para inserir data no mysql
 
-function ConverteData($data){
-
-	if (strstr($data, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
 
 
 	$meses = array ("Janeiro", "Fevereiro", "Mar&ccedil;o", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro");
@@ -70,7 +59,7 @@ function ConverteData($data){
     for($ii=strlen($inteiro[$i]);$ii<3;$ii++)
     $inteiro[$i] = "0".$inteiro[$i];
      
-    // $fim identifica onde que deve se dar junção de centenas por "e" ou por "," ;)
+    // $fim identifica onde que deve se dar junï¿½ï¿½o de centenas por "e" ou por "," ;)
     $fim = count($inteiro) - ($inteiro[count($inteiro)-1] > 0 ? 1 : 2);
     for ($i=0;$i<count($inteiro);$i++) {
     $valor = $inteiro[$i];
@@ -82,7 +71,7 @@ function ConverteData($data){
     $r .= $r ? " ".($valor > 1 ? $plural[$t] : $singular[$t]) : "";
     if ($valor == "000")$z++; elseif ($z > 0) $z--;
     if (($t==1) && ($z>0) && ($inteiro[0] > 0)) $r .= (($z>1) ? " DE " : "").$plural[$t];
-    if ($r) $rt = $rt . ((($i > 0) && ($i <= $fim) && ($inteiro[0] > 0) && ($z < 1)) ? ( ($i < $fim) ? ", " : " E ") : " ") . $r;
+    if ($r) $rt = ((($i > 0) && ($i <= $fim) && ($inteiro[0] > 0) && ($z < 1)) ? ( ($i < $fim) ? ", " : " E ") : " ") . $r;
     }
      
     return($rt ? $rt : "zero");
@@ -170,7 +159,7 @@ $produto_apelido = $aux_bp[20];
 	else
 	{$unidade_print = "-";}
 
-// SITUAÇÃO PRINT  ==========================================================================================
+// SITUAï¿½ï¿½O PRINT  ==========================================================================================
 	if ($situacao == "POSTO")
 	{$situacao_print = "POSTO";}
 	elseif ($situacao == "A_RETIRAR")

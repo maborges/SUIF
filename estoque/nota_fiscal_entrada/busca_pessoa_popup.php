@@ -49,11 +49,11 @@ include ('../../includes/head.php');
 
 
 <?php
-$nome = $_POST["nome"];
-$cpf = $_POST["cpf"];
-$cnpj = $_POST["cnpj"];
-$tipo_pessoa = $_POST["tipo_pessoa"];
-$mostra_inativo = $_POST["mostra_inativo"];
+$nome = $_POST["nome"] ?? '';
+$cpf = $_POST["cpf"] ?? '';
+$cnpj = $_POST["cnpj"] ?? '';
+$tipo_pessoa = $_POST["tipo_pessoa"] ?? '';
+$mostra_inativo = $_POST["mostra_inativo"] ?? '';
 ?>
 
 <div id="centro" style="width:660px; height:35px; border:0px solid #999; color:#666; font-size:12px">

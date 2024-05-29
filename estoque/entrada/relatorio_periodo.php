@@ -7,19 +7,6 @@ $modulo = "estoque";
 $menu = "entrada";
 // ================================================================================================================
 
-
-// ====== CONVERTE DATA ===========================================================================================
-function ConverteData($data_x)
-{
-    if (strstr($data_x, "/")) {
-        $d = explode("/", $data_x);
-        $rstData = "$d[2]-$d[1]-$d[0]";
-        return $rstData;
-    }
-}
-// ================================================================================================================
-
-
 // ====== BUSCAS =================================================================================================
 include("include_comando.php");
 // ================================================================================================================
@@ -199,15 +186,15 @@ include("../../includes/head.php");
                     <?php
                     if ($linha_romaneio >= 1) {
                         echo "
-	<form action='$servidor/$diretorio_servidor/estoque/entrada/relatorio_selec_fornecedor.php' method='post' />
-	<input type='hidden' name='botao' value='BUSCAR'>
-	<input type='hidden' name='data_inicial_busca' value='$data_inicial_br'>
-	<input type='hidden' name='data_final_busca' value='$data_final_br'>
-	<input type='hidden' name='fornecedor_pesquisa' value='$fornecedor_pesquisa'>
-	<input type='hidden' name='nome_fornecedor' value='$nome_fornecedor'>
-	<input type='hidden' name='cod_produto_busca' value='$cod_produto_busca'>
-	<button type='submit' class='botao_1' style='float:right'>Filtrar por Fornecedor</button>
-	</form>";
+                            <form action='$servidor/$diretorio_servidor/estoque/entrada/relatorio_selec_fornecedor.php' method='post' />
+                            <input type='hidden' name='botao' value='BUSCAR'>
+                            <input type='hidden' name='data_inicial_busca' value='$data_inicial_br'>
+                            <input type='hidden' name='data_final_busca' value='$data_final_br'>
+                            <input type='hidden' name='fornecedor_pesquisa' value='$fornecedor_pesquisa'>
+                            <input type='hidden' name='nome_fornecedor' value='$nome_fornecedor'>
+                            <input type='hidden' name='cod_produto_busca' value='$cod_produto_busca'>
+                            <button type='submit' class='botao_1' style='float:right'>Filtrar por Fornecedor</button>
+                            </form>";
                     }
                     ?>
                 </div>
@@ -224,9 +211,9 @@ include("../../includes/head.php");
                     <?php
                     if ($linha_romaneio >= 1) {
                         echo "
-	<form action='$servidor/$diretorio_servidor/estoque/entrada/buscar_romaneio.php' method='post' />
-	<button type='submit' class='botao_1' style='float:right'>Buscar por N&uacute;mero</button>
-	</form>";
+                            <form action='$servidor/$diretorio_servidor/estoque/entrada/buscar_romaneio.php' method='post' />
+                            <button type='submit' class='botao_1' style='float:right'>Buscar por N&uacute;mero</button>
+                            </form>";
                     }
                     ?>
                 </div>

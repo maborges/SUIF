@@ -2,47 +2,25 @@
 include ('../../includes/config.php'); 
 include ('../../includes/conecta_bd.php');
 include ('../../includes/valida_cookies.php');
+include_once("../../helpers.php");
+
 $pagina = 'contrato_tratado_enviar';
 $menu = 'contratos';
 $titulo = 'Contrato Tratado';
 $modulo = 'compras';
-	
-	
-// ============================================== CONVERTE DATA ====================================================	
-// Função para converter a data de formato nacional para formato americano. Muito útil para inserir data no mysql
-function ConverteData($data){
-
-	if (strstr($data, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-// =================================================================================================================
-
-
-// ============================================== CONVERTE VALOR ====================================================	
-function ConverteValor($valor){
-	$valor_1 = str_replace(".", "", $valor);
-	$valor_2 = str_replace(",", ".", $valor_1);
-	return $valor_2;
-}
-// =================================================================================================================
-
 
 // ======= RECEBENDO POST =================================================================================
 $numero_contrato = $_POST["numero_contrato"];
 $fornecedor = $_POST["fornecedor"];
 $cod_produto = $_POST["cod_produto"];
 $data_contrato = date('Y/m/d', time());
-$data_entrega_i = ConverteData($_POST["data_entrega_i"]);
+$data_entrega_i = Helpers::ConverteData($_POST["data_entrega_i"]);
 $data_entrega_i_2 = $_POST["data_entrega_i"];	
-$data_entrega_f = ConverteData($_POST["data_entrega_f"]);
+$data_entrega_f = Helpers::ConverteData($_POST["data_entrega_f"]);
 $data_entrega_f_2 = $_POST["data_entrega_f"];	
 $quantidade = intval($_POST["quantidade"]);
 $quant_quilo_aux = intval($_POST["quantidade_quilo"]);
-$valor = ConverteValor($_POST["valor"]);
+$valor = Helpers::ConverteValor($_POST["valor"]);
 $valor_print = $_POST["valor"];
 $safra = $_POST["safra"];
 $prazo_pgto = $_POST["prazo_pgto"];		

@@ -12,23 +12,23 @@ $menu = 'entrada';
 
 // ======= RECEBENDO POST =================================================================================
 $numero_romaneio = $_POST["numero_romaneio"];
-$numero_compra = $_POST["numero_compra"];
+$numero_compra = $_POST["numero_compra"] ?? '';
 $botao = $_POST["botao"];
 
-$fornecedor_form = $_POST["fornecedor_form"];
-$cod_produto_form = $_POST["cod_produto_form"];
-$nome_form = $_POST["nome_form"];
+$fornecedor_form = $_POST["fornecedor_form"] ?? '';
+$cod_produto_form = $_POST["cod_produto_form"] ?? '';
+$nome_form = $_POST["nome_form"] ?? '';
 $data_hoje = date('d/m/Y');
 
-$pagina_mae = $_POST["pagina_mae"];
-$pagina_filha = $_POST["pagina_filha"];
-$data_inicial_busca = $_POST["data_inicial_busca"];
-$data_final_busca = $_POST["data_final_busca"];
-$fornecedor_busca = $_POST["fornecedor_busca"];
-$cod_produto_busca = $_POST["cod_produto_busca"];
-$numero_romaneio_busca = $_POST["numero_romaneio_busca"];
-$situacao_romaneio_busca = $_POST["situacao_romaneio_busca"];
-$forma_pesagem_busca = $_POST["forma_pesagem_busca"];
+$pagina_mae = $_POST["pagina_mae"] ?? '';
+$pagina_filha = $_POST["pagina_filha"] ?? '';
+$data_inicial_busca = $_POST["data_inicial_busca"] ?? '';
+$data_final_busca = $_POST["data_final_busca"] ?? '';
+$fornecedor_busca = $_POST["fornecedor_busca"] ?? '';
+$cod_produto_busca = $_POST["cod_produto_busca"] ?? '';
+$numero_romaneio_busca = $_POST["numero_romaneio_busca"] ?? '';
+$situacao_romaneio_busca = $_POST["situacao_romaneio_busca"] ?? '';
+$forma_pesagem_busca = $_POST["forma_pesagem_busca"] ?? '' ;
 // ========================================================================================================
 
 
@@ -94,7 +94,7 @@ include ('../../includes/head.php');
 <!-- ====== MENU ================================================================================================== -->
 <div id="menu_geral">
 <?php include ('../../includes/menu_estoque.php'); ?>
-<?php include ('../../includes/sub_menu_estoque_entrada.php'); ?>
+<?php include ('../../includes/submenu_estoque_entrada.php'); ?>
 </div>
 
 

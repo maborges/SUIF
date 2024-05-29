@@ -28,9 +28,9 @@ $cod_produto_busca = $_POST["cod_produto_busca"];
 $numero_romaneio_busca = $_POST["numero_romaneio_busca"];
 $situacao_romaneio_busca = $_POST["situacao_romaneio_busca"];
 $forma_pesagem_busca = $_POST["forma_pesagem_busca"];
-$filial_busca = $_POST["filial_busca"];
-$status_busca = $_POST["status_busca"];
-$seleciona_pessoa = $_POST["seleciona_pessoa"];
+$filial_busca = $_POST["filial_busca"] ?? '';
+$status_busca = $_POST["status_busca"] ?? '';
+$seleciona_pessoa = $_POST["seleciona_pessoa"] ?? '';
 
 
 $usuario_alteracao = $nome_usuario_print;
@@ -817,6 +817,7 @@ for ($w=1 ; $w<=$linha_nota_fiscal ; $w++)
 
 	$data_nf_print_2 = date('d/m/Y', strtotime($aux_nota_fiscal[4]));		
 	$numero_nf_print_2 = $aux_nota_fiscal[3];
+	$serie_nf_print_2 = $aux_nota_fiscal[27];
 	$valor_unitario_print_2 = number_format($aux_nota_fiscal[5],2,",",".");
 	$valor_total_print_2 = number_format($aux_nota_fiscal[8],2,",",".");
 	$unidade_print_2 = $aux_nota_fiscal[6];
@@ -829,17 +830,17 @@ for ($w=1 ; $w<=$linha_nota_fiscal ; $w++)
 	<tr class='tabela_1' title=' CPF/CNPJ: $cpf_cnpj_2 &#13; Observa&ccedil;&atilde;o: $observacao_print_2'>
 	<td width='90px' align='left'>&#160;&#160;$data_nf_print_2</td>
 	<td width='380px' align='left'>&#160;&#160;$nome_favorecido_2</td>
-	<td width='120px' align='center'>$numero_nf_print_2</td>
+	<td width='120px' align='center'>$serie_nf_print_2 $numero_nf_print_2</td>
 	<td width='122px' align='center'>$quantidade_print_2 $unidade_print_2</td>
 	<td width='122px' align='right'>$valor_unitario_print_2&#160;&#160;</td>
 	<td width='122px' align='right'>&#160;&#160;$valor_total_print_2&#160;&#160;</td>
 	</tr>";
 }
 echo "
-</table>
-</div>
-<div id='centro' style='height:15px; width:1030px; border:0px solid #999; margin:auto'></div>
-";
+	</table>
+	</div>
+	<div id='centro' style='height:15px; width:1030px; border:0px solid #999; margin:auto'></div>
+	";
 
 
 ?>

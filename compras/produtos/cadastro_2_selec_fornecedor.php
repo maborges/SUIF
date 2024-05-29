@@ -12,10 +12,11 @@ $menu = "compras";
 
 // ======= RECEBENDO POST =================================================================================
 $botao = $_POST["botao"];
-$fornecedor_form = $_POST["fornecedor_form"];
+$fornecedor_form = $_POST["fornecedor_form"] ?? '';
 $cod_produto_form = $_POST["cod_produto_form"];
-$nome_form = $_POST["nome_form"];
+$nome_form = $_POST["nome_form"] ?? '';
 $data_hoje = date('d/m/Y');
+
 // ========================================================================================================
 
 /*
@@ -53,7 +54,7 @@ if ($botao == "selecionar") {
 
 // ===== BUSCA CADASTRO PESSOAS =============================================================================================
 if ($nome_form != "") {
-	$busca_pessoa_geral = mysqli_query($conexao, "SELECT codigo, nome, tipo, cpf, cnpj, cidade, estado, telefone_1, situacao_compra FROM cadastro_pessoa WHERE estado_registro='ATIVO' AND nome LIKE '%$nome_form%' ORDER BY nome");
+	$busca_pessoa_geral = mysqli_query($conexao, "SELECT codigo, nome, tipo, cpf, cnpj, cidade, estado, telefone_1, situacao_compra, id_sankhya FROM cadastro_pessoa WHERE estado_registro='ATIVO' AND nome LIKE '%$nome_form%' ORDER BY nome");
 	$linha_pessoa_geral = mysqli_num_rows($busca_pessoa_geral);
 } else {
 	$busca_pessoa_geral = 0;
@@ -120,7 +121,7 @@ include("../../includes/head.php");
 			</div>
 
 			<div class="ct_titulo_1" style="width:545px; float:right; text-align:right; margin-top:0px; border:0px solid #000">
-				<?php echo "$produto_print_2"; ?>
+				<?php echo isset($produto_print_2) ? $produto_print_2 : '' ?>
 			</div>
 		</div>
 		<!-- ============================================================================================================= -->
@@ -154,7 +155,7 @@ include("../../includes/head.php");
 				<input class="pqa_input" type="text" name="nome_form" id="ok" maxlength="50" style="width:395px" value="<?php echo "$nome_form"; ?>" />
 			</div>
 
-			<div style="height:34px; width:46px; border:0px solid #999; color:#666; font-size:11px; float:left; margin-left:10px; margin-top:5px">
+			<div style="height:34px; width:46px; border:0px solid #999; color:#666; font-size:11px; float:left; margin-left:10px; margin-top:0px">
 				<button type='submit' class='botao_1'>Buscar</button>
 				</form>
 			</div>
@@ -184,7 +185,8 @@ include("../../includes/head.php");
 			echo "
 				<table border='0' align='center' style='color:#FFF; font-size:11px'>
 				<tr>
-				<td width='440px' height='24px' align='center' bgcolor='#006699'>Nome</td>
+				<td width='370x' height='24px' align='center' bgcolor='#006699'>Nome</td>
+				<td width='70px' height='24px' align='center' bgcolor='#006699'>Id Sankhya</td>
 				<td width='200px' align='center' bgcolor='#006699'>CPF/CNPJ</td>
 				<td width='150px' align='center' bgcolor='#006699'>Telefone</td>
 				<td width='300px' align='center' bgcolor='#006699'>Cidade/UF</td>
@@ -195,7 +197,8 @@ include("../../includes/head.php");
 
 		echo "<table class='tabela_geral' style='font-size:12px'>";
 
-
+		$cpf_cnpj_w = '';
+		
 		// ====== FUNÇÃO FOR ===================================================================================
 		for ($x = 1; $x <= $linha_pessoa_geral; $x++) {
 			$aux_pessoa_geral = mysqli_fetch_row($busca_pessoa_geral);
@@ -209,6 +212,7 @@ include("../../includes/head.php");
 			$cidade_pessoa_w = $aux_pessoa_geral[5];
 			$estado_pessoa_w = $aux_pessoa_geral[6];
 			$telefone_pessoa_w = $aux_pessoa_geral[7];
+			$idSankhya_pessoa_w =$aux_pessoa_geral[9]; 
 			
 			if ($tipo_pessoa_w == "PF" or $tipo_pessoa_w == "pf") {
 				$cpf_cnpj_w = $cpf_pessoa_w;
@@ -243,20 +247,24 @@ include("../../includes/head.php");
 					</div>
 					</td>";
 			} else {
-				echo "<td width='400px' height='24px' align='left'>
+				if (!isset($selecionar)) {$selecionar = '';}
+				echo "<td width='360px' height='24px' align='left'>
 					<div style='margin-left:10px'>
 					<form action='$servidor/$diretorio_servidor/compras/produtos/compra_cadastro.php' method='post'>
 					<input type='hidden' name='botao' value='$selecionar' />
 					<input type='hidden' name='fornecedor' value='$codigo_pessoa_w' />
+					<input type='hidden' name='idSankhya' value='$idSankhya_pessoa_w' />
 					<input type='hidden' name='nome_fornecedor' value='$nome_pessoa_w' />
 					<input type='hidden' name='cod_produto' value='$cod_produto_form' />
 					<input type='hidden' name='numero_compra' value='$numero_compra' />
-					<input class='tabela_1' type='submit' style='width:430px; height:22px; text-align:left; border:0px solid #000; background-color:transparent' value='$nome_pessoa_w'>
+					<input class='tabela_1' type='submit' style='width:360px; height:22px; text-align:left; border:0px solid #000; background-color:transparent' value='$nome_pessoa_w'>
 					</form>
 					</div>
 				</td>";
 			}
-			echo "<td width='200px' align='center'>$cpf_cnpj_w</td>
+			echo 
+				"<td width='70px' align='center'>$idSankhya_pessoa_w</td>
+				<td width='200px' align='center'>$cpf_cnpj_w</td>
 				<td width='150px' align='center'>$telefone_pessoa_w</td>
 				<td width='300px' align='center'>$cidade_pessoa_w/$estado_pessoa_w</td>
 				<td width='100px' align='center' style='background-color:$color_bg_w'>$situacao_compra_w</td>
@@ -268,7 +276,7 @@ include("../../includes/head.php");
 
 
 		// =================================================================================================================
-		if ($linha_pessoa_geral == 0 and ($nome_form != '' or $cpf != '')) {
+		if ($linha_pessoa_geral == 0 and ($nome_form != '' or $cpf_cnpj_w != '')) {
 			echo "
 			<div id='centro' style='height:30px; width:700px; border:0px solid #000; color:#F00; font-size:12px; margin:auto; text-align:center'><i>Nenhum fornecedor encontrado.</i></div>";
 		} else {

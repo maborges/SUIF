@@ -2,47 +2,12 @@
 include ('../../includes/config.php');
 include ('../../includes/conecta_bd.php');
 include ('../../includes/valida_cookies.php');
+include ("../../helpers.php");
+
 $pagina = 'forma_pagamento';
 $titulo = 'Forma de Pagamento';
 $menu = 'produtos';
 $modulo = 'compras';
-
-
-// ============================================== CONVERTE DATA ====================================================	
-// Função para converter a data de formato nacional para formato americano. Muito útil para inserir data no mysql
-function ConverteData($data){
-
-	if (strstr($data, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-// =================================================================================================================
-
-
-// ============================================== CONVERTE VALOR ====================================================	
-function ConverteValor($valor){
-
-	$valor_1 = str_replace(".", "", $valor);
-	$valor_2 = str_replace(",", ".", $valor_1);
-	return $valor_2;
-}
-// =================================================================================================================
-
-
-// ========== ELIMINA MÁSCARAS CPF E CNPJ ================================================================
-function limpa_cpf_cnpj($limpa){
-	 $limpa = trim($limpa);
-	 $limpa = str_replace(".", "", $limpa);
-	 $limpa = str_replace(",", "", $limpa);
-	 $limpa = str_replace("-", "", $limpa);
-	 $limpa = str_replace("/", "", $limpa);
-	 return $limpa;
-}
-// ========================================================================================================
-
 
 // ====== RETIRA ACENTUAÇÃO ===============================================================================
 $comAcentos = array('à', 'á', 'â', 'ã', 'ä', 'å', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö', 'ù', 'ü', 'ú', 'ÿ', 'À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ù', 'Ü', 'Ú');
@@ -71,9 +36,9 @@ $codigo_pgto_favorecido = $_POST["codigo_pgto_favorecido"];
 
 $codigo_favorecido = $_POST["representante"];
 $forma_pagamento = $_POST["forma_pagamento"];
-$data_pagamento = ConverteData($_POST["data_pagamento"]);
+$data_pagamento = Helpers::ConverteData($_POST["data_pagamento"]);
 $data_pagamento_print = $_POST["data_pagamento"];	
-$valor_pagamento = ConverteValor($_POST["valor_pagamento"]);
+$valor_pagamento = Helpers::ConverteValor($_POST["valor_pagamento"]);
 // deu erro dia 16/07/2018
 // $valor_pagamento_print = number_format($valor_pagamento,2,",",".");
 $valor_pagamento_print = number_format($_POST["valor_pagamento"],2,",",".");
@@ -198,7 +163,7 @@ $codigo_pessoa_fav = $aux_pessoa[35];
 	else
 	{$cpf_cnpj = $aux_pessoa[4];}
 	
-$cpf_aux = limpa_cpf_cnpj($cpf_cnpj); // ==== INTEGRAÇÃO ROVERETI =====
+$cpf_aux = Helpers::limpa_cpf_cnpj($cpf_cnpj); // ==== INTEGRAÇÃO ROVERETI =====
 }
 
 
@@ -211,8 +176,8 @@ for ($f=1 ; $f<=$linha_acha_favorecido ; $f++)
 	$cod_pessoa_1 = $aux_fav[1];
 	$banco_ted = $aux_fav[2];
 	$tipo_conta = $aux_fav[5];
-	$agencia_ted_aux = limpa_cpf_cnpj($aux_fav[3]);
-	$conta_ted_aux = limpa_cpf_cnpj($aux_fav[4]);
+	$agencia_ted_aux = Helpers::limpa_cpf_cnpj($aux_fav[3]);
+	$conta_ted_aux = Helpers::limpa_cpf_cnpj($aux_fav[4]);
 	$conta_ted = substr($conta_ted_aux, 0, -1);
 	$conta_digito = substr($conta_ted_aux, -1);
 	$nome_fav = $aux_fav[14];
@@ -229,7 +194,7 @@ for ($f=1 ; $f<=$linha_acha_favorecido ; $f++)
 	{$cpf_cnpj_fav = $aux_cpf_fav[4];}
 	
 
-	$cpf_aux_fav = limpa_cpf_cnpj($cpf_cnpj_fav); // ==== INTEGRAÇÃO ROVERETI =====
+	$cpf_aux_fav = Helpers::limpa_cpf_cnpj($cpf_cnpj_fav); // ==== INTEGRAÇÃO ROVERETI =====
 
 }
 // ===============================================================

@@ -2,33 +2,11 @@
 include ("../../includes/config.php"); 
 include ("../../includes/conecta_bd.php");
 include ("../../includes/valida_cookies.php");
+include_once("../../helpers.php");
 $pagina = "index_contrato_tratado";
 $titulo = "Contratos Tratados";
 $modulo = "compras";
 $menu = "contratos";	
-	
-// ====== CONVERTE DATA ============================================================================================	
-// Função para converter a data de formato nacional para formato americano. Muito útil para inserir data no mysql
-function ConverteData($data){
-
-	if (strstr($data, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-// =================================================================================================================
-
-
-// ======= CONVERTE VALOR ===========================================================================================	
-function ConverteValor($valor){
-	$valor_1 = str_replace(".", "", $valor);
-	$valor_2 = str_replace(",", ".", $valor_1);
-	return $valor_2;
-}
-// =================================================================================================================
-
 
 // ====== RECEBE POST ===========================================================================================
 $data_hoje = date('Y-m-d', time());
@@ -37,9 +15,9 @@ $filial = $filial_usuario;
 $codigo_contrato = $_POST["codigo_contrato"];
 $numero_contrato = $_POST["numero_contrato"];
 $data_inicial_aux = $_POST["data_inicial"];
-$data_inicial = ConverteData($_POST["data_inicial"]);
+$data_inicial = Helpers::ConverteData($_POST["data_inicial"]);
 $data_final_aux = $_POST["data_final"];
-$data_final = ConverteData($_POST["data_final"]);
+$data_final = Helpers::ConverteData($_POST["data_final"]);
 $botao = $_POST["botao"];
 $monstra_situacao = $_POST["monstra_situacao"];
 

@@ -10,23 +10,33 @@ $menu = "";
 
 
 // ====== BUSCA CADASTRO ==========================================================================================
-$busca_pessoa = mysqli_query ($conexao, "SELECT * FROM cadastro_pessoa WHERE estado_registro='ATIVO'");
-$linha_pessoa = mysqli_num_rows ($busca_pessoa);
+$busca_pessoa = mysqli_query ($conexao, "SELECT count(*) FROM cadastro_pessoa WHERE estado_registro='ATIVO'");
+//$linha_pessoa = mysqli_num_rows ($busca_pessoa);
+$linha_pessoa = $busca_pessoa->fetch_row()[0];
 
-$busca_favorecido = mysqli_query ($conexao, "SELECT * FROM cadastro_favorecido WHERE estado_registro='ATIVO'");
-$linha_favorecido = mysqli_num_rows ($busca_favorecido);
+$busca_favorecido = mysqli_query ($conexao, "SELECT count(*) FROM cadastro_favorecido WHERE estado_registro='ATIVO'");
+$linha_favorecido = $busca_favorecido->fetch_row()[0];
 
-$busca_usuario = mysqli_query ($conexao, "SELECT * FROM usuarios WHERE estado_registro!='EXCLUIDO' AND usuario_interno!='S'");
-$linha_usuario = mysqli_num_rows ($busca_usuario);
+$busca_usuario = mysqli_query ($conexao, "SELECT count(*) FROM usuarios WHERE estado_registro!='EXCLUIDO' AND usuario_interno!='S'");
+$linha_usuario = $busca_usuario->fetch_row()[0];
 
-$busca_usuario_a = mysqli_query ($conexao, "SELECT * FROM usuarios WHERE estado_registro='ATIVO' AND usuario_interno!='S'");
-$linha_usuario_a = mysqli_num_rows ($busca_usuario_a);
+$busca_usuario_a = mysqli_query ($conexao, "SELECT count(*) FROM usuarios WHERE estado_registro='ATIVO' AND usuario_interno!='S'");
+$linha_usuario_a = $busca_usuario_a->fetch_row()[0];
 
-$busca_usuario_b = mysqli_query ($conexao, "SELECT * FROM usuarios WHERE estado_registro='BLOQUEADO' AND usuario_interno!='S'");
-$linha_usuario_b = mysqli_num_rows ($busca_usuario_b);
+$busca_usuario_b = mysqli_query ($conexao, "SELECT count(*) FROM usuarios WHERE estado_registro='BLOQUEADO' AND usuario_interno!='S'");
+$linha_usuario_b = $busca_usuario_b->fetch_row()[0];
 
-$busca_produto = mysqli_query ($conexao, "SELECT * FROM cadastro_produto WHERE estado_registro='ATIVO'");
-$linha_produto = mysqli_num_rows ($busca_produto);
+$busca_produto = mysqli_query ($conexao, "SELECT count(*) FROM cadastro_produto WHERE estado_registro='ATIVO'");
+$linha_produto = $busca_produto->fetch_row()[0];
+
+$busca_pessoa_sankhya = mysqli_query ($conexao, "SELECT count(*) FROM cadastro_pessoa WHERE estado_registro='ATIVO' AND id_sankhya is not null");
+$linha_pessoa_sankhya = $busca_pessoa_sankhya->fetch_row()[0];
+
+$busca_favorecido_sankhya = mysqli_query ($conexao, "SELECT count(*) FROM cadastro_favorecido WHERE estado_registro='ATIVO' AND id_sankhya is not null");
+$linha_favorecido_sankhya = $busca_favorecido_sankhya->fetch_row()[0];
+
+
+
 // ================================================================================================================
 
 
@@ -288,6 +298,52 @@ include ("../includes/head.php");
 
 
 
+
+<!-- ################## SANKHYA    ###################  -->
+<div style="width:293px; height:250px; border:1px solid #999; margin-left:40px; margin-top:20px; float:left">
+	<div style="width:253px; height:26px; border:1px solid transparent; margin-left:20px; background-color:#999; float:left; text-align:center">
+    <div style="margin-top:4px; font-size:14px; color:#FFF">ERP Sankhya</div>
+    </div>
+
+    <div style="width:253px; height:20px; margin-left:20px; margin-top:5px; text-align:left; float:left; font-size:13px; color:#003466">
+    </div>
+
+    <div style="width:160px; height:20px; margin-left:20px; margin-top:10px; text-align:left; float:left; font-size:13px; color:#003466">
+    Pessoas Atualizadas:</div>
+    
+
+    <div style="width:86px; height:20px; margin-left:7px; margin-top:10px; text-align:right; float:left; font-size:13px; color:#009900">
+    <?php echo"$linha_pessoa_sankhya" ?></div>
+
+    <div style="width:170px; height:20px; margin-left:20px; margin-top:10px; text-align:left; float:left; font-size:13px; color:#003466">
+    Favorecidos Atualizados:</div>
+    
+
+    <div style="width:76px; height:20px; margin-left:7px; margin-top:10px; text-align:right; float:left; font-size:13px; color:#009900">
+    <?php echo"$linha_favorecido_sankhya" ?></div>
+
+    <!-- <div style="width:253px; height:20px; margin-left:20px; margin-top:5px; text-align:left; float:left; font-size:13px; color:#003466">
+    </div> -->
+
+    <div style="width:253px; height:20px; margin-left:20px; margin-top:10px; text-align:left; float:left; font-size:13px; color:#003466">
+    <div class="link_4" style="float:left; width:auto; height:18px; border:0px solid #000; font-size:13px">
+    <a href="<?php echo"$servidor/$diretorio_servidor" ?>/sankhya/filial/filiais.php" >&#8226; Atualizar Filiais</a></div>
+    </div>
+
+    <div style="width:253px; height:20px; margin-left:20px; margin-top:10px; text-align:left; float:left; font-size:13px; color:#003466">
+    <div class="link_4" style="float:left; width:auto; height:18px; border:0px solid #000; font-size:13px">
+    <a href="<?php echo"$servidor/$diretorio_servidor" ?>/sankhya/produto/produtos.php" >&#8226; Atualizar Produtos</a></div>
+    </div>
+
+    <div style="width:253px; height:20px; margin-left:20px; margin-top:10px; text-align:left; float:left; font-size:13px; color:#003466">
+    <div class="link_4" style="float:left; width:auto; height:18px; border:0px solid #000; font-size:13px">
+    <a href="<?php echo"$servidor/$diretorio_servidor" ?>/sankhya/centro_custo/centro_custo.php" >&#8226; Atualizar Centro de Custo</a></div>
+    </div>
+    <div style="width:253px; height:20px; margin-left:20px; margin-top:10px; text-align:left; float:left; font-size:13px; color:#003466">
+    <div class="link_4" style="float:left; width:auto; height:18px; border:0px solid #000; font-size:13px">
+    <a href="<?php echo"$servidor/$diretorio_servidor" ?>/sankhya/tops/tops.php" >&#8226; Cadastrar T.O.P.S.</a></div>
+    </div>
+</div>
 
 
 

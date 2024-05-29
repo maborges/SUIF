@@ -2,20 +2,12 @@
 include ("../../includes/config.php"); 
 include ("../../includes/conecta_bd.php");
 include ("../../includes/valida_cookies.php");
+include ("../../helpers.php");
+
 $pagina = "cadastro_servico";
 $titulo = "Cadastro de Servi&ccedil;os (Produ&ccedil;&atilde;o)";
 $modulo = "cadastros";
 $menu = "config";
-// ================================================================================================================
-
-
-// ====== CONVERTE VALOR ==========================================================================================
-function ConverteValor($valor_x){
-	$valor_1 = str_replace("R$ ", "", $valor_x); //tira o símbolo
-	$valor_2 = str_replace(".", "", $valor_1); //tira o ponto
-	$valor_3 = str_replace(",", ".", $valor_2); //troca vírgula por ponto
-	return $valor_3;
-}
 // ================================================================================================================
 
 
@@ -25,7 +17,7 @@ $nome_servico_form = $_POST["nome_servico_form"];
 $cod_produto_form = $_POST["cod_produto_form"];
 $codigo_servico_w = $_POST["codigo_servico_w"];
 $id_w = $_POST["id_w"];
-$valor_servico_form = ConverteValor($_POST["valor_servico_form"]);
+$valor_servico_form = Helpers::ConverteValor($_POST["valor_servico_form"]);
 $valor_servico_print = $_POST["valor_servico_form"];
 $bloqueio_w = $_POST["bloqueio_w"];
 

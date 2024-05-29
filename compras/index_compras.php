@@ -297,7 +297,7 @@ include ("../includes/head.php");
     </div>
 
 
-	<img src="https://suif.grancafe.com.br/sis/compras/grafico_compras.php" />
+	<img src="grafico_compras.php" />
 
 
 
@@ -841,7 +841,7 @@ include ("../includes/head.php");
 
 
 <?php
-SetFileFormat("png");
+// SetFileFormat("png");
 
 #Indicamos o título do gráfico e o título dos dados no eixo X e Y do mesmo
 $grafico->SetTitle("Gráfico de exemplo");

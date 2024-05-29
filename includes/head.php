@@ -10,8 +10,16 @@
 -->
 <link rel="stylesheet" href= <?php echo "$servidor/$diretorio_servidor/calendario_jquery/calendario_jquery.css"; ?> />
 
-<script ?php echo "src='$servidor/$diretorio_servidor/calendario_jquery/jquery-1.8.2.js'"></script>
-<script ?php echo "src='$servidor/$diretorio_servidor/calendario_jquery/jquery-ui.js'"></script>
+<script src=<?= "$servidor/$diretorio_servidor/calendario_jquery/jquery-1.8.2.js"?>></script>
+<script src=<?= "$servidor/$diretorio_servidor/calendario_jquery/jquery-ui.js"?>></script>
+<!-- 
+<style type="text/css">
+    /* CSS para simular readonly de uma tag <select readonly="readonly"> */
+    select[readonly] {
+        pointer-events: none;
+        touch-action: none;
+    }
+</style> -->
 
 <!--
 <script src="http://code.jquery.com/jquery-1.8.2.js"></script>

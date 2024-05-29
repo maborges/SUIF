@@ -1,6 +1,7 @@
 ﻿<?php
 // ====== CONVERTE DATA ===========================================================================================
 // Função para converter a data de formato nacional para formato americano. Muito útil para inserir data no mysql
+/*
 function ConverteData($data_x){
 	if (strstr($data_x, "/"))//verifica se tem a barra
 	{
@@ -9,6 +10,7 @@ function ConverteData($data_x){
 	return $rstData;
 	}
 }
+*/
 // ================================================================================================================
 
 // ====== CONVERTE VALOR ==========================================================================================

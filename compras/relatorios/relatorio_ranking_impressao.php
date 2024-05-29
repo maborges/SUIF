@@ -1,22 +1,11 @@
 <?php
 include ("../../includes/config.php");
 include ("../../includes/valida_cookies.php");
+include ("../../helpers.php");
 $pagina = "relatorio_ranking_impressao";
 $titulo = "Ranking de Fornecedores";
 $modulo = "compras";
 $menu = "relatorios";
-// ================================================================================================================
-
-
-// ====== CONVERTE DATA ===========================================================================================
-function ConverteData($data_x){
-	if (strstr($data_x, "/"))
-	{
-	$d = explode ("/", $data_x);
-	$rstData = "$d[2]-$d[1]-$d[0]";
-	return $rstData;
-	}
-}
 // ================================================================================================================
 
 
@@ -28,9 +17,9 @@ $data_hoje = date('Y-m-d', time());
 $data_hoje_br = date('d/m/Y', time());
 $hora_br = date('G:i:s', time());
 $data_inicial_br = $_POST["data_inicial_busca"];
-$data_inicial_busca = ConverteData($_POST["data_inicial_busca"]);
+$data_inicial_busca = Helpers::ConverteData($_POST["data_inicial_busca"]);
 $data_final_br = $_POST["data_final_busca"];
-$data_final_busca = ConverteData($_POST["data_final_busca"]);
+$data_final_busca = Helpers::ConverteData($_POST["data_final_busca"]);
 
 $cod_produto_busca = $_POST["cod_produto_busca"];
 $filial_busca = $_POST["filial_busca"];
@@ -45,9 +34,9 @@ if (empty($data_inicial_br) or empty($data_final_br))
 	$data_final_busca = $data_hoje;}
 else
 	{$data_inicial_br = $_POST["data_inicial_busca"];
-	$data_inicial_busca = ConverteData($_POST["data_inicial_busca"]);
+	$data_inicial_busca = Helpers::ConverteData($_POST["data_inicial_busca"]);
 	$data_final_br = $_POST["data_final_busca"];
-	$data_final_busca = ConverteData($_POST["data_final_busca"]);}
+	$data_final_busca = Helpers::ConverteData($_POST["data_final_busca"]);}
 
 $mysql_filtro_data = "compras.data_compra BETWEEN '$data_inicial_busca' AND '$data_final_busca'";
 if ($data_inicial_busca == $data_final_busca)
@@ -143,7 +132,7 @@ else
 include ("../../includes/head_impressao.php");
 ?>
 
-<!-- ====== TÍTULO DA PÁGINA ====================================================================================== -->
+<!-- ====== Tï¿½TULO DA Pï¿½GINA ====================================================================================== -->
 <title>
 <?php echo "$titulo"; ?>
 </title>
@@ -156,18 +145,18 @@ include ("../../includes/head_impressao.php");
 </head>
 
 
-<!-- ====== INÍCIO ================================================================================================ -->
+<!-- ====== INï¿½CIO ================================================================================================ -->
 <body onLoad="imprimir()">
 
 <div style="width:770px; border:0px solid #F00">
 
 <?php
 // #################################################################################################################################
-// ####### Determina-se aqui nesse "FOR" "limite_registros" a quantidade de linhas que aparecerá em cada página de impressão #######
-// #######           É importante sempre testar antes para ver quantas linhas são necessárias             					 #######
+// ####### Determina-se aqui nesse "FOR" "limite_registros" a quantidade de linhas que aparecerï¿½ em cada pï¿½gina de impressï¿½o #######
+// #######           ï¿½ importante sempre testar antes para ver quantas linhas sï¿½o necessï¿½rias             					 #######
 // #################################################################################################################################
 $limite_registros = 40;
-$totalizadores = $numero_divs; // Total geral de cada produto no final da página
+$totalizadores = $numero_divs; // Total geral de cada produto no final da pï¿½gina
 $numero_paginas = ceil(($linha_compra + $totalizadores) / $limite_registros);
 
 
@@ -226,7 +215,7 @@ echo "
 </div>";
 
 
-// ====== FUNÇÃO FOR ===================================================================================
+// ====== FUNï¿½ï¿½O FOR ===================================================================================
 for ($x=1 ; $x<=$limite_registros ; $x++)
 {
 $aux_compra = mysqli_fetch_row($busca_compra);
@@ -356,7 +345,7 @@ echo "
 
 
 <!-- =============================================================================================== -->";
-echo "</div>"; // quebra de página
+echo "</div>"; // quebra de pï¿½gina
 } // fim do primeiro "FOR"
 ?>
 

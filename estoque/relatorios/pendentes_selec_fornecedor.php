@@ -9,10 +9,12 @@ $menu = "estoque";
 
 
 // ======= RECEBENDO POST =================================================================================
-$botao = $_POST["botao"];
-$fornecedor_pesquisa = $_POST["fornecedor_pesquisa"];
-$nome_form = $_POST["nome_form"];
+$botao = $_POST["botao"] ?? '';
+$fornecedor_pesquisa = $_POST["fornecedor_pesquisa"] ?? 11;
+$nome_form = $_POST["nome_form"] ?? 11;
 $data_hoje = date('d/m/Y');
+
+$produto_print_2 = $_POST['produto_print_2'] ?? '';
 // ========================================================================================================
 
 

@@ -3,8 +3,8 @@
 <head>
 
 <meta charset="UTF-8" />
-<link rel="stylesheet" type="text/css" href="https://suif.grancafe.com.br/sis/padrao.css" />
-<link rel="shortcut icon" href="https://suif.grancafe.com.br/sis/imagens/favicon_suif.ico" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="../padrao.css" />
+<link rel="shortcut icon" href="../imagens/favicon_suif.ico" type="image/x-icon" />
 
 <?php
 $pagina = "index_manutencao";
@@ -43,7 +43,7 @@ $titulo = "Sistema em Manuten&ccedil;&atilde;o";
 
 
 <div style="height:100px; width:905px; border:0px solid #000; margin-top:20px; float:left" align="center">
-<img src="https://suif.grancafe.com.br/sis/imagens/logomarca_suif.png" border="0" height="80px" />
+<img src="imagens/logomarca_suif.png" border="0" height="80px" />
 </div>
 
 <div style="height:50px; width:905px; border:0px solid #000; float:left; color:#FF0000; font-size:16px" align="center">

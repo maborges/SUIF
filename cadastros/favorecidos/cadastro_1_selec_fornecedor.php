@@ -9,13 +9,14 @@ $menu = "cadastro_favorecidos";
 
 
 // ======= RECEBENDO POST =================================================================================
-$botao = $_POST["botao"];
+$msg = '';
+$botao = $_POST["botao"] ?? '';
 $data_hoje = date('Y-m-d', time());
 $data_hoje_br = date('d/m/Y', time());
 $filial = $filial_usuario;
 
-$fornecedor_form = $_POST["fornecedor_form"];
-$nome_form = $_POST["nome_form"];
+$fornecedor_form = $_POST["fornecedor_form"] ?? '';
+$nome_form = $_POST["nome_form"] ?? '';
 // ========================================================================================================
 
 
@@ -23,7 +24,7 @@ $nome_form = $_POST["nome_form"];
 if ($nome_form != "")
 {
 include ("../../includes/conecta_bd.php");
-$busca_pessoa_geral = mysqli_query ($conexao, "SELECT codigo, nome, tipo, cpf, cnpj, cidade, estado, telefone_1 FROM cadastro_pessoa WHERE estado_registro='ATIVO' AND nome LIKE '%$nome_form%' ORDER BY nome");
+$busca_pessoa_geral = mysqli_query ($conexao, "SELECT codigo, nome, tipo, cpf, cnpj, cidade, estado, telefone_1, Id_Sankhya FROM cadastro_pessoa WHERE estado_registro='ATIVO' AND nome LIKE '%$nome_form%' ORDER BY nome");
 include ("../../includes/desconecta_bd.php");
 
 $linha_pessoa_geral = mysqli_num_rows ($busca_pessoa_geral);
@@ -172,7 +173,8 @@ else
 
 <table class='tabela_cabecalho'>
 <tr>
-<td width='450px'>Nome</td>
+<td width='65px'>Sankhya</td>
+<td width='380px'>Nome</td>
 <td width='200px'>CPF/CNPJ</td>
 <td width='200px'>Telefone</td>
 <td width='300px'>Cidade/UF</td>
@@ -201,26 +203,29 @@ if ($tipo_pessoa_w == "PF" or $tipo_pessoa_w == "pf")
 {$cpf_cnpj_w = $cpf_pessoa_w;}
 else
 {$cpf_cnpj_w = $cnpj_pessoa_w;}
+$idSankhya_pessoa_w = $aux_pessoa_geral[8];
 // ======================================================================================================
 
 
 // ====== RELATORIO ========================================================================================
 	echo "
 	<tr class='tabela_1'>
-	<td width='450px' height='24px' align='left'>
+	<td width='65px'>$idSankhya_pessoa_w</td>
+	<td width='370px' height='24px' align='left'>
 		<div style='margin-left:10px'>
 		<form action='$servidor/$diretorio_servidor/cadastros/favorecidos/cadastro_2_formulario.php' method='post'>
 		<input type='hidden' name='botao' value='FORMULARIO' />
 		<input type='hidden' name='fornecedor_form' value='$codigo_pessoa_w' />
 		<input type='hidden' name='nome_form' value='$nome_form' />
 		<input type='hidden' name='nome_fornecedor' value='$nome_pessoa_w' />
-		<input class='tabela_1' type='submit' style='width:430px; height:22px; text-align:left; border:0px solid #000; background-color:transparent' value='$nome_pessoa_w'>
+		<input type='hidden' name='idSankhya_form' value='$idSankhya_pessoa_w' />
+		<input class='tabela_1' type='submit' style='width:370px; height:22px; text-align:left; border:0px solid #000; background-color:transparent' value='$nome_pessoa_w'>
 		</form>
 		</div>
 	</td>
-	<td width='200px' align='center'>$cpf_cnpj_w</td>
-	<td width='200px' align='center'>$telefone_pessoa_w</td>
-	<td width='300px' align='center'>$cidade_pessoa_w/$estado_pessoa_w</td>
+	<td width='200px'>$cpf_cnpj_w</td>
+	<td width='200px'>$telefone_pessoa_w</td>
+	<td width='300px'>$cidade_pessoa_w/$estado_pessoa_w</td>
 	</tr>";
 
 }

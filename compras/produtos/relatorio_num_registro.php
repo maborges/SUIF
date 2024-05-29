@@ -2,33 +2,11 @@
 include ("../../includes/config.php");
 include ("../../includes/conecta_bd.php");
 include ("../../includes/valida_cookies.php");
+include ("../../helpers.php");
 $pagina = "relatorio_num_registro";
 $titulo = "Excluir Registro";
 $modulo = "compras";
 $menu = "compras";
-
-
-// ====== CONVERTE DATA ================================================================================	
-// Função para converter a data de formato nacional para formato americano. Usado para inserir data no mysql
-function ConverteData($data){
-	if (strstr($data, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-// ======================================================================================================
-
-
-// ====== CONVERTE VALOR =================================================================================	
-function ConverteValor($valor){
-	$valor_1 = str_replace(".", "", $valor);
-	$valor_2 = str_replace(",", ".", $valor_1);
-	return $valor_2;
-}
-// =======================================================================================================
-
 
 // ====== LIMITE DE DIAS PARA EXCLUSAO ==========================================================================
 $busca_limite_exclusao = mysqli_query ($conexao, "SELECT * FROM configuracoes");
@@ -42,7 +20,7 @@ $data_hoje = date('Y-m-d', time());
 $filial = $filial_usuario;
 
 $data_inicial_aux = $_POST["data_inicial"];
-$data_inicial = ConverteData($_POST["data_inicial"]);
+$data_inicial = Helpers::ConverteData($_POST["data_inicial"]);
 $numero_compra = $_POST["numero_compra"];
 
 $botao = $_POST["botao"];

@@ -8,6 +8,7 @@ SELECT codigo, descricao, cod_produto FROM select_tipo_produto WHERE estado_regi
 Exportar formato PHP Array
 */
 
+/* /* VERSÃO ANTIGA QUE ESTAVA FIXA
 $select_tipo_produto = array(
   array('codigo' => '1','descricao' => '4','cod_produto' => '2'),
   array('codigo' => '2','descricao' => '6','cod_produto' => '2'),
@@ -51,5 +52,25 @@ $select_tipo_produto = array(
   array('codigo' => '64','descricao' => 'MADURA','cod_produto' => '13'),
   array('codigo' => '65','descricao' => 'G4G','cod_produto' => '3')
 );
+
+*/
+
+include "conecta_bd.php";
+
+$resultado = mysqli_query($conexao, "SELECT codigo, descricao, cod_produto 
+                                       FROM select_tipo_produto 
+                                      WHERE estado_registro='ATIVO' 
+                                    ORDER BY codigo");
+
+
+$select_tipo_produto = array();
+
+// Loop através dos resultados da consulta
+while ($linha = $resultado->fetch_assoc()) {
+    // Adiciona os resultados ao array
+    $select_tipo_produto[] = $linha;
+}
+
+include "desconecta_bd.php";
 
 ?>

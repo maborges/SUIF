@@ -2,6 +2,7 @@
 include ('../../includes/config.php'); 
 include ('../../includes/conecta_bd.php');
 include ('../../includes/valida_cookies.php');
+
 $pagina = 'entrada_cadastro_inicial';
 $titulo = 'Estoque - Entrada';
 $modulo = 'estoque';
@@ -28,22 +29,6 @@ include ('../../includes/head.php');
 <body onload="javascript:foco('ok');">
 
 <?php
-
-// ============================================== CONVERTE DATA ====================================================	
-// Função para converter a data de formato nacional para formato americano. Muito útil para inserir data no mysql
-
-function ConverteData($data){
-
-	if (strstr($data, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-//echo ConverteData($data_emissao);
-// =================================================================================================================
-
 
 
 // =================================================================================================================

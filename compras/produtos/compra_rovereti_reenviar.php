@@ -2,23 +2,12 @@
 	include ('../../includes/config.php'); 
 	include ('../../includes/conecta_bd.php');
 	include ('../../includes/valida_cookies.php');
+	include ("../../helpers.php");
+
 	$pagina = 'compra_rovereti_reenviar';
 	$titulo = 'Reenvio de Compra ao Rovereti';
 	$menu = 'produtos';
 	$modulo = 'compras';
-
-
-// ========== ELIMINA MÁSCARAS CPF E CNPJ ================================================================
-function limpa_cpf_cnpj($limpa){
-	 $limpa = trim($limpa);
-	 $limpa = str_replace(".", "", $limpa);
-	 $limpa = str_replace(",", "", $limpa);
-	 $limpa = str_replace("-", "", $limpa);
-	 $limpa = str_replace("/", "", $limpa);
-	 return $limpa;
-}
-// ========================================================================================================
-
 
 // ====== RETIRA ACENTUAÇÃO ===============================================================================
 $comAcentos = array('à', 'á', 'â', 'ã', 'ä', 'å', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö', 'ù', 'ü', 'ú', 'ÿ', 'À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ù', 'Ü', 'Ú');
@@ -113,7 +102,7 @@ if ($aux_forn[2] == "PF" or $aux_forn[2] == "pf")
 {$cpf_cnpj = $aux_forn[3];}
 else
 {$cpf_cnpj = $aux_forn[4];}
-$cpf_aux = limpa_cpf_cnpj($cpf_cnpj); // ==== INTEGRAÇÃO ROVERETI =====
+$cpf_aux = Helpers::limpa_cpf_cnpj($cpf_cnpj); // ==== INTEGRAÇÃO ROVERETI =====
 $fornecedor_rovereti = str_replace($comAcentos, $semAcentos, $fornecedor_print); // ==== INTEGRAÇÃO ROVERETI =====
 // ======================================================================================================
 

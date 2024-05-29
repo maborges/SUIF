@@ -4,6 +4,7 @@
 include ('../../includes/config.php'); 
 include ('../../includes/conecta_bd.php');
 include ('../../includes/valida_cookies.php');
+include_once("../../helpers.php");
 $pagina = 'extrato_ficha_impressao';
 $titulo = 'Movimenta&ccedil;&atilde;o Ficha do Produtor';
 $modulo = 'compras';
@@ -11,46 +12,22 @@ $menu = 'ficha_produtor';
 // ================================================================================================================
 
 
-//Direciona o sistema para a página de MANUTENÇÃO
+//Direciona o sistema para a pï¿½gina de MANUTENï¿½ï¿½O
 header ("Location: $servidor/$diretorio_servidor/pagina_manutencao.php");
-
-
-
-// ====== CONVERTE DATA ===========================================================================================
-// Função para converter a data de formato nacional para formato americano. Muito útil para inserir data no mysql
-function ConverteData($data){
-	if (strstr($data, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-// ================================================================================================================
-
-
-// ====== CONVERTE VALOR ==========================================================================================
-function ConverteValor($valor){
-	$valor_1 = str_replace(".", "", $valor);
-	$valor_2 = str_replace(",", ".", $valor_1);
-	return $valor_2;
-}
-// ================================================================================================================
-
 
 // ====== RECEBE POST ==============================================================================================
 $hoje = date('Y-m-d', time());
 $data_hoje = date('d/m/Y', time());
-$mes_atras = date ('d/m/Y', strtotime('-60 days')); // 2 mêses atras
+$mes_atras = date ('d/m/Y', strtotime('-60 days')); // 2 mï¿½ses atras
 
 $filial = $filial_usuario;
 $fornecedor = $_POST["fornecedor"];
 $cod_produto = $_POST["cod_produto"];
 $botao = $_POST["botao"];
 $data_inicial_aux = $_POST["data_inicial"];
-$data_inicial = ConverteData($_POST["data_inicial"]);
+$data_inicial = Helpers::ConverteData($_POST["data_inicial"]);
 $data_final_aux = $_POST["data_final"];
-$data_final = ConverteData($_POST["data_final"]);
+$data_final = Helpers::ConverteData($_POST["data_final"]);
 $dia_atras = date('Y-m-d', strtotime('-1 days', strtotime($data_inicial)));
 $mostra_cancelada = $_POST["mostra_cancelada"];
 
@@ -119,11 +96,11 @@ $soma_compras_print = number_format($soma_compras[0],2,",",".");
 
 
 // ====== SALDO PRODUTOR =================================================================================
-// ------ SOMA QUANTIDADE DE ENTRADA (PERÍODO) --------------------------------------------------------------------
+// ------ SOMA QUANTIDADE DE ENTRADA (PERï¿½ODO) --------------------------------------------------------------------
 $soma_quant_produto_e = mysqli_fetch_row(mysqli_query ($conexao, "SELECT SUM(quantidade) FROM compras WHERE estado_registro!='EXCLUIDO' AND (movimentacao='ENTRADA' OR movimentacao='TRANSFERENCIA_ENTRADA' OR movimentacao='ENTRADA_FUTURO') AND data_compra>='$data_inicial' AND data_compra<='$data_final' AND cod_produto='$cod_produto' AND fornecedor='$fornecedor' AND filial='$filial'"));
 $quant_produto_e_print = number_format($soma_quant_produto_e[0],2,",",".");
 
-// ------ SOMA QUANTIDADE DE SAÍDA (PERÍODO) -----------------------------------------------------------------------
+// ------ SOMA QUANTIDADE DE SAï¿½DA (PERï¿½ODO) -----------------------------------------------------------------------
 $soma_quant_produto_s = mysqli_fetch_row(mysqli_query ($conexao, "SELECT SUM(quantidade) FROM compras WHERE estado_registro!='EXCLUIDO' AND (movimentacao='COMPRA' OR movimentacao='TRANSFERENCIA_SAIDA' OR movimentacao='SAIDA' OR movimentacao='SAIDA_FUTURO') AND data_compra>='$data_inicial' AND data_compra<='$data_final' AND cod_produto='$cod_produto' AND fornecedor='$fornecedor' AND filial='$filial'"));
 $quant_produto_s_print = number_format($soma_quant_produto_s[0],2,",",".");
 
@@ -131,7 +108,7 @@ $quant_produto_s_print = number_format($soma_quant_produto_s[0],2,",",".");
 $soma_quant_total_produto_e = mysqli_fetch_row(mysqli_query ($conexao, "SELECT SUM(quantidade) FROM compras WHERE estado_registro!='EXCLUIDO' AND (movimentacao='ENTRADA' OR movimentacao='TRANSFERENCIA_ENTRADA' OR movimentacao='ENTRADA_FUTURO') AND cod_produto='$cod_produto' AND fornecedor='$fornecedor' AND filial='$filial'"));
 $quant_produto_total_e_print = number_format($soma_quant_total_produto_e[0],2,",",".");
 
-// ------ SOMA QUANTIDADE DE SAÍDA (GERAL) -----------------------------------------------------------------------
+// ------ SOMA QUANTIDADE DE SAï¿½DA (GERAL) -----------------------------------------------------------------------
 $soma_quant_total_produto_s = mysqli_fetch_row(mysqli_query ($conexao, "SELECT SUM(quantidade) FROM compras WHERE estado_registro!='EXCLUIDO' AND (movimentacao='COMPRA' OR movimentacao='TRANSFERENCIA_SAIDA' OR movimentacao='SAIDA' OR movimentacao='SAIDA_FUTURO') AND cod_produto='$cod_produto' AND fornecedor='$fornecedor' AND filial='$filial'"));
 $quant_produto_total_s_print = number_format($soma_quant_total_produto_s[0],2,",",".");
 
@@ -146,7 +123,7 @@ include ('../../includes/head_impressao.php');
 ?>
 
 
-<!-- ==================================   T Í T U L O   D A   P Á G I N A   ====================================== -->
+<!-- ==================================   T ï¿½ T U L O   D A   P ï¿½ G I N A   ====================================== -->
 <title>
 <?php echo "$titulo"; ?>
 </title>
@@ -159,7 +136,7 @@ include ('../../includes/head_impressao.php');
 </head>
 
 
-<!-- =============================================   I N Í C I O   =============================================== -->
+<!-- =============================================   I N ï¿½ C I O   =============================================== -->
 <body onLoad="imprimir()">
 
 <div id="centro" style="width:745px; border:0px solid #F00">
@@ -342,8 +319,8 @@ $linha_tratado = mysqli_num_rows ($busca_tratado);
 	
 
 // ##############################################################################################################
-// ####### Determina-se aqui nesse "FOR" "limite_registros" a quantidade de linhas que aparecerá em cada página de impressão #######
-// #######           É importante sempre testar antes para ver quantas linhas são necessárias             #######
+// ####### Determina-se aqui nesse "FOR" "limite_registros" a quantidade de linhas que aparecerï¿½ em cada pï¿½gina de impressï¿½o #######
+// #######           ï¿½ importante sempre testar antes para ver quantas linhas sï¿½o necessï¿½rias             #######
 // ############################################################################################################## 
 /*
 $limite_registros = 44;
@@ -550,7 +527,7 @@ $linha_produto_print = mysqli_num_rows ($busca_produto_print);
 	else
 	{$unidade_print = "-";}
 
-// SITUAÇÃO PRINT  ==========================================================================================
+// SITUAï¿½ï¿½O PRINT  ==========================================================================================
 	if ($situacao == "ENTREGUE")
 	{$situacao_print = "ENTREGUE";}
 	elseif ($situacao == "A_ENTREGAR")
@@ -815,7 +792,7 @@ echo "
 
 <!-- ####################################################################### -->";
 /*
-echo "</div>"; // quebra de página
+echo "</div>"; // quebra de pï¿½gina
 } // fim do primeiro "FOR"
 */
 ?>

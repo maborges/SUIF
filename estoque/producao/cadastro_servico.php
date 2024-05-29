@@ -3,43 +3,13 @@
 include ('../../includes/config.php'); 
 include ('../../includes/conecta_bd.php');
 include ('../../includes/valida_cookies.php');
+include ("../../helpers.php");
+
 $pagina = 'cadastro_servico';
 $titulo = 'Cadastro de Servi&ccedil;os';
 $modulo = 'estoque';
 $menu = 'movimentacao';
 // ================================================================================================================
-
-
-// ====== CONVERTE DATA ===========================================================================================
-// Função para converter a data de formato nacional para formato americano. Muito útil para inserir data no mysql
-function ConverteData($data_x){
-	if (strstr($data_x, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data_x);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-// ================================================================================================================
-
-
-// ====== CONVERTE VALOR ==========================================================================================
-function ConverteValor($valor_x){
-	$valor_1 = str_replace(".", "", $valor_x);
-	$valor_2 = str_replace(",", ".", $valor_1);
-	return $valor_2;
-}
-// ================================================================================================================
-
-
-// ====== CONVERTE PESO ==========================================================================================
-function ConvertePeso($peso_x){
-	$peso_1 = str_replace(".", "", $peso_x);
-	$peso_2 = str_replace(",", "", $peso_1);
-	return $peso_2;
-}
-// ================================================================================================================
-
 
 // ====== RECEBE POST ==============================================================================================
 $botao = $_POST["botao"];
@@ -51,7 +21,7 @@ $id_w = $_POST["id_w"];
 if ($botao == "EDICAO")
 {$valor_servico_form = $_POST["valor_servico_form"];}
 else
-{$valor_servico_form = ConverteValor($_POST["valor_servico_form"]);}
+{$valor_servico_form = Helpers::ConverteValor($_POST["valor_servico_form"]);}
 
 $usuario_cadastro_form = $nome_usuario_print;
 $data_cadastro_form = date('Y-m-d', time());

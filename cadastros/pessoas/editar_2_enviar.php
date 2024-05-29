@@ -2,6 +2,8 @@
 include ("../../includes/config.php"); 
 include ("../../includes/conecta_bd.php");
 include ("../../includes/valida_cookies.php");
+include ("../../helpers.php");
+
 $pagina = "editar_2_enviar";
 $titulo = "Editar Cadastro de Pessoa";
 $modulo = "cadastros";
@@ -9,15 +11,12 @@ $menu = "cadastro_pessoas";
 // ================================================================================================================
 
 
-// ====== CONVERTE DATA, VALOR e PESO =============================================================================
-include ("../../includes/converte.php");
-// ================================================================================================================
-
-
 // ======= RECEBENDO POST =========================================================================================
 $botao = $_POST["botao"];
 $id_w = $_POST["id_w"];
+
 $codigo_pessoa_w = $_POST["codigo_pessoa_w"];
+$idSankhya_w = $_POST["idSankhya_w"];
 $pagina_mae = $_POST["pagina_mae"];
 $data_hoje = date('Y-m-d');
 $data_hoje_br = date('d/m/Y');
@@ -31,12 +30,12 @@ $fantasia_busca = $_POST["fantasia_busca"];
 
 $tipo_pessoa_form = $_POST["tipo_pessoa_form"];
 $nome_form = $_POST["nome_form"];
-$cpf_form = $_POST["cpf_form"];
-$cnpj_form = $_POST["cnpj_form"];
+$cpf_form = $_POST["cpf_form"] ?? '';
+$cnpj_form = $_POST["cnpj_form"] ?? '';
 $rg_form = $_POST["rg_form"];
-$data_nascimento_form = $_POST["data_nascimento_form"];
-$sexo_form = $_POST["sexo_form"];
-$nome_fantasia_form = $_POST["nome_fantasia_form"];
+$data_nascimento_form = $_POST["data_nascimento_form"] ?? '';
+$sexo_form = $_POST["sexo_form"] ?? '';
+$nome_fantasia_form = $_POST["nome_fantasia_form"] ?? '';
 $telefone_1_form = $_POST["telefone_1_form"];
 $telefone_2_form = $_POST["telefone_2_form"];
 $endereco_form = $_POST["endereco_form"];
@@ -57,7 +56,7 @@ $data_alteracao = date('Y-m-d', time());
 
 
 // ======= ALTERA DATA ==========================================================================================
-$data_nascimento_aux = ConverteData($data_nascimento_form);
+$data_nascimento_aux = Helpers::ConverteData($data_nascimento_form);
 
 if ($data_nascimento_aux == "" or $data_nascimento_aux <= 1900-01-01)
 {$data_nascimento_aux = "1900-01-01";}
@@ -90,7 +89,6 @@ $busca_classificacao = mysqli_query ($conexao, "SELECT * FROM classificacao_pess
 $aux_bcl = mysqli_fetch_row($busca_classificacao);
 $classificacao_print = $aux_bcl[1];
 // ================================================================================================================
-
 
 // ======= BUSCA CPF E CNPJ =======================================================================================
 $busca_cpf = mysqli_query ($conexao, "SELECT * FROM cadastro_pessoa WHERE estado_registro!='EXCLUIDO' AND cpf='$cpf_form' AND cpf!='' AND codigo_pessoa!='$codigo_pessoa_w'");
@@ -305,10 +303,10 @@ if ($botao == "EDITAR_CADASTRO")
 
 
 	// ====== TABELA CADASTRO_PESSOA ==========================================================================
-	$editar = mysqli_query ($conexao, "UPDATE cadastro_pessoa SET nome='$nome_form', cpf='$cpf_form', cnpj='$cnpj_form', rg='$rg_form', sexo='$sexo_form', data_nascimento='$data_nascimento_aux', endereco='$endereco_form', bairro='$bairro_form', cidade='$cidade_aux', cep='$cep_form', estado='$estado_aux', telefone_1='$telefone_1_form', telefone_2='$telefone_2_form', email='$email_form', classificacao_1='$classificacao_1_form', observacao='$obs_form', nome_fantasia='$nome_fantasia_form', numero_residencia='$numero_residencia_form', complemento='$complemento_form', usuario_alteracao='$usuario_alteracao', hora_alteracao='$hora_alteracao', data_alteracao='$data_alteracao' WHERE codigo='$id_w'");
+	$editar = mysqli_query ($conexao, "UPDATE cadastro_pessoa SET nome='$nome_form', cpf='$cpf_form', cnpj='$cnpj_form', rg='$rg_form', sexo='$sexo_form', data_nascimento='$data_nascimento_aux', endereco='$endereco_form', bairro='$bairro_form', cidade='$cidade_aux', cep='$cep_form', estado='$estado_aux', telefone_1='$telefone_1_form', telefone_2='$telefone_2_form', email='$email_form', classificacao_1='$classificacao_1_form', observacao='$obs_form', nome_fantasia='$nome_fantasia_form', numero_residencia='$numero_residencia_form', complemento='$complemento_form', usuario_alteracao='$usuario_alteracao', hora_alteracao='$hora_alteracao', data_alteracao='$data_alteracao', id_sankhya='$idSankhya_w', tipo='$tipo_pessoa_form' WHERE codigo='$id_w'");
 
 	// ====== TABELA CADASTRO_FAVORECIDO ======================================================================
-	$editar_favorecido = mysqli_query ($conexao, "UPDATE cadastro_favorecido SET usuario_alteracao='$usuario_alteracao', hora_alteracao='$hora_alteracao', data_alteracao='$data_alteracao', nome='$nome_form' WHERE codigo_pessoa='$codigo_pessoa_w'");
+	$editar_favorecido = mysqli_query ($conexao, "UPDATE cadastro_favorecido SET usuario_alteracao='$usuario_alteracao', hora_alteracao='$hora_alteracao', data_alteracao='$data_alteracao', nome='$nome_form', id_sankhya='$idSankhya_w' WHERE codigo_pessoa='$codigo_pessoa_w'");
 
 	}
 }
@@ -816,6 +814,7 @@ else
 	<form name='voltar' action='$servidor/$diretorio_servidor/cadastros/pessoas/editar_1_formulario.php' method='post'>
 	<input type='hidden' name='botao' value='ERRO' />
 	<input type='hidden' name='id_w' value='$id_w'>
+	<input type='hidden' name='idSankhya_w' value='$idSankhya_w'>
 	<input type='hidden' name='codigo_pessoa_w' value='$codigo_pessoa_w'>
 	<input type='hidden' name='pagina_mae' value='$pagina_mae'>	
 	<input type='hidden' name='pesquisar_por_busca' value='$pesquisar_por_busca'>

@@ -8,20 +8,6 @@ $modulo = "compras";
 $menu = "contratos";
 // ================================================================================================================
 
-
-// ====== CONVERTE DATA ===========================================================================================
-// Função para converter a data de formato nacional para formato americano. Muito &uacute;til para inserir data no mysql
-function ConverteData($data_x){
-if (strstr($data_x, "/"))//verifica se tem a barra
-{
-$d = explode ("/", $data_x);//tira a barra
-$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-return $rstData;
-}
-}
-// ================================================================================================================
-
-
 // ======= RECEBENDO POST =========================================================================================
 $numero_contrato = $_POST["numero_contrato"];
 // ================================================================================================================
@@ -49,6 +35,8 @@ $filial_w = $aux_contrato[10];
 $observacao_w = $aux_contrato[11];
 $estado_registo_w = $aux_contrato[12];
 $pendencia_assinatura_w = $aux_contrato[13];
+
+$rt = $_POST["rt"] ?? '';
 
 
 $usuario_cadastro_w = $aux_contrato[14];
@@ -186,7 +174,7 @@ include ("../../includes/head_impressao.php");
 ?>
 
 
-<!-- ====== TÍTULO DA PÁGINA ====================================================================================== -->
+<!-- ====== Tï¿½TULO DA Pï¿½GINA ====================================================================================== -->
 <title>
 <?php echo "$titulo"; ?>
 </title>
@@ -199,7 +187,7 @@ include ("../../includes/head_impressao.php");
 </head>
 
 
-<!-- ====== INÍCIO ================================================================================================ -->
+<!-- ====== INï¿½CIO ================================================================================================ -->
 <body onLoad="imprimir()">
 
 <div id="centro" style="width:750px; border:0px solid #000; float:left">
@@ -242,7 +230,7 @@ O COMPROMITENTE CEDENTE disponibiliza ao COMPROMITENTE RECEBEDOR o numer&aacute;
 <div id="centro" style="width:640px; border:0px solid #000; margin-top:0px; margin-left:80px; font-size:13px" align="justify">
 Dever&aacute; o COMPROMITENTE RECEBEDOR quitar esta quantia adiantadamente recebida at&eacute; o dia <b><?php echo "$data_vencimento_print"; ?></b>, em produto
 <?php
-if ($cod_produto_w == "2" or $cod_produto_w == "10") //CAFÉ
+if ($cod_produto_w == "2" or $cod_produto_w == "10") //CAFï¿½
 { echo "caf&eacute; beneficiado, cr&uacute; em gr&atilde;o, safra $safra_w, tipo 7, bebida neutra, padr&atilde;o, bica corrida acondicionados em sacaria de juta em bom estado, com capacidade de 60 (sessenta) quilogramas l&iacute;quidos cada, sendo feito a convers&atilde;o para designar a quantidade de sacas pelo mercado deste produto ao dia do vencimento, sendo que n&atilde;o sofrer&aacute; nenhum ajuste positivo ou negativo  em raz&atilde;o do pre&ccedil;o m&eacute;dio de mercado do dia da entrega, devendo o mesmo se responsabilizar pela entrega que se dar&aacute; por sua conta e ordem, no armaz&eacute;m da Grancaf&eacute;, situado na Av. Prefeito Samuel Batista Cruz, N. 8481, Bairro Nova Bet&acirc;nia - Linhares-ES, CEP: 29.907-515, sem qualquer despesa por parte da COMPROMITENTE CEDENTE.";}
 
 elseif ($cod_produto_w == "3") //PIMENTA
@@ -275,7 +263,7 @@ O presente contrato &eacute; celebrado em car&aacute;ter irrevog&aacute;vel e ir
 <div id="centro" style="width:640px; border:0px solid #000; margin-top:0px; margin-left:80px; font-size:13px" align="justify">
 A eventual inadimpl&ecirc;ncia do COMPROMITENTE RECEBEDOR , consistente na recusa da entrega do produto at&eacute; a data estipulada no contrato, dar&aacute; a COMPROMITENTE CEDENTE o direito de ingressar em ju&iacute;zo, a receber o produto, al&eacute;m de responder o COMPROMITENTE RECEBEDOR por perdas e danos, custas e honor&aacute;rios advocat&iacute;cios, al&eacute;m da multa equivalente a 10%
 <?php
-if ($cod_produto_w == "2" or $cod_produto_w == "10") //CAFÉ
+if ($cod_produto_w == "2" or $cod_produto_w == "10") //CAFï¿½
 { echo "em sacas de caf&eacute; do mesmo padr&atilde;o e qualidade ora comercializadas.";}
 elseif ($cod_produto_w == "3") //PIMENTA
 { echo "em quilogramas de pimenta do reino do mesmo padr&atilde;o e qualidade ora comercializadas.";}

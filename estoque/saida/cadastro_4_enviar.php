@@ -3,17 +3,13 @@
 include ('../../includes/config.php'); 
 include ('../../includes/conecta_bd.php');
 include ('../../includes/valida_cookies.php');
+include ("../../helpers.php");
+
 $pagina = 'cadastro_4_enviar';
 $titulo = 'Novo Romaneio de Sa&iacute;da';
 $modulo = 'estoque';
 $menu = 'saida';
 // ================================================================================================================
-
-
-// ====== CONVERTE DATA, VALOR e PESO =============================================================================
-include ('../../includes/converte.php');
-// ================================================================================================================
-
 
 // ======= RECEBENDO POST =========================================================================================
 $botao = $_POST["botao"];
@@ -24,13 +20,13 @@ $filial = $filial_usuario;
 $numero_romaneio = $_POST["numero_romaneio"];
 $fornecedor_form = $_POST["fornecedor_form"];
 $cod_produto_form = $_POST["cod_produto_form"];
-$peso_form = ConvertePeso($_POST["peso_form"]);
-$peso_inicial_form = ConvertePeso($_POST["peso_inicial_form"]);
-$peso_final_form = ConvertePeso($_POST["peso_final_form"]);
+$peso_form = Helpers::ConvertePeso($_POST["peso_form"]);
+$peso_inicial_form = Helpers::ConvertePeso($_POST["peso_inicial_form"]);
+$peso_final_form = Helpers::ConvertePeso($_POST["peso_final_form"]);
 $cod_sacaria_form = $_POST["cod_sacaria_form"];
-$quant_sacaria_form = ConvertePeso($_POST["quant_sacaria_form"]);
-$desconto_form = ConvertePeso($_POST["desconto_form"]);
-$quant_volume_form = ConvertePeso($_POST["quant_volume_form"]);
+$quant_sacaria_form = Helpers::ConvertePeso($_POST["quant_sacaria_form"]);
+$desconto_form = Helpers::ConvertePeso($_POST["desconto_form"]);
+$quant_volume_form = Helpers::ConvertePeso($_POST["quant_volume_form"]);
 $cod_tipo_produto_form = $_POST["cod_tipo_produto_form"];
 $romaneio_manual_form = $_POST["romaneio_manual_form"];
 $filial_origem_form = $_POST["filial_origem_form"];

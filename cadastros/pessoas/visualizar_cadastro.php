@@ -11,15 +11,17 @@ $menu = "cadastro_pessoas";
 
 // ======= RECEBENDO POST =========================================================================================
 $botao = $_POST["botao"];
-$id_w = $_POST["id_w"];
-$codigo_pessoa_w = $_POST["codigo_pessoa_w"];
-$pagina_mae = $_POST["pagina_mae"];
+$id_w = $_POST["id_w"] ?? '';
+$idSankhya_w = $_POST["idSankhya_w"] ?? '';
+$idSankhyaInformado =  $_POST["idSankhyaInformado"] ?? false;
+$codigo_pessoa_w = $_POST["codigo_pessoa_w"] ?? '';
+$pagina_mae = $_POST["pagina_mae"] ?? '';
 
 $pesquisar_por_busca = $_POST["pesquisar_por_busca"];
-$nome_busca = $_POST["nome_busca"];
-$cpf_busca = $_POST["cpf_busca"];
-$cnpj_busca = $_POST["cnpj_busca"];
-$fantasia_busca = $_POST["fantasia_busca"];
+$nome_busca = $_POST["nome_busca"] ?? '';
+$cpf_busca = $_POST["cpf_busca"] ?? '';
+$cnpj_busca = $_POST["cnpj_busca"] ?? '';
+$fantasia_busca = $_POST["fantasia_busca"] ?? '';
 // ================================================================================================================
 
 
@@ -73,7 +75,8 @@ else
 {
 $data_cadastro_w = date('d/m/Y', strtotime($aux_pessoa[30]));
 $hora_cadastro_w = $aux_pessoa[29];
-$dados_cadastro_w = " &#13; Cadastrado por: $usuario_cadastro_w $data_cadastro_w $hora_cadastro_w";
+//$dados_cadastro_w = " &#13; Cadastrado por: $usuario_cadastro_w $data_cadastro_w $hora_cadastro_w";
+$dados_cadastro_w = "$usuario_cadastro_w $data_cadastro_w $hora_cadastro_w";
 }
 
 $usuario_alteracao_w = $aux_pessoa[31];
@@ -83,7 +86,8 @@ else
 {
 $data_alteracao_w = date('d/m/Y', strtotime($aux_pessoa[33]));
 $hora_alteracao_w = $aux_pessoa[32];
-$dados_alteracao_w = " &#13; Editado por: $usuario_alteracao_w $data_alteracao_w $hora_alteracao_w";
+//$dados_alteracao_w = " &#13; Editado por: $usuario_alteracao_w $data_alteracao_w $hora_alteracao_w";
+$dados_alteracao_w = "$usuario_alteracao_w $data_alteracao_w $hora_alteracao_w";
 }
 
 $usuario_exclusao_w = $aux_pessoa[36];
@@ -94,7 +98,8 @@ else
 $data_exclusao_w = date('d/m/Y', strtotime($aux_pessoa[37]));
 $hora_exclusao_w = $aux_pessoa[38];
 $motivo_exclusao_w = $aux_pessoa[39];
-$dados_exclusao_w = " &#13; Exclu&iacute;do por: $usuario_exclusao_w $data_exclusao_w $hora_exclusao_w";
+//$dados_exclusao_w = " &#13; Exclu&iacute;do por: $usuario_exclusao_w $data_exclusao_w $hora_exclusao_w";
+$dados_exclusao_w = "$usuario_exclusao_w $data_exclusao_w $hora_exclusao_w";
 }
 // ======================================================================================================
 
@@ -228,6 +233,21 @@ include ("../../includes/head.php");
 <!-- ===========  INÍCIO DO FORMULÁRIO =========== -->
 <div style="width:1030px; height:330px; margin:auto; border:1px solid transparent; color:#003466">
 
+<!-- =======  ID SANKHYA ============================================================================================== -->
+<div style="width:1030px; height:50px; margin:auto; border:1px solid transparent; color:#003466">
+	<div style="width:100px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
+        <div class="form_rotulo" style="width:334px; height:17px; border:1px solid transparent; float:left">
+		Código Sankhya:
+        </div>
+
+        <div style="width:334px; height:25px; float:left; border:1px solid transparent">
+        <div style="width:150px; height:25px; border:1px solid #999; float:left; font-size:12px; text-align:center; background-color:#EEE">
+        <div style="margin-top:4px; margin-left:5px; width:100px; height:16px; text-align:left; overflow:hidden"><?php echo "$idSankhya_w" ?></div></div>
+        </div>
+	</div>
+</div>
+<p></p>
+<!-- ================================================================================================================ -->
 
 <!-- =======  TIPO PESSOA ========================================================================================== -->
 	<div style="width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
@@ -469,8 +489,8 @@ if ($tipo_pessoa_form == "PF" or $tipo_pessoa_form == "pf")
 		{echo"<div style='width:153px; height:25px; border:1px solid #999; float:left; font-size:12px; text-align:center; background-color:#EEE'>
 		<div style='margin-top:6px; margin-left:5px; width:143px; height:16px; text-align:left; overflow:hidden'>$cidade</div></div>";}
 		else
-		{echo"<div style='width:153px; height:25px; border:1px solid #999; float:left; font-size:9px; text-align:center; background-color:#EEE'>
-		<div style='margin-top:2px; margin-left:5px; width:143px; height:23px; text-align:left; overflow:hidden'>$cidade</div></div>";}
+		{echo"<div style='width:153px; height:25px; border:1px solid #999; float:left; font-size:12px; text-align:center; background-color:#EEE'>
+		<div style='margin-top:6px; margin-left:5px; width:143px; height:23px; text-align:left; overflow:hidden'>$cidade</div></div>";}
 		?>
         </div>
 	</div>
@@ -555,65 +575,19 @@ if ($tipo_pessoa_form == "PF" or $tipo_pessoa_form == "pf")
 
 
 <!-- ======= DADOS CADASTRO ========================================================================================= -->
-<?php
-if ($dados_cadastro_w != "")
-{echo "
-	<div style='width:339px; height:50px; border:1px solid transparent; margin-top:10px; float:left'>
-        <div class='form_rotulo' style='width:334px; height:17px; border:1px solid transparent; float:left'>
-		<!-- Cadastrado por: -->
-        </div>
 
-        <div style='width:334px; height:25px; float:left; border:1px solid transparent'>
-        <div style='width:324px; height:25px; border:0px solid #999; float:left; color:#999; font-size:10px; text-align:center; background-color:#EEE'>
-        <div style='margin-top:6px; margin-left:7px; width:314px; height:16px; text-align:left; overflow:hidden'><i>$dados_cadastro_w</i></div></div>
-        </div>
-	</div>";}
-?>
-<!-- ================================================================================================================ -->
+<div style='width:1000px; padding: 5px; float:left; display: flex;'>
+	<!-- <div class='form_rotulo' style='width:334px; height:17px; border:1px solid transparent; float:left'> -->
+	<div class='form_rotulo' style='padding: 5px; margin: 5px; background-color:#EEE; flex: 1; font-size:10px'> Cadastrado por: <?php echo $dados_cadastro_w ?>
+    </div>
 
+	<div class='form_rotulo' style='padding: 5px; margin: 5px; background-color:#EEE; flex: 1; font-size:10px'> Editado por: <?php echo $dados_alteracao_w ?>
+    </div>
 
-<!-- ======= DADOS EDIÇÃO =========================================================================================== -->
-<?php
-if ($dados_alteracao_w != "")
-{echo "
-	<div style='width:339px; height:50px; border:1px solid transparent; margin-top:10px; float:left'>
-        <div class='form_rotulo' style='width:334px; height:17px; border:1px solid transparent; float:left'>
-		<!-- Editado por: -->
-        </div>
+	<div class='form_rotulo' style='padding: 5px; margin: 5px; background-color:#EEE; flex: 1; font-size:10px'> Excluido por: <?php echo $dados_exclusao_w ?>
+    </div>
 
-        <div style='width:334px; height:25px; float:left; border:1px solid transparent'>
-        <div style='width:324px; height:25px; border:0px solid #999; float:left; color:#999; font-size:10px; text-align:center; background-color:#EEE'>
-        <div style='margin-top:6px; margin-left:7px; width:314px; height:16px; text-align:left; overflow:hidden'><i>$dados_alteracao_w</i></div></div>
-        </div>
-	</div>";}
-?>
-<!-- ================================================================================================================ -->
-
-
-<!-- ======= DADOS EXCLUSÃO ========================================================================================= -->
-<?php
-if ($usuario_exclusao_w != "")
-{echo "
-	<div style='width:339px; height:50px; border:1px solid transparent; margin-top:10px; float:left'>
-        <div class='form_rotulo' style='width:334px; height:17px; border:1px solid transparent; float:left'>
-		<!-- Exclu&iacute;do por: -->
-        </div>
-
-        <div style='width:334px; height:25px; float:left; border:1px solid transparent'>
-        <div style='width:324px; height:25px; border:0px solid #999; float:left; color:#999; font-size:10px; text-align:center; background-color:#EEE'>
-        <div style='margin-top:6px; margin-left:7px; width:314px; height:16px; text-align:left; overflow:hidden' title='Motivo da Exclus&atilde;o: $motivo_exclusao_w'>
-		<i>$dados_exclusao_w</i></div></div>
-        </div>
-	</div>";}
-?>
-<!-- ================================================================================================================ -->
-
-
-
-
-
-
-
+</div>
 
 </div>
 <!-- ===========  FIM DO FORMULÁRIO =========== -->
@@ -637,6 +611,8 @@ echo "
 	<input type='hidden' name='pagina_mae' value='$pagina_mae'>
 	<input type='hidden' name='botao' value='EDITAR'>
 	<input type='hidden' name='id_w' value='$id_w'>
+	<input type='hidden' name='idSankhya_w' value='$idSankhya_w'>
+	<input type='hidden' name='idSankhyaInformado' value='$idSankhyaInformado'>
 	<input type='hidden' name='codigo_pessoa_w' value='$codigo_pessoa_w'>
 	<input type='hidden' name='pesquisar_por_busca' value='$pesquisar_por_busca'>
 	<input type='hidden' name='nome_busca' value='$nome_busca'>
@@ -719,3 +695,5 @@ echo "
 <?php include ("../../includes/desconecta_bd.php"); ?>
 </body>
 </html>
+
+

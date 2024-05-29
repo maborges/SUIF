@@ -1,24 +1,12 @@
 <?php
 include ("../../includes/config.php"); 
 include ("../../includes/valida_cookies.php");
+include_once("../../helpers.php");
 $pagina = "ficha_selec_produto";
 $titulo = "Ficha do Produtor";
 $modulo = "compras";
 $menu = "ficha_produtor";
 // ================================================================================================================
-
-
-// ====== CONVERTE DATA ===========================================================================================
-function ConverteData($data_x){
-	if (strstr($data_x, "/"))
-	{
-	$d = explode ("/", $data_x);
-	$rstData = "$d[2]-$d[1]-$d[0]";
-	return $rstData;
-	}
-}
-// ================================================================================================================
-
 
 // ======= RECEBENDO POST =================================================================================
 $botao = $_POST["botao"];
@@ -27,9 +15,9 @@ $pagina_mae = $_POST["pagina_mae"] ?? '';
 $data_hoje = date('d/m/Y');
 $nome_form = $_POST["nome_form"] ?? '';
 $data_inicial_br = $_POST["data_inicial_busca"];
-$data_inicial_busca = ConverteData($_POST["data_inicial_busca"]);
+$data_inicial_busca = Helpers::ConverteData($_POST["data_inicial_busca"]);
 $data_final_br = $_POST["data_final_busca"];
-$data_final_busca = ConverteData($_POST["data_final_busca"]);
+$data_final_busca = Helpers::ConverteData($_POST["data_final_busca"]);
 $fornecedor_pesquisa = $_POST["fornecedor_pesquisa"];
 $nome_fornecedor = $_POST["nome_fornecedor"];
 $cod_produto_busca = $_POST["cod_produto_busca"];

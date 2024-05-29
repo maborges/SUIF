@@ -3,17 +3,13 @@
 include ('../../includes/config.php'); 
 include ('../../includes/conecta_bd.php');
 include ('../../includes/valida_cookies.php');
+include ("../../helpers.php");
+
 $pagina = 'classificacao_qualidade_2';
 $titulo = 'Classifica&ccedil;&atilde;o da Qualidade';
 $modulo = 'estoque';
 $menu = 'movimentacao';
 // ================================================================================================================
-
-
-// ====== CONVERTE DATA / VALOR / PESO ============================================================================
-include ('../../includes/converte.php'); 
-// ================================================================================================================
-
 
 // ====== RECEBE POST ==============================================================================================
 $data_hoje = date('Y-m-d', time());
@@ -32,9 +28,9 @@ $quantidade_desconto_aux = $_POST["quantidade_desconto"];
 if ($botao == "1" or $botao_class == "SIM")
 {
 	$data_inicial_aux = $_POST["data_inicial"];
-	$data_inicial = ConverteData($_POST["data_inicial"]);
+	$data_inicial = Helpers::ConverteData($_POST["data_inicial"]);
 	$data_final_aux = $_POST["data_final"];
-	$data_final = ConverteData($_POST["data_final"]);
+	$data_final = Helpers::ConverteData($_POST["data_final"]);
 }
 else
 {

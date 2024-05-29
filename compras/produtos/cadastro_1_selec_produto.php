@@ -94,19 +94,19 @@ include ("../../includes/head.php");
 
 <?php
 // ======= RECEBENDO POST ===================================================================================
-$numero_romaneio = $_POST["numero_romaneio"];
-$numero_compra = $_POST["numero_compra"];
-$botao = $_POST["botao"];
+$numero_romaneio = $_POST["numero_romaneio"] ?? '';
+$numero_compra = $_POST["numero_compra"] ?? '';
+$botao = $_POST["botao"] ?? '';
 
-$pagina_mae = $_POST["pagina_mae"];
-$pagina_filha = $_POST["pagina_filha"];
-$data_inicial_busca = $_POST["data_inicial_busca"];
-$data_final_busca = $_POST["data_final_busca"];
-$fornecedor_busca = $_POST["fornecedor_busca"];
-$cod_produto_busca = $_POST["cod_produto_busca"];
-$numero_romaneio_busca = $_POST["numero_romaneio_busca"];
-$situacao_romaneio_busca = $_POST["situacao_romaneio_busca"];
-$forma_pesagem_busca = $_POST["forma_pesagem_busca"];
+$pagina_mae = $_POST["pagina_mae"] ?? '';
+$pagina_filha = $_POST["pagina_filha"] ?? '';
+$data_inicial_busca = $_POST["data_inicial_busca"] ?? '';
+$data_final_busca = $_POST["data_final_busca"] ?? '';
+$fornecedor_busca = $_POST["fornecedor_busca"] ?? '';
+$cod_produto_busca = $_POST["cod_produto_busca"] ?? '';
+$numero_romaneio_busca = $_POST["numero_romaneio_busca"] ?? '';
+$situacao_romaneio_busca = $_POST["situacao_romaneio_busca"] ?? '';
+$forma_pesagem_busca = $_POST["forma_pesagem_busca"] ?? '';
 
 if ($botao == "ALTERAR_PRODUTO")
 {$pagina_destino = "editar_3_formulario";}
