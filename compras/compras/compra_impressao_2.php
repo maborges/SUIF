@@ -82,7 +82,8 @@ $busca_compra = mysqli_query(
 	cadastro_pessoa.estado,
 	cadastro_pessoa.telefone_1,
 	cadastro_pessoa.codigo_pessoa,
-	compras.id_pedido_sankhya
+	compras.id_pedido_sankhya,
+	compras.tipo_compra
 FROM
 	compras, cadastro_pessoa
 WHERE
@@ -145,6 +146,8 @@ $pessoa_cidade_w = $aux_compra[39];
 $pessoa_estado_w = $aux_compra[40];
 $pessoa_telefone_w = $aux_compra[41];
 $codigo_pessoa_w = $aux_compra[42];
+$tipoCompraText = $aux_compra[44] == 2 ? 'ARMAZENADO' : '';
+
 
 
 if ($pessoa_tipo_w == "PF" or $pessoa_tipo_w == "pf") {
@@ -203,40 +206,44 @@ include("../../includes/conecta_bd.php");
 $busca_pgto = mysqli_query(
 	$conexao,
 	"SELECT 
-	codigo,
-	codigo_compra,
-	codigo_favorecido,
-	forma_pagamento,
-	data_pagamento,
-	valor,
-	banco_cheque,
-	observacao,
-	usuario_cadastro,
-	hora_cadastro,
-	data_cadastro,
-	estado_registro,
-	situacao_pagamento,
-	filial,
-	codigo_pessoa,
-	numero_cheque,
-	banco_ted,
-	origem_pgto,
-	codigo_fornecedor,
-	produto,
-	favorecido_print,
-	cod_produto,
-	agencia,
-	num_conta,
-	tipo_conta,
-	nome_banco,
-	cpf_cnpj
+	a.codigo,
+	a.codigo_compra,
+	a.codigo_favorecido,
+	a.forma_pagamento,
+	a.data_pagamento,
+	a.valor,
+	a.banco_cheque,
+	a.observacao,
+	a.usuario_cadastro,
+	a.hora_cadastro,
+	a.data_cadastro,
+	a.estado_registro,
+	a.situacao_pagamento,
+	a.filial,
+	a.codigo_pessoa,
+	a.numero_cheque,
+	a.banco_ted,
+	a.origem_pgto,
+	a.codigo_fornecedor,
+	a.produto,
+	a.favorecido_print,
+	a.cod_produto,
+	a.agencia,
+	a.num_conta,
+	a.tipo_conta,
+	a.nome_banco,
+	a.cpf_cnpj,
+	a.id_pedido_sankhya,
+	b.id_sankhya
 FROM 
-	favorecidos_pgto
+	favorecidos_pgto a
+	left outer join cadastro_favorecido b 
+   	             on b.codigo = a.codigo_favorecido
 WHERE 
-	codigo_compra='$numero_compra' AND
-	estado_registro='ATIVO'
+	a.codigo_compra='$numero_compra' AND
+	a.estado_registro='ATIVO'
 ORDER BY 
-	codigo"
+	a.codigo"
 );
 
 $soma_pgto = mysqli_fetch_row(mysqli_query(
@@ -312,6 +319,14 @@ include("../../includes/head_impressao.php");
 			<!-- ====== T�TULO ========= -->
 			<div style="width:400px; height:50px; border:0px solid #000; font-size:26px; margin-top:20px; float:right; text-align:right">
 				<?php echo $titulo; ?>
+
+				<div style="display: flex; justify-content: center; width: 100%; margin: 5px 50px 5px;">
+					<div style="border:0px solid #000; font-size:12px; float:left; align-items:center">
+						<span class='badge badge-report' style='font-size:120%'><?= $tipoCompraText ?></span>
+					</div>
+				</div>
+
+
 			</div>
 
 		</div>
@@ -638,7 +653,8 @@ include("../../includes/head_impressao.php");
 				$tipo_conta_z = $aux_pgto[24];
 				$nome_banco_z = $aux_pgto[25];
 				$cpf_cnpj_z = $aux_pgto[26];
-
+				$idFaturaSankhya = $aux_pgto[27];
+				$idFavorecidoSankhya = $aux_pgto[28];
 
 				$data_pgto_print = date('d/m/Y', strtotime($data_pagamento_z));
 				$valor_print = number_format($valor_z, 2, ",", ".");
@@ -711,14 +727,19 @@ include("../../includes/head_impressao.php");
 
 				$conta_caracter = strlen($cpf_cnpj_z);
 				if ($conta_caracter == 14) {
-					$cpf_cnpj_print = "CPF: " . $cpf_cnpj_z;
+					$cpf_cnpj_print = "CPF: " . $cpf_cnpj_z . '      Sankhya: ' . $idFavorecidoSankhya;
 				} elseif ($conta_caracter > 14) {
-					$cpf_cnpj_print = "CNPJ: " . $cpf_cnpj_z;
+					$cpf_cnpj_print = "CNPJ: " . $cpf_cnpj_z . '      Sankhya: ' . $idFavorecidoSankhya;
 				} else {
 					$cpf_cnpj_print = "";
 				}
 
+				$idFaturaSankhya_print = '';
 
+				if ($idFaturaSankhya) {
+					$idFaturaSankhya_print = 'Fatura: ' . $idFaturaSankhya;
+				}
+	
 				if (!empty($usuario_cadastro_z)) {
 					$dados_cadastro_z = " &#13; Cadastrado por: " . $usuario_cadastro_z . " " . date('d/m/Y', strtotime($data_cadastro_z)) . " " . $hora_cadastro_z;
 				}
@@ -739,7 +760,9 @@ include("../../includes/head_impressao.php");
 						</div>
 						
 						<div style='width:80px; height:30px; border:1px solid #000; float:left; text-align:center; background-color:#FFF; margin-left:2px'>
-						<div style='height:11px; margin-left:0px; margin-top:2px; overflow:hidden'>$forma_pagamento_print</div></div>
+						<div style='height:11px; margin-left:0px; margin-top:2px; overflow:hidden'>$forma_pagamento_print</div>
+						<div style='height:11px; margin-left:0px; margin-top:2px; overflow:hidden'>$idFaturaSankhya_print</div>
+						</div>
 
 						<div style='width:150px; height:30px; border:1px solid #000; float:left; text-align:left; background-color:#FFF; margin-left:2px'>
 						<div style='width:142px; height:11px; margin-left:6px; margin-top:2px; overflow:hidden'>$nome_banco_print</div>
@@ -853,6 +876,12 @@ include("../../includes/head_impressao.php");
 			<!-- ====== T�TULO ========= -->
 			<div style="width:400px; height:50px; border:0px solid #000; font-size:26px; margin-top:20px; float:right; text-align:right">
 				<?php echo $titulo; ?>
+
+				<div style="display: flex; justify-content: center; width: 100%; margin: 5px 50px 5px;">
+					<div style="border:0px solid #000; font-size:12px; float:left; align-items:center">
+						<span class='badge badge-report' style='font-size:120%'><?= $tipoCompraText ?></span>
+					</div>
+				</div>
 			</div>
 
 		</div>
@@ -878,6 +907,14 @@ include("../../includes/head_impressao.php");
 				</div>
 			</div>
 
+		</div>
+
+		<div style="width:720px; border:0px solid #000; margin-left:25px; float:left; text-align:center">
+			<div style="width:720px; height:22px; border:0px solid #000; float:right; float:left">
+				<div style="width:200px; height:22px; border:0px solid #000; font-size:16px; float:right; text-align: right;">
+					<?= $idPedidoSankhya_w ?>
+				</div>
+			</div>
 		</div>
 
 
@@ -1170,7 +1207,8 @@ include("../../includes/head_impressao.php");
 				$tipo_conta_y = $aux_pgto_y[24];
 				$nome_banco_y = $aux_pgto_y[25];
 				$cpf_cnpj_y = $aux_pgto_y[26];
-
+				$idFaturaSankhya = $aux_pgto_y[27];
+				$idFavorecidoSankhya = $aux_pgto_y[28];
 
 				$data_pgto_print = date('d/m/Y', strtotime($data_pagamento_y));
 				$valor_print = number_format($valor_y, 2, ",", ".");
@@ -1243,11 +1281,17 @@ include("../../includes/head_impressao.php");
 
 				$conta_caracter = strlen($cpf_cnpj_y);
 				if ($conta_caracter == 14) {
-					$cpf_cnpj_print = "CPF: " . $cpf_cnpj_y;
+					$cpf_cnpj_print = "CPF: " . $cpf_cnpj_y . '      Sankhya: ' . $idFavorecidoSankhya;
 				} elseif ($conta_caracter > 14) {
-					$cpf_cnpj_print = "CNPJ: " . $cpf_cnpj_y;
+					$cpf_cnpj_print = "CNPJ: " . $cpf_cnpj_y . '      Sankhya: ' . $idFavorecidoSankhya;
 				} else {
 					$cpf_cnpj_print = "";
+				}
+
+				$idFaturaSankhya_print = '';
+
+				if ($idFaturaSankhya) {
+					$idFaturaSankhya_print = 'Fatura: ' . $idFaturaSankhya;
 				}
 
 
@@ -1271,7 +1315,9 @@ include("../../includes/head_impressao.php");
 						</div>
 						
 						<div style='width:80px; height:30px; border:1px solid #000; float:left; text-align:center; background-color:#FFF; margin-left:2px'>
-						<div style='height:11px; margin-left:0px; margin-top:2px; overflow:hidden'>$forma_pagamento_print</div></div>
+						<div style='height:11px; margin-left:0px; margin-top:2px; overflow:hidden'>$forma_pagamento_print</div>
+						<div style='height:11px; margin-left:0px; margin-top:2px; overflow:hidden'>$idFaturaSankhya_print</div>
+						</div>
 
 						<div style='width:150px; height:30px; border:1px solid #000; float:left; text-align:left; background-color:#FFF; margin-left:2px'>
 						<div style='width:142px; height:11px; margin-left:6px; margin-top:2px; overflow:hidden'>$nome_banco_print</div>

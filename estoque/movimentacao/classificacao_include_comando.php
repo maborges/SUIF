@@ -19,7 +19,7 @@ $classificacao_romaneio_pesq = $_POST["classificacao_romaneio_pesq"];
 $botao = $_POST["botao"];
 $botao_class = $_POST["botao_class"];
 $numero_romaneio_form = $_POST["numero_romaneio_form"];
-$quantidade_desconto_form = Helpers::ConvertePeso($_POST["quantidade_desconto_form"]);
+$quantidade_desconto_form = Helpers::ConvertePeso($_POST["quantidade_desconto_form"], 'N');
 $quantidade_desconto_aux = $_POST["quantidade_desconto_form"];
 
 

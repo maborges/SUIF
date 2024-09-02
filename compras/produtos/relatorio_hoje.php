@@ -62,7 +62,7 @@ $linhas_bp_geral = mysqli_num_rows ($busca_produto_geral);
 <div id="menu_geral">
 <?php include ('../../includes/menu_compras.php'); ?>
 
-<?php include ('../../includes/sub_menu_compras_produtos.php'); ?>
+<?php include ('../../includes/submenu_compras_compras.php'); ?>
 </div> <!-- FIM menu_geral -->
 
 

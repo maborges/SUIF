@@ -4,6 +4,7 @@ include('../../includes/config.php');
 include('../../includes/conecta_bd.php');
 include('../../includes/valida_cookies.php');
 include("../../helpers.php");
+require("../../sankhya/Sankhya.php");
 
 $pagina = 'nota_fiscal';
 $titulo = 'Estoque - Nota Fiscal de Entrada';
@@ -46,6 +47,8 @@ $valor_unitario_nf = Helpers::ConverteValor($_POST["valor_unitario"] ?? 0);
 $valor_un_nf = $_POST["valor_unitario"] ?? '';
 $natureza_operacao_nf = $_POST["natureza_operacao"] ?? '';
 $observacao_nf = $_POST["observacao"] ?? '';
+$idContratoSankhya = $_POST["idContratoSankhya"] ?? '';
+$idFaturaSankhya = $_POST["idFaturaSankhya"] ?? '';
 
 $valor_total_nf = ($quantidade_nf * $valor_unitario_nf);
 
@@ -63,6 +66,7 @@ $msg_erro = '';
 // ====== BUSCA ROMANEIO ==========================================================================================
 $busca_romaneio = mysqli_query($conexao, "SELECT * FROM estoque WHERE estado_registro!='EXCLUIDO' AND numero_romaneio='$numero_romaneio' ORDER BY codigo");
 $linha_romaneio = mysqli_num_rows($busca_romaneio);
+
 
 for ($x = 1; $x <= $linha_romaneio; $x++) {
 	$aux_romaneio = mysqli_fetch_row($busca_romaneio);
@@ -270,6 +274,19 @@ if ($botao == "INCLUIR_NF") {
 														 '$cod_produto', '$fornecedor', '$fornecedor_print', 
 														 '$natureza_operacao_nf', '$serie_nf', '$data_saida_nf')");
 
+												
+		if ($natureza_operacao_nf == 'ARMAZENAGEM') {
+			// obtém a chave do registro 
+			$idNotaFiscalEntrada = mysqli_insert_id($conexao);
+
+			$resultSankhya = Sankhya::IncluiArmazenagem($idNotaFiscalEntrada);
+
+			if ($resultSankhya->errorCode) {
+				$erro = 9;
+				$msg_erro = "Erro Sankhya: $resultSankhya->errorCode.";
+			}
+		}
+
 		$fornecedor_nf = "";
 		$numero_nf = "";
 		$serie_nf = "";
@@ -285,7 +302,6 @@ if ($botao == "INCLUIR_NF") {
 
 // ====== EXCLUIR NOTA FISCAL ============================================================================
 elseif ($botao == "EXCLUIR_NF") {
-	echo "nota fiscal : <<$codigo_nf>>";
 	$excluir_nf = mysqli_query($conexao, "UPDATE nota_fiscal_entrada 
 	                            			 SET estado_registro='EXCLUIDO', 
 											 	 usuario_exclusao='$usuario_alteracao_nf', 
@@ -295,6 +311,27 @@ elseif ($botao == "EXCLUIR_NF") {
 										   WHERE codigo='$codigo_nf'");
 
 	//$delete = mysqli_query ($conexao, "DELETE FROM nota_fiscal_entrada WHERE codigo='$codigo_nf'");
+
+	// Exclui contrato e fatura no Sankhya no caso de ser armazenagem
+	if ($idFaturaSankhya) {
+		$resultSankhya = Sankhya::CancelaFaturaArmazenagem($idFaturaSankhya, 'Cancelamento NF de Armazenamento');
+
+		if ($resultSankhya->errorCode) {
+			$erro = 10;
+			$msg_erro = "Erro Sankhya: $resultSankhya->errorCode.";
+		}
+	} 
+
+	if ($idContratoSankhya and !$resultSankhya->errorCode) {
+		$resultSankhya = Sankhya::CancelaContratoArmazenagem($idContratoSankhya, 'Cancelamento NF de Armazenamento');
+
+		if ($resultSankhya->errorCode) {
+			$erro = 11;
+			$msg_erro = "Erro Sankhya: $resultSankhya->errorCode.";
+		}
+	}
+
+
 }
 // ======================================================================================================
 
@@ -311,7 +348,8 @@ $busca_nota_fiscal = mysqli_query($conexao, "SELECT a.codigo, a.codigo_romaneio,
 													a.valor_unitario, a.unidade, a.quantidade, a.valor_total, a.observacao, 
 													a.usuario_cadastro, a.hora_cadastro, a.data_cadastro, a.usuario_alteracao, 
 													a.hora_alteracao, a.data_alteracao, a.estado_registro, a.filial, a.natureza_operacao, 
-													b.nome, b.tipo, b.cpf, b.cnpj, a.serie_nf, a.data_saida 
+													b.nome, b.tipo, b.cpf, b.cnpj, a.serie_nf, a.data_saida, a.id_pedido_sankhya, a.pedido_confirmado_sankhya,
+													id_fatura_sankhya, fatura_confirmada_sankhya 
                                                FROM nota_fiscal_entrada a, 
 											        cadastro_pessoa b
 											  WHERE a.estado_registro='ATIVO' 
@@ -360,18 +398,19 @@ include('../../includes/head.php');
 
 
 	<!-- ====== TOPO ================================================================================================== -->
-	<div id="topo_geral">
+	<div class="topo">
 		<?php include('../../includes/topo.php'); ?>
 	</div>
 
 
 	<!-- ====== MENU ================================================================================================== -->
-	<div id="menu_geral">
+	<div class="menu">
 		<?php include('../../includes/menu_estoque.php'); ?>
-		<?php include('../../includes/submenu_estoque_entrada.php'); ?>
 	</div>
 
-
+	<div class="submenu">
+		<?php include('../../includes/submenu_estoque_entrada.php'); ?>
+	</div>
 
 
 	<!-- ====== CENTRO ================================================================================================= -->
@@ -639,7 +678,7 @@ include('../../includes/head.php');
 		<div class="form_rotulo" style="width:174px; height:15px; border:1px solid transparent"><!-- xxxxxxxx --></div>
 		<div class="form_rotulo" style="width:174px; height:15px; border:1px solid transparent">Data de Emissão da NF:</div>
 		<div class="form_rotulo" style="width:174px; height:15px; border:1px solid transparent">Série da NF:</div>
-		<div class="form_rotulo" style="width:174px; height:15px; border:1px solid transparent">NÚmero da NF:</div>
+		<div class="form_rotulo" style="width:174px; height:15px; border:1px solid transparent">Número da NF:</div>
 	</div>
 	<!-- ============================================================================================================= -->
 
@@ -734,8 +773,8 @@ include('../../includes/head.php');
 			<input type="text" class="form_input" name="observacao" maxlength="100" onkeypress="troca(this)" onkeydown="if (getKey(event) == 13) return false;" style="width:150px; text-align:left; padding-left:5px" value="<?php echo "$observacao_nf"; ?>" />
 		</div>
 
-		<div style="border:1px solid transparent; margin-top: 10px">
-			<div style="width:174px; height:auto; float:left; border:1px solid transparent; margin-top: 10px; margin-bottom: 20px">
+		<div style="border:1px solid transparent; margin-top: 20px;">
+			<div style="width:174px; height:auto; float:left; border:1px solid transparent; margin-top: 20px; margin-bottom: 20px;">
 				<button type='submit' class='botao_1' style="width:152px">Salvar</button>
 				</form>
 			</div>
@@ -747,6 +786,7 @@ include('../../includes/head.php');
 
 
 	<!-- ============================================================================================================= -->
+	<div class="espacamento_30"></div>
 	<div class="espacamento_30"></div>
 	<!-- ============================================================================================================= -->
 
@@ -762,9 +802,9 @@ include('../../includes/head.php');
 	} else {
 		echo "
 			<div style='width:1165px; height:30px; margin:auto; border:1px solid transparent'>
-				<div style='width:480px; margin-left:0px; color:#00F; float:left; font-size:18px'>Notas Fiscais</div>
-				<div style='width:340px; float:left; font-size:18px; color:#666; text-align:right'>
-				Quantidade: $soma_quantidade_nf_print $unidade_print</div>
+				<div style='width:400px; margin-left:0px; color:#00F; float:left; font-size:18px'>Notas Fiscais</div>
+				<div style='width:250px; float:left; font-size:18px; color:#666; text-align:right'>
+				Quantidade: $soma_quantidade_nf_print</div>
 				<div style='width:340px; float:right; font-size:18px; color:#666; text-align:right'>
 				Total: R$ $soma_nota_fiscal_print</div>
 			</div>
@@ -777,12 +817,14 @@ include('../../includes/head.php');
 			<tr>
 			<td width='60px'>Excluir</td>
 			<td width='100px'>Data Emiss&atilde;o</td>
-			<td width='300px'>Produtor</td>
+			<td width='270px'>Produtor</td>
 			<td width='120px'>N&ordm; Nota Fiscal</td>
-			<td width='160px'>Natureza da Opera&ccedil;&atilde;o</td>
-			<td width='140px'>Quantidade</td>
-			<td width='120px'>Valor Unit&aacute;rio</td>
-			<td width='140px'>Valor Total</td>
+			<td width='130px'>Natureza da Opera&ccedil;&atilde;o</td>
+			<td width='90px'>Quantidade</td>
+			<td width='90px'>Valor Unit&aacute;rio R$</td>
+			<td width='120px'>Valor Total R$</td>
+			<td width='70px'>Contrato</td>
+			<td width='70px'>Fatura</td>
 			</tr>
 			</table>";
 	}
@@ -821,6 +863,10 @@ include('../../includes/head.php');
 		$produtor_cnpj_w = $aux_nota_fiscal[22];
 		$serie_nf_w = $aux_nota_fiscal[23];
 		$data_saida_w = $aux_nota_fiscal[24];
+		$idContratoSankhya = $aux_nota_fiscal[25];
+		$contratoConfirmadoSanlhya = $aux_nota_fiscal[26];
+		$idFaturaSankhya = $aux_nota_fiscal[27];
+		$faturaConfirmadaSanlhya = $aux_nota_fiscal[28];
 
 		if ($produtor_tipo_w == "PF" or $produtor_tipo_w == "pf") {
 			$produtor_cpf_cnpj = "CPF: " . $produtor_cpf_w;
@@ -830,8 +876,8 @@ include('../../includes/head.php');
 
 		$data_emissao_print = date('d/m/Y', strtotime($data_emissao_w));
 		$quantidade_print = number_format($quantidade_w, 0, ",", ".") . " " . $unidade_w;
-		$valor_unitario_print = "R$ " . number_format($valor_unitario_w, 2, ",", ".");
-		$valor_total_print = "R$ " . number_format($valor_total_w, 2, ",", ".");
+		$valor_unitario_print = number_format($valor_unitario_w, 2, ",", ".");
+		$valor_total_print = number_format($valor_total_w, 2, ",", ".");
 
 		if (!empty($usuario_cadastro_w)) {
 			$dados_cadastro_w = " &#13; Cadastrado por: " . $usuario_cadastro_w . " " . date('d/m/Y', strtotime($data_cadastro_w)) . " " . $hora_cadastro_w;
@@ -863,21 +909,24 @@ include('../../includes/head.php');
 				<input type='hidden' name='numero_romaneio_busca' value='$numero_romaneio_busca'>
 				<input type='hidden' name='situacao_romaneio_busca' value='$situacao_romaneio_busca'>
 				<input type='hidden' name='forma_pesagem_busca' value='$forma_pesagem_busca'>
-				<input type='hidden' name='numero_romaneio' value='$numero_romaneio' />
-				<input type='hidden' name='numero_romaneio' value='$numero_romaneio'>
 				<input type='hidden' name='pagina_mae' value='$pagina_mae'>
 				<input type='hidden' name='pagina_filha' value='$pagina_filha'>
+				<input type='hidden' name='idContratoSankhya' value='$idContratoSankhya'>
+				<input type='hidden' name='idFaturaSankhya' value='$idFaturaSankhya'>
+				<input type='hidden' name='natureza_operacao_nf' value='$natureza_operacao_nf'>
 				<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/excluir.png' height='18px' style='margin-top:3px' />
 				</form>
 			</td>
 
 			<td width='100px' align='center'>$data_emissao_print</td>
-			<td width='300px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$produtor_nome_w</div></td>
+			<td width='270px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$produtor_nome_w</div></td>
 			<td width='120px' align='center'>$serie_nf_w $numero_nf_w</td>
-			<td width='160px' align='center'>$natureza_operacao_w</td>
-			<td width='140px' align='right'><div style='height:14px; margin-right:10px; overflow:hidden'>$quantidade_print</div></td>
-			<td width='120px' align='right'><div style='height:14px; margin-right:10px'>$valor_unitario_print</div></td>
-			<td width='140px' align='right'><div style='height:14px; margin-right:15px'>$valor_total_print</div></td>";
+			<td width='130px' align='center'>$natureza_operacao_w</td>
+			<td width='90px' align='right'><div style='height:14px; margin-right:10px; overflow:hidden'>$quantidade_print</div></td>
+			<td width='90px' align='right'><div style='height:14px; margin-right:10px'>$valor_unitario_print</div></td>
+			<td width='120px' align='right'><div style='height:14px; margin-right:15px'>$valor_total_print</div></td>
+			<td width='70px' align='right'><div style='height:14px; margin-right:15px'>$idContratoSankhya</div></td>
+			<td width='70px' align='right'><div style='height:14px; margin-right:15px'>$idFaturaSankhya</div></td>";
 		// =================================================================================================================
 
 	}

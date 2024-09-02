@@ -16,149 +16,9 @@ $comAcentos = array('à', 'á', 'â', 'ã', 'ä', 'å', 'ç', 'è', 'é', 'ê', 
 $semAcentos = array('a', 'a', 'a', 'a', 'a', 'a', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'n', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'y', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'N', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U');
 //$teste = str_replace($comAcentos, $semAcentos, $exemplo);
 // ========================================================================================================
-
-
-// ======= RECEBENDO POST =================================================================================
-$fornecedor = $_POST["fornecedor"];
-$idSankhya = $_POST["idSankhya"];
-$pedidoSankhya = $_POST["pedidoSankhya"];
-$idProdutoSankhya = $_POST["idProdutoSankhya"];
-$pedidoSankhya = $_POST["pedidoSankhya"] ?? '';
-$cod_produto = $_POST["cod_produto"];
-$botao = $_POST["botao"];
-$numero_compra = $_POST["numero_compra"];
-$quantidade = $_POST["quantidade"];
-$preco_unitario = Helpers::ConverteValor($_POST["preco_unitario"]);
-//$preco_unitario_print = number_format($preco_unitario,2,",",".");
-$preco_unitario_print = $_POST["preco_unitario"];
-$valor_total = ($quantidade * $preco_unitario);
-$valor_total_print = number_format($valor_total, 2, ",", ".");
-$safra = $_POST["safra"];
-$cod_tipo = $_POST["cod_tipo"];
-$umidade = $_POST["umidade"];
-$broca = $_POST["broca"];
-$impureza = $_POST["impureza"];
-$data_pagamento = Helpers::ConverteData($_POST["data_pagamento"]);
-$data_pgto = $_POST["data_pagamento"];
-$observacao = $_POST["observacao"];
-$data_compra = date('Y/m/d', time());
-$filial = $filial_usuario;
-$movimentacao = "COMPRA";
-$data_pagamento_br = $_POST["data_pagamento"];
-$data_pagamento = Helpers::ConverteData($_POST["data_pagamento"]);
-$situacao_pagamento = "EM_ABERTO";
-$forma_pagamento  = '';
-
-$usuario_cadastro = $nome_usuario_print;
-$hora_cadastro = date('G:i:s', time());
-$data_cadastro = date('Y/m/d', time());
-
-if (strtotime($data_pagamento) > strtotime($data_compra)) {
-	$forma_pagamento = "PREVISAO";
-}
-
-$errno = $_POST["errno"] ?? 0;
-$error = $_POST["error"] ?? '';
-
-$msgSankhya   = $_POST["msgSankhya"] ?? 0;
-$errorSankhya = $_POST["errorSankhya"] ?? '';
-
-
-// ====== BUSCA PRODUTO ================================================================================
-$busca_produto = mysqli_query($conexao, "SELECT * FROM cadastro_produto WHERE codigo='$cod_produto' AND estado_registro!='EXCLUIDO'");
-$aux_bp = mysqli_fetch_row($busca_produto);
-$linhas_bp = mysqli_num_rows($busca_produto);
-
-$produto_print = $aux_bp[1];
-$produto_apelido = $aux_bp[20];
-$cod_unidade = $aux_bp[7];
-$quantidade_un = $aux_bp[23];
-$preco_maximo = $aux_bp[21];
-$preco_maximo_print = number_format($aux_bp[21], 2, ",", ".");		
-$usuario_alteracao = $aux_bp[16];
-$data_alteracao = date('d/m/Y', strtotime($aux_bp[18]));
-$plano_conta = $aux_bp[35];
-$plano_conta_mae = $aux_bp[41];
-$produto_rovereti = str_replace($comAcentos, $semAcentos, $produto_print); // ==== INTEGRAÇÃO ROVERETI ===== ATENÇÃO: REVERETI não aceita "acentos"
-$cod_class_gerencial = $aux_bp[24]; // ==== INTEGRAÇÃO ROVERETI =====
-$cod_centro_custo = $aux_bp[25]; // ==== INTEGRAÇÃO ROVERETI =====
-// ======================================================================================================
-
-
-// ====== BUSCA FORNECEDOR ==============================================================================
-$busca_fornecedor = mysqli_query($conexao, "SELECT * FROM cadastro_pessoa WHERE codigo='$fornecedor' AND estado_registro!='EXCLUIDO'");
-$aux_forn = mysqli_fetch_row($busca_fornecedor);
-$linhas_fornecedor = mysqli_num_rows($busca_fornecedor);
-
-$fornecedor_print = $aux_forn[1];
-$codigo_pessoa = $aux_forn[35];
-$cidade_fornecedor = $aux_forn[10];
-$estado_fornecedor = $aux_forn[12];
-$telefone_fornecedor = $aux_forn[14];
-$produtorSankhya = $aux_forn[41];
-
-if ($aux_forn[2] == "pf" or $aux_forn[2] == "PF") {
-	$cpf_cnpj = $aux_forn[3];
-} else {
-	$cpf_cnpj = $aux_forn[4];
-}
-
-$cpf_aux = Helpers::limpa_cpf_cnpj($cpf_cnpj); // ==== INTEGRAÇÃO ROVERETI =====
-$fornecedor_rovereti = str_replace($comAcentos, $semAcentos, $fornecedor_print); // ==== INTEGRAÇÃO ROVERETI =====
-$situacao_compra = $aux_forn[40];
-// ======================================================================================================
-
-
-// ====== BUSCA FAVORECIDO ==============================================================================
-$busca_favorecido = mysqli_query($conexao, "SELECT * 
-                                              FROM cadastro_favorecido 
-											 WHERE estado_registro != 'EXCLUIDO' 
-											   AND codigo_pessoa='$codigo_pessoa' 
-											ORDER BY nome LIMIT 1");
-$aux_favorecido = mysqli_fetch_row($busca_favorecido);
-$linhas_favorecido = mysqli_num_rows($busca_favorecido);
-
-$cod_favorecido = $aux_favorecido[0];
-$favorecido_print = $aux_favorecido[14];
-$favorecidoSankhya = $aux_favorecido[23];
-// ========================================================================================================
-
-
-// ====== BUSCA TIPO PRODUTO ==========================================================================
-$busca_tipo_produto = mysqli_query($conexao, "SELECT * FROM select_tipo_produto WHERE codigo='$cod_tipo' AND estado_registro!='EXCLUIDO'");
-$aux_tp = mysqli_fetch_row($busca_tipo_produto);
-
-$tipo_print = $aux_tp[1];
-// ===========================================================================================================
-
-
-// ====== BUSCA UNIDADE DE MEDIDA ==========================================================================
-$busca_un_med = mysqli_query($conexao, "SELECT * FROM unidade_produto WHERE codigo='$cod_unidade' AND estado_registro!='EXCLUIDO'");
-$aux_un_med = mysqli_fetch_row($busca_un_med);
-
-$un_descricao = $aux_un_med[1];
-$unidade_print = $aux_un_med[2];
-// ===========================================================================================================
-
-
-// ====== BUSCA NUMERO DE COMPRA ==============================================================================
-$busca_num_compra = mysqli_query($conexao, "SELECT * FROM compras WHERE estado_registro!='EXCLUIDO' AND numero_compra='$numero_compra'");
-$achou_num_compra = mysqli_num_rows($busca_num_compra);
-// ============================================================================================================
-
-
-// ====== BUSCA CONTROLE DE TALAO  ============================================================================
-$busca_talao = mysqli_query($conexao, "SELECT * FROM talao_controle WHERE estado_registro!='EXCLUIDO' AND codigo_pessoa='$fornecedor' AND cod_produto='$cod_produto' AND devolvido='N' ORDER BY codigo");
-$linha_talao = mysqli_num_rows($busca_talao);
-// ===========================================================================================================
-
-// ====== BUSCA TOPS  ============================================================================
-$busca_tops = mysqli_query($conexao, "SELECT tops_requisicao FROM tipo_operacao_produto WHERE tipo_operacao='ECPR' AND produto_sankhya='$idProdutoSankhya'");
-$codigo_tops = mysqli_fetch_row($busca_tops);
-// ===========================================================================================================
-
-// ===========================================================================================================
 include("../../includes/head.php");
+
+
 ?>
 
 <!-- ====== TÍTULO DA PÁGINA ====================================================================================== -->
@@ -171,13 +31,17 @@ include("../../includes/head.php");
 <script type="text/javascript">
 	<?php include("../../includes/javascript.php"); ?>
 </script>
+
+<script src=<?= "../../includes/loading/loading.js" ?>></script>
+
+
 </head>
 
+<body onload="loading();">
 
-<!-- ====== INÍCIO ================================================================================================ -->
-
-<body onload="javascript:foco('ok');">
-
+	<?php
+	include("../../includes/loading/loading.php");
+	?>
 
 	<!-- ====== TOPO ================================================================================================== -->
 	<div class="topo">
@@ -194,8 +58,150 @@ include("../../includes/head.php");
 		<?php include("../../includes/submenu_compras_compras.php"); ?>
 	</div>
 
+	<?php
+	// ======= RECEBENDO POST =================================================================================
+	$fornecedor = $_POST["fornecedor"];
+	$idSankhya = $_POST["idSankhya"];
+	$pedidoSankhya = $_POST["pedidoSankhya"];
+	$idProdutoSankhya = $_POST["idProdutoSankhya"];
+	$pedidoSankhya = $_POST["pedidoSankhya"] ?? '';
+	$cod_produto = $_POST["cod_produto"];
+	$botao = $_POST["botao"];
+	$numero_compra = $_POST["numero_compra"];
+	$quantidade = $_POST["quantidade"];
+	$preco_unitario = Helpers::ConverteValor($_POST["preco_unitario"]);
+	//$preco_unitario_print = number_format($preco_unitario,2,",",".");
+	$preco_unitario_print = $_POST["preco_unitario"];
+	$valor_total = ($quantidade * $preco_unitario);
+	$valor_total_print = number_format($valor_total, 2, ",", ".");
+	$safra = $_POST["safra"];
+	$cod_tipo = $_POST["cod_tipo"];
+	$umidade = $_POST["umidade"];
+	$broca = $_POST["broca"];
+	$impureza = $_POST["impureza"];
+	$data_pagamento = Helpers::ConverteData($_POST["data_pagamento"]);
+	$data_pgto = $_POST["data_pagamento"];
+	$tipo_compra = $_POST["tipo_compra"] ?? 0;
+	$tipoCompraText = $tipo_compra == 1 ? 'Normal' : ($tipo_compra == 2 ? 'Armazenado' : '');
+	$observacao = $_POST["observacao"];
+	$data_compra = date('Y/m/d', time());
+	$filial = $filial_usuario;
+	$movimentacao = "COMPRA";
+	$data_pagamento_br = $_POST["data_pagamento"];
+	$data_pagamento = Helpers::ConverteData($_POST["data_pagamento"]);
+	$situacao_pagamento = "EM_ABERTO";
+	$forma_pagamento  = '';
+
+	$usuario_cadastro = $nome_usuario_print;
+	$hora_cadastro = date('G:i:s', time());
+	$data_cadastro = date('Y/m/d', time());
+
+	if (strtotime($data_pagamento) > strtotime($data_compra)) {
+		$forma_pagamento = "PREVISAO";
+	}
+
+	$errno = $_POST["errno"] ?? 0;
+	$error = $_POST["error"] ?? '';
+
+	$msgSankhya   = $_POST["msgSankhya"] ?? 0;
+	$errorSankhya = $_POST["errorSankhya"] ?? '';
 
 
+	// ====== BUSCA PRODUTO ================================================================================
+	$busca_produto = mysqli_query($conexao, "SELECT * FROM cadastro_produto WHERE codigo='$cod_produto' AND estado_registro!='EXCLUIDO'");
+	$aux_bp = mysqli_fetch_row($busca_produto);
+	$linhas_bp = mysqli_num_rows($busca_produto);
+
+	$produto_print = $aux_bp[1];
+	$produto_apelido = $aux_bp[20];
+	$cod_unidade = $aux_bp[7];
+	$quantidade_un = $aux_bp[23];
+	$preco_maximo = $aux_bp[21];
+	$preco_maximo_print = number_format($aux_bp[21], 2, ",", ".");
+	$usuario_alteracao = $aux_bp[16];
+	$data_alteracao = date('d/m/Y', strtotime($aux_bp[18]));
+	$plano_conta = $aux_bp[35];
+	$plano_conta_mae = $aux_bp[41];
+	$produto_rovereti = str_replace($comAcentos, $semAcentos, $produto_print); // ==== INTEGRAÇÃO ROVERETI ===== ATENÇÃO: REVERETI não aceita "acentos"
+	$cod_class_gerencial = $aux_bp[24]; // ==== INTEGRAÇÃO ROVERETI =====
+	$cod_centro_custo = $aux_bp[25]; // ==== INTEGRAÇÃO ROVERETI =====
+	// ======================================================================================================
+
+
+	// ====== BUSCA FORNECEDOR ==============================================================================
+	$busca_fornecedor = mysqli_query($conexao, "SELECT * FROM cadastro_pessoa WHERE codigo='$fornecedor' AND estado_registro!='EXCLUIDO'");
+	$aux_forn = mysqli_fetch_row($busca_fornecedor);
+	$linhas_fornecedor = mysqli_num_rows($busca_fornecedor);
+
+	$fornecedor_print = $aux_forn[1];
+	$codigo_pessoa = $aux_forn[35];
+	$cidade_fornecedor = $aux_forn[10];
+	$estado_fornecedor = $aux_forn[12];
+	$telefone_fornecedor = $aux_forn[14];
+	$produtorSankhya = $aux_forn[41];
+
+	if ($aux_forn[2] == "pf" or $aux_forn[2] == "PF") {
+		$cpf_cnpj = $aux_forn[3];
+	} else {
+		$cpf_cnpj = $aux_forn[4];
+	}
+
+	$cpf_aux = Helpers::limpa_cpf_cnpj($cpf_cnpj); // ==== INTEGRAÇÃO ROVERETI =====
+	$fornecedor_rovereti = str_replace($comAcentos, $semAcentos, $fornecedor_print); // ==== INTEGRAÇÃO ROVERETI =====
+	$situacao_compra = $aux_forn[40];
+	// ======================================================================================================
+
+
+	// ====== BUSCA FAVORECIDO ==============================================================================
+	$busca_favorecido = mysqli_query($conexao, "SELECT * 
+                                              FROM cadastro_favorecido 
+											 WHERE estado_registro != 'EXCLUIDO' 
+											   AND codigo_pessoa='$codigo_pessoa' 
+											ORDER BY nome LIMIT 1");
+	$aux_favorecido = mysqli_fetch_row($busca_favorecido);
+	$linhas_favorecido = mysqli_num_rows($busca_favorecido);
+
+	$cod_favorecido = $aux_favorecido[0];
+	$favorecido_print = $aux_favorecido[14];
+	$favorecidoSankhya = $aux_favorecido[23];
+	// ========================================================================================================
+
+
+	// ====== BUSCA TIPO PRODUTO ==========================================================================
+	$busca_tipo_produto = mysqli_query($conexao, "SELECT * FROM select_tipo_produto WHERE codigo='$cod_tipo' AND estado_registro!='EXCLUIDO'");
+	$aux_tp = mysqli_fetch_row($busca_tipo_produto);
+
+	$tipo_print = $aux_tp[1];
+	// ===========================================================================================================
+
+
+	// ====== BUSCA UNIDADE DE MEDIDA ==========================================================================
+	$busca_un_med = mysqli_query($conexao, "SELECT * FROM unidade_produto WHERE codigo='$cod_unidade' AND estado_registro!='EXCLUIDO'");
+	$aux_un_med = mysqli_fetch_row($busca_un_med);
+
+	$un_descricao = $aux_un_med[1];
+	$unidade_print = $aux_un_med[2];
+	// ===========================================================================================================
+
+
+	// ====== BUSCA NUMERO DE COMPRA ==============================================================================
+	$busca_num_compra = mysqli_query($conexao, "SELECT * FROM compras WHERE estado_registro!='EXCLUIDO' AND numero_compra='$numero_compra'");
+	$achou_num_compra = mysqli_num_rows($busca_num_compra);
+	// ============================================================================================================
+
+
+	// ====== BUSCA CONTROLE DE TALAO  ============================================================================
+	$busca_talao = mysqli_query($conexao, "SELECT * FROM talao_controle WHERE estado_registro!='EXCLUIDO' AND codigo_pessoa='$fornecedor' AND cod_produto='$cod_produto' AND devolvido='N' ORDER BY codigo");
+	$linha_talao = mysqli_num_rows($busca_talao);
+	// ===========================================================================================================
+
+	// ====== BUSCA TOPS  ============================================================================
+	$busca_tops = mysqli_query($conexao, "SELECT tops_requisicao FROM tipo_operacao_produto WHERE tipo_operacao='ECPR' AND produto_sankhya='$idProdutoSankhya'");
+	$codigo_tops = mysqli_fetch_row($busca_tops);
+	// ===========================================================================================================
+
+	// ===========================================================================================================
+	?>
 
 	<!-- =============================================   C E N T R O   =============================================== -->
 	<div id="centro_geral">
@@ -227,7 +233,18 @@ include("../../includes/head.php");
 				$msg = 'Compra não autolizada';
 			} elseif (!is_numeric($quantidade)) {
 				$msg = 'Quantidade inválida';
+			} elseif (!$tipo_compra) {
+				$msg = 'Informe o tipo de compra';
 			}
+
+			// ATUALIZA SALDO ARMAZENADO ========================================
+			include('../../includes/busca_saldo_armaz.php');
+
+			// Verifica se há saldo quando compra armazenado
+			if ($tipo_compra == 2 && ($saldo_produtor < 0 || $saldo_produtor < $quantidade)) {
+				$msg = "Saldo armazenado ($saldo_produtor) do produto é inferiar à quantidade sendo comprada.";
+			}
+
 
 			if ($msg) {
 				echo "<div id='centro' style='float:left; height:5px; width:1080px; border:0px solid #000'></div>
@@ -255,6 +272,7 @@ include("../../includes/head.php");
 					<input type='hidden' name='broca' value='$broca' />
 					<input type='hidden' name='impureza' value='$impureza' />
 					<input type='hidden' name='data_pagamento' value='$data_pagamento' />
+					<input type='hidden' name='tipo_compra' value='$tipo_compra' />
 					<input type='hidden' name='observacao' value='$observacao' />
 					<button type='submit' class='botao_2' style='margin-left:20px; width:120px'>Voltar</button>
 					</form>
@@ -430,7 +448,8 @@ include("../../includes/head.php");
 									total_pago,
 									saldo_pagar,
 									plano_conta_mae,
-									plano_conta)
+									plano_conta,
+									tipo_compra)
 								VALUES
 									(NULL,
 									'$numero_compra',
@@ -466,7 +485,8 @@ include("../../includes/head.php");
 									'0',
 									'$valor_total',
 									'$plano_conta_mae',
-									'$plano_conta')"
+									'$plano_conta',
+								  	 $tipo_compra)"
 					);
 
 					if ($inserir) {
@@ -480,8 +500,8 @@ include("../../includes/head.php");
 						}
 					} else {
 						$errorSUIF = 'Erro ao grava no SUIF (compras): ' . $inserir;
-					} 
-
+					}
+					
 					$errorSankhya = 0;
 					// Trata gravação do pedido no SANKHYA
 					if (!$pedidoSankhya) {
@@ -492,18 +512,7 @@ include("../../includes/head.php");
 							$msgSankhya   = $resultPedido['errorMessage'];
 						} else {
 							$pedidoSankhya = $resultPedido['rows']['pk']['NUNOTA']['$'];
-/*
-							// Grava Favorecido na nota no Sankhya
-							$resultCabecalhoNF = Sankhya::alteraCabecalhoNota($pedidoSankhya, $produtorSankhya, $favorecidoSankhya);
 
-							if ($resultCabecalhoNF['errorCode']) {
-								$errorSankhya = $resultCabecalhoNF['errorCode'];
-								$msgSankhya   = $resultCabecalhoNF['errorMessage'];
-							} else {
-								// Faz a confirmação do pedido somente se consegiu alterarar favorecido de faturamento
-								$confirmaPedido = Sankhya::confirmaPedidoCompra($pedidoSankhya);
-							}
-*/
 							// Faz a confirmação do pedido somente se consegiu alterarar favorecido de faturamento
 							$confirmaPedido = Sankhya::confirmaPedidoCompra($pedidoSankhya);
 
@@ -605,9 +614,16 @@ include("../../includes/head.php");
 
 
 							<div style='width:150px; height:20px; border:1px solid #999; float:left; color:#00F; text-align:left; font-size:12px; 
-							border-radius:3px; background-color:#EEE; margin-left:0px'><div style='margin-left:10px; margin-top:2px'>$umidade</div></div>
+								border-radius:3px; background-color:#EEE; margin-left:0px'>
+								<div style='margin-left:10px; margin-top:2px'>$umidade
+								</div>
+							</div>
+
 							<div style='width:150px; height:20px; border:1px solid #999; float:left; color:#00F; text-align:left; font-size:12px; 
-							border-radius:3px; background-color:#EEE; margin-left:25px'><div style='margin-left:10px; margin-top:2px'>$broca</div></div>
+							border-radius:3px; background-color:#EEE; margin-left:25px'>
+								<div style='margin-left:10px; margin-top:2px'>$broca</div>
+							</div>
+
 							<div style='width:150px; height:20px; border:1px solid #999; float:left; color:#00F; text-align:left; font-size:12px; 
 							border-radius:3px; background-color:#EEE; margin-left:25px'><div style='margin-left:10px; margin-top:2px'>$impureza</div></div>
 							<div style='width:150px; height:20px; border:1px solid #999; float:left; color:#00F; text-align:left; font-size:12px; 
@@ -616,14 +632,17 @@ include("../../includes/head.php");
 
 							<div style='width:750px; height:8px; border:0px solid #000; float:left; color:#00F; text-align:left; font-size:12px'></div>
 
-							<!-- =========  OBSERVACAO ============================================================================= -->
-							<div style='width:680px; height:14px; border:1px solid #FFF; float:left; color:#666; text-align:left; font-size:10px; margin-left:0px'>
-							Observa&ccedil;&atilde;o:</div>
-							<div style='width:120px; height:14px; border:1px solid #FFF; float:left; margin-left:25px'></div>
+							<!-- =========  TIPO_COMPRA, OBSERVACAO ============================================================================= -->
+							<div style='width:150px; height:14px; border:1px solid #FFF; float:left; color:#666; text-align:left; font-size:10px; margin-left:0px'>
+							Tipo de Compra:</div>
+							<div style='width:550px; height:14px; border:1px solid #FFF; float:left; color:#666; text-align:left; font-size:10px; margin-left:25px'>
+							Observação:</div>
 
-
-							<div style='width:680px; height:20px; border:1px solid #999; float:left; color:#00F; text-align:left; font-size:12px; 
-							border-radius:3px; background-color:#EEE; margin-left:0px'><div style='margin-left:10px; margin-top:2px'>$observacao</div></div>
+							<div style='width:150px; height:20px; border:1px solid #999; float:left; color:#00F; text-align:left; font-size:12px; 
+							border-radius:3px; background-color:#EEE; margin-left:0px'><div style='margin-left:10px; margin-top:2px'>$tipoCompraText</div></div>
+							
+							<div style='width:505px; height:20px; border:1px solid #999; float:left; color:#00F; text-align:left; font-size:12px; 
+							border-radius:3px; background-color:#EEE; margin-left:25px'><div style='margin-left:10px; margin-top:2px'>$observacao</div></div>
 							<div style='width:120px; height:20px; border:1px solid #FFF; float:left; margin-left:25px'></div>
 
 						</div>

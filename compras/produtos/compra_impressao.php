@@ -19,8 +19,10 @@ $linha_compra = mysqli_num_rows ($busca_compra);
 
 
 // ====== BUSCA POR PRODUTOS GERAL  =======================================================================
+/* #Bi
 $busca_produto_geral = mysqli_query ($conexao, "SELECT * FROM cadastro_produto WHERE estado_registro!='EXCLUIDO' AND codigo='$cod_produto'");
 $linhas_bp_geral = mysqli_num_rows ($busca_produto_geral);
+#Bf */
 // =======================================================================================================
 
 
@@ -70,6 +72,8 @@ $broca = $aux_compra[11];
 $umidade = $aux_compra[12];
 $situacao = $aux_compra[17];
 $impureza = $aux_compra[43];
+$tipo_compra  = $aux_compra[57] ?? 0;
+$tipoCompraText = $tipo_compra == 2 ? 'ARMAZENADO' : '';
 $observacao = $aux_compra[13];
 $motivo_alteracao_quant = $aux_compra[35];
 $quantidade_original = number_format($aux_compra[36],2,",",".");

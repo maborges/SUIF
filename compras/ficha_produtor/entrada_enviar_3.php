@@ -378,7 +378,7 @@ include ('../../includes/atualisa_saldo_armaz.php');
 
 		<div id='centro' style='float:left; height:90px; width:185px; color:#00F; text-align:center; border:0px solid #000'>
 		<form action='$servidor/$diretorio_servidor/compras/ficha_produtor/entrada_seleciona_3.php' method='post'>
-		<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/voltar_2.jpg' border='0' /></form>
+		<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/voltar.png' border='0' /></form>
 		</div>	
 
 
@@ -387,7 +387,7 @@ include ('../../includes/atualisa_saldo_armaz.php');
 		<input type='hidden' name='botao' value='seleciona'>
 		<input type='hidden' name='fornecedor' value='$fornecedor'>
 		<input type='hidden' name='cod_produto' value='$cod_produto'>
-		<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/movimentacao.jpg' border='0' /></form>
+		<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/doc_3.png' border='0' /></form>
 		</div>";	
 
 

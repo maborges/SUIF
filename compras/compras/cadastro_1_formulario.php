@@ -152,7 +152,7 @@ else
 // ====== CALCULA SUB TOTAL =============================================================================
 if ($botao == "CALCULA_TOTAL")
 {
-$quantidade_aux = Helpers::ConvertePeso($_POST["quantidade_form"]);
+$quantidade_aux = Helpers::ConvertePeso($_POST["quantidade_form"], $config[30]);
 $preco_aux = Helpers::ConverteValor($_POST["preco_form"]);
 
 $sub_total = ($quantidade_aux * $preco_aux);

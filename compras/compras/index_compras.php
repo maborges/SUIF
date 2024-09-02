@@ -134,7 +134,8 @@ $busca_compra = mysqli_query(
 	forma_entrega,
 	usuario_exclusao,
 	hora_exclusao,
-	data_exclusao
+	data_exclusao,
+	id_pedido_sankhya
 FROM 
 	compras
 WHERE 
@@ -241,7 +242,7 @@ include("../../includes/head.php");
 
 <!-- ====== INÍCIO ================================================================================================ -->
 
-<body onload="javascript:foco('ok');">
+<body onload="foco('ok');">
 
 
 	<!-- ====== TOPO ================================================================================================== -->
@@ -468,9 +469,9 @@ include("../../includes/head.php");
 					<?php
 					if ($linha_compra >= 1) {
 						echo "
-	<a href='$servidor/$diretorio_servidor/compras/produtos/cadastro_1_selec_produto.php'>
-	<button type='submit' class='botao_1' style='margin-right:20px'>Nova Compra</button>
-	</a>";
+							<a href='$servidor/$diretorio_servidor/compras/produtos/cadastro_1_selec_produto.php'>
+							<button type='submit' class='botao_1' style='margin-right:20px'>Nova Compra</button>
+							</a>";
 					}
 					?>
 				</div>
@@ -483,18 +484,18 @@ include("../../includes/head.php");
 					<?php
 					if ($linha_compra >= 1) {
 						echo "
-	<form action='$servidor/$diretorio_servidor/compras/relatorios/relatorio_selec_fornecedor.php' method='post' />
-	<input type='hidden' name='botao' value='BUSCAR'>
-	<input type='hidden' name='pagina_mae' value='relatorio_periodo'>
-	<input type='hidden' name='data_inicial_busca' value='$data_inicial_br'>
-	<input type='hidden' name='data_final_busca' value='$data_final_br'>
-	<input type='hidden' name='fornecedor_pesquisa' value='$fornecedor_pesquisa'>
-	<input type='hidden' name='nome_fornecedor' value='$nome_fornecedor'>
-	<input type='hidden' name='cod_produto_busca' value='$cod_produto_busca'>
-	<input type='hidden' name='cod_tipo_busca' value='$cod_tipo_busca'>
-	<input type='hidden' name='filial_busca' value='$filial_busca'>
-	<button type='submit' class='botao_1' style='margin-right:20px'>Filtrar por Fornecedor</button>
-	</form>";
+							<form action='$servidor/$diretorio_servidor/compras/relatorios/relatorio_selec_fornecedor.php' method='post' />
+							<input type='hidden' name='botao' value='BUSCAR'>
+							<input type='hidden' name='pagina_mae' value='relatorio_periodo'>
+							<input type='hidden' name='data_inicial_busca' value='$data_inicial_br'>
+							<input type='hidden' name='data_final_busca' value='$data_final_br'>
+							<input type='hidden' name='fornecedor_pesquisa' value='$fornecedor_pesquisa'>
+							<input type='hidden' name='nome_fornecedor' value='$nome_fornecedor'>
+							<input type='hidden' name='cod_produto_busca' value='$cod_produto_busca'>
+							<input type='hidden' name='cod_tipo_busca' value='$cod_tipo_busca'>
+							<input type='hidden' name='filial_busca' value='$filial_busca'>
+							<button type='submit' class='botao_1' style='margin-right:20px'>Filtrar por Fornecedor</button>
+							</form>";
 					}
 					?>
 				</div>
@@ -508,20 +509,20 @@ include("../../includes/head.php");
 					<?php
 					if ($linha_compra >= 1) {
 						echo "
-	<form action='$servidor/$diretorio_servidor/compras/relatorios/relatorio_periodo_impressao.php' target='_blank' method='post' />
-	<input type='hidden' name='modulo_mae' value='$modulo'>
-	<input type='hidden' name='menu_mae' value='$menu'>
-	<input type='hidden' name='pagina_mae' value='$pagina'>
-	<input type='hidden' name='botao' value='IMPRIMIR'>
-	<input type='hidden' name='data_inicial_busca' value='$data_inicial_br'>
-	<input type='hidden' name='data_final_busca' value='$data_final_br'>
-	<input type='hidden' name='fornecedor_pesquisa' value='$fornecedor_pesquisa'>
-	<input type='hidden' name='nome_fornecedor' value='$nome_fornecedor'>
-	<input type='hidden' name='cod_produto_busca' value='$cod_produto_busca'>
-	<input type='hidden' name='cod_tipo_busca' value='$cod_tipo_busca'>
-	<input type='hidden' name='filial_busca' value='$filial_busca'>
-	<button type='submit' class='botao_1' style='margin-right:20px'>Imprimir</button>
-	</form>";
+							<form action='$servidor/$diretorio_servidor/compras/relatorios/relatorio_periodo_impressao.php' target='_blank' method='post' />
+							<input type='hidden' name='modulo_mae' value='$modulo'>
+							<input type='hidden' name='menu_mae' value='$menu'>
+							<input type='hidden' name='pagina_mae' value='$pagina'>
+							<input type='hidden' name='botao' value='IMPRIMIR'>
+							<input type='hidden' name='data_inicial_busca' value='$data_inicial_br'>
+							<input type='hidden' name='data_final_busca' value='$data_final_br'>
+							<input type='hidden' name='fornecedor_pesquisa' value='$fornecedor_pesquisa'>
+							<input type='hidden' name='nome_fornecedor' value='$nome_fornecedor'>
+							<input type='hidden' name='cod_produto_busca' value='$cod_produto_busca'>
+							<input type='hidden' name='cod_tipo_busca' value='$cod_tipo_busca'>
+							<input type='hidden' name='filial_busca' value='$filial_busca'>
+							<button type='submit' class='botao_1' style='margin-right:20px'>Imprimir</button>
+							</form>";
 					}
 					?>
 				</div>
@@ -576,18 +577,18 @@ include("../../includes/head.php");
 
 
 			echo "
-<div style='height:50px; width:414px; border:0px solid #000; float:left'>
-<div class='total' style='height:40px; width:384px; margin-top:0px' title=''>
-	<div class='total_valor' style='width:60px; height:28px; border:0px solid #999; font-size:11px; margin-top:7px'>$link_img_produto_t</div>
-	<div class='total_nome' style='width:160px; height:15px; border:0px solid #999; font-size:11px; margin-top:4px'><b>$produto_print_t</b></div>
-	<div class='total_valor' style='width:150px; height:15px; border:0px solid #999; font-size:11px; margin-top:3px'>Total: $soma_total_print</div>
-	<div class='total_nome' style='width:160px; height:15px; border:0px solid #999; font-size:11px; margin-top:4px; color:#444'>
-	Quant.: $soma_quantidade_print</div>
-	<div class='total_valor' style='width:150px; height:15px; border:0px solid #999; font-size:11px; margin-top:3px'>
-	Pre&ccedil;o m&eacute;dio: $media_produto_print</div>
+				<div style='height:50px; width:414px; border:0px solid #000; float:left'>
+				<div class='total' style='height:40px; width:384px; margin-top:0px' title=''>
+					<div class='total_valor' style='width:60px; height:28px; border:0px solid #999; font-size:11px; margin-top:7px'>$link_img_produto_t</div>
+					<div class='total_nome' style='width:160px; height:15px; border:0px solid #999; font-size:11px; margin-top:4px'><b>$produto_print_t</b></div>
+					<div class='total_valor' style='width:150px; height:15px; border:0px solid #999; font-size:11px; margin-top:3px'>Total: $soma_total_print</div>
+					<div class='total_nome' style='width:160px; height:15px; border:0px solid #999; font-size:11px; margin-top:4px; color:#444'>
+					Quant.: $soma_quantidade_print</div>
+					<div class='total_valor' style='width:150px; height:15px; border:0px solid #999; font-size:11px; margin-top:3px'>
+					Pre&ccedil;o m&eacute;dio: $media_produto_print</div>
 
-</div>
-</div>";
+				</div>
+				</div>";
 		}
 
 		echo "</div>";
@@ -604,25 +605,26 @@ include("../../includes/head.php");
 		<?php
 		if ($linha_compra == 0) {
 			echo "
-<div class='espacamento' style='height:400px'>
-<div class='espacamento' style='height:30px'></div>";
-		} else {
-			echo "
-<div class='ct_relatorio'>
+				<div class='espacamento' style='height:400px'>
+				<div class='espacamento' style='height:30px'></div>";
+						} else {
+							echo "
+				<div class='ct_relatorio'>
 
-<table class='tabela_cabecalho'>
-<tr>
-<td width='60px'>Visualizar</td>
-<td width='120px'>Data</td>
-<td width='360px'>Fornecedor</td>
-<td width='120px'>N&uacute;mero</td>
-<td width='180px'>Produto</td>
-<td width='150px'>Tipo</td>
-<td width='140px'>Quantidade</td>
-<td width='120px'>Pre&ccedil;o Unit&aacute;rio</td>
-<td width='160px'>Valor Total</td>
-</tr>
-</table>";
+				<table class='tabela_cabecalho'>
+				<tr>
+				<td width='60px'>Visualizar</td>
+				<td width='120px'>Data</td>
+				<td width='300px'>Fornecedor</td>
+				<td width='100px'>N&uacute;mero</td>
+				<td width='80px'>Sankhya</td>
+				<td width='180px'>Produto</td>
+				<td width='150px'>Tipo</td>
+				<td width='140px'>Quantidade</td>
+				<td width='120px'>Pre&ccedil;o Unit&aacute;rio</td>
+				<td width='160px'>Valor Total</td>
+				</tr>
+				</table>";
 		}
 
 
@@ -659,6 +661,7 @@ include("../../includes/head.php");
 			$usuario_exclusao_w = $aux_compra[22];
 			$hora_exclusao_w = $aux_compra[23];
 			$data_exclusao_w = $aux_compra[24];
+			$idSankhya_w = $aux_compra[25];
 
 
 			$data_compra_print = date('d/m/Y', strtotime($data_compra_w));
@@ -698,39 +701,40 @@ include("../../includes/head.php");
 
 			// ====== BOTAO VISUALIZAR ==================================================================================
 			echo "
-<td width='60px' align='center'>
-<div style='height:24px; margin-top:0px; border:0px solid #000'>
-<form action='$servidor/$diretorio_servidor/compras/compras/compra_visualizar.php' method='post' />
-<input type='hidden' name='modulo_mae' value='$modulo'>
-<input type='hidden' name='menu_mae' value='$menu'>
-<input type='hidden' name='pagina_mae' value='$pagina'>
-<input type='hidden' name='botao' value='VISUALIZAR'>
-<input type='hidden' name='id_w' value='$id_w'>
-<input type='hidden' name='numero_compra' value='$numero_compra_w'>
-<input type='hidden' name='data_inicial_busca' value='$data_inicial_br'>
-<input type='hidden' name='data_final_busca' value='$data_final_br'>
-<input type='hidden' name='fornecedor_pesquisa' value='$fornecedor_pesquisa'>
-<input type='hidden' name='nome_fornecedor' value='$nome_fornecedor'>
-<input type='hidden' name='cod_produto_busca' value='$cod_produto_busca'>
-<input type='hidden' name='cod_tipo_busca' value='$cod_tipo_busca'>
-<input type='hidden' name='filial_busca' value='$filial_busca'>
-<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/buscar.png' height='18px' style='margin-top:3px' />
-</form>
-</div>
-</td>";
+				<td width='60px' align='center'>
+				<div style='height:24px; margin-top:0px; border:0px solid #000'>
+				<form action='$servidor/$diretorio_servidor/compras/compras/compra_visualizar.php' method='post' />
+				<input type='hidden' name='modulo_mae' value='$modulo'>
+				<input type='hidden' name='menu_mae' value='$menu'>
+				<input type='hidden' name='pagina_mae' value='$pagina'>
+				<input type='hidden' name='botao' value='VISUALIZAR'>
+				<input type='hidden' name='id_w' value='$id_w'>
+				<input type='hidden' name='numero_compra' value='$numero_compra_w'>
+				<input type='hidden' name='data_inicial_busca' value='$data_inicial_br'>
+				<input type='hidden' name='data_final_busca' value='$data_final_br'>
+				<input type='hidden' name='fornecedor_pesquisa' value='$fornecedor_pesquisa'>
+				<input type='hidden' name='nome_fornecedor' value='$nome_fornecedor'>
+				<input type='hidden' name='cod_produto_busca' value='$cod_produto_busca'>
+				<input type='hidden' name='cod_tipo_busca' value='$cod_tipo_busca'>
+				<input type='hidden' name='filial_busca' value='$filial_busca'>
+				<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/buscar.png' height='18px' style='margin-top:3px' />
+				</form>
+				</div>
+				</td>";
 			// =================================================================================================================
 
 
 			// =================================================================================================================
 			echo "
-<td width='120px' align='center'>$data_compra_print</td>
-<td width='360px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$fornecedor_print_w</div></td>
-<td width='120px' align='center'>$numero_compra_w</td>
-<td width='180px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$produto_print_w</div></td>
-<td width='150px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$tipo_w</div></td>
-<td width='140px' align='right'><div style='height:14px; margin-right:10px'>$quantidade_print $unidade_w</div></td>
-<td width='120px' align='right'><div style='height:14px; margin-right:10px'>$preco_unitario_print</div></td>
-<td width='160px' align='right'><div style='height:14px; margin-right:15px'>$total_geral_print</div></td>";
+				<td width='120px' align='center'>$data_compra_print</td>
+				<td width='300px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$fornecedor_print_w</div></td>
+				<td width='100px' align='center'>$numero_compra_w</td>
+				<td width='80px' align='center'>$idSankhya_w</td>
+				<td width='180px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$produto_print_w</div></td>
+				<td width='150px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$tipo_w</div></td>
+				<td width='140px' align='right'><div style='height:14px; margin-right:10px'>$quantidade_print $unidade_w</div></td>
+				<td width='120px' align='right'><div style='height:14px; margin-right:10px'>$preco_unitario_print</div></td>
+				<td width='160px' align='right'><div style='height:14px; margin-right:15px'>$total_geral_print</div></td>";
 			// =================================================================================================================
 
 			echo "</tr>";
@@ -744,9 +748,9 @@ include("../../includes/head.php");
 		// =================================================================================================================
 		if ($linha_compra == 0 and $botao == "BUSCAR") {
 			echo "
-<div class='espacamento' style='height:30px'></div>
-<div style='height:30px; width:880px; border:0px solid #000; color:#999; font-size:14px; margin:auto; text-align:center'>
-<i>Nenhuma compra encontrada.</i></div>";
+				<div class='espacamento' style='height:30px'></div>
+				<div style='height:30px; width:880px; border:0px solid #000; color:#999; font-size:14px; margin:auto; text-align:center'>
+				<i>Nenhuma compra encontrada.</i></div>";
 		}
 		// =================================================================================================================
 		?>

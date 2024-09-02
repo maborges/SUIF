@@ -704,6 +704,7 @@ include("../../includes/head.php");
 					<td width='80px' align='center' bgcolor='#006699'>Data</td>
 					<td width='150px' align='center' bgcolor='#006699'>Movimenta&ccedil;&atilde;o</td>
 					<td width='60px' align='center' bgcolor='#006699'>N&ordm;</td>
+					<td width='60px' align='center' bgcolor='#006699'>Sankhya</td>
 					<td width='100px' align='center' bgcolor='#006699'>Produto</td>
 					<td width='90px' align='center' bgcolor='#006699'>Tipo</td>
 					<td width='85px' align='center' bgcolor='#006699'>Quantidade</td>
@@ -725,6 +726,7 @@ include("../../includes/head.php");
 					<tr style='color:#666'>
 					<td width='80px' align='left'></td>
 					<td width='150px' align='left'><div style='margin-left:3px'><i>SALDO ANTERIOR</i></div></td>
+					<td width='60px' align='center'></td>
 					<td width='60px' align='center'></td>
 					<td width='100px' align='center'></td>
 					<td width='90px' align='center'></td>
@@ -753,6 +755,7 @@ include("../../includes/head.php");
 			//$unidade_print = $aux_compra[8];
 			//$fornecedor = $aux_compra[2];
 			$numero_compra = $aux_compra[1];
+			$idContratoSankhya = $aux_compra[55];
 			$data_compra = $aux_compra[4];
 			$data_compra_print = date('d/m/Y', strtotime($aux_compra[4]));
 			$quantidade = $aux_compra[5];
@@ -832,6 +835,7 @@ include("../../includes/head.php");
 					<td width='80px' align='left'><div style='margin-left:3px'>$data_compra_print</div></td>
 					<td width='150px' align='left'><div style='margin-left:3px'>$movimentacao_print</div></td>
 					<td width='60px' align='center'>$numero_compra</td>
+					<td width='60px' align='center'>$idContratoSankhya</td>
 					<td width='100px' align='center'>$produto_print_2</td>
 					<td width='90px' align='center'>$tipo</td>
 					<td width='85px' align='center'>$quantidade_print $unidade_print</td>

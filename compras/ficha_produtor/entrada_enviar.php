@@ -18,8 +18,8 @@ $cod_produto = $_POST["cod_produto"];
 $produto_list = $_POST["produto"];
 $data_compra = date('Y/m/d', time());
 $fornecedor = $_POST["fornecedor"];
-$quantidade_kg = $_POST["quantidade_kg"] ?? 0;
-$desconto_aux = $_POST["desconto_aux"] ?? 0;
+$quantidade_kg = $_POST["quantidade"] ?? 0;
+$desconto_aux = $_POST["desconto"] ?? 0;
 	if (!is_numeric($desconto_aux) or $desconto_aux < 0)
 	{$desconto = 0;}
 	else
@@ -54,6 +54,7 @@ else
 {$quantidade = ($quantidade_kg - $desconto);}
 
 $quantidade_print = number_format($quantidade,2,",",".");
+
 // ======================================================================================================
 
 
@@ -266,7 +267,6 @@ else
 	}
 	else
 	{
-	
 	$inserir = mysqli_query ($conexao, "INSERT INTO compras (codigo, numero_compra, fornecedor, produto, data_compra, quantidade, unidade, tipo, observacao, movimentacao, usuario_cadastro, hora_cadastro, data_cadastro, estado_registro, filial, numero_romaneio, desconto_quantidade, cod_produto, cod_unidade, cod_tipo, fornecedor_print) VALUES (NULL, '$numero_compra', '$fornecedor', '$produto', '$data_compra', '$quantidade', '$unidade_print', '$tipo_print', '$observacao', '$movimentacao', '$usuario_cadastro', '$hora_cadastro', '$data_cadastro', 'ATIVO', '$filial', '$numero_romaneio', '$desconto', '$cod_produto', '$cod_unidade', '$cod_tipo', '$fornecedor_print')");
 
 

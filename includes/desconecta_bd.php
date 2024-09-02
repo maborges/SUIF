@@ -1,5 +1,5 @@
 <?php
-mysqli_close($conexao);
+if (isset($conexao)) {
+	mysqli_close($conexao);
+}
 ?>
-
-

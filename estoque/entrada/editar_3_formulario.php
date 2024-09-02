@@ -14,7 +14,7 @@ $menu = 'entrada';
 $botao = $_POST["botao"];
 $data_hoje = date('d/m/Y');
 $pagina_mae = $_POST["pagina_mae"];
-$pagina_filha = $_POST["pagina_filha"];
+$pagina_filha = $_POST["pagina_filha"] ?? '';
 $filial = $filial_usuario;
 
 $numero_romaneio = $_POST["numero_romaneio"] ?? '';

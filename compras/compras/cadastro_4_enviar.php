@@ -26,7 +26,7 @@ $numero_compra = $_POST["numero_compra"];
 $fornecedor_pesquisa = $_POST["fornecedor_pesquisa"];
 $cod_seleciona_produto = $_POST["cod_seleciona_produto"];
 
-$quantidade_form = Helpers::ConvertePeso($_POST["quantidade_form"]);
+$quantidade_form = Helpers::ConvertePeso($_POST["quantidade_form"],$config[30]);
 $quantidade_print = $_POST["quantidade_form"];
 $preco_form = Helpers::ConverteValor($_POST["preco_form"]);
 $preco_print = $_POST["preco_form"];

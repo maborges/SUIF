@@ -51,64 +51,9 @@
 												}
 												?>" style='margin-top:0px; margin-left:10px'>Financeiro</button></a>
 
-			<a hidden href='$servidor/$diretorio_servidor/certificacao/'>
-				<button type='submit' class='botao_modulo_off' style='margin-top:0px; margin-left:10px'>Certificacao</button></a>
+			<a href='<?= "$servidor/$diretorio_servidor" ?>/sankhya/index_sankhya.php'>
+				<button type='submit' class="botao_modulo_<?= $modulo == 'sankhya' ? 'on' : 'off'?>" style='margin-top:0px; margin-left:10px'>Sankhya</button></a>
 
-
-			<?php
-			/*
-	if ($modulo == 'cadastros')
-	{echo "<a href='$servidor/$diretorio_servidor/cadastros/index_cadastros.php'>
-	<button type='submit' class='botao_modulo_on' style='margin-top:0px; margin-left:0px'>Cadastros</button></a>";}
-	else
-	{echo "<a href='$servidor/$diretorio_servidor/cadastros/index_cadastros.php'>
-	<button type='submit' class='botao_modulo_off' style='margin-top:0px; margin-left:0px'>Cadastros</button></a>";}
-
-
-	if ($modulo == 'compras')
-	{echo "<a href='$servidor/$diretorio_servidor/compras/compras/index_compras.php'>
-	<button type='submit' class='botao_modulo_on' style='margin-top:0px; margin-left:10px'>Compras</button></a>";}
-	else
-	{echo "<a href='$servidor/$diretorio_servidor/compras/compras/index_compras.php'>
-	<button type='submit' class='botao_modulo_off' style='margin-top:0px; margin-left:10px'>Compras</button></a>";}
-*/
-
-			/*
-	if ($modulo == 'vendas')
-	{echo "<a href='$servidor/$diretorio_servidor/vendas/index_vendas.php'>
-	<button type='submit' class='botao_modulo_on' style='margin-top:0px; margin-left:10px'>Vendas</button></a>";}
-	else
-	{echo "<a href='$servidor/$diretorio_servidor/vendas/index_vendas.php'>
-	<button type='submit' class='botao_modulo_off' style='margin-top:0px; margin-left:10px'>Vendas</button></a>";}
-*/
-			/*
-	if ($modulo == 'estoque')
-	{echo "<a href='$servidor/$diretorio_servidor/estoque/index_estoque.php'>
-	<button type='submit' class='botao_modulo_on' style='margin-top:0px; margin-left:10px'>Estoque</button></a>";}
-	else
-	{echo "<a href='$servidor/$diretorio_servidor/estoque/index_estoque.php'>
-	<button type='submit' class='botao_modulo_off' style='margin-top:0px; margin-left:10px'>Estoque</button></a>";}
-
-
-	if ($modulo == 'financeiro')
-	{echo "<a href='$servidor/$diretorio_servidor/financeiro/index_financeiro.php'>
-	<button type='submit' class='botao_modulo_on' style='margin-top:0px; margin-left:10px'>Financeiro</button></a>";}
-	else
-	{echo "<a href='$servidor/$diretorio_servidor/financeiro/index_financeiro.php'>
-	<button type='submit' class='botao_modulo_off' style='margin-top:0px; margin-left:10px'>Financeiro</button></a>";}
-
-	{echo "<a hidden href='$servidor/$diretorio_servidor/certificacao/'>
-		<button type='submit' class='botao_modulo_off' style='margin-top:0px; margin-left:10px'>Certificacao</button></a>";}
-*/
-			/*
-	if ($modulo == 'diversos')
-	{echo "<a href='$servidor/$diretorio_servidor/diversos/index_diversos.php'>
-	<button type='submit' class='botao_modulo_on' style='margin-top:0px; margin-left:10px'>Diversos</button></a>";}
-	else
-	{echo "<a href='$servidor/$diretorio_servidor/diversos/index_diversos.php'>
-	<button type='submit' class='botao_modulo_off' style='margin-top:0px; margin-left:10px'>Diversos</button></a>";}
-*/
-			?>
 		</div>
 
 

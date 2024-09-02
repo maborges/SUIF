@@ -41,17 +41,19 @@ include('../../includes/head.php');
 
 
     <!-- ======= TOPO ================================================================================================== -->
-    <div id="topo_geral">
+    <div class="topo">
         <?php include('../../includes/topo.php'); ?>
     </div>
 
 
     <!-- ======= MENU ================================================================================================== -->
-    <div id="menu_geral">
+    <div class="menu">
         <?php include('../../includes/menu_estoque.php'); ?>
-        <?php include('../../includes/submenu_estoque_entrada.php'); ?>
     </div>
 
+    <div class='submenu'>
+        <?php include('../../includes/submenu_estoque_entrada.php'); ?>
+    </div>
 
     <!-- ======= CENTRO ================================================================================================ -->
     <div class="ct_1">

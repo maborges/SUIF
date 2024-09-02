@@ -79,7 +79,7 @@ if ($botao_2 == "ATIVAR" and $permissao[35] == "S") {
 // ====== EXCLUIR CADASTRO ==========================================================================================
 if ($botao_2 == "EXCLUIR" and $permissao[36] == "S") {
 	// EXCLUSAO
-	$excluir_favorecido = mysqli_query($conexao, "UPDATE cadastro_favorecido SET estado_registro='EXCLUIDO', usuario_exclusao='$usuario_alteracao', data_exclusao='$data_alteracao', hora_exclusao='$hora_alteracao', id_senkhya = $idSankhya_w WHERE codigo='$id_w'");
+	$excluir_favorecido = mysqli_query($conexao, "UPDATE cadastro_favorecido SET estado_registro='EXCLUIDO', usuario_exclusao='$usuario_alteracao', data_exclusao='$data_alteracao', hora_exclusao='$hora_alteracao' WHERE codigo='$id_w'");
 
 	// MONTA MENSAGEM
 	$msg = "<div id='oculta' style='color:#0000FF'>Cadastro de favorecido exclu&iacute;do com sucesso!</div>";

@@ -3,7 +3,7 @@
 include('../../includes/config.php');
 include('../../includes/conecta_bd.php');
 include('../../includes/valida_cookies.php');
-include ("../../helpers.php");
+include("../../helpers.php");
 
 $pagina = 'cadastro_4_enviar';
 $titulo = 'Novo Romaneio de Entrada';
@@ -22,13 +22,13 @@ $numero_romaneio = $_POST["numero_romaneio"] ?? '';
 $fornecedor_form = $_POST["fornecedor_form"] ?? '';
 $fornecedor = $_POST["fornecedor_form"] ?? '';
 $cod_produto_form = $_POST["cod_produto_form"] ?? '';
-$peso_form = Helpers::ConvertePeso($_POST["peso_form"] ?? '');
-$peso_inicial_form = Helpers::ConvertePeso($_POST["peso_inicial_form"] ?? '');
-$peso_final_form = Helpers::ConvertePeso($_POST["peso_final_form"] ?? '');
+$peso_form = Helpers::ConvertePeso($_POST["peso_form"] ?? '', $config[30]);
+$peso_inicial_form = Helpers::ConvertePeso($_POST["peso_inicial_form"] ?? '', $config[30]);
+$peso_final_form = Helpers::ConvertePeso($_POST["peso_final_form"] ?? '', $config[30]);
 $cod_sacaria_form = $_POST["cod_sacaria_form"] ?? '';
-$quant_sacaria_form = Helpers::ConvertePeso($_POST["quant_sacaria_form"] ?? '');
-$desconto_form = Helpers::ConvertePeso($_POST["desconto_form"] ?? '');
-$quant_volume_form = Helpers::ConvertePeso($_POST["quant_volume_form"] ?? '');
+$quant_sacaria_form = Helpers::ConvertePeso($_POST["quant_sacaria_form"] ?? '', $config[30]);
+$desconto_form = Helpers::ConvertePeso($_POST["desconto_form"] ?? '', $config[30]);
+$quant_volume_form = Helpers::ConvertePeso($_POST["quant_volume_form"] ?? '', $config[30]);
 $cod_tipo_produto_form = $_POST["cod_tipo_produto_form"] ?? '';
 $romaneio_manual_form = $_POST["romaneio_manual_form"] ?? '';
 $filial_origem_form = $_POST["filial_origem_form"] ?? '';
@@ -420,14 +420,17 @@ include('../../includes/head.php');
 
 
 	<!-- ====== TOPO ================================================================================================== -->
-	<div id="topo_geral">
+	<div class="topo">
 		<?php include('../../includes/topo.php'); ?>
 	</div>
 
 
 	<!-- ====== MENU ================================================================================================== -->
-	<div id="menu_geral">
+	<div class="menu">
 		<?php include('../../includes/menu_estoque.php'); ?>
+	</div>
+
+	<div class="submenu">
 		<?php include('../../includes/submenu_estoque_entrada.php'); ?>
 	</div>
 
@@ -937,11 +940,11 @@ include('../../includes/head.php');
 		<input type='hidden' name='numero_romaneio' value='$numero_romaneio'>
 		<input type='hidden' name='data_inicial_busca_busca' value='$data_inicial_busca_br'>
 		<input type='hidden' name='data_final_busca_busca' value='$data_final_busca_br'>
-		<input type='hidden' name='cod_produto_busca' value='$cod_produto_busca'>
-		<input type='hidden' name='fornecedor_busca' value='$fornecedor_busca'>
-		<input type='hidden' name='numero_romaneio_busca' value='$numero_romaneio_busca'>
-		<input type='hidden' name='situacao_romaneio_busca' value='$situacao_romaneio_busca'>
-		<input type='hidden' name='forma_pesagem_busca' value='$forma_pesagem_busca'>
+		<input type='hidden' name='cod_produto_buscar' value='$cod_produto_buscar'>
+		<input type='hidden' name='fornecedor_buscar' value='$fornecedor_buscar'>
+		<input type='hidden' name='numero_romaneio_buscar' value='$numero_romaneio_buscar'>
+		<input type='hidden' name='situacao_romaneio_buscar' value='$situacao_romaneio_buscar'>
+		<input type='hidden' name='forma_pesagem_buscar' value='$forma_pesagem_buscar'>
 		<button type='submit' class='botao_2' style='margin-left:10px; width:180px'>Editar</button>
 		</form>
     </div>";

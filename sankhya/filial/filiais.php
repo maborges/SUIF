@@ -8,7 +8,7 @@ include_once("../Sankhya.php");
 $pagina = "filiais";
 $titulo = "Informa Código Sankhya das Filiais";
 $modulo = "sankhya";
-$menu   = "filial_sankhya";
+$menu   = "cadastro_sankhya";
 
 $erro = 0;
 $msg = '';
@@ -93,11 +93,11 @@ include_once("../../includes/head.php");
     </div>
 
     <div class="menu">
-        <?php include("../../includes/menu_cadastro.php"); ?>
+        <?php include("../../includes/menu_sankhya.php"); ?>
     </div>
 
     <div class="submenu">
-        <?php include("../../includes/submenu_cadastro_config.php"); ?>
+        <?php include("../../includes/submenu_sankhya_cadastro.php"); ?>
     </div>
 
     <div class="ct_auto">

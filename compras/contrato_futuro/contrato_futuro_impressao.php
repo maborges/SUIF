@@ -3,6 +3,8 @@ include ('../../includes/config.php');
 include ('../../includes/conecta_bd.php');
 include ('../../includes/valida_cookies.php');
 include ('../../includes/numero_extenso.php');
+include ("../../helpers.php");
+
 $pagina = 'contrato_futuro_impressao';
 $menu = 'contratos';
 $titulo = 'Contrato Futuro';
@@ -13,43 +15,6 @@ $modulo = 'compras';
 $numero_contrato = $_POST["numero_contrato"];
 // =========================================================================================================
 
-
-// =========================================================================================================
-function valorPorExtenso($valor=0) {
-$singular = array("CENTAVO", "REAL", "MIL", "MILH&Atilde;O", "BILH&Atilde;O", "TRILH&Atilde;O", "QUATRILH&Atilde;O");
-$plural = array("CENTAVOS", "REAIS", "MIL", "MILH&Otilde;ES", "BILH&Otilde;ES", "TRILH&Otilde;ES","QUATRILH&Otilde;ES");
- 
-$c = array("", "CEM", "DUZENTOS", "TREZENTOS", "QUATROCENTOS","QUINHENTOS", "SEISCENTOS", "SETECENTOS", "OITOCENTOS", "NOVECENTOS");
-$d = array("", "DEZ", "VINTE", "TRINTA", "QUARENTA", "CINQUENTA","SESSENTA", "SETENTA", "OITENTA", "NOVENTA");
-$d10 = array("DEZ", "ONZE", "DOZE", "TREZE", "QUATORZE", "QUINZE","DEZESSEIS", "DEZESETE", "DEZOITO", "DEZENOVE");
-$u = array("", "UM", "DOIS", "TR&Ecirc;S", "QUATRO", "CINCO", "SEIS","SETE", "OITO", "NOVE");
- 
-$z=0;
- 
-$valor = number_format($valor, 2, ".", ".");
-$inteiro = explode(".", $valor);
-for($i=0;$i<count($inteiro);$i++)
-for($ii=strlen($inteiro[$i]);$ii<3;$ii++)
-$inteiro[$i] = "0".$inteiro[$i];
-
-// $fim identifica onde que deve se dar junção de centenas por "e" ou por "," ;)
-$fim = count($inteiro) - ($inteiro[count($inteiro)-1] > 0 ? 1 : 2);
-for ($i=0;$i<count($inteiro);$i++) {
-$valor = $inteiro[$i];
-$rc = (($valor > 100) && ($valor < 200)) ? "CENTO" : $c[$valor[0]];
-$rd = ($valor[1] < 2) ? "" : $d[$valor[1]];
-$ru = ($valor > 0) ? (($valor[1] == 1) ? $d10[$valor[2]] : $u[$valor[2]]) : "";
-$r = $rc.(($rc && ($rd || $ru)) ? " E " : "").$rd.(($rd && $ru) ? " E " : "").$ru;
-$t = count($inteiro)-1-$i;
-$r .= $r ? " ".($valor > 1 ? $plural[$t] : $singular[$t]) : "";
-if ($valor == "000")$z++; elseif ($z > 0) $z--;
-if (($t==1) && ($z>0) && ($inteiro[0] > 0)) $r .= (($z>1) ? " DE " : "").$plural[$t];
-if ($r) $rt = $rt . ((($i > 0) && ($i <= $fim) && ($inteiro[0] > 0) && ($z < 1)) ? ( ($i < $fim) ? ", " : " E ") : " ") . $r;
-}
- 
-return($rt ? $rt : "zero");
-}
-// =========================================================================================================
 
 
 // ====== BUSCA CONTRATO =================================================================================
@@ -188,7 +153,7 @@ include ('../../includes/head_impressao.php');
 ?>
 
 
-<!-- ==================================   T Í T U L O   D A   P Á G I N A   ====================================== -->
+<!-- ==================================   T ï¿½ T U L O   D A   P ï¿½ G I N A   ====================================== -->
 <title>
 <?php echo "$titulo"; ?>
 </title>
@@ -201,7 +166,7 @@ include ('../../includes/head_impressao.php');
 </head>
 
 
-<!-- =============================================   I N Í C I O   =============================================== -->
+<!-- =============================================   I N ï¿½ C I O   =============================================== -->
 <body onLoad="imprimir()">
 
 <div id="centro" style="width:750px; border:0px solid #000">
@@ -300,7 +265,7 @@ else
 
 <div id="centro" style="width:748px; height:auto; border:0px solid #000; margin-left:0px; float:left">
 	<div id="centro" style="width:570px; border:0px solid #000; margin-top:0px; margin-left:124px; font-size:17px; line-height: 25px" align="justify">
-	<b>Cl&aacute;usula 1.</b> O pre&ccedil;o certo e ajustado por cada <?php echo "$unidade_print"; ?> de <?php echo "$produto_print"; ?> &eacute; de <?php echo "R$ $preco_produto_print"; ?> (<?php echo valorPorExtenso($preco_produto); ?> ), totalizando <?php echo "R$ $valor_total_print"; ?> (<?php echo valorPorExtenso($valor_total); ?> ), que a compradora paga neste ato, por op&ccedil;&atilde;o do vendedor, conforme recibo firmado (cheque ou comprovante banc&aacute;rio) que passa a compor o presente contrato; 
+	<b>Cl&aacute;usula 1.</b> O pre&ccedil;o certo e ajustado por cada <?php echo "$unidade_print"; ?> de <?php echo "$produto_print"; ?> &eacute; de <?php echo "R$ $preco_produto_print"; ?> (<?php echo Helpers::valorPorExtenso($preco_produto); ?> ), totalizando <?php echo "R$ $valor_total_print"; ?> (<?php echo Helpers::valorPorExtenso($valor_total); ?> ), que a compradora paga neste ato, por op&ccedil;&atilde;o do vendedor, conforme recibo firmado (cheque ou comprovante banc&aacute;rio) que passa a compor o presente contrato; 
 	</div>
 </div>
 

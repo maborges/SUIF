@@ -1,7 +1,7 @@
 <?php
 
 require_once('SankhyaKeys.php');
-require_once("../../helpers.php");
+// require_once("../helpers.php");
 
 
 /**
@@ -13,6 +13,7 @@ require_once("../../helpers.php");
 class Sankhya
 {
 
+
     public static function login(): array
     {
 
@@ -23,7 +24,7 @@ class Sankhya
             $result = curl_exec($curl);
         } catch (Exception $e) {
             return array(
-                "rows" => $result,
+                "rows" => null,
                 "errorCode" => 1,
                 "errorMessage" => $e->getMessage()
             );
@@ -49,6 +50,605 @@ class Sankhya
         );
     }
 
+    public static function DadosArmazenagem($idNFEntrada)
+    {
+        $result = [
+            'errorCode'    => null,
+            'errorMessage' => null,
+            'nf'           => null
+        ];
+
+        $result = (object)$result;
+
+        // Obtém a armazenamento do SUIF
+        $sql = "select b.numero_romaneio  codigoRomaneio,
+                       b.data dataEntrada, 
+                       d.codigo produtorNFSuif,
+                       d.id_sankhya produtorNFSankhya,
+                       c.codigo produtorRomaneioSuif,
+                       c.id_sankhya produtorRomaneioSankhya,
+                       e.codigo produtoNFSuif,
+                       e.id_sankhya produtoNFSankhya,
+                       g.tops_requisicao, 
+                       g.tipo_movimento_requisicao, 
+                       g.tops_compra, 
+                       g.tipo_movimento_compra, 
+                       g.natureza_operacao_requisicao,
+                       a.filial filialSuif, 
+                       h.id_sankhya filialSankhya,
+                       i.centro_custo centroCusto,
+                       a.quantidade qtdeItem,
+                       a.valor_total valorFaturado,
+                       a.unidade unidadeProduto,
+                       a.valor_unitario vlrUnit,
+                       a.observacao,
+                       '' tipo,
+                       j.id_Sankhya comprador,
+                       a.id_pedido_sankhya contratoSankhya,
+                       a.pedido_confirmado_sankhya contratoConfirmadoSankhya,
+                       a.id_fatura_sankhya faturaSankhya,
+                       a.fatura_confirmada_sankhya faturaConfirmadaSankhya,
+                       h.filial_armazenamento
+                  from nota_fiscal_entrada a
+                       left join estoque b       
+                              on b.numero_romaneio   = a.codigo_romaneio
+                             and b.estado_registro   = 'ATIVO'
+                             and b.movimentacao      = 'ENTRADA'
+                       left join cadastro_pessoa c
+                              on c.codigo = b.fornecedor
+                       left join cadastro_pessoa d
+                              on d.codigo = a.codigo_fornecedor
+                       left join cadastro_produto e 
+                              on e.codigo = a.cod_produto
+                       left join tipo_operacao_produto g
+                              on g.tipo_operacao   = 'EARM'
+                             and g.produto_sankhya = e.id_sankhya  
+                       left join filiais h 
+                              on h.descricao = a.filial 
+                       left join centro_custo_sankhya i
+                              on i.filial = h.codigo 
+                             and i.produto = e.codigo 
+                       left join usuarios j
+                              on j.username = b.usuario_cadastro
+                 where a.codigo            = $idNFEntrada
+                   and a.estado_registro   = 'ATIVO'
+                   and a.natureza_operacao = 'ARMAZENAGEM'
+                order by a.codigo_romaneio";
+
+        $resultSetNotaFiscal = Self::queryExecuteDB($sql);
+        $rowsCount = 0;
+
+        if ($resultSetNotaFiscal['errorCode']) {
+            $result->errorCode    = 1;
+            $result->errorMessage = $resultSetNotaFiscal['errorMessage'];
+            return $result;
+        }
+
+        $rowsCount = Count($resultSetNotaFiscal['rows']);
+
+        if ($rowsCount == 0) {
+            $result->errorCode    = 2;
+            $result->errorMessage = "Número da entrada de nota fiscal $idNFEntrada não encontrado no SUIF ou não é uma nota fiscal de armazenagem.";
+            return $result;
+        }
+
+        $nf = [
+            'nfEntrada'                  => $idNFEntrada,
+            'codigoRomaneio'             => $resultSetNotaFiscal['rows'][0][0],
+            'dataEntrada'                => date('d/m/Y', strtotime($resultSetNotaFiscal['rows'][0][1])),
+            'produtorNFSuif'             => $resultSetNotaFiscal['rows'][0][2],
+            'produtorNFSankhya'          => $resultSetNotaFiscal['rows'][0][3],
+            'produtorRomaneioSuif'       => $resultSetNotaFiscal['rows'][0][4],
+            'produtorRomaneioSankhya'    => $resultSetNotaFiscal['rows'][0][5],
+            'produtoSuif'                => $resultSetNotaFiscal['rows'][0][6],
+            'produtoSankhya'             => $resultSetNotaFiscal['rows'][0][7],
+            'topsContrato'               => $resultSetNotaFiscal['rows'][0][8],
+            'tipoMovimentoContrato'      => $resultSetNotaFiscal['rows'][0][9],
+            'topsFatura'                 => $resultSetNotaFiscal['rows'][0][10],
+            'tipoMovimentoFatura'        => $resultSetNotaFiscal['rows'][0][11],
+            'naturezaOperacao'           => $resultSetNotaFiscal['rows'][0][12],
+            'filialSuif'                 => $resultSetNotaFiscal['rows'][0][13],
+            'filialSankhya'              => $resultSetNotaFiscal['rows'][0][14],
+            'centroCusto'                => $resultSetNotaFiscal['rows'][0][15],
+            'qtdeItem'                   => $resultSetNotaFiscal['rows'][0][16],
+            'valorFaturado'              => $resultSetNotaFiscal['rows'][0][17],
+            'unidadeProduto'             => $resultSetNotaFiscal['rows'][0][18],
+            'vlrUnit'                    => $resultSetNotaFiscal['rows'][0][19],
+            'observacao'                 => $resultSetNotaFiscal['rows'][0][20],
+            'codigoTipo'                 => $resultSetNotaFiscal['rows'][0][21],
+            'comprador'                  => $resultSetNotaFiscal['rows'][0][22],
+            'contratoSankhya'            => $resultSetNotaFiscal['rows'][0][23],
+            'contratoConfirmadoSankhya'  => $resultSetNotaFiscal['rows'][0][24],
+            'faturaSankhya'              => $resultSetNotaFiscal['rows'][0][25],
+            'faturaConfirmadaSankhya'    => $resultSetNotaFiscal['rows'][0][26],
+            'filialArmazenamento'        => $resultSetNotaFiscal['rows'][0][27],
+            'tipoVenda'                  => 999,
+            'dhTOPContrato'              => null,
+            'dhTipoContrato'             => null,
+            'dhTOPFatura'                => null,
+            'dhTipoFatura'               => null,
+        ];
+
+        $nfEntrada = (object)$nf;
+
+        if (!$nfEntrada->produtorNFSankhya) {
+            $result->errorCode    = 3;
+            $result->errorMessage = "Codigo do produtor Sankhya da nota fiscal não informado.";
+            return $result;
+        } else if (!$nfEntrada->produtorRomaneioSankhya) {
+            $result->errorCode    = 4;
+            $result->errorMessage = "Codigo do produtor Sankhya do Romaneio não informado.";
+            return $result;
+        } else if (!$nfEntrada->produtoSankhya) {
+            $result->errorCode    = 5;
+            $result->errorMessage = "Codigo do produto Sankhya não informado.";
+            return $result;
+        } else if (!$nfEntrada->topsContrato || !$nfEntrada->topsFatura) {
+            $result->errorCode    = 6;
+            $result->errorMessage = "Código TOP Fatura não encontrado para o produto $nfEntrada->produtoSuif.";
+            return $result;
+        } else if (!$nfEntrada->filialSankhya) {
+            $result->errorCode    = 7;
+            $result->errorMessage = "Código da filial Sankhya não informado.";
+            return $result;
+        } else if (!$nfEntrada->centroCusto) {
+            $result->errorCode    = 8;
+            $result->errorMessage = "Código do centro de custo não informado.";
+            return $result;
+        } else if (!$nfEntrada->comprador) {
+            $result->errorCode    = 9;
+            $result->errorMessage = "Código do comprador Sankhya não informado no SUIF.";
+            return $result;
+        } else if ($nfEntrada->faturaSankhya) {
+            $result->errorMessage = "Nota Fiscal $nfEntrada->nfEntrada já tem o número de fatura $nfEntrada->faturaSankhya criado no Sankhya.";
+        }
+
+        // Busca o histórico dos tipos de operação - Contrato
+        $tipoOperacao = self::BuscaHistoricoTOP($nfEntrada->topsContrato, $nfEntrada->tipoVenda);
+
+        if ($tipoOperacao->errorCode) {
+            $result->errorCode    = $tipoOperacao->errorCode;
+            $result->errorMessage = $tipoOperacao->errorMessage;
+            return $result;
+        }
+
+        $nfEntrada->dhTOPContrato  = $tipoOperacao->dhTOP;
+        $nfEntrada->dhTipoContrato = $tipoOperacao->dhTipo;
+
+        // Busca o histórico dos tipos de operação - Fatura
+        $tipoOperacao = self::BuscaHistoricoTOP($nfEntrada->topsFatura, $nfEntrada->tipoVenda);
+
+        if ($tipoOperacao->errorCode) {
+            $result->errorCode    = $tipoOperacao->errorCode;
+            $result->errorMessage = $tipoOperacao->errorMessage;
+            return $result;
+        }
+
+        $nfEntrada->dhTOPFatura  = $tipoOperacao->dhTOP;
+        $nfEntrada->dhTipoFatura = $tipoOperacao->dhTipo;
+
+        $result->nf = $nfEntrada;
+
+        return $result;
+    }
+
+    public static function IncluiArmazenagem($idNFEntrada)
+    {
+        $result = [
+            'errorCode'       => null,
+            'errorMessage'    => null,
+            'contratoSankhya' => null,
+            'faturaSankhya'   => null,
+        ];
+
+        $result = (object) $result;
+
+        $resultSet = Self::DadosArmazenagem($idNFEntrada);
+
+        if ($resultSet->errorCode) {
+            $result->errorCode    = $resultSet->errorCode;
+            $result->errorMessage = $resultSet->errorMessage;
+            return $result;
+        }
+
+        $nfEntrada = $resultSet->nf;
+
+        /*
+            Contrato de armazenamento
+        */
+
+        $contrato = Self::CriaContratoArmazenagem($nfEntrada);
+
+        if ($contrato->errorCode) {
+            $result->errorCode    = $contrato->errorCode;
+            $result->errorMessage = $contrato->errorMessage;
+            return $result;
+        }
+
+        $nfEntrada->contratoSankhya = $contrato->contratoSankhya;
+
+        // Confirma contrato
+        $resultSet = Self::ConfirmaContratoArmazenagem($nfEntrada);
+
+        if ($resultSet->errorCode) {
+            $result->errorCode    = 9;
+            $result->errorMessage = "{$resultSet->errorCode}: {$resultSet->errorMessage}";
+            return $result;
+        } else {
+            $nfEntrada->contratoConfirmadoSankhya = 'S';
+        }
+
+        /*
+            Fatura de armazenamento
+        */
+
+        // Cria fatura quando da inclusão do contrato
+        if ($nfEntrada->contratoSankhya && $nfEntrada->contratoConfirmadoSankhya == 'S') {
+            $fatura = Self::CriaFaturaArmazenagem($nfEntrada);
+
+            if ($fatura->errorCode) {
+                $result->errorCode    = $fatura->errorCode;
+                $result->errorMessage = $fatura->errorMessage;
+                return $result;
+            }
+
+            $nfEntrada->faturaSankhya = $fatura->faturaSankhya;
+            $nfEntrada->faturaConfirmadaSankhya = $fatura->faturaConfirmadaSankhya;
+
+            $resultItem = Self::alteraItemNota(
+                $nfEntrada->faturaSankhya,
+                $nfEntrada->produtoSankhya,
+                $nfEntrada->valorFaturado,
+                $nfEntrada->qtdeItem,
+                $nfEntrada->unidadeProduto,
+                $nfEntrada->vlrUnit,
+                $nfEntrada->observacao
+            );
+
+            if ($resultItem['errorCode']) {
+                $result->errorCode    = $resultItem['errorCode'];
+                $result->errorMessage = $resultItem['errorMessage'];
+                return $result;
+            }
+
+            $resultSet = Self::alteraCabecalhoNota(
+                $nfEntrada->faturaSankhya,
+                $nfEntrada->produtorRomaneioSankhya,
+                $nfEntrada->produtorNFSankhya,
+                $nfEntrada->dataEntrada,
+                null
+            ); // $nfEntrada->CCSankhya
+
+            if ($resultSet['errorCode']) {
+                $result->errorCode    = $resultSet['errorCode'];
+                $result->errorMessage = $resultSet['errorMessage'];
+                return $result;
+            }
+
+            $resultSet = Self::ConfirmaFaturaArmazenagem($nfEntrada);
+
+            if ($resultSet->errorCode) {
+                $result->errorCode    = 11;
+                $result->errorMessage = "{$resultSet->errorCode}: {$resultSet->errorMessage}";
+                return $result;
+            }
+        }
+
+        return $result;
+    }
+
+    public static function CriaContratoArmazenagem($nfEntrada)
+    {
+        $result = [
+            'errorCode' => null,
+            'errorMessage' => null,
+            'contratoSankhya' => null
+        ];
+
+        $result = (object) $result;
+
+        if ($nfEntrada->contratoSankhya) {
+            // retorna erro que já existe contrato
+            $result->contratoSankhya = $nfEntrada->contratoSankhya;
+            $result->errorMessage    = "Contrato já gerado para a NF $nfEntrada->nfEntrada.";
+            $result->contratoSankhya = $nfEntrada->contratoSankhya;
+            return $result;
+        }
+
+        $body = array(
+            'nota' => array(
+                'cabecalho' => array(
+                    'NUNOTA' => array("$" => ''),
+                    'CODPARC' => array('$' => "$nfEntrada->produtorNFSankhya"),
+                    'DTNEG' => array('$' => "$nfEntrada->dataEntrada"),
+                    'CODTIPOPER' => array('$' => "$nfEntrada->topsContrato"),
+                    'DHTIPOPER' => array('$' => "$nfEntrada->dhTOPContrato"),
+                    'CODTIPVENDA' => array('$' => $nfEntrada->tipoVenda),
+                    'DHTIPVENDA' => array('$' => "$nfEntrada->dhTipoContrato"),
+                    'CODVEND' => array('$' => '0'),
+                    'CODEMP' => array('$' => "$nfEntrada->filialArmazenamento"),
+                    'TIPMOV' => array('$' => "$nfEntrada->tipoMovimentoContrato"),
+                    'CIF_FOB' => array('$' => "C"),
+                    'ISSRETIDO' => array('$' => "N"),
+                    'CODNAT' => array('$' => "$nfEntrada->naturezaOperacao"),
+                    'AD_PEDIDO_SUIF' => array('$' => "$nfEntrada->codigoRomaneio"),
+                    'CODUSU' => array('$' => "{$_COOKIE['u_sankhya']}"),
+                    'CODUSUINC' => array('$' => "{$_COOKIE['u_sankhya']}"),
+                    'CODUSUCOMPRADOR' => array('$' => $nfEntrada->comprador),
+                    'CODCENCUS' => array('$' => "$nfEntrada->centroCusto"),
+                    'AD_CODPARCFICHA' => array('$' => "$nfEntrada->produtorRomaneioSankhya"),
+                    'AD_CODPARCNOTA' => array('$' => "$nfEntrada->produtorNFSankhya"),
+                    'AD_SAFRA' => array('$' => ""),
+                    'AD_PERCIMPUREZA' => array('$' => ""),
+                    'AD_PERCUMIDADE' => array('$' => ""),
+                    'AD_PERCBROCA' => array('$' => ""),
+                    'AD_COMPRAARMAZENADO' => array('$' => "S"),
+                    'AD_TIPOPRODUTO' => array('$' => "$nfEntrada->codigoTipo"),
+                    'OBSERVACAO' => array('$' => $nfEntrada->observacao),
+                    'IRFRETIDO' => array('$' => 'S')
+                ),
+                'itens' => array(
+                    'INFORMARPRECO' => 'True',
+                    'item' => array(
+                        array(
+                            'NUNOTA' => array("$" => ""),
+                            'CODPROD' => array('$' => $nfEntrada->produtoSankhya),
+                            'CODVOL' => array('$' => "$nfEntrada->unidadeProduto"),
+                            'CODLOCALORIG' => array('$' => '105000'),
+                            'CONTROLE' => array('$' => ''),
+                            'QTDNEG' => array('$' => "$nfEntrada->qtdeItem"),
+                            'PERCDESC' => array('$' => '0'),
+                            'VLRUNIT' => array('$' => "$nfEntrada->vlrUnit"),
+                            'VLRTOT' => array('$' => "$nfEntrada->valorFaturado")
+                        )
+                    )
+                )
+            )
+        );
+
+        $statusProcesso = 'X';
+        $result->errorMessage = Self::informaProcessoContratoArmazenagem($nfEntrada->nfEntrada, $nfEntrada->contratoSankhya, $statusProcesso);
+
+        if ($result->errorMessage) {
+            $result->errorCode = 1;
+            return $result;
+        }
+
+        $resultServiceAPI = Self::serviceExecuteAPI($GLOBALS['urlApiCriaPedido'], $body);
+
+        if ($resultServiceAPI['errorCode']) {
+            $result->errorCode    = $resultServiceAPI['errorCode'];
+            $result->errorMessage = $resultServiceAPI['errorMessage'];
+            return $result;
+        }
+
+        $result->contratoSankhya = $resultServiceAPI['rows']['pk']['NUNOTA']['$'] ?? null;
+
+        $statusProcesso = $nfEntrada->contratoSankhya && $result->errorMessage ? 'X' : 'N';
+
+        // Informa ao Suif que a entrada está sendo processada
+        $result->errorMessage = Self::informaProcessoContratoArmazenagem($nfEntrada->nfEntrada, $result->contratoSankhya, $statusProcesso);
+
+        if ($result->errorMessage) {
+            $result->errorCode = 2;
+        }
+
+        return $result;
+    }
+
+    public static function CriaFaturaArmazenagem($nfEntrada)
+    {
+        $result = [
+            'errorCode' => null,
+            'errorMessage' => null,
+            'faturaSankhya' => null,
+            'faturaConfirmadaSankhya' => $nfEntrada->faturaConfirmadaSankhya
+        ];
+
+        $result = (object) $result;
+
+        if ($nfEntrada->faturaSankhya) {
+            // retorna erro que já existe contrato
+            $result->errorMessage  = "Fatura já gerada para a NF $nfEntrada->nfEntrada.";
+            $result->faturaSankhya = $nfEntrada->faturaSankhya;
+            return $result;
+        }
+
+        $body = array(
+            "notas" => array(
+                "codTipOper" => "$nfEntrada->topsFatura",
+                "TIPMOV" => "$nfEntrada->tipoMovimentoFatura",
+                "dtFaturamento" => "$nfEntrada->dataEntrada",
+                "tipoFaturamento" => "FaturamentoNormal",
+                "dataValidada" => true,
+                "notasComMoeda" => array("$" => ""),
+                "nota" => array(
+                    "NUNOTA" => $nfEntrada->contratoSankhya,
+                    "itens" => array(
+                        "item" => array(
+                            array(
+                                "$" => 1,
+                                "QTDFAT" => $nfEntrada->qtdeItem,
+                                "VLRTOT" => $nfEntrada->valorFaturado,
+                                "CODVOL" => $nfEntrada->unidadeProduto
+                            )
+                        )
+                    )
+                ),
+                "codLocalDestino" => "",
+                "faturarTodosItens" => false,
+                "umaNotaParaCada" => false,
+                "ehWizardFaturamento" => true,
+                "dtFixaVenc" => "",
+                "ehPedidoWeb" => false,
+                "nfeDevolucaoViaRecusa" => false
+            )
+        );
+
+        $statusProcesso = 'X';
+        $result->errorMessage = Self::informaProcessoFaturaArmazenagem($nfEntrada->nfEntrada, $nfEntrada->faturaSankhya, $statusProcesso);
+
+        if ($result->errorMessage) {
+            $result->errorCode = 1;
+            return $result;
+        }
+
+        $resultServiceAPI = Self::serviceExecuteAPI($GLOBALS['urlApiFaturamentoPedido'], $body);
+
+        if ($resultServiceAPI['errorCode']) {
+            $result->errorCode    = $resultServiceAPI['errorCode'];
+            $result->errorMessage = $resultServiceAPI['errorMessage'];
+            return $result;
+        }
+
+        $result->faturaSankhya = $resultServiceAPI['rows']['notas']['nota']['$'];
+        $statusProcesso = $nfEntrada->faturaSankhya && $result->errorMessage ? 'X' : 'N';
+
+        // Informa ao Suif que a entrada está sendo processada
+        $result->errorMessage = Self::informaProcessoFaturaArmazenagem($nfEntrada->nfEntrada, $nfEntrada->faturaSankhya, $statusProcesso);
+
+        if ($result->errorMessage) {
+            $result->errorCode = 2;
+        } else {
+            $result->faturaConfirmadaSankhya = $statusProcesso;
+        }
+
+        return $result;
+    }
+
+    public static function ConfirmaContratoArmazenagem($nfEntrada)
+    {
+        $result = [
+            'errorCode' => null,
+            'errorMessage' => null,
+        ];
+
+        $result = (object) $result;
+
+
+        if ($nfEntrada->contratoConfirmadoSankhya == 'S') {
+            $result->errorMessage = "Contrato de armazenamento $nfEntrada->contratoSankhya já confirmado.";
+            return $result;
+        }
+
+        $body = array(
+            "notas" => array(
+                "nunota" => array(
+                    array("$" => $nfEntrada->contratoSankhya)
+                ),
+            )
+        );
+
+        $resultServiceAPI = Self::serviceExecuteAPI($GLOBALS['urlApiConfirmaPedido'], $body);
+
+        if ($resultServiceAPI['errorCode']) {
+            $result->errorCode    = 1;
+            $result->errorMessage = $resultServiceAPI['errorMessage'];
+        } else {
+            $result->errorMessage = Self::informaProcessoContratoArmazenagem($nfEntrada->nfEntrada, $nfEntrada->contratoSankhya, 'S');
+
+            if ($result->errorMessage) {
+                $result->errorCode = 2;
+            }
+        }
+
+        return $result;
+    }
+
+    public static function ConfirmaFaturaArmazenagem($nfEntrada)
+    {
+        $result = [
+            'errorCode' => null,
+            'errorMessage' => null,
+        ];
+
+        $result = (object) $result;
+
+        if ($nfEntrada->faturaConfirmadaSankhya == 'S') {
+            $result->errorMessage = "Fatura de armazenamento $nfEntrada->faturaSankhya já confirmado.";
+            return $result;
+        }
+
+        $body = array(
+            "notas" => array(
+                "nunota" => array(
+                    array("$" => $nfEntrada->faturaSankhya)
+                ),
+            )
+        );
+
+        $resultServiceAPI = Self::serviceExecuteAPI($GLOBALS['urlApiConfirmaPedido'], $body);
+
+        if ($resultServiceAPI['errorCode']) {
+            $result->errorCode    = 1;
+            $result->errorMessage = $resultServiceAPI['errorMessage'];
+        } else {
+            $result->errorMessage = Self::informaProcessoFaturaArmazenagem($nfEntrada->nfEntrada, $nfEntrada->faturaSankhya, 'S');
+
+            if ($result->errorMessage) {
+                $result->errorCode = 2;
+            }
+        }
+
+        return $result;
+    }
+
+    public static function CancelaContratoArmazenagem($contrato, $motivo = '') 
+    {
+        $result = [
+            'errorCode'       => null,
+            'errorMessage'    => null,
+            'contratoSankhya' => null,
+            'faturaSankhya'   => null,
+        ];
+
+        $result = (object) $result;
+
+        if (!$contrato) {
+            $result->errorMessage = 'Nenhum contrato informado para ser cancelado';
+            return $result;
+        }
+
+        $cancela = Self::cancelaDocumento($contrato,$motivo);
+
+        if ($cancela['errorCode']) {
+            $result->errorCode    = $cancela['errorCode'];
+            $result->errorMessage = $cancela['errorMessage'];
+        }
+
+        return $result;
+    }
+
+    public static function CancelaFaturaArmazenagem($fatura, $motivo = '')
+    {
+        $result = [
+            'errorCode'       => null,
+            'errorMessage'    => null,
+            'contratoSankhya' => null,
+            'faturaSankhya'   => null,
+        ];
+
+        $result = (object) $result;
+
+        if (!$fatura) {
+            $result->errorMessage = 'Nenhuma fatura informada para ser cancelada';
+            return $result;
+        }
+
+        $cancela = Self::cancelaDocumento($fatura, $motivo);
+
+        if ($cancela['errorCode']) {
+            $result->errorCode    = $cancela['errorCode'];
+            $result->errorMessage = $cancela['errorMessage'];
+        }
+
+        return $result;
+    }
+
+
+    /***
+     * Processos para tratamento de compras (contratos e faturas)
+     */
     public static function insertPedidoCompra($idCompra)
     {
         $error = 0;
@@ -100,7 +700,7 @@ class Sankhya
 
         if ($resultSetCompra['errorCode']) {
             $error  = 1;
-            $msg  = "Erro: {$resultSetCompra['errorCode']}: {$resultSetCompra['errorMessage']}";
+            $msg  = $resultSetCompra['errorMessage'];
         } else {
             $rowsCount = Count($resultSetCompra['rows']);
 
@@ -126,17 +726,17 @@ class Sankhya
                 $impureza = str_replace('%', '', $resultSetCompra['rows'][0][43] ?? 0);
 
                 if (!is_numeric($impureza)) {
-                    $impureza = 0;    
+                    $impureza = 0;
                 }
 
                 $umidade = str_replace('%', '', $resultSetCompra['rows'][0][12] ?? 0);
                 if (!is_numeric($umidade)) {
-                    $umidade = 0;    
+                    $umidade = 0;
                 }
 
                 $broca = str_replace('%', '', $resultSetCompra['rows'][0][11] ?? 0);
                 if (!is_numeric($broca)) {
-                    $broca = 0;    
+                    $broca = 0;
                 }
 
                 $observacao         = $resultSetCompra['rows'][0][13];
@@ -145,7 +745,7 @@ class Sankhya
                 $movimentacao       = $resultSetCompra['rows'][0][16];
                 $idPedidoSankhya       = $resultSetCompra['rows'][0][55];
                 $situacaoPedidoSankhya = $resultSetCompra['rows'][0][56];
-                
+
                 if ($idPedidoSankhya) {
                     $error  = 4;
                     $msg   = "Compra $idCompra já tem o número de contrato $idPedidoSankhya criado no Sankhya.";
@@ -169,7 +769,7 @@ class Sankhya
 
             if ($resultSet['errorCode']) {
                 $error  = 5;
-                $msg  = "Erro: {$resultSet['errorCode']}: {$resultSet['errorMessage']}";
+                $msg  = $resultSet['errorMessage'];
             } else {
                 $rowsCount = Count($resultSet['rows']);
                 if ($rowsCount == 0) {
@@ -203,7 +803,7 @@ class Sankhya
 
             if ($resultSetFilial['errorCode']) {
                 $error  = 3;
-                $msg  = "Erro: {$resultSetFilial['errorCode']}: {$resultSetFilial['errorMessage']}";
+                $msg  = $resultSetFilial['errorMessage'];
             } else {
                 $rowsCount = Count($resultSetFilial['rows']);
                 if ($rowsCount == 0) {
@@ -236,7 +836,7 @@ class Sankhya
 
             if ($resultSetProdutor['errorCode']) {
                 $error  = 3;
-                $msg  = "Erro: {$resultSetProdutor['errorCode']}: {$resultSetProdutor['errorMessage']}";
+                $msg  = $resultSetProdutor['errorMessage'];
             } else {
                 $rowsCount = Count($resultSetProdutor['rows']);
                 if ($rowsCount == 0) {
@@ -265,7 +865,7 @@ class Sankhya
 
             if ($resultSetProduto['errorCode']) {
                 $error  = 3;
-                $msg  = "Erro: {$resultSetProduto['errorCode']}: {$resultSetProduto['errorMessage']}";
+                $msg  = $resultSetProduto['errorMessage'];
             } else {
                 $rowsCount = Count($resultSetProduto['rows']);
                 if ($rowsCount == 0) {
@@ -297,7 +897,7 @@ class Sankhya
 
             if ($resultSetTOPS['errorCode']) {
                 $error  = 3;
-                $msg  = "Erro: {$resultSetTOPS['errorCode']}: {$resultSetTOPS['errorMessage']}";
+                $msg  = $resultSetTOPS['errorMessage'];
             } else {
                 $rowsCount = Count($resultSetTOPS['rows']);
                 if ($rowsCount == 0) {
@@ -329,10 +929,10 @@ class Sankhya
             $resultSetOperacao = self::queryExecuteAPI($sql);
 
             if ($resultSetOperacao['errorCode']) {
-                $erro = 1;
-                $msg  = "Erro: {$resultSetOperacao['errorCode']}: {$resultSetOperacao['errorMessage']}";
+                $error = 1;
+                $msg  = $resultSetOperacao['errorMessage'];
             } else if (Count($resultSetOperacao['rows']) == 0) {
-                $erro = 1;
+                $error = 1;
                 $msg  = "Histórico não encontrado para o tipo de operação e/ou tipo de venda.";
             } else {
                 $dataHoraTipoOperacao = DateTime::createFromFormat(
@@ -374,6 +974,7 @@ class Sankhya
                         'AD_PERCIMPUREZA' => array('$' => "$impureza"),
                         'AD_PERCUMIDADE' => array('$' => "$umidade"),
                         'AD_PERCBROCA' => array('$' => "$broca"),
+                        'AD_COMPRAARMAZENADO' => array('$' => "N"),
                         'AD_TIPOPRODUTO' => array('$' => "$codigoTipo"),
                         'OBSERVACAO' => array('$' => $observacao),
                         'IRFRETIDO' => array('$' => 'S')
@@ -385,7 +986,7 @@ class Sankhya
                                 'NUNOTA' => array("$" => ""),
                                 'CODPROD' => array('$' => $produtoIdSankhya),
                                 'CODVOL' => array('$' => "$unidade"),
-                                'CODLOCALORIG' => array('$' => '0'),
+                                'CODLOCALORIG' => array('$' => '101000'),
                                 'CONTROLE' => array('$' => ''),
                                 'QTDNEG' => array('$' => "$quantidade"),
                                 'PERCDESC' => array('$' => '0'),
@@ -397,12 +998,10 @@ class Sankhya
                 )
             );
 
-
             $resultServiceAPI = Self::serviceExecuteAPI($GLOBALS['urlApiCriaPedido'], $body);
-
             if ($resultServiceAPI['errorCode']) {
                 $error  = $resultServiceAPI['errorCode'];
-                $msg  = "Erro: {$resultServiceAPI['errorCode']}: {$resultServiceAPI['errorMessage']}";
+                $msg  = $resultServiceAPI['errorMessage'];
             }
         }
 
@@ -452,14 +1051,14 @@ class Sankhya
         }
     }
 
-    public static function cancelaPedidoCompra($pedidoSankhya)
+    public static function cancelaDocumento($pedidoSankhya, $motivo = 'SUIF-lançamento indevido')
     {
         $body = array(
             "notasCanceladas" => array(
                 "nunota" => array(
                     array("$" => $pedidoSankhya)
                 ),
-                "justificativa" => "lançamento indevido",
+                "justificativa" => $motivo,
                 "validarProcessosWmsEmAndamento" => "true"
             )
         );
@@ -483,7 +1082,7 @@ class Sankhya
         }
     }
 
-    public static function alteraCabecalhoNota($numNota, $idParceiro, $idParceiroNota)
+    public static function alteraCabecalhoNota($numNota, $idParceiro, $idParceiroNota, $dataNegociacao, $idCCSankhya = null)
     {
         $body = "<?xml version='1.0'?>
                 <serviceRequest serviceName='CACSP.incluirAlterarCabecalhoNota'>
@@ -493,41 +1092,7 @@ class Sankhya
                                 <NUNOTA>$numNota</NUNOTA>
                                 <AD_CODPARCFICHA>$idParceiro</AD_CODPARCFICHA>
                                 <AD_CODPARCNOTA>$idParceiroNota</AD_CODPARCNOTA>
-                            </cabecalho>
-                        </nota>
-                    </requestBody>
-                </serviceRequest>";
-
-        $resultServiceAPI = Self::serviceExecuteAPI($GLOBALS['urlApiAlteraCabecalhoNota'], $body, false);
-
-        if ($resultServiceAPI['errorCode']) {
-            return array(
-                "rows" => [],
-                "effectedRows" => 0,
-                "errorCode" => $resultServiceAPI['errorCode'],
-                "errorMessage" => "Fatura: $numNota - " . $resultServiceAPI['errorMessage']
-            );
-        } else {
-            return array(
-                "rows" => $resultServiceAPI['rows'],
-                "effectedRows" => 0,
-                "errorCode" => "",
-                "errorMessage" => ""
-            );
-        }
-    }
-
-    // apagar depois de fazer a carga, pos não será mais necessario
-    public static function alteraCabecalhoNotaCarga($numNota, $idParceiro, $idParceiroNota, $dataNegociacao)
-    {
-        $body = "<?xml version='1.0'?>
-                <serviceRequest serviceName='CACSP.incluirAlterarCabecalhoNota'>
-                    <requestBody>
-                        <nota>
-                            <cabecalho>
-                                <NUNOTA>$numNota</NUNOTA>
-                                <AD_CODPARCFICHA>$idParceiro</AD_CODPARCFICHA>
-                                <AD_CODPARCNOTA>$idParceiroNota</AD_CODPARCNOTA>
+                                <AD_CODCTAPAG>$idCCSankhya</AD_CODCTAPAG>
                                 <DTNEG>$dataNegociacao</DTNEG>
                                 <DTENTSAI>$dataNegociacao</DTENTSAI>
                                 <DTMOV>$dataNegociacao</DTMOV>
@@ -537,6 +1102,7 @@ class Sankhya
                     </requestBody>
                 </serviceRequest>";
 
+
         $resultServiceAPI = Self::serviceExecuteAPI($GLOBALS['urlApiAlteraCabecalhoNota'], $body, false);
 
         if ($resultServiceAPI['errorCode']) {
@@ -544,8 +1110,8 @@ class Sankhya
                 "rows" => [],
                 "effectedRows" => 0,
                 "errorCode" => $resultServiceAPI['errorCode'],
-                "errorMessage" => "Fatura: $numNota Produtor: $idParceiro Favorecido: $idParceiroNota Faturamento: $dataNegociacao  <br>" . 
-                                $resultServiceAPI['errorMessage']
+                "errorMessage" => "Fatura: $numNota Produtor: $idParceiro Favorecido: $idParceiroNota Faturamento: $dataNegociacao  <br>" .
+                    $resultServiceAPI['errorMessage']
             );
         } else {
             return array(
@@ -557,8 +1123,8 @@ class Sankhya
         }
     }
 
-    // apagar depois de fazer a carga, pos não será mais necessario
-    public static function alteraItemNotaCarga($numNota, $idProduto, $valorFatura, $qtdeNegociada, $codigoVolume, $valorUnitario)
+    // apagar depois de fazer a carga, pois não será mais necessário
+    public static function alteraItemNota($numNota, $idProduto, $valorFatura, $qtdeNegociada, $codigoVolume, $valorUnitario, $observacao = '')
     {
         $error = 0;
         $msg   = '';
@@ -566,14 +1132,15 @@ class Sankhya
             'nota' => array(
                 'NUNOTA' => $numNota,
                 'itens' => array(
-                    'item' => array (
+                    'item' => array(
                         'CODPROD' => array('$' => $idProduto),
                         'NUNOTA' => array('$' => $numNota),
-                        'SEQUENCIA' => array('$' =>'1'),
+                        'SEQUENCIA' => array('$' => '1'),
                         'QTDNEG' => array('$' => $qtdeNegociada),
                         'CODVOL' => array('$' => $codigoVolume),
                         'VLRUNIT' => array('$' => $valorUnitario),
-                        'VLRTOT' => array('$' => $valorFatura)
+                        'VLRTOT' => array('$' => $valorFatura),
+                        'OBSERVACAO' => array('$' => $observacao)
                     ),
                 )
             )
@@ -583,7 +1150,7 @@ class Sankhya
 
         if ($resultServiceAPI['errorCode']) {
             $error = $resultServiceAPI['errorCode'];
-            $msg = "Erro: {$resultServiceAPI['errorCode']}: {$resultServiceAPI['errorMessage']}";
+            $msg = $resultServiceAPI['errorMessage'];
         }
 
         if ($error) {
@@ -601,15 +1168,64 @@ class Sankhya
             "errorCode" => $error,
             "errorMessage" => $msg
         );
+    }
 
+    public static function geraFaturaSankhya(array $data)
+    {
+        $body = array(
+            "notas" => array(
+                "codTipOper" => $data['codTipOper'],
+                "TIPMOV" => $data['TipMov'],
+                "dtFaturamento" => $data['dtFaturamento'],
+                "tipoFaturamento" => "FaturamentoNormal",
+                "dataValidada" => true,
+                "notasComMoeda" => array("$" => ""),
+                "nota" => array(
+                    "NUNOTA" =>  $data['NumNota'],
+                    "itens" => array(
+                        "item" => array(
+                            array(
+                                "$" => 1,
+                                "QTDFAT" =>  $data['qtdeItem'],
+                                "VLRTOT" =>  $data['valorFaturado'],
+                                "CODVOL" =>  $data['unidadeProduto']
+                            )
+                        )
+                    )
+                ),
+                "codLocalDestino" => "",
+                "faturarTodosItens" => false,
+                "umaNotaParaCada" => false,
+                "ehWizardFaturamento" => true,
+                "dtFixaVenc" => "",
+                "ehPedidoWeb" => false,
+                "nfeDevolucaoViaRecusa" => false
+            )
+        );
+
+        $resultServiceAPI = Self::serviceExecuteAPI($GLOBALS['urlApiFaturamentoPedido'], $body);
+
+        if ($resultServiceAPI['errorCode']) {
+            return array(
+                "rows" => [],
+                "effectedRows" => 0,
+                "errorCode" => $resultServiceAPI['errorCode'],
+                "errorMessage" => $resultServiceAPI['errorMessage']
+            );
+        }
+
+        return array(
+            "rows" => $resultServiceAPI['rows'],
+            "effectedRows" => 0,
+            "errorCode" => '',
+            "errorMessage" => 'ok'
+        );
     }
 
     public static function faturaPedidoCompra($idCompra, $qtdeItem, $dataFaturamento, $valorFaturado)
     {
         $error = "";
         $msg   = "";
-
-        $qtdeItem = round($qtdeItem,3);
 
         // Obtém pedido de compra Sankhya no SUIF
         $sql = "select id_pedido_sankhya, estado_registro, data_cadastro, cod_produto, fornecedor, pedido_confirmado_sankhya, preco_unitario, unidade
@@ -655,7 +1271,7 @@ class Sankhya
 
             if ($resultSetProdutor['errorCode']) {
                 $error  = 3;
-                $msg  = "Erro: {$resultSetProdutor['errorCode']}: {$resultSetProdutor['errorMessage']}";
+                $msg  = $resultSetProdutor['errorMessage'];
             } else {
                 $rowsCount = Count($resultSetProdutor['rows']);
                 if ($rowsCount == 0) {
@@ -686,7 +1302,7 @@ class Sankhya
 
             if ($resultSetProduto['errorCode']) {
                 $error  = 3;
-                $msg  = "Erro: {$resultSetProduto['errorCode']}: {$resultSetProduto['errorMessage']}";
+                $msg  = $resultSetProduto['errorMessage'];
             } else {
                 $rowsCount = Count($resultSetProduto['rows']);
                 if ($rowsCount == 0) {
@@ -717,7 +1333,7 @@ class Sankhya
 
             if ($resultSetTOPS['errorCode']) {
                 $error  = 3;
-                $msg  = "Erro: {$resultSetTOPS['errorCode']}: {$resultSetTOPS['errorMessage']}";
+                $msg  = $resultSetTOPS['errorMessage'];
             } else {
                 $rowsCount = Count($resultSetTOPS['rows']);
                 if ($rowsCount == 0) {
@@ -779,7 +1395,6 @@ class Sankhya
                 $msg  = $resultServiceAPI['errorMessage'];
             } else {
                 $idFaturaSankhya = $resultServiceAPI['rows']['notas']['nota']['$'];
-
             }
         }
 
@@ -798,6 +1413,51 @@ class Sankhya
             "errorCode" => $error,
             "errorMessage" => $msg
         );
+    }
+
+    /** 
+     * Atualiza os daddos do contrato do Sankhya na tabela de compras
+     * @param integer $idCompra Código da compra
+     * @param integer $idContratoSankhya Número do contrato retornado pelo Sankhya
+     * @param integer $situacaoContrato Situação do contrato após processo do Sankhya
+     * (N - Não processado) (S - Processado) (X - Falha no processamento)
+     * 
+     * @return array
+     */
+    public static function atualizaDadosCompra($idCompra, $idContratoSankhya, $situacaoContrato, $logSankhya = ''): array
+    {
+        $contrato = $idContratoSankhya ?? 'id_pedido_sankhya';
+        $textLog = str_replace('"','',str_replace("'","", $logSankhya));
+
+        $sql = "update compras 
+                   set id_pedido_sankhya         = $contrato,
+                       pedido_confirmado_sankhya = '$situacaoContrato',
+                       log_sankhya               = '$textLog'
+                 where numero_compra             = $idCompra";
+
+        return Sankhya::queryExecuteDB($sql);
+    }
+
+    /** 
+     * Atualiza os daddos de pagamento do Sankhya na tabela de faturamento (favorecido_pagto)
+     * @param integer $idPagamento Código do pagamento
+     * @param integer $idFaturaSankhya Número da fatura gerada pelo Sankhya
+     * @param integer $situacaoFatura Situação do pagamento quando retornado o processamento
+     * (N - Não processado) (S - Processado) (X - Falha no processamento)
+     * 
+     * @return array
+     */
+    public static function atualizaDadosPagamentoFavorecido($idPagamento, $idFaturaSankhya, $situacaoFatura, $logSankhya = ''): array
+    {
+        $fatura = $idFaturaSankhya ?? 'id_pedido_sankhya';
+        $textLog = str_replace('"','',str_replace("'","", $logSankhya));
+        $sql = "update favorecidos_pgto 
+                   set pedido_confirmado_sankhya = '$situacaoFatura',
+                       id_pedido_sankhya         = $fatura,
+                       log_sankhya               = '$textLog' 
+                 where codigo                    = $idPagamento";
+
+        return Sankhya::queryExecuteDB($sql);
     }
 
     public static function getParceiroById($id): array
@@ -843,7 +1503,6 @@ class Sankhya
     public static function getFavorecidoSUIF($idSankhya = 0, $Sequencia = 0): array
     {
         $sql = "select nome from cadastro_favorecido where id_sankhya = $idSankhya and sequencia_cc_sankhya = $Sequencia";
-        Helpers::consoleLog($sql);
         return self::queryExecuteDB($sql);
     }
 
@@ -970,17 +1629,20 @@ class Sankhya
         ]);
 
         $result = curl_exec($curl);
+
         // Fechar a sessão cURL
         curl_close($curl);
 
         if (!$json) {
             $string = str_replace('"', "'", $result);     // substitui aspas dupla po simples
-            $string = str_replace(array("\r", "\n"),'', $string); // tira o cr/lf
+            $string = str_replace(array("\r", "\n"), '', $string); // tira o cr/lf
+
+            $xml = [];
 
             try {
                 $xml = simplexml_load_string($string, 'SimpleXMLElement', LIBXML_NOCDATA);
-
             } catch (Exception $e) {
+
                 if (!$xml['status']) {
                     return array(
                         "rows" => [],
@@ -988,9 +1650,8 @@ class Sankhya
                         "errorMessage" => "Erro ao tentar ler XML de retorno do Sankhya na execução da API $url. <br> {$e->getMessage()}"
                     );
                 }
-    
             }
-            
+
             if ("{$xml['status']}" == '0') {
                 return array(
                     "rows" => [],
@@ -1037,11 +1698,10 @@ class Sankhya
     public static function queryExecuteDB($sql): array
     {
         $rows = [];
+        $conexao = ConnectDB();
 
         // trata a conexão com o banco
         try {
-            $conexao = ConnectDB();
-
             // verifica se a conexão foi ok
             if ($conexao->connect_errno) {
                 return array(
@@ -1079,7 +1739,7 @@ class Sankhya
                 "rows" => $rows,
                 "effectedRows" => $effectedRows,
                 "errorCode" => 0,
-                "errorMessage" => 'ok',
+                "errorMessage" => '',
                 "count" => $count
             );
         } catch (Exception $e) {
@@ -1095,7 +1755,7 @@ class Sankhya
         }
     }
 
-    public static function queryExecuteDBOnly($sql) 
+    public static function queryExecuteDBOnly($sql)
     {
         // trata a conexão com o banco
         $conexao = ConnectDB();
@@ -1117,8 +1777,6 @@ class Sankhya
                 "errorCode" => $conexao->errno,
                 "errorMessage" => $conexao->error,
             );
-
-
         } catch (Exception $e) {
             return array(
                 "rows" => null,
@@ -1131,40 +1789,83 @@ class Sankhya
         }
     }
 
-    public static function mask($val, $mask)
+    public static function informaProcessoContratoArmazenagem($entradaNF, $contratoSankhya, $situacao)
     {
-        $maskared = '';
-        $k = 0;
-        for ($i = 0; $i <= strlen($mask) - 1; ++$i) {
-            if ($mask[$i] == '#') {
-                if (isset($val[$k])) {
-                    $maskared .= $val[$k++];
-                }
-            } else {
-                if (isset($mask[$i])) {
-                    $maskared .= $mask[$i];
-                }
-            }
+        $contrato = isset($contratoSankhya) ? $contratoSankhya : "null";
+
+        $sql = "update nota_fiscal_entrada 
+                   set id_pedido_sankhya         = $contrato,
+                       pedido_confirmado_sankhya = '$situacao'
+                 where codigo = $entradaNF";
+
+        $resultSet = Sankhya::queryExecuteDB($sql);
+
+        return $resultSet['errorMessage'];
+    }
+
+    public static function informaProcessoFaturaArmazenagem($entradaNF, $faturaSankhya, $situacao)
+    {
+        $fatura = isset($faturaSankhya) ? $faturaSankhya : "null";
+
+        $sql = "update nota_fiscal_entrada 
+                   set id_fatura_sankhya         = $fatura,
+                       fatura_confirmada_sankhya = '$situacao'
+                 where codigo = $entradaNF";
+
+        $resultSet = Sankhya::queryExecuteDB($sql);
+
+        return $resultSet['errorMessage'];
+    }
+
+    public static function informaProcessoNFEntrada($entradaNF, $pedidoSankhya, $situacao)
+    {
+        $sql = "update nota_fiscal_entrada 
+                   set id_pedido_sankhya         = $pedidoSankhya,
+                       pedido_confirmado_sankhya = '$situacao'
+                 where codigo = $entradaNF";
+
+        $resultSet = Sankhya::queryExecuteDB($sql);
+
+        return $resultSet['errorMessage'];
+    }
+
+    public static function BuscaHistoricoTOP($tops, $tipo)
+    {
+        $result = [
+            'errorCode' => null,
+            'errorMessage' => null,
+            'dhTOP' => null,
+            'dhTipo' => null,
+        ];
+
+        $result = (object) $result;
+
+        // Busca o histórico dos tipos de operação
+        $sql = "SELECT MAX(TGFTOP.DHALTER) TGFTOP_DHALTER, 
+                           MAX(TGFTPV.DHALTER) TGFTPV_DHALTER 
+                      FROM TGFTOP, TGFTPV 
+                     WHERE CODTIPOPER = $tops AND CODTIPVENDA = $tipo";
+
+        $resultSet = self::queryExecuteAPI($sql);
+
+        if ($resultSet['errorCode']) {
+            $result->errorCode = 1;
+            $result->errorMessage = $resultSet['errorMessage'];
+        } else if (Count($resultSet['rows']) == 0) {
+            $result->errorCode = 2;
+            $result->errorMessage = "Histórico não encontrado para o tipo de operação $tops e/ou tipo de venda $tipo.";
+        } else {
+            $result->dhTOP = DateTime::createFromFormat(
+                "dmY H:i:s",
+                $resultSet['rows'][0][0]
+            )->format('d/m/Y H:i:s');
+
+            $result->dhTipo = DateTime::createFromFormat(
+                "dmY H:i:s",
+                $resultSet['rows'][0][1]
+            )->format('d/m/Y H:i:s');
         }
 
-        return $maskared;
-
-        /* TIPO DE MASCARA
-            $cnpj = '11222333000199';
-            $cpf = '00100200300';
-            $cep = '08665110';
-            $data = '10102010';
-            $hora = '021050';
-
-            echo mask($cnpj, '##.###.###/####-##').'<br>';
-            echo mask($cpf, '###.###.###-##').'<br>';
-            echo mask($cep, '#####-###').'<br>';
-            echo mask($data, '##/##/####').'<br>';
-            echo mask($data, '##/##/####').'<br>';
-            echo mask($data, '[##][##][####]').'<br>';
-            echo mask($data, '(##)(##)(####)').'<br>';
-            echo mask($hora, 'Agora são ## horas ## minutos e ## segundos').'<br>';
-            echo mask($hora, '##:##:##');
-        */
+        return (object) $result;
     }
 }

@@ -13,17 +13,17 @@ $menu = "entrada";
 // ====== RECEBE POST =============================================================================================
 $botao = $_POST["botao"];
 $data_hoje = date('Y-m-d', time());
-$data_inicial = $_POST["data_inicia_buscal"];
-$data_final = $_POST["data_final_busca"];
-$pagina_mae = $_POST["pagina_mae"];
-$pagina_filha = $_POST["pagina_filha"];
+$data_inicial = $_POST["data_inicia_buscal"] ?? '';
+$data_final = $_POST["data_final_busca"] ?? '';
+$pagina_mae = $_POST["pagina_mae"] ?? '';
+$pagina_filha = $_POST["pagina_filha"] ?? '';
 $filial = $filial_usuario;
 
-$fornecedor_form = $_POST["fornecedor_form"];
-$cod_produto_busca = $_POST["cod_produto_busca"];
-$num_romaneio_form = $_POST["num_romaneio_form"];
-$situacao_romaneio_busca = $_POST["situacao_romaneio_busca"];
-$forma_pesagem_busca = $_POST["forma_pesagem_busca"];
+$fornecedor_form = $_POST["fornecedor_form"] ?? '';
+$cod_produto_busca = $_POST["cod_produto_busca"] ?? '';
+$num_romaneio_form = $_POST["num_romaneio_form"] ?? '';
+$situacao_romaneio_busca = $_POST["situacao_romaneio_busca"] ?? '';
+$forma_pesagem_busca = $_POST["forma_pesagem_busca"] ?? '';
 // ================================================================================================================
 
 
@@ -180,6 +180,7 @@ $codigo_pessoa = $aux_pessoa[35];
 $cidade_fornecedor = $aux_pessoa[10];
 $estado_fornecedor = $aux_pessoa[12];
 $telefone_fornecedor = $aux_pessoa[14];
+$cidade_uf_fornecedor = "$cidade_fornecedor-$estado_fornecedor";
 
 if ($aux_pessoa[2] == "pf")
 {$cpf_cnpj = $aux_pessoa[3];}

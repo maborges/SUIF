@@ -1,5 +1,5 @@
 <?php
-// MUDAR ESTA VARIÁVEL CONFORME O AMBIENTE
+// MUDAR ESTA VARIÁVEL CONFORME O AMBIENTE (BANCO DE DADOS)
 $dbc_environment = 'HOM';
 $db_environment = $GLOBALS['$db_environment'] ?? '';
 
@@ -41,15 +41,15 @@ switch ($dbc_environment) {
         break;
 }
 
-// Faz conexão com o banCo de dados 
+// Faz conexão com o banco de dados 
 if (!function_exists('ConnectDB')) {
     function ConnectDB()
     {
         global $dbc_host, $dbc_user, $dbc_pass, $dbc_base, $dbc_port, $dbc_environment;
 
         try {
-            //            $conexao = new mysqli($dbc_host, $dbc_user, $dbc_pass, $dbc_base, $dbc_port);
-            mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+            // $conexao = new mysqli($dbc_host, $dbc_user, $dbc_pass, $dbc_base, $dbc_port);
+            // mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
             $conexao = mysqli_connect($dbc_host, $dbc_user, $dbc_pass, $dbc_base, $dbc_port);
             mysqli_set_charset($conexao, "utf8");
 

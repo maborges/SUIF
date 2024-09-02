@@ -483,8 +483,8 @@ include('../../includes/head_impressao.php');
 <div id='centro' style='height:auto; width:725px; border:0px solid #999; margin:auto'>
 	<div style='width:65px; height:20px; border:1px solid #FFF; float:left; font-size:10px; margin-left:5px; text-align:center'>Data</div>
 	<div style='width:195px; height:20px; border:1px solid #FFF; float:left; font-size:10px; margin-left:4px; text-align:center'>Produtor</div>
-	<div style='width:105px; height:20px; border:1px solid #FFF; float:left; font-size:10px; margin-left:4px; text-align:center'>CPF/CNPJ</div>
-	<div style='width:70px; height:20px; border:1px solid #FFF; float:left; font-size:10px; margin-left:4px; text-align:center'>N&ordm; NF</div>
+	<div style='width:90px; height:20px; border:1px solid #FFF; float:left; font-size:10px; margin-left:4px; text-align:center'>CPF/CNPJ</div>
+	<div style='width:85px; height:20px; border:1px solid #FFF; float:left; font-size:10px; margin-left:4px; text-align:center'>N&ordm; NF</div>
 	<div style='width:40px; height:20px; border:1px solid #FFF; float:left; font-size:10px; margin-left:4px; text-align:center'>Natureza</div>
 	<div style='width:75px; height:20px; border:1px solid #FFF; float:left; font-size:10px; margin-left:4px; text-align:center'>Quantidade</div>
 	<div style='width:50px; height:20px; border:1px solid #FFF; float:left; font-size:10px; margin-left:4px; text-align:center'>Valor Un</div>
@@ -561,10 +561,10 @@ include('../../includes/head_impressao.php');
 	<div style='margin-top:2px; margin-left:0px'>$data_emissao_print</div></div>
 	<div style='width:195px; height:18px; border:1px solid #000; float:left; font-size:10px; margin-left:4px; overflow:hidden'>
 	<div style='margin-top:2px; margin-left:5px; float:left'>$produtor_nome_z</div></div>
-	<div style='width:105px; height:18px; border:1px solid #000; float:left; font-size:10px; margin-left:4px; text-align:center'>
+	<div style='width:90px; height:18px; border:1px solid #000; float:left; font-size:10px; margin-left:4px; text-align:center'>
 	<div style='margin-top:2px; margin-left:5px'>$produtor_cpf_cnpj</div></div>
-	<div style='width:70px; height:18px; border:1px solid #000; float:left; font-size:10px; margin-left:4px; text-align:center'>
-	<div style='margin-top:2px; margin-left:5px'>$serie_nf_z $numero_nf_z</div></div>
+	<div style='width:85px; height:18px; border:1px solid #000; float:left; font-size:10px; margin-left:4px; text-align:center'>
+	<div style='margin-top:2px; margin-left:5px'>$numero_nf_z</div></div>
 	<div style='width:45px; height:18px; border:1px solid #000; float:left; font-size:9px; margin-left:4px; text-align:center'>
 	<div style='margin-top:2px; margin-left:5px'>$natureza_operacao_z</div></div>
 	<div style='width:70px; height:18px; border:1px solid #000; float:left; font-size:10px; margin-left:4px; text-align:center'>

@@ -22,7 +22,7 @@ $cod_sacaria_form = $_POST["cod_sacaria_form"];
 if ($botao == "EDICAO")
 {$capacidade_max_form = $_POST["capacidade_max_form"];}
 else
-{$capacidade_max_form = Helpers::ConvertePeso($_POST["capacidade_max_form"]);}
+{$capacidade_max_form = Helpers::ConvertePeso($_POST["capacidade_max_form"], 'N');}
 
 $usuario_cadastro_form = $nome_usuario_print;
 $data_cadastro_form = date('Y-m-d', time());

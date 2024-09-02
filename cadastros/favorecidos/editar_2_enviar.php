@@ -28,6 +28,7 @@ $conta_conjunta_form = $_POST["conta_conjunta_form"];
 $obs_form = $_POST["obs_form"];
 $tipo_chave_pix_form = $_POST["tipo_chave_pix_form"];
 $chave_pix_form = $_POST["chave_pix_form"];
+$idSankhyaCC_form = $_POST["idSankhyaCC_form"];
 
 if ($conta_conjunta_form == "") {
 	$conta_conjunta_aux = "NAO";
@@ -188,7 +189,7 @@ if ($botao == "EDITAR_CADASTRO") {
 
 		// ====== TABELA CADASTRO_FAVORECIDO ======================================================================
 		include("../../includes/conecta_bd.php");
-		$editar_favorecido = mysqli_query($conexao, "UPDATE cadastro_favorecido SET banco='$banco_form', agencia='$agencia_form', conta='$numero_conta_form', tipo_conta='$tipo_conta_form', usuario_alteracao='$usuario_cadastro', hora_alteracao='$hora_cadastro', data_alteracao='$data_cadastro', observacao='$obs_form', conta_conjunta='$conta_conjunta_aux', tipo_chave_pix='$tipo_chave_pix_form', chave_pix='$chave_pix_form', cpf_cnpj='$cpf_cnpj', nome_banco='$apelido_banco' WHERE codigo='$id_w'");
+		$editar_favorecido = mysqli_query($conexao, "UPDATE cadastro_favorecido SET banco='$banco_form', agencia='$agencia_form', conta='$numero_conta_form', tipo_conta='$tipo_conta_form', usuario_alteracao='$usuario_cadastro', hora_alteracao='$hora_cadastro', data_alteracao='$data_cadastro', observacao='$obs_form', conta_conjunta='$conta_conjunta_aux', tipo_chave_pix='$tipo_chave_pix_form', chave_pix='$chave_pix_form', cpf_cnpj='$cpf_cnpj', nome_banco='$apelido_banco', sequencia_cc_sankhya=$idSankhyaCC_form WHERE codigo='$id_w'");
 		include("../../includes/desconecta_bd.php");
 	}
 }

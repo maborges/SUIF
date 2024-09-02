@@ -8,12 +8,12 @@ $menu = "entrada";
 // ================================================================================================================
 
 // ======= RECEBENDO POST =========================================================================================
-$botao = $_POST["botao"];
-$pagina_mae = $_POST["pagina_mae"];
+$botao = $_POST["botao"] ?? '';;
+$pagina_mae = $_POST["pagina_mae"] ?? '';;
 $data_hoje = date('Y-m-d', time());
 $data_hoje_br = date('d/m/Y', time());
 
-$numero_romaneio_busca = $_POST["numero_romaneio_busca"];
+$numero_romaneio_busca = $_POST["numero_romaneio_busca"] ?? '';;
 // ================================================================================================================
 
 

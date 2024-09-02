@@ -121,7 +121,8 @@ $busca_compra = mysqli_query(
 	cadastro_pessoa.estado,
 	cadastro_pessoa.telefone_1,
 	cadastro_pessoa.codigo_pessoa,
-	compras.id_pedido_sankhya
+	compras.id_pedido_sankhya,
+	compras.tipo_compra
 FROM
 	compras, cadastro_pessoa
 WHERE
@@ -185,6 +186,8 @@ $pessoa_estado_w = $aux_compra[41];
 $pessoa_telefone_w = $aux_compra[42];
 $codigo_pessoa_w = $aux_compra[43];
 $idPedidoSankhya_w = $aux_compra[44];
+$tipoCompra =$aux_compra[45];
+$tipoCompraText = $tipoCompra == 1 ? "NORMAL" : ($tipoCompra == 2 ? 'ARMAZENADO' : '');
 
 
 if ($pessoa_tipo_w == "PF" or $pessoa_tipo_w == "pf") {
@@ -212,6 +215,10 @@ if (!empty($linha_compra)) {
 	}
 }
 
+$desconto_quant_print = '';
+$desconto_em_valor_print = '';
+$quantidade_original_print = '';
+$valor_total_original_print = '';
 
 if (!empty($data_altera_quant_w)) {
 	$data_altera_quant_print = date('d/m/Y', strtotime($data_altera_quant_w));
@@ -264,40 +271,44 @@ include("../../includes/conecta_bd.php");
 $busca_pgto = mysqli_query(
 	$conexao,
 			"SELECT 
-			codigo,
-			codigo_compra,
-			codigo_favorecido,
-			forma_pagamento,
-			data_pagamento,
-			valor,
-			banco_cheque,
-			observacao,
-			usuario_cadastro,
-			hora_cadastro,
-			data_cadastro,
-			estado_registro,
-			situacao_pagamento,
-			filial,
-			codigo_pessoa,
-			numero_cheque,
-			banco_ted,
-			origem_pgto,
-			codigo_fornecedor,
-			produto,
-			favorecido_print,
-			cod_produto,
-			agencia,
-			num_conta,
-			tipo_conta,
-			nome_banco,
-			cpf_cnpj
+			a.codigo,
+			a.codigo_compra,
+			a.codigo_favorecido,
+			a.forma_pagamento,
+			a.data_pagamento,
+			a.valor,
+			a.banco_cheque,
+			a.observacao,
+			a.usuario_cadastro,
+			a.hora_cadastro,
+			a.data_cadastro,
+			a.estado_registro,
+			a.situacao_pagamento,
+			a.filial,
+			a.codigo_pessoa,
+			a.numero_cheque,
+			a.banco_ted,
+			a.origem_pgto,
+			a.codigo_fornecedor,
+			a.produto,
+			a.favorecido_print,
+			a.cod_produto,
+			a.agencia,
+			a.num_conta,
+			a.tipo_conta,
+			a.nome_banco,
+			a.cpf_cnpj,
+			a.id_pedido_sankhya,
+			b.id_sankhya
 		FROM 
-			favorecidos_pgto
+			favorecidos_pgto a
+			left outer join cadastro_favorecido b 
+  	   	            on b.codigo = a.codigo_favorecido
 		WHERE 
-			codigo_compra='$numero_compra' AND
-			estado_registro='ATIVO'
+			a.codigo_compra='$numero_compra' AND
+			a.estado_registro='ATIVO'
 		ORDER BY 
-			codigo"
+			a.codigo"
 );
 
 $soma_pgto = mysqli_fetch_row(mysqli_query(
@@ -675,7 +686,21 @@ include("../../includes/head.php");
 
 				<div class="visualizar_caixa">
 					<div class="visualizar_campo" style='width:170px'>
-						<div class="visualizar_hidden"><?php echo $filial_w; ?></div>
+						<div class="visualizar_hidden"><?= $filial_w; ?></div>
+					</div>
+				</div>
+			</div>
+			<!-- ================================================================================================================ -->
+
+			<!-- ================================================================================================================ -->
+			<div class="visualizar">
+				<div class="visualizar_rotulo">
+					Tipo da Compra
+				</div>
+
+				<div class="visualizar_caixa">
+					<div class="visualizar_campo" style='width:170px'>
+						<div class="visualizar_hidden"><?= $tipoCompraText ?></div>
 					</div>
 				</div>
 			</div>
@@ -685,12 +710,12 @@ include("../../includes/head.php");
 			<!-- ================================================================================================================ -->
 			<div class="visualizar">
 				<div class="visualizar_rotulo">
-					Observa&ccedil;&atilde;o
+					Observação
 				</div>
 
 				<div class="visualizar_caixa">
-					<div class="visualizar_campo" style='width:582px'>
-						<div class="visualizar_hidden"><?php echo $observacao_w; ?></div>
+					<div class="visualizar_campo" style='width:580px'>
+						<div class="visualizar_hidden"><?= $observacao_w; ?></div>
 					</div>
 				</div>
 			</div>
@@ -937,13 +962,14 @@ include("../../includes/head.php");
 				<table class='tabela_cabecalho'>
 				<tr>
 				<td width='90px'>Data</td>
-				<td width='320px'>Favorecido</td>
+				<td width='260px'>Favorecido</td>
 				<td width='140px'>Forma de Pagamento</td>
 				<td width='150px'>Banco</td>
 				<td width='90px'>Ag&ecirc;ncia</td>
-				<td width='120px'>N&uacute;mero</td>
+				<td width='100px'>N&uacute;mero</td>
 				<td width='100px'>Tipo de Conta</td>
 				<td width='120px'>Valor</td>
+				<td width='80px'>Sankhya</td>
 				</tr>
 				</table>";
 		}
@@ -984,6 +1010,8 @@ include("../../includes/head.php");
 			$tipo_conta_z = $aux_pgto[24];
 			$nome_banco_z = $aux_pgto[25];
 			$cpf_cnpj_z = $aux_pgto[26];
+			$idSankhya_z = $aux_pgto[27];
+			$idSankhyaFavorecido = $aux_pgto[28];
 
 
 			$data_pgto_print = date('d/m/Y', strtotime($data_pagamento_z));
@@ -1057,22 +1085,25 @@ include("../../includes/head.php");
 
 			// ====== RELATORIO =======================================================================================
 			if ($situacao_pagamento_w == "EM_ABERTO") {
-				echo "<tr class='tabela_1' title=' ID: $id_z &#13; C&oacute;digo do Favorecido: $codigo_favorecido_z &#13; CPF/CNPJ: $cpf_cnpj_z &#13; Status do Pagamento: $situacao_pagamento_print &#13; Origem do Pagamento: $origem_pgto_print &#13; Produto: $produto_z &#13; C&oacute;digo do Fornecedor: $codigo_fornecedor_z &#13; Observa&ccedil;&atilde;o: $observacao_z &#13; Filial: $filial_z $dados_cadastro_z'>";
+				echo "<tr class='tabela_1' title=' ID: $id_z &#13; C&oacute;digo do Favorecido: $codigo_favorecido_z Sankhya: $idSankhyaFavorecido &#13; CPF/CNPJ: $cpf_cnpj_z &#13; Status do Pagamento: $situacao_pagamento_print &#13; Origem do Pagamento: $origem_pgto_print &#13; Produto: $produto_z &#13; C&oacute;digo do Fornecedor: $codigo_fornecedor_z &#13; Observa&ccedil;&atilde;o: $observacao_z &#13; Filial: $filial_z $dados_cadastro_z'>";
 			} else {
-				echo "<tr class='tabela_2' title=' ID: $id_z &#13; C&oacute;digo do Favorecido: $codigo_favorecido_z &#13; CPF/CNPJ: $cpf_cnpj_z &#13; Status do Pagamento: $situacao_pagamento_print &#13; Origem do Pagamento: $origem_pgto_print &#13; Produto: $produto_z &#13; C&oacute;digo do Fornecedor: $codigo_fornecedor_z &#13; Observa&ccedil;&atilde;o: $observacao_z &#13; Filial: $filial_z $dados_cadastro_z'>";
+				echo "<tr class='tabela_2' title=' ID: $id_z &#13; C&oacute;digo do Favorecido: $codigo_favorecido_z Sankhya: $idSankhyaFavorecido &#13; CPF/CNPJ: $cpf_cnpj_z &#13; Status do Pagamento: $situacao_pagamento_print &#13; Origem do Pagamento: $origem_pgto_print &#13; Produto: $produto_z &#13; C&oacute;digo do Fornecedor: $codigo_fornecedor_z &#13; Observa&ccedil;&atilde;o: $observacao_z &#13; Filial: $filial_z $dados_cadastro_z'>";
 			}
 
 
 			// =================================================================================================================
 			echo "
 				<td width='90px' align='center'>$data_pgto_print</td>
-				<td width='320px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$favorecido_print</div></td>
+				<td width='260px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$favorecido_print</div></td>
 				<td width='140px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$forma_pagamento_print</div></td>
 				<td width='150px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$nome_banco_print</div></td>
 				<td width='90px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$agencia_print</div></td>
-				<td width='120px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$num_conta_print</div></td>
+				<td width='100px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$num_conta_print</div></td>
 				<td width='100px' align='center'>$tipo_conta_print</td>
-				<td width='120px' align='right'><div style='height:14px; margin-right:15px'>$valor_print</div></td>";
+				<td width='120px' align='right'><div style='height:14px; margin-right:15px'>$valor_print</div></td>
+				<td width='80px' align='right'><div style='height:14px; margin-right:15px'>$idSankhya_z</div></td>"
+				
+				;
 			// =================================================================================================================
 
 			echo "</tr>";

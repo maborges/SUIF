@@ -200,7 +200,8 @@ if ($linha_fornecedor == 1) {
 	usuario_exclusao,
 	hora_exclusao,
 	data_exclusao,
-	numero_romaneio
+	numero_romaneio,
+	id_pedido_sankhya
 FROM 
 	compras
 WHERE 
@@ -836,31 +837,31 @@ include("../../includes/head.php");
 			$soma_tipo_entrada = mysqli_fetch_row(mysqli_query(
 				$conexao,
 				"SELECT
-	SUM(quantidade)
-FROM
-	compras
-WHERE
-	$mysql_filial AND
-	$mysql_status AND
-	$mysql_fornecedor AND
-	$mysql_cod_produto AND
-	cod_tipo='$cod_tipo_t' AND
-	(movimentacao='ENTRADA' OR movimentacao='TRANSFERENCIA_ENTRADA' OR movimentacao='ENTRADA_FUTURO')"
+						SUM(quantidade)
+					FROM
+						compras
+					WHERE
+						$mysql_filial AND
+						$mysql_status AND
+						$mysql_fornecedor AND
+						$mysql_cod_produto AND
+						cod_tipo='$cod_tipo_t' AND
+						(movimentacao='ENTRADA' OR movimentacao='TRANSFERENCIA_ENTRADA' OR movimentacao='ENTRADA_FUTURO')"
 			));
 
 			$soma_tipo_saida = mysqli_fetch_row(mysqli_query(
 				$conexao,
 				"SELECT
-	SUM(quantidade)
-FROM
-	compras
-WHERE
-	$mysql_filial AND
-	$mysql_status AND
-	$mysql_fornecedor AND
-	$mysql_cod_produto AND
-	cod_tipo='$cod_tipo_t' AND
-	(movimentacao='COMPRA' OR movimentacao='TRANSFERENCIA_SAIDA' OR movimentacao='SAIDA' OR movimentacao='SAIDA_FUTURO')"
+						SUM(quantidade)
+					FROM
+						compras
+					WHERE
+						$mysql_filial AND
+						$mysql_status AND
+						$mysql_fornecedor AND
+						$mysql_cod_produto AND
+						cod_tipo='$cod_tipo_t' AND
+						(movimentacao='COMPRA' OR movimentacao='TRANSFERENCIA_SAIDA' OR movimentacao='SAIDA' OR movimentacao='SAIDA_FUTURO')"
 			));
 
 			include("../../includes/desconecta_bd.php");
@@ -871,22 +872,22 @@ WHERE
 
 			if ($saldo_tipo < 0) {
 				echo "
-<div style='height:50px; width:414px; border:0px solid #000; float:left'>
-<div class='total' style='height:40px; width:384px; margin-top:0px' title=''>
-	<div class='total_valor' style='width:60px; height:28px; border:0px solid #999; font-size:11px; margin-top:7px'>$link_img_produto_t</div>
-	<div class='total_nome' style='width:160px; height:15px; border:0px solid #999; font-size:11px; margin-top:14px'><b>$tipo_print_t</b></div>
-	<div class='total_valor' style='width:150px; height:15px; border:0px solid #999; font-size:11px; margin-top:14px; color:#FF0000'>Saldo: $saldo_tipo_print $unidade_produto</div>
-</div>
-</div>";
+					<div style='height:50px; width:414px; border:0px solid #000; float:left'>
+					<div class='total' style='height:40px; width:384px; margin-top:0px' title=''>
+						<div class='total_valor' style='width:60px; height:28px; border:0px solid #999; font-size:11px; margin-top:7px'>$link_img_produto_t</div>
+						<div class='total_nome' style='width:160px; height:15px; border:0px solid #999; font-size:11px; margin-top:14px'><b>$tipo_print_t</b></div>
+						<div class='total_valor' style='width:150px; height:15px; border:0px solid #999; font-size:11px; margin-top:14px; color:#FF0000'>Saldo: $saldo_tipo_print $unidade_produto</div>
+					</div>
+					</div>";
 			} elseif ($saldo_tipo > 0) {
 				echo "
-<div style='height:50px; width:414px; border:0px solid #000; float:left'>
-<div class='total' style='height:40px; width:384px; margin-top:0px' title=''>
-	<div class='total_valor' style='width:60px; height:28px; border:0px solid #999; font-size:11px; margin-top:7px'>$link_img_produto_t</div>
-	<div class='total_nome' style='width:160px; height:15px; border:0px solid #999; font-size:11px; margin-top:14px'><b>$tipo_print_t</b></div>
-	<div class='total_valor' style='width:150px; height:15px; border:0px solid #999; font-size:11px; margin-top:14px; color:#0000FF'>Saldo: $saldo_tipo_print $unidade_produto</div>
-</div>
-</div>";
+					<div style='height:50px; width:414px; border:0px solid #000; float:left'>
+					<div class='total' style='height:40px; width:384px; margin-top:0px' title=''>
+						<div class='total_valor' style='width:60px; height:28px; border:0px solid #999; font-size:11px; margin-top:7px'>$link_img_produto_t</div>
+						<div class='total_nome' style='width:160px; height:15px; border:0px solid #999; font-size:11px; margin-top:14px'><b>$tipo_print_t</b></div>
+						<div class='total_valor' style='width:150px; height:15px; border:0px solid #999; font-size:11px; margin-top:14px; color:#0000FF'>Saldo: $saldo_tipo_print $unidade_produto</div>
+					</div>
+					</div>";
 			} else {
 				echo "";
 			}
@@ -906,26 +907,27 @@ WHERE
 		<?php
 		if ($linha_compra == 0) {
 			echo "
-<div class='espacamento' style='height:400px'>
-<div class='espacamento' style='height:30px'></div>";
+				<div class='espacamento' style='height:400px'>
+				<div class='espacamento' style='height:30px'></div>";
 		} else {
 			echo "
-<div class='ct_relatorio'>
+				<div class='ct_relatorio'>
 
-<table class='tabela_cabecalho'>
-<tr>
-<td width='60px'>Visualizar</td>
-<td width='120px'>Data</td>
-<td width='260px'>Movimenta&ccedil;&atilde;o</td>
-<td width='120px'>N&uacute;mero</td>
-<td width='180px'>Produto</td>
-<td width='150px'>Tipo</td>
-<td width='100px'>Pre&ccedil;o Unit&aacute;rio</td>
-<td width='140px'>Valor Total</td>
-<td width='140px'>Quantidade</td>
-<td width='140px'>Saldo</td>
-</tr>
-</table>";
+				<table class='tabela_cabecalho'>
+				<tr>
+				<td width='60px'>Visualizar</td>
+				<td width='100px'>Data</td>
+				<td width='240px'>Movimenta&ccedil;&atilde;o</td>
+				<td width='100px'>N&uacute;mero</td>
+				<td width='100px'>Sankhya</td>
+				<td width='180px'>Produto</td>
+				<td width='110px'>Tipo</td>
+				<td width='100px'>Pre&ccedil;o Unit&aacute;rio</td>
+				<td width='140px'>Valor Total</td>
+				<td width='140px'>Quantidade</td>
+				<td width='140px'>Saldo</td>
+				</tr>
+				</table>";
 		}
 
 
@@ -935,18 +937,19 @@ WHERE
 		if ($linha_compra >= 1) {
 			// ====== SALDO ANTERIOR ==============================================================================
 			echo "<tr class='tabela_3'>
-<td width='60px' align='center'><div style='height:24px; margin-top:0px; border:0px solid #000'></div></td>
-<td width='120px' align='center'></td>
-<td width='260px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>SALDO ANTERIOR</div></td>
-<td width='120px' align='center'></td>
-<td width='180px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'></div></td>
-<td width='150px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'></div></td>
-<td width='100px' align='right'><div style='height:14px; margin-right:10px'></div></td>
-<td width='140px' align='right'><div style='height:14px; margin-right:10px'></div></td>
-<td width='140px' align='right'><div style='height:14px; margin-right:10px'></div></td>
-<td width='140px' align='right'><div style='height:14px; margin-right:15px'>$saldo_ant_print $unidade_produto</div></td>
-</tr>
-";
+				<td width='60px' align='center'><div style='height:24px; margin-top:0px; border:0px solid #000'></div></td>
+				<td width='100px' align='center'></td>
+				<td width='240px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>SALDO ANTERIOR</div></td>
+				<td width='100px' align='center'></td>
+				<td width='100px' align='center'></td>
+				<td width='180px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'></div></td>
+				<td width='110px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'></div></td>
+				<td width='100px' align='right'><div style='height:14px; margin-right:10px'></div></td>
+				<td width='140px' align='right'><div style='height:14px; margin-right:10px'></div></td>
+				<td width='140px' align='right'><div style='height:14px; margin-right:10px'></div></td>
+				<td width='140px' align='right'><div style='height:14px; margin-right:15px'>$saldo_ant_print $unidade_produto</div></td>
+				</tr>
+				";
 		}
 
 
@@ -982,6 +985,7 @@ WHERE
 			$hora_exclusao_w = $aux_compra[24];
 			$data_exclusao_w = $aux_compra[25];
 			$numero_romaneio_w = $aux_compra[26];
+			$pedidoSankhya = $aux_compra[27];
 
 
 			$data_compra_print = date('d/m/Y', strtotime($data_compra_w));
@@ -1079,40 +1083,41 @@ WHERE
 
 			// ====== BOTAO VISUALIZAR ==================================================================================
 			echo "
-<td width='60px' align='center'>
-<div style='height:24px; margin-top:0px; border:0px solid #000'>
-<form action='$servidor/$diretorio_servidor/$endereco_visualizar.php' method='post' />
-<input type='hidden' name='modulo_mae' value='$modulo'>
-<input type='hidden' name='menu_mae' value='$menu'>
-<input type='hidden' name='pagina_mae' value='$pagina'>
-<input type='hidden' name='botao' value='VISUALIZAR'>
-<input type='hidden' name='id_w' value='$id_w'>
-<input type='hidden' name='numero_compra' value='$numero_compra_w'>
-<input type='hidden' name='data_inicial_busca' value='$data_inicial_br'>
-<input type='hidden' name='data_final_busca' value='$data_final_br'>
-<input type='hidden' name='fornecedor_pesquisa' value='$fornecedor_pesquisa'>
-<input type='hidden' name='nome_fornecedor' value='$nome_fornecedor'>
-<input type='hidden' name='cod_produto_busca' value='$cod_produto_busca'>
-<input type='hidden' name='cod_tipo_busca' value='$cod_tipo_busca'>
-<input type='hidden' name='filial_busca' value='$filial_busca'>
-<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/buscar.png' height='18px' style='margin-top:3px' />
-</form>
-</div>
-</td>";
+				<td width='60px' align='center'>
+				<div style='height:24px; margin-top:0px; border:0px solid #000'>
+				<form action='$servidor/$diretorio_servidor/$endereco_visualizar.php' method='post' />
+				<input type='hidden' name='modulo_mae' value='$modulo'>
+				<input type='hidden' name='menu_mae' value='$menu'>
+				<input type='hidden' name='pagina_mae' value='$pagina'>
+				<input type='hidden' name='botao' value='VISUALIZAR'>
+				<input type='hidden' name='id_w' value='$id_w'>
+				<input type='hidden' name='numero_compra' value='$numero_compra_w'>
+				<input type='hidden' name='pedidoSankhya' value='$pedidoSankhya'>
+				<input type='hidden' name='data_inicial_busca' value='$data_inicial_br'>
+				<input type='hidden' name='data_final_busca' value='$data_final_br'>
+				<input type='hidden' name='fornecedor_pesquisa' value='$fornecedor_pesquisa'>
+				<input type='hidden' name='nome_fornecedor' value='$nome_fornecedor'>
+				<input type='hidden' name='cod_produto_busca' value='$cod_produto_busca'>
+				<input type='hidden' name='cod_tipo_busca' value='$cod_tipo_busca'>
+				<input type='hidden' name='filial_busca' value='$filial_busca'>
+				<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/buscar.png' height='18px' style='margin-top:3px' />
+				</form>
+				</div>
+				</td>";
 			// =================================================================================================================
-
 
 			// =================================================================================================================
 			echo "
-<td width='120px' align='center'>$data_compra_print</td>
-<td width='260px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$movimentacao_print</div></td>
-<td width='120px' align='center'>$numero_compra_w</td>
-<td width='180px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$produto_print_w</div></td>
-<td width='150px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$tipo_w</div></td>
-<td width='100px' align='right'><div style='height:14px; margin-right:10px'>$preco_unitario_print</div></td>
-<td width='140px' align='right'><div style='height:14px; margin-right:10px'>$total_geral_print</div></td>
-<td width='140px' align='right'><div style='height:14px; margin-right:10px'><b>$quantidade_print</b> $unidade_w</div></td>
-<td width='140px' align='right'><div style='height:14px; margin-right:15px'>$saldo_atual_print $unidade_produto</div></td>";
+				<td width='100px' align='center'>$data_compra_print</td>
+				<td width='240px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$movimentacao_print</div></td>
+				<td width='100px' align='center'>$numero_compra_w</td>
+				<td width='100px' align='center'>$pedidoSankhya</td>
+				<td width='180px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$produto_print_w</div></td>
+				<td width='110px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$tipo_w</div></td>
+				<td width='100px' align='right'><div style='height:14px; margin-right:10px'>$preco_unitario_print</div></td>
+				<td width='140px' align='right'><div style='height:14px; margin-right:10px'>$total_geral_print</div></td>
+				<td width='140px' align='right'><div style='height:14px; margin-right:10px'><b>$quantidade_print</b> $unidade_w</div></td>
+				<td width='140px' align='right'><div style='height:14px; margin-right:15px'>$saldo_atual_print $unidade_produto</div></td>";
 			// =================================================================================================================
 
 			echo "</tr>";
@@ -1126,9 +1131,9 @@ WHERE
 		// =================================================================================================================
 		if ($linha_compra == 0 and $botao == "BUSCAR") {
 			echo "
-<div class='espacamento' style='height:30px'></div>
-<div style='height:30px; width:880px; border:0px solid #000; color:#999; font-size:14px; margin:auto; text-align:center'>
-<i>Nenhuma movimenta&ccedil;&atilde;o encontrada nesse per&iacute;odo</i></div>";
+				<div class='espacamento' style='height:30px'></div>
+				<div style='height:30px; width:880px; border:0px solid #000; color:#999; font-size:14px; margin:auto; text-align:center'>
+				<i>Nenhuma movimenta&ccedil;&atilde;o encontrada nesse per&iacute;odo</i></div>";
 		}
 		// =================================================================================================================
 		?>

@@ -3,6 +3,7 @@
 require_once("../../includes/config.php");
 require_once("../../includes/conecta_bd.php");
 require_once("../../includes/valida_cookies.php");
+require_once("../../helpers.php");
 require_once("../../sankhya/Sankhya.php");
 require_once("../../sankhya/SankhyaKeys.php");
 
@@ -47,10 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				$_POST["nome_form"] = $parceiro['rows'][0][3];
 
 				if ($_POST['tipo_pessoa_form'] == 'PF') {
-					$_POST["cpf_form"] = Sankhya::mask($parceiro['rows'][0][4], '###.###.###-##');
+					$_POST["cpf_form"] = Helpers::mask($parceiro['rows'][0][4], '###.###.###-##');
 					$_POST["rg_form"] = $parceiro['rows'][0][5];
 				} else {
-					$_POST["cnpj_form"] = Sankhya::mask($parceiro['rows'][0][4], '##.###.###/####-##');
+					$_POST["cnpj_form"] = Helpers::mask($parceiro['rows'][0][4], '##.###.###/####-##');
 					$_POST["rg_form"] = '';
 				}
 

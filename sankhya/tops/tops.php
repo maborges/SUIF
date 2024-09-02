@@ -6,9 +6,9 @@ include_once("../../includes/valida_cookies.php");
 include_once("../Sankhya.php");
 
 $pagina = "tops";
-$titulo = "Tipo de Operação de Produtos - Sankhya";
+$titulo = "Tipo de Operação de Produtos";
 $modulo = "sankhya";
-$menu = "tops";
+$menu = "cadastro_sankhya";
 
 $erro = 0;
 $msg = '';
@@ -188,11 +188,11 @@ include_once("../../includes/head.php");
     </div>
 
     <div class="menu">
-        <?php include("../../includes/menu_cadastro.php"); ?>
+        <?php include("../../includes/menu_sankhya.php"); ?>
     </div>
 
     <div class="submenu">
-        <?php include("../../includes/submenu_cadastro_config.php"); ?>
+        <?php include("../../includes/submenu_sankhya_cadastro.php"); ?>
     </div>
 
     <div class="ct_auto">

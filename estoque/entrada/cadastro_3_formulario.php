@@ -150,14 +150,17 @@ include('../../includes/head.php');
 
 
     <!-- ====== TOPO ================================================================================================== -->
-    <div id="topo_geral">
+    <div class="topo">
         <?php include('../../includes/topo.php'); ?>
     </div>
 
 
     <!-- ====== MENU ================================================================================================== -->
-    <div id="menu_geral">
+    <div class="menu">
         <?php include('../../includes/menu_estoque.php'); ?>
+    </div>
+
+    <div class="submenu">
         <?php include('../../includes/submenu_estoque_entrada.php'); ?>
     </div>
 
@@ -270,30 +273,30 @@ include('../../includes/head.php');
             </div>
 
             <!--
-<div style="width:241px; height:32px; border:1px solid #009900; color:#003466; overflow:hidden; margin-left:153px; background-color:#EEE; float:left">
-    <div style="width:60px; height:25px; margin-top:4px; margin-left:5px; float:left; font-size:14px; color:#003466">
-        <?php //echo"<img src='$servidor/$diretorio_servidor/imagens/$nome_imagem_produto.png' style='width:60px'>" 
-        ?>
-    </div>
+                <div style="width:241px; height:32px; border:1px solid #009900; color:#003466; overflow:hidden; margin-left:153px; background-color:#EEE; float:left">
+                    <div style="width:60px; height:25px; margin-top:4px; margin-left:5px; float:left; font-size:14px; color:#003466">
+                        <?php //echo"<img src='$servidor/$diretorio_servidor/imagens/$nome_imagem_produto.png' style='width:60px'>" 
+                        ?>
+                    </div>
 
-    <div style="width:170px; height:20px; margin-top:7px; margin-left:0px; float:left; font-size:14px; color:#003466; overflow:hidden">
-        <?php //echo"<b>$produto_print_2</b>" 
-        ?>
-    </div>
-</div>
+                    <div style="width:170px; height:20px; margin-top:7px; margin-left:0px; float:left; font-size:14px; color:#003466; overflow:hidden">
+                        <?php //echo"<b>$produto_print_2</b>" 
+                        ?>
+                    </div>
+                </div>
 
-<div style="width:241px; height:32px; border:1px solid #009900; color:#003466; overflow:hidden; margin-right:25px; background-color:#EEE; float:right">
-    <div style="width:60px; height:25px; margin-top:4px; margin-left:5px; float:left; font-size:14px; color:#003466">
-        <?php //echo"<img src='$servidor/$diretorio_servidor/imagens/$nome_imagem_produto.png' style='width:60px'>" 
-        ?>
-    </div>
+                <div style="width:241px; height:32px; border:1px solid #009900; color:#003466; overflow:hidden; margin-right:25px; background-color:#EEE; float:right">
+                    <div style="width:60px; height:25px; margin-top:4px; margin-left:5px; float:left; font-size:14px; color:#003466">
+                        <?php //echo"<img src='$servidor/$diretorio_servidor/imagens/$nome_imagem_produto.png' style='width:60px'>" 
+                        ?>
+                    </div>
 
-    <div style="width:170px; height:20px; margin-top:7px; margin-left:0px; float:left; font-size:14px; color:#003466; overflow:hidden">
-        <?php //echo"<b>$produto_print_2</b>" 
-        ?>
-    </div>
-</div>
--->
+                    <div style="width:170px; height:20px; margin-top:7px; margin-left:0px; float:left; font-size:14px; color:#003466; overflow:hidden">
+                        <?php //echo"<b>$produto_print_2</b>" 
+                        ?>
+                    </div>
+                </div>
+            -->
             <!-- ======================================================================================================================= -->
 
 
@@ -311,48 +314,48 @@ include('../../includes/head.php');
             <?php
             if ($filial_config[9] == "S") {
                 echo "
-<!-- =======  PESO INICIAL =========================================================================================== -->
-	<div style='width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left'>
-        <div class='form_rotulo' style='width:167px; height:17px; border:1px solid transparent; float:left'>
-        Peso Inicial (Kg):
-        </div>
-        
-        <div style='width:167px; height:25px; float:left; border:1px solid transparent'>
-        <input type='text' name='peso_inicial_form' id='ok' class='form_input' maxlength='12' onkeypress='$config[30]' 
-        onkeydown='if (getKey(event) == 13) return false;' style='width:150px; text-align:center' value='$peso_inicial_form' />
-        </div>
-	</div>
-<!-- ================================================================================================================ -->
+                    <!-- =======  PESO INICIAL =========================================================================================== -->
+                    <div style='width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left'>
+                        <div class='form_rotulo' style='width:167px; height:17px; border:1px solid transparent; float:left'>
+                        Peso Inicial (Kg):
+                        </div>
+                        
+                        <div style='width:167px; height:25px; float:left; border:1px solid transparent'>
+                        <input type='text' name='peso_inicial_form' id='ok' class='form_input' maxlength='12' onkeypress='$config[30]' 
+                        onkeydown='if (getKey(event) == 13) return false;' style='width:150px; text-align:center' value='$peso_inicial_form' />
+                        </div>
+                    </div>
+                    <!-- ================================================================================================================ -->
 
 
-<!-- =======  PESO FINAL =========================================================================================== -->
-	<div style='width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left'>
-        <div class='form_rotulo' style='width:167px; height:17px; border:1px solid transparent; float:left'>
-        Peso Final (Kg):
-        </div>
-        
-        <div style='width:167px; height:25px; float:left; border:1px solid transparent'>
-        <input type='text' name='peso_final_form' id='ok' class='form_input' maxlength='12' onkeypress='$config[30]' 
-        onkeydown='if (getKey(event) == 13) return false;' style='width:150px; text-align:center' value='$peso_final_form' />
-        </div>
-	</div>
-<!-- ================================================================================================================ -->
-";
+                    <!-- =======  PESO FINAL =========================================================================================== -->
+                    <div style='width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left'>
+                        <div class='form_rotulo' style='width:167px; height:17px; border:1px solid transparent; float:left'>
+                        Peso Final (Kg):
+                        </div>
+                        
+                        <div style='width:167px; height:25px; float:left; border:1px solid transparent'>
+                        <input type='text' name='peso_final_form' id='ok' class='form_input' maxlength='12' onkeypress='$config[30]' 
+                        onkeydown='if (getKey(event) == 13) return false;' style='width:150px; text-align:center' value='$peso_final_form' />
+                        </div>
+                    </div>
+                    <!-- ================================================================================================================ -->
+                    ";
             } else {
                 echo "
-<!-- =======  PESO ================================================================================================== -->
-	<div style='width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left'>
-        <div class='form_rotulo' style='width:167px; height:17px; border:1px solid transparent; float:left'>
-        Peso (Kg):
-        </div>
-        
-        <div style='width:167px; height:25px; float:left; border:1px solid transparent'>
-        <input type='text' name='peso_form' id='ok' class='form_input' maxlength='12' onkeypress='$config[30]' 
-        onkeydown='if (getKey(event) == 13) return false;' style='width:150px; text-align:center' value='$peso_form' />
-        </div>
-	</div>
-<!-- ================================================================================================================ -->
-";
+                <!-- =======  PESO ================================================================================================== -->
+                    <div style='width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left'>
+                        <div class='form_rotulo' style='width:167px; height:17px; border:1px solid transparent; float:left'>
+                        Peso (Kg):
+                        </div>
+                        
+                        <div style='width:167px; height:25px; float:left; border:1px solid transparent'>
+                        <input type='text' name='peso_form' id='ok' class='form_input' maxlength='12' onkeypress='$config[30]' 
+                        onkeydown='if (getKey(event) == 13) return false;' style='width:150px; text-align:center' value='$peso_form' />
+                        </div>
+                    </div>
+                <!-- ================================================================================================================ -->
+                ";
             }
 
             ?>
@@ -475,19 +478,19 @@ include('../../includes/head.php');
             <?php
             if ($config[34] == "S") {
                 echo "
-<!-- ======= MOTORISTA ========================================================================================== -->
-	<div style='width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left'>
-        <div class='form_rotulo' style='width:167px; height:17px; border:1px solid transparent; float:left'>
-        Motorista:
-        </div>
-        
-        <div style='width:167px; height:25px; float:left; border:1px solid transparent'>
-        <input type='text' name='motorista_form' class='form_input' maxlength='25' onBlur='alteraMaiusculo(this)' 
-        onkeydown='if (getKey(event) == 13) return false;' style='width:145px; text-align:left; padding-left:5px' value='$motorista_form' />
-        </div>
-	</div>
-<!-- ================================================================================================================ -->
-";
+                    <!-- ======= MOTORISTA ========================================================================================== -->
+                        <div style='width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left'>
+                            <div class='form_rotulo' style='width:167px; height:17px; border:1px solid transparent; float:left'>
+                            Motorista:
+                            </div>
+                            
+                            <div style='width:167px; height:25px; float:left; border:1px solid transparent'>
+                            <input type='text' name='motorista_form' class='form_input' maxlength='25' onBlur='alteraMaiusculo(this)' 
+                            onkeydown='if (getKey(event) == 13) return false;' style='width:145px; text-align:left; padding-left:5px' value='$motorista_form' />
+                            </div>
+                        </div>
+                    <!-- ================================================================================================================ -->
+                    ";
             }
 
 
@@ -495,19 +498,19 @@ include('../../includes/head.php');
 
             if ($config[35] == "S") {
                 echo "
-<!-- ======= CPF MOTORISTA ========================================================================================== -->
-	<div style='width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left'>
-        <div class='form_rotulo' style='width:167px; height:17px; border:1px solid transparent; float:left'>
-        CPF Motorista:
-        </div>
-        
-        <div style='width:167px; height:25px; float:left; border:1px solid transparent'>
-        <input type='text' name='motorista_cpf_form' class='form_input' maxlength='14' onkeypress='mascara(this,num_cpf)' onBlur='mascara(this,num_cpf)' 
-        onkeydown='if (getKey(event) == 13) return false;' style='width:145px; text-align:left; padding-left:5px' value='$motorista_cpf_form' />
-        </div>
-	</div>
-<!-- ================================================================================================================ -->
-";
+                    <!-- ======= CPF MOTORISTA ========================================================================================== -->
+                        <div style='width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left'>
+                            <div class='form_rotulo' style='width:167px; height:17px; border:1px solid transparent; float:left'>
+                            CPF Motorista:
+                            </div>
+                            
+                            <div style='width:167px; height:25px; float:left; border:1px solid transparent'>
+                            <input type='text' name='motorista_cpf_form' class='form_input' maxlength='14' onkeypress='mascara(this,num_cpf)' onBlur='mascara(this,num_cpf)' 
+                            onkeydown='if (getKey(event) == 13) return false;' style='width:145px; text-align:left; padding-left:5px' value='$motorista_cpf_form' />
+                            </div>
+                        </div>
+                    <!-- ================================================================================================================ -->
+                    ";
             }
 
 
@@ -515,19 +518,19 @@ include('../../includes/head.php');
 
             if ($config[36] == "S") {
                 echo "
-<!-- ======= PLACA VEICULO ========================================================================================== -->
-	<div style='width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left'>
-        <div class='form_rotulo' style='width:167px; height:17px; border:1px solid transparent; float:left'>
-        Placa do Ve&iacute;culo:
-        </div>
-        
-        <div style='width:167px; height:25px; float:left; border:1px solid transparent'>
-        <input type='text' name='placa_veiculo_form' class='form_input' maxlength='20' onBlur='alteraMaiusculo(this)' 
-        onkeydown='if (getKey(event) == 13) return false;' style='width:145px; text-align:left; padding-left:5px' value='$placa_veiculo_form' />
-        </div>
-	</div>
-<!-- ================================================================================================================ -->
-";
+                    <!-- ======= PLACA VEICULO ========================================================================================== -->
+                        <div style='width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left'>
+                            <div class='form_rotulo' style='width:167px; height:17px; border:1px solid transparent; float:left'>
+                            Placa do Ve&iacute;culo:
+                            </div>
+                            
+                            <div style='width:167px; height:25px; float:left; border:1px solid transparent'>
+                            <input type='text' name='placa_veiculo_form' class='form_input' maxlength='20' onBlur='alteraMaiusculo(this)' 
+                            onkeydown='if (getKey(event) == 13) return false;' style='width:145px; text-align:left; padding-left:5px' value='$placa_veiculo_form' />
+                            </div>
+                        </div>
+                    <!-- ================================================================================================================ -->
+                    ";
             }
 
 
@@ -535,15 +538,15 @@ include('../../includes/head.php');
 
             if ($config[33] == "S") {
                 echo "
-<!-- =======  FILIAL ORIGEM ========================================================================================== -->
-	<div style='width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left'>
-        <div class='form_rotulo' style='width:167px; height:17px; border:1px solid transparent; float:left'>
-        Filial Origem:
-        </div>
-        
-        <div style='width:167px; height:25px; float:left; border:1px solid transparent'>
-        <select name='filial_origem_form' class='form_select' onkeydown='if (getKey(event) == 13) return false;' style='width:154px' />
-        <option></option>";
+                    <!-- =======  FILIAL ORIGEM ========================================================================================== -->
+                        <div style='width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left'>
+                            <div class='form_rotulo' style='width:167px; height:17px; border:1px solid transparent; float:left'>
+                            Filial Origem:
+                            </div>
+                            
+                            <div style='width:167px; height:25px; float:left; border:1px solid transparent'>
+                            <select name='filial_origem_form' class='form_select' onkeydown='if (getKey(event) == 13) return false;' style='width:154px' />
+                            <option></option>";
                 $busca_filial_origem = mysqli_query($conexao, "SELECT * FROM filiais ORDER BY codigo");
                 $linhas_filial_origem = mysqli_num_rows($busca_filial_origem);
 
@@ -557,11 +560,11 @@ include('../../includes/head.php');
                     }
                 }
                 echo "
-        </select>
-        </div>
-	</div>
-<!-- ================================================================================================================ -->
-";
+                            </select>
+                            </div>
+                        </div>
+                    <!-- ================================================================================================================ -->
+                    ";
             }
             ?>
 
@@ -594,28 +597,28 @@ include('../../includes/head.php');
             <?php
             if ($erro != 0) {
                 echo "
-	<div id='centro' style='float:left; height:55px; width:535px; text-align:center; border:0px solid #000'></div>
+                    <div id='centro' style='float:left; height:55px; width:535px; text-align:center; border:0px solid #000'></div>
 
-	<div id='centro' style='float:left; height:55px; width:200px; color:#00F; text-align:center; border:0px solid #000'>
-	</form>
-	<form action='$servidor/$diretorio_servidor/estoque/entrada/cadastro_1_selec_produto.php' method='post'>
-	<button type='submit' class='botao_2' style='margin-left:10px; width:180px'>Voltar</button>
-	</form>
-	</div>";
+                    <div id='centro' style='float:left; height:55px; width:200px; color:#00F; text-align:center; border:0px solid #000'>
+                    </form>
+                    <form action='$servidor/$diretorio_servidor/estoque/entrada/cadastro_1_selec_produto.php' method='post'>
+                    <button type='submit' class='botao_2' style='margin-left:10px; width:180px'>Voltar</button>
+                    </form>
+                    </div>";
             } else {
                 echo "
-	<div id='centro' style='float:left; height:55px; width:435px; text-align:center; border:0px solid #000'></div>
+                    <div id='centro' style='float:left; height:55px; width:435px; text-align:center; border:0px solid #000'></div>
 
-	<div id='centro' style='float:left; height:55px; width:200px; color:#00F; text-align:center; border:0px solid #000'>
-	<button type='submit' class='botao_2' style='margin-left:10px; width:180px'>Salvar</button>
-	</form>
-	</div>
+                    <div id='centro' style='float:left; height:55px; width:200px; color:#00F; text-align:center; border:0px solid #000'>
+                    <button type='submit' class='botao_2' style='margin-left:10px; width:180px'>Salvar</button>
+                    </form>
+                    </div>
 
-	<div id='centro' style='float:left; height:55px; width:200px; color:#00F; text-align:center; border:0px solid #000'>
-	<a href='$servidor/$diretorio_servidor/estoque/entrada/entrada_relatorio_produto.php'>
-	<button type='submit' class='botao_2' style='margin-left:10px; width:180px'>Cancelar</button>
-	</a>
-	</div>";
+                    <div id='centro' style='float:left; height:55px; width:200px; color:#00F; text-align:center; border:0px solid #000'>
+                    <a href='$servidor/$diretorio_servidor/estoque/entrada/entrada_relatorio_produto.php'>
+                    <button type='submit' class='botao_2' style='margin-left:10px; width:180px'>Cancelar</button>
+                    </a>
+                    </div>";
             }
 
             ?>

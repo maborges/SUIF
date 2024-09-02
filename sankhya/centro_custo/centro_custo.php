@@ -8,7 +8,7 @@ include_once("../Sankhya.php");
 $pagina = "centro_custo";
 $titulo = "Centro de Resultado - Sankhya";
 $modulo = "sankhya";
-$menu = "centro_custo"; 
+$menu = "cadastro_sankhya";
 
 $erro = 0;
 $msg = '';
@@ -148,7 +148,6 @@ if ($resultSet['errorCode']) {
     $centroCusto = $resultSet['rows'][0][3] ?? '';
     $nomeFilial  = $resultSet['rows'][0][4] ?? '';
     $nomeProduto = $resultSet['rows'][0][5] ?? '';
-    
 }
 
 include_once("../../includes/head.php");
@@ -165,11 +164,11 @@ include_once("../../includes/head.php");
     </div>
 
     <div class="menu">
-        <?php include("../../includes/menu_cadastro.php"); ?>
+        <?php include("../../includes/menu_sankhya.php"); ?>
     </div>
 
     <div class="submenu">
-        <?php include("../../includes/submenu_cadastro_config.php"); ?>
+        <?php include("../../includes/submenu_sankhya_cadastro.php"); ?>
     </div>
 
     <div class="ct_auto">
@@ -206,11 +205,11 @@ include_once("../../includes/head.php");
 
         <div class="ct_relatorio">
             <div class="brg-flex brg-flex-center brg-gap-30">
-                <section name="secPesquisar" 
+                <section name="secPesquisar"
                     <?php
-                        if (!$showList) {
-                            echo "hidden";
-                        }
+                    if (!$showList) {
+                        echo "hidden";
+                    }
                     ?>>
 
                     <div class="brg-flex-column brg-flex-right brg-gap-10">
@@ -251,40 +250,42 @@ include_once("../../includes/head.php");
                 </section>
             </div>
 
-            <section name="secAlterar" style="width: auto" <?php if (!$showEdit) {echo "hidden";}?>>
+            <section name="secAlterar" style="width: auto" <?php if (!$showEdit) {
+                                                                echo "hidden";
+                                                            } ?>>
                 <form action="<?= $_SERVER['PHP_SELF'] ?>" class="brg-form-center" method="post" id="frmEdit" style="width: 850px">
-                     <input hidden type="number" name="codigo" value="<?= $codigo ?>" readonly>
+                    <input hidden type="number" name="codigo" value="<?= $codigo ?>" readonly>
 
                     <div class="brg-flex">
 
                         <!-- ###### CAMPOS DE ENTRADA ###### -->
                         <div class="brg-form-group" style="width: 200px">
                             <label class="form_rotulo" for="filial">Filial</label>
-                            <select class="form_select" name="filial" id="filial" 
+                            <select class="form_select" name="filial" id="filial"
                                 <?php
-                                    if ($operacao !== 'I') {
-                                        echo "readonly='readonly' tabindex='-1' aria-disabled='true'";
-                                    }
+                                if ($operacao !== 'I') {
+                                    echo "readonly='readonly' tabindex='-1' aria-disabled='true'";
+                                }
                                 ?>>
 
-                                <?php foreach($filiais['rows'] as $redcord) : ?>
-                                    <option value=<?= $redcord[0] ?> <?= $redcord[0]==$filial ? 'selected' : '' ?>><?=$redcord[1]?></option>
-                                <?php endforeach ?>  
+                                <?php foreach ($filiais['rows'] as $redcord) : ?>
+                                    <option value=<?= $redcord[0] ?> <?= $redcord[0] == $filial ? 'selected' : '' ?>><?= $redcord[1] ?></option>
+                                <?php endforeach ?>
                             </select>
                         </div>
-                        
+
                         <div class="brg-form-group" style="width: 200px">
                             <label class="form_rotulo" for="produto">Produto SUIF</label>
-                            <select class="form_select" name="produto" id="produto" 
+                            <select class="form_select" name="produto" id="produto"
                                 <?php
-                                    if ($operacao !== 'I') {
-                                        echo "readonly='readonly' tabindex='-1' aria-disabled='true'";
-                                    }
+                                if ($operacao !== 'I') {
+                                    echo "readonly='readonly' tabindex='-1' aria-disabled='true'";
+                                }
                                 ?>>
 
-                                <?php foreach($produtos['rows'] as $redcord) : ?>
-                                    <option value=<?= $redcord[0] ?> <?= $redcord[0]==$produto ? 'selected' : '' ?>><?=$redcord[1]?></option>
-                                <?php endforeach ?>  
+                                <?php foreach ($produtos['rows'] as $redcord) : ?>
+                                    <option value=<?= $redcord[0] ?> <?= $redcord[0] == $produto ? 'selected' : '' ?>><?= $redcord[1] ?></option>
+                                <?php endforeach ?>
                             </select>
                         </div>
 
@@ -298,8 +299,8 @@ include_once("../../includes/head.php");
                         </div>
 
                     </div>
-                    
-                     <!-- ###### BOTÕES ###### -->
+
+                    <!-- ###### BOTÕES ###### -->
                     <div class="brg-flex brg-flex-left brg-gap-30" style="padding-top: 15px">
                         <?php if ($operacao != 'D') : ?>
                             <button class="brg-action-button" type="submit" value="<?= $operacao ?>" name="btnSave">Salvar</button>

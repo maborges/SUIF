@@ -337,7 +337,7 @@ if ($botao == "NOVO_CADASTRO") {
 		$erro = 6;
 		$msg = "<div style='color:#FF0000'>CPF já cadastrado.</div>";
 		$msg_titulo = "<div style='color:#009900'>$titulo</div>";
-	} elseif ($tipo_pessoa_form == "PJ" and $cnpj_form == "") {
+	} elseif ($estado <> "EX" and $tipo_pessoa_form == "PJ" and $cnpj_form == "") {
 		$erro = 7;
 		$msg = "<div style='color:#FF0000'>Informe o CNPJ da empresa.</div>";
 		$msg_titulo = "<div style='color:#009900'>$titulo</div>";
@@ -345,11 +345,11 @@ if ($botao == "NOVO_CADASTRO") {
 		$erro = 12;
 		$msg = "<div style='color:#FF0000'>Pessoa é um favorecido e é necessário informar uma conta corrente.</div>";
 		$msg_titulo = "<div style='color:#009900'>$titulo</div>";
-	} elseif ($tipo_pessoa_form == "PJ" and $valida_cnpj == "erro") {
+	} elseif ($estado <> "EX" and $tipo_pessoa_form == "PJ" and $valida_cnpj == "erro") {
 		$erro = 8;
 		$msg = "<div style='color:#FF0000'>CNPJ inválido.</div>";
 		$msg_titulo = "<div style='color:#009900'>$titulo</div>";
-	} elseif ($tipo_pessoa_form == "PJ" and $achou_cnpj >= 1) {
+	} elseif ($estado <> "EX" and $tipo_pessoa_form == "PJ" and $achou_cnpj >= 1) {
 		$erro = 9;
 		$msg = "<div style='color:#FF0000'>CNPJ já cadastrado.</div>";
 		$msg_titulo = "<div style='color:#009900'>$titulo</div>";

@@ -38,7 +38,7 @@ $fornecedor_nf = $_POST["fornecedor"];
 $data_emissao_nf = Helpers::ConverteData($_POST["data_emissao"]);
 $numero_nf = $_POST["numero_nf"];
 $unidade_nf = $_POST["unidade"];
-$quantidade_nf = Helpers::ConvertePeso($_POST["quantidade"]);
+$quantidade_nf = Helpers::ConvertePeso($_POST["quantidade"], 'N');
 $valor_unitario_nf = Helpers::ConverteValor($_POST["valor_unitario"]);
 $valor_un_nf = $_POST["valor_unitario"];
 $observacao_nf = $_POST["observacao"];
@@ -324,7 +324,7 @@ include ('../../includes/head.php');
 <!-- ====== MENU ================================================================================================== -->
 <div id="menu_geral">
 <?php include ('../../includes/menu_estoque.php'); ?>
-<?php include ('../../includes/sub_menu_estoque_entrada.php'); ?>
+<?php include ('../../includes/submenu_estoque_entrada.php'); ?>
 </div>
 
 

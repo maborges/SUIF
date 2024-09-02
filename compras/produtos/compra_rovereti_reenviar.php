@@ -1,13 +1,13 @@
 <?php
-	include ('../../includes/config.php'); 
-	include ('../../includes/conecta_bd.php');
-	include ('../../includes/valida_cookies.php');
-	include ("../../helpers.php");
+include('../../includes/config.php');
+include('../../includes/conecta_bd.php');
+include('../../includes/valida_cookies.php');
+include("../../helpers.php");
 
-	$pagina = 'compra_rovereti_reenviar';
-	$titulo = 'Reenvio de Compra ao Rovereti';
-	$menu = 'produtos';
-	$modulo = 'compras';
+$pagina = 'compra_rovereti_reenviar';
+$titulo = 'Reenvio de Compra ao Rovereti';
+$menu = 'produtos';
+$modulo = 'compras';
 
 // ====== RETIRA ACENTUAÇÃO ===============================================================================
 $comAcentos = array('à', 'á', 'â', 'ã', 'ä', 'å', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö', 'ù', 'ü', 'ú', 'ÿ', 'À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ù', 'Ü', 'Ú');
@@ -24,9 +24,9 @@ $filial = $filial_usuario;
 
 
 // ====== BUSCA COMPRA ===================================================================================
-$busca_compra = mysqli_query ($conexao, "SELECT * FROM compras WHERE numero_compra='$numero_compra'");
+$busca_compra = mysqli_query($conexao, "SELECT * FROM compras WHERE numero_compra='$numero_compra'");
 $aux_bc = mysqli_fetch_row($busca_compra);
-$linhas_bc = mysqli_num_rows ($busca_compra);
+$linhas_bc = mysqli_num_rows($busca_compra);
 $data_hoje = date('d/m/Y', time());
 
 $fornecedor = $aux_bc[2];
@@ -34,11 +34,11 @@ $cod_produto = $aux_bc[39];
 $data_compra = $aux_bc[4];
 $data_compra_print = date('d/m/Y', strtotime($aux_bc[4]));
 $quantidade = $aux_bc[5];
-$quantidade_print = number_format($aux_bc[5],2,",",".");
+$quantidade_print = number_format($aux_bc[5], 2, ",", ".");
 $preco_unitario = $aux_bc[6];
-$preco_unitario_print = number_format($aux_bc[6],2,",",".");
+$preco_unitario_print = number_format($aux_bc[6], 2, ",", ".");
 $valor_total = $aux_bc[7];
-$valor_total_print = number_format($aux_bc[7],2,",",".");
+$valor_total_print = number_format($aux_bc[7], 2, ",", ".");
 $tipo = $aux_bc[10];
 $cod_tipo = $aux_bc[41];
 $safra = $aux_bc[9];
@@ -54,12 +54,12 @@ $usuario_cadastro = $aux_bc[18];
 $data_cadastro = date('d/m/Y', strtotime($aux_bc[20]));
 $hora_cadastro = $aux_bc[19];
 $motivo_alteracao_quant = $aux_bc[35];
-$quantidade_original = number_format($aux_bc[36],2,",",".");
-$desconto_quantidade = number_format($aux_bc[29],2,",",".");
+$quantidade_original = number_format($aux_bc[36], 2, ",", ".");
+$desconto_quantidade = number_format($aux_bc[29], 2, ",", ".");
 $desconto_quantidade_2 = $aux_bc[29];
-$valor_total_original = number_format($aux_bc[37],2,",",".");
+$valor_total_original = number_format($aux_bc[37], 2, ",", ".");
 $desconto_em_valor = ($aux_bc[29] * $aux_bc[6]);
-$desc_em_valor_print = number_format($desconto_em_valor,2,",",".");
+$desc_em_valor_print = number_format($desconto_em_valor, 2, ",", ".");
 $usuario_altera_quant = $aux_bc[44];
 $movimentacao = "COMPRA";
 
@@ -70,16 +70,16 @@ $data_cadastro = date('Y-m-d', time());
 
 
 // ====== BUSCA PRODUTO ================================================================================
-$busca_produto = mysqli_query ($conexao, "SELECT * FROM cadastro_produto WHERE codigo='$cod_produto' AND estado_registro!='EXCLUIDO'");
+$busca_produto = mysqli_query($conexao, "SELECT * FROM cadastro_produto WHERE codigo='$cod_produto' AND estado_registro!='EXCLUIDO'");
 $aux_bp = mysqli_fetch_row($busca_produto);
-$linhas_bp = mysqli_num_rows ($busca_produto);
+$linhas_bp = mysqli_num_rows($busca_produto);
 
 $produto_print = $aux_bp[1];
 $produto_apelido = $aux_bp[20];
 $cod_unidade = $aux_bp[7];
 $quantidade_un = $aux_bp[23];
 $preco_maximo = $aux_bp[21];
-$preco_maximo_print = number_format($aux_bp[21],2,",",".");
+$preco_maximo_print = number_format($aux_bp[21], 2, ",", ".");
 $usuario_alteracao = $aux_bp[16];
 $data_alteracao = date('d/m/Y', strtotime($aux_bp[18]));
 $produto_rovereti = str_replace($comAcentos, $semAcentos, $produto_print); // ==== INTEGRAÇÃO ROVERETI ===== ATENÇÃO: REVERETI não aceita "acentos"
@@ -89,28 +89,29 @@ $cod_centro_custo = $aux_bp[25]; // ==== INTEGRAÇÃO ROVERETI =====
 
 
 // ====== BUSCA FORNECEDOR ==============================================================================
-$busca_fornecedor = mysqli_query ($conexao, "SELECT * FROM cadastro_pessoa WHERE codigo='$fornecedor' AND estado_registro!='EXCLUIDO'");
+$busca_fornecedor = mysqli_query($conexao, "SELECT * FROM cadastro_pessoa WHERE codigo='$fornecedor' AND estado_registro!='EXCLUIDO'");
 $aux_forn = mysqli_fetch_row($busca_fornecedor);
-$linhas_fornecedor = mysqli_num_rows ($busca_fornecedor);
+$linhas_fornecedor = mysqli_num_rows($busca_fornecedor);
 
 $fornecedor_print = $aux_forn[1];
 $codigo_pessoa = $aux_forn[35];
 $cidade_fornecedor = $aux_forn[10];
 $estado_fornecedor = $aux_forn[12];
 $telefone_fornecedor = $aux_forn[14];
-if ($aux_forn[2] == "PF" or $aux_forn[2] == "pf")
-{$cpf_cnpj = $aux_forn[3];}
-else
-{$cpf_cnpj = $aux_forn[4];}
+if ($aux_forn[2] == "PF" or $aux_forn[2] == "pf") {
+	$cpf_cnpj = $aux_forn[3];
+} else {
+	$cpf_cnpj = $aux_forn[4];
+}
 $cpf_aux = Helpers::limpa_cpf_cnpj($cpf_cnpj); // ==== INTEGRAÇÃO ROVERETI =====
 $fornecedor_rovereti = str_replace($comAcentos, $semAcentos, $fornecedor_print); // ==== INTEGRAÇÃO ROVERETI =====
 // ======================================================================================================
 
 
 // ====== BUSCA FAVORECIDO ==============================================================================
-$busca_favorecido = mysqli_query ($conexao, "SELECT * FROM cadastro_favorecido WHERE estado_registro!='EXCLUIDO' AND codigo_pessoa='$codigo_pessoa' ORDER BY nome LIMIT 1");
+$busca_favorecido = mysqli_query($conexao, "SELECT * FROM cadastro_favorecido WHERE estado_registro!='EXCLUIDO' AND codigo_pessoa='$codigo_pessoa' ORDER BY nome LIMIT 1");
 $aux_favorecido = mysqli_fetch_row($busca_favorecido);
-$linhas_favorecido = mysqli_num_rows ($busca_favorecido);
+$linhas_favorecido = mysqli_num_rows($busca_favorecido);
 
 $cod_favorecido = $aux_favorecido[0];
 $favorecido_print = $aux_favorecido[14];
@@ -118,7 +119,7 @@ $favorecido_print = $aux_favorecido[14];
 
 
 // ====== BUSCA TIPO PRODUTO ==========================================================================
-$busca_tipo_produto = mysqli_query ($conexao, "SELECT * FROM select_tipo_produto WHERE codigo='$cod_tipo' AND estado_registro!='EXCLUIDO'");
+$busca_tipo_produto = mysqli_query($conexao, "SELECT * FROM select_tipo_produto WHERE codigo='$cod_tipo' AND estado_registro!='EXCLUIDO'");
 $aux_tp = mysqli_fetch_row($busca_tipo_produto);
 
 $tipo_print = $aux_tp[1];
@@ -126,7 +127,7 @@ $tipo_print = $aux_tp[1];
 
 
 // ====== BUSCA UNIDADE DE MEDIDA ==========================================================================
-$busca_un_med = mysqli_query ($conexao, "SELECT * FROM unidade_produto WHERE codigo='$cod_unidade' AND estado_registro!='EXCLUIDO'");
+$busca_un_med = mysqli_query($conexao, "SELECT * FROM unidade_produto WHERE codigo='$cod_unidade' AND estado_registro!='EXCLUIDO'");
 $aux_un_med = mysqli_fetch_row($busca_un_med);
 
 $un_descricao = $aux_un_med[1];
@@ -135,50 +136,52 @@ $unidade_print = $aux_un_med[2];
 
 
 // ===========================================================================================================
-	include ('../../includes/head.php'); 
+include('../../includes/head.php');
 ?>
 
 <!-- ==================================   T Í T U L O   D A   P Á G I N A   ====================================== -->
 <title>
-<?php echo "$titulo"; ?>
+	<?php echo "$titulo"; ?>
 </title>
 
 <!-- =======================================   J A V A   S C R I P T   =========================================== -->
 <script type="text/javascript">
-<?php include ('../../includes/javascript.php'); ?>
+	<?php include('../../includes/javascript.php'); ?>
 </script>
 </head>
 
 <!-- =============================================   I N Í C I O   =============================================== -->
+
 <body onload="javascript:foco('ok');">
 
-<!-- =============================================    T O P O    ================================================= -->
-<div id="topo_geral">
-<?php  include ('../../includes/topo.php'); ?>
-</div>
+	<!-- =============================================    T O P O    ================================================= -->
+	<div id="topo_geral">
+		<?php include('../../includes/topo.php'); ?>
+	</div>
 
 
 
 
-<!-- =============================================    M E N U    ================================================= -->
-<div id="menu_geral">
-<?php include ('../../includes/menu_compras.php'); ?>
+	<!-- =============================================    M E N U    ================================================= -->
+	<div id="menu_geral">
+		<?php include('../../includes/menu_compras.php'); ?>
 
-<?php include ('../../includes/sub_menu_compras_produtos.php'); ?>
-</div> <!-- FIM menu_geral -->
+		<div class="submenu">
+			<?php include("../../includes/submenu_compras_compras.php"); ?>
+		</div>
+	</div> <!-- FIM menu_geral -->
 
 
 
 
-<!-- =============================================   C E N T R O   =============================================== -->
-<div id="centro_geral">
-<div id="centro" style="height:500px; width:1080px; border:0px solid #000; margin:auto">
+	<!-- =============================================   C E N T R O   =============================================== -->
+	<div id="centro_geral">
+		<div id="centro" style="height:500px; width:1080px; border:0px solid #000; margin:auto">
 
-<?php
-if ($botao == "ROVERETI" and $numero_compra != "")
-{
+			<?php
+			if ($botao == "ROVERETI" and $numero_compra != "") {
 
-/*
+				/*
 
 // ==========================================================================================================================
 // INTEGRAÇÃO ROVERETI ======================================================================================================
@@ -299,7 +302,7 @@ $erro_rovereti = 'nao';}
 
 
 
-	echo "<div id='centro' style='float:left; height:5px; width:1080px; border:0px solid #000'></div>
+				echo "<div id='centro' style='float:left; height:5px; width:1080px; border:0px solid #000'></div>
 	<div id='centro' style='float:left; height:90px; width:1080px; text-align:center; border:0px solid #000'>
 	<img src='$servidor/$diretorio_servidor/imagens/icones/ok.png' border='0' /></div>
 	<div id='centro' style='float:left; height:25px; width:1080px; color:#4F4F4F; text-align:center; border:0px solid #000; font-size:12px'>
@@ -418,31 +421,28 @@ $erro_rovereti = 'nao';}
 
 	
 	";
+			}
+
+
+
+			?>
 
 
 
 
-}
-
-
-
-?>
-
-
-
-
-</div>
-</div><!-- FIM DIV CENTRO GERAL -->
+		</div>
+	</div><!-- FIM DIV CENTRO GERAL -->
 
 
 
 
-<!-- =============================================   R O D A P É   =============================================== -->
-<div id="rodape_geral">
-<?php include ('../../includes/rodape.php'); ?>
-</div>
+	<!-- =============================================   R O D A P É   =============================================== -->
+	<div id="rodape_geral">
+		<?php include('../../includes/rodape.php'); ?>
+	</div>
 
-<!-- =============================================   F  I  M   =================================================== -->
-<?php include ('../../includes/desconecta_bd.php'); ?>
+	<!-- =============================================   F  I  M   =================================================== -->
+	<?php include('../../includes/desconecta_bd.php'); ?>
 </body>
+
 </html>

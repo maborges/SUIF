@@ -14,8 +14,8 @@ $menu = 'movimentacao';
 $botao = $_POST["botao"];
 $descricao_sacaria_form = $_POST["descricao_sacaria_form"];
 $movimentacao_sacaria_form = $_POST["movimentacao_sacaria_form"];
-$peso_sacaria_form = Helpers::ConvertePeso($_POST["peso_sacaria_form"]);
-$capacidade_sacaria_form = Helpers::ConvertePeso($_POST["capacidade_sacaria_form"]);
+$peso_sacaria_form = Helpers::ConvertePeso($_POST["peso_sacaria_form"],'N');
+$capacidade_sacaria_form = Helpers::ConvertePeso($_POST["capacidade_sacaria_form"], 'N');
 $codigo_w = $_POST["codigo_w"];
 
 if ($botao == "EDICAO")
@@ -25,8 +25,8 @@ $capacidade_sacaria_form = $_POST["capacidade_sacaria_form"];
 }
 else
 {
-$peso_sacaria_form = Helpers::ConvertePeso($_POST["peso_sacaria_form"]);
-$capacidade_sacaria_form = Helpers::ConvertePeso($_POST["capacidade_sacaria_form"]);
+$peso_sacaria_form = Helpers::ConvertePeso($_POST["peso_sacaria_form"], 'N');
+$capacidade_sacaria_form = Helpers::ConvertePeso($_POST["capacidade_sacaria_form"], 'N');
 }
 
 $usuario_cadastro_form = $nome_usuario_print;

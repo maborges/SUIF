@@ -64,6 +64,12 @@ include("../includes/desconecta_bd.php");
 // ================================================================================================================
 
 
+$soma_entrada_cafe = 0;
+$soma_entrada_pimenta = 0;
+$soma_entrada_cacau = 0;
+$soma_entrada_res_pimenta = 0;
+
+
 // ====== FUNÇÃO FOR ENTRADA ======================================================================================
 for ($e = 1; $e <= $linha_entrada_geral; $e++) {
     $aux_entrada_geral = mysqli_fetch_row($soma_entrada_geral);
@@ -78,18 +84,22 @@ for ($e = 1; $e <= $linha_entrada_geral; $e++) {
     $quantidade_entrada = $aux_entrada_geral[6];
 
     if ($cod_produto_e == "2") {
-        $soma_entrada_cafe = $quantidade_entrada;
+        $soma_entrada_cafe += $quantidade_entrada;
     } elseif ($cod_produto_e == "3") {
-        $soma_entrada_pimenta = $quantidade_entrada;
+        $soma_entrada_pimenta += $quantidade_entrada;
     } elseif ($cod_produto_e == "4") {
         $soma_entrada_cacau = $quantidade_entrada;
     } elseif ($cod_produto_e == "11") {
-        $soma_entrada_res_pimenta = $quantidade_entrada;
+        $soma_entrada_res_pimenta += $quantidade_entrada;
     } else {
     }
 }
 // ================================================================================================================
 
+$soma_saida_cafe = 0;
+$soma_saida_pimenta = 0;
+$soma_saida_cacau = 0;
+$soma_saida_res_pimenta = 0;
 
 // ====== FUNÇÃO FOR SAÍDA ========================================================================================
 for ($s = 1; $s <= $linha_saida_geral; $s++) {
@@ -105,13 +115,13 @@ for ($s = 1; $s <= $linha_saida_geral; $s++) {
     $quantidade_saida = $aux_saida_geral[6];
 
     if ($cod_produto_s == "2") {
-        $soma_saida_cafe = $quantidade_saida;
+        $soma_saida_cafe += $quantidade_saida;
     } elseif ($cod_produto_s == "3") {
-        $soma_saida_pimenta = $quantidade_saida;
+        $soma_saida_pimenta += $quantidade_saida;
     } elseif ($cod_produto_s == "4") {
-        $soma_saida_cacau = $quantidade_saida;
+        $soma_saida_cacau += $quantidade_saida;
     } elseif ($cod_produto_s == "11") {
-        $soma_saida_res_pimenta = $quantidade_saida;
+        $soma_saida_res_pimenta += $quantidade_saida;
     } else {
     }
 }

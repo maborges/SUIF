@@ -11,22 +11,22 @@ $menu = 'entrada';
 
 
 // ====== RECEBE POST =============================================================================================
-$botao = $_POST["botao"];
+$botao = $_POST["botao"]  ?? '';;
 $data_hoje = date('Y-m-d', time());
-$data_inicial_busca = $_POST["data_inicial_busca"];
-$data_final_busca = $_POST["data_final_busca"];
-$pagina_mae = $_POST["pagina_mae"];
-$pagina_filha = $_POST["pagina_filha"];
+$data_inicial_busca = $_POST["data_inicial_busca"] ?? '';;
+$data_final_busca = $_POST["data_final_busca"] ?? '';;
+$pagina_mae = $_POST["pagina_mae"] ?? '';;
+$pagina_filha = $_POST["pagina_filha"] ?? '';;
 $filial = $filial_usuario;
 $usuario_exclusao = $nome_usuario_print;
 $data_exclusao = date('Y/m/d', time());
 $hora_exclusao = date('G:i:s', time());
 
-$numero_romaneio_busca = $_POST["numero_romaneio_busca"];
-$fornecedor_busca = $_POST["fornecedor_busca"];
-$cod_produto_busca = $_POST["cod_produto_busca"];
-$situacao_romaneio_busca = $_POST["situacao_romaneio_busca"];
-$forma_pesagem_busca = $_POST["forma_pesagem_busca"];
+$numero_romaneio_busca = $_POST["numero_romaneio_busca"] ?? '';;
+$fornecedor_busca = $_POST["fornecedor_busca"] ?? '';;
+$cod_produto_busca = $_POST["cod_produto_busca"] ?? '';;
+$situacao_romaneio_busca = $_POST["situacao_romaneio_busca"] ?? '';;
+$forma_pesagem_busca = $_POST["forma_pesagem_busca"] ?? '';;
 // ================================================================================================================
 
 
@@ -60,7 +60,7 @@ include ('../../includes/head.php');
 <!-- ====== MENU ================================================================================================== -->
 <div id="menu_geral">
 <?php include ('../../includes/menu_estoque.php'); ?>
-<?php include ('../../includes/sub_menu_estoque_entrada.php'); ?>
+<?php include ('../../includes/submenu_estoque_entrada.php'); ?>
 </div>
 
 
