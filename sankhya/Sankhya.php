@@ -382,7 +382,7 @@ class Sankhya
                     'AD_PERCIMPUREZA' => array('$' => ""),
                     'AD_PERCUMIDADE' => array('$' => ""),
                     'AD_PERCBROCA' => array('$' => ""),
-                    'AD_COMPRAARMAZENADO' => array('$' => "S"),
+                    'AD_TIPOCOMPRA' => array('$' => 2), // para contrato de armazenagem é 2
                     'AD_TIPOPRODUTO' => array('$' => "$nfEntrada->codigoTipo"),
                     'OBSERVACAO' => array('$' => $nfEntrada->observacao),
                     'IRFRETIDO' => array('$' => 'S')
@@ -691,6 +691,7 @@ class Sankhya
         $observacao     = '';
         $codigoTipo     = 0;
         $broca          = 0;
+        $tipoCompra     = 0;
 
 
         // Obtém a compra do SUIF
@@ -745,6 +746,7 @@ class Sankhya
                 $movimentacao       = $resultSetCompra['rows'][0][16];
                 $idPedidoSankhya       = $resultSetCompra['rows'][0][55];
                 $situacaoPedidoSankhya = $resultSetCompra['rows'][0][56];
+                $tipoCompra            = $resultSetCompra['rows'][0][57];
 
                 if ($idPedidoSankhya) {
                     $error  = 4;
@@ -974,7 +976,7 @@ class Sankhya
                         'AD_PERCIMPUREZA' => array('$' => "$impureza"),
                         'AD_PERCUMIDADE' => array('$' => "$umidade"),
                         'AD_PERCBROCA' => array('$' => "$broca"),
-                        'AD_COMPRAARMAZENADO' => array('$' => "N"),
+                        'AD_TIPOCOMPRA' => array('$' => $tipoCompra),
                         'AD_TIPOPRODUTO' => array('$' => "$codigoTipo"),
                         'OBSERVACAO' => array('$' => $observacao),
                         'IRFRETIDO' => array('$' => 'S')

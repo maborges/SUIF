@@ -576,7 +576,7 @@ include("../../includes/head.php");
 
 				include("../../includes/desconecta_bd.php");
 
-				$qtdeFaturar = round($valor_pagamento / $preco_unitario, 9);
+				$qtdeFaturar = round($valor_pagamento / $preco_unitario, 2);
 
 				$observacao = '';
 

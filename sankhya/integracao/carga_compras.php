@@ -512,7 +512,7 @@ function GeraPedidos()
                     b.id_pedido_sankhya idContratoSankhya,
                     a.id_pedido_sankhya idFaturaSankhya,
                     a.pedido_confirmado_sankhya faturaConfirmada,
-                    ROUND(a.valor / b.preco_unitario, 9) qtdeFaturada,
+                    ROUND(a.valor / b.preco_unitario, 2) qtdeFaturada,
                     a.data_pagamento dataPagamento,
                     a.data_cadastro dataCadastro,
                     a.codigo_pessoa idPessoaFatura,
@@ -595,6 +595,7 @@ function GeraPedidos()
             }
 
             GeraContratos($idCompra);
+
         } elseif ($idContratoSankhya and $contratoConfirmado <> 'S') {
             Sankhya::atualizaDadosPagamentoFavorecido(
                 $idPagamentoFavorecido,
