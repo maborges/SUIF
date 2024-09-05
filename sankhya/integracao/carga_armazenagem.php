@@ -302,13 +302,10 @@ function GeraPedidos()
 {
     global $msgOk, $msgEr, $sqlWhere, $naoEnviadoSankhya, $enviadoSankhya;
 
-
     $contador = 0;
     $msgOk = '';
     $msgEr = '';
-    $msgAu = '';
-    $recordCount = 0;
-
+    
     $sqlArmazenameto = "select b.codigo,
                                a.numero_romaneio
                           from estoque a
@@ -316,6 +313,7 @@ function GeraPedidos()
                                        on b.codigo_romaneio   = a.numero_romaneio  
                                       and b.estado_registro   = 'ATIVO'
                                       and b.natureza_operacao = 'ARMAZENAGEM'
+                                      and b.fatura_confirmada_sankhya <> 'S'
                          where a.estado_registro   = 'ATIVO'
                            and a.movimentacao      = 'ENTRADA'
                                $sqlWhere
@@ -326,37 +324,17 @@ function GeraPedidos()
     $faturas = Sankhya::queryExecuteDB($sqlArmazenameto);
 
     if ($faturas['errorCode']) {
-        $error = true;
-        $msgEr .= "{$faturas['errorCode']}: {$faturas['errorMessage']} <br>";
+        $msgEr = "{$faturas['errorCode']}: {$faturas['errorMessage']}";
+        return;
     }
-
-    $error      = false;
-    $idRomaneioAu = '';
 
     foreach ($faturas['rows'] as $fatura) {
         $notaFiscalEntrada = $fatura[0];
-        $idRomaneio        = $fatura[1];
-
-        $msgAu = '';
-        $error = false;
 
         // Faz a gravação do pedido no Sankhya 
-        $resultSet = Sankhya::IncluiArmazenagem($notaFiscalEntrada);
+        Sankhya::IncluiArmazenagem($notaFiscalEntrada);
 
-        if ($resultSet->errorCode) {
-            $error = true;
-            $msgAu .= "$resultSet->errorMessage <br>";
-        }
-
-        if ($error) {
-            if ($idRomaneioAu <> $idRomaneio) {
-                $idRomaneioAu = $idRomaneio;
-                $msgEr .= "<b>Romaneio $idRomaneio </b><br>";
-            }
-            $msgEr .= $msgAu;
-        } else {
-            $contador = +1;
-        }
+        $contador = +1;
     }
 
     if ($contador) {

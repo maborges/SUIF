@@ -1,8 +1,6 @@
 <?php
 
 require_once('SankhyaKeys.php');
-// require_once("../helpers.php");
-
 
 /**
  * Classe Helper - Classe auxiliar responsável por prover interface como Sankhya..
@@ -53,8 +51,8 @@ class Sankhya
     public static function DadosArmazenagem($idNFEntrada)
     {
         $result = [
-            'errorCode'    => null,
-            'errorMessage' => null,
+            'errorCode'    => 0,
+            'errorMessage' => '',
             'nf'           => null
         ];
 
@@ -126,9 +124,9 @@ class Sankhya
 
         $rowsCount = Count($resultSetNotaFiscal['rows']);
 
-        if ($rowsCount == 0) {
+        if ($rowsCount <> 1) {
             $result->errorCode    = 2;
-            $result->errorMessage = "Número da entrada de nota fiscal $idNFEntrada não encontrado no SUIF ou não é uma nota fiscal de armazenagem.";
+            $result->errorMessage = "Nota fiscal de entrada $idNFEntrada não encontrado, ou duplicada, ou não é de armazenagem.";
             return $result;
         }
 
@@ -235,10 +233,10 @@ class Sankhya
     public static function IncluiArmazenagem($idNFEntrada)
     {
         $result = [
-            'errorCode'       => null,
-            'errorMessage'    => null,
-            'contratoSankhya' => null,
-            'faturaSankhya'   => null,
+            'errorCode'       => 0,
+            'errorMessage'    => '',
+            'contratoSankhya' => 0,
+            'faturaSankhya'   => 0,
         ];
 
         $result = (object) $result;
@@ -248,52 +246,82 @@ class Sankhya
         if ($resultSet->errorCode) {
             $result->errorCode    = $resultSet->errorCode;
             $result->errorMessage = $resultSet->errorMessage;
+            Self::informaProcessoContratoArmazenagem($idNFEntrada, null, null, $result->errorMessage);
             return $result;
         }
 
         $nfEntrada = $resultSet->nf;
 
-        /*
+        /* **
             Contrato de armazenamento
         */
+        if (is_null($nfEntrada->contratoSankhya) or $nfEntrada->contratoConfirmadoSankhya <> 'S') {
+            // Informa que está processando contrato
+            Self::informaProcessoContratoArmazenagem($nfEntrada->nfEntrada,$nfEntrada->contratoSankhya,'X');
+            $contrato = Self::CriaContratoArmazenagem($nfEntrada);
 
-        $contrato = Self::CriaContratoArmazenagem($nfEntrada);
+            $nfEntrada->contratoSankhya = $contrato->contratoSankhya;
 
-        if ($contrato->errorCode) {
-            $result->errorCode    = $contrato->errorCode;
-            $result->errorMessage = $contrato->errorMessage;
-            return $result;
-        }
+            if ($contrato->errorCode) {
+                $result->errorCode       = $contrato->errorCode;
+                $result->errorMessage    = $contrato->errorMessage;
+                $result->contratoSankhya = $contrato->contratoSankhya;
 
-        $nfEntrada->contratoSankhya = $contrato->contratoSankhya;
+                // Avisa quando ocorreu erro mas conseguiu cria o contrato
+                if ($nfEntrada->contratoSankhya) {
+                    Self::informaProcessoContratoArmazenagem($nfEntrada->nfEntrada, $nfEntrada->contratoSankhya, 'X', $result->errorMessage);
+                }
 
-        // Confirma contrato
-        $resultSet = Self::ConfirmaContratoArmazenagem($nfEntrada);
+                return $result;
+            }
 
-        if ($resultSet->errorCode) {
-            $result->errorCode    = 9;
-            $result->errorMessage = "{$resultSet->errorCode}: {$resultSet->errorMessage}";
-            return $result;
-        } else {
+            $nfEntrada->contratoSankhya = $contrato->contratoSankhya;
+
+            // Confirma contrato
+            $resultSet = Self::ConfirmaContratoArmazenagem($nfEntrada);
+
+            if ($resultSet->errorCode) {
+                $result->errorCode    = 9;
+                $result->errorMessage = $resultSet->errorMessage;
+                Self::informaProcessoContratoArmazenagem($nfEntrada->nfEntrada, $nfEntrada->contratoSankhya, 'X', $resultSet->errorMessage);
+                return $result;
+            }
+
             $nfEntrada->contratoConfirmadoSankhya = 'S';
+            
+            // Informa que confirmou no Sankhya
+            Self::informaProcessoContratoArmazenagem($nfEntrada->nfEntrada, 
+                                                     $nfEntrada->contratoSankhya,
+                                                     $nfEntrada->contratoConfirmadoSankhya, 
+                                                     $result->errorMessage);
         }
+
 
         /*
             Fatura de armazenamento
         */
 
         // Cria fatura quando da inclusão do contrato
-        if ($nfEntrada->contratoSankhya && $nfEntrada->contratoConfirmadoSankhya == 'S') {
+        // Para criar a fatura, o contrato já deverá estar criado e confirmado
+        if (($nfEntrada->contratoSankhya && $nfEntrada->contratoConfirmadoSankhya == 'S') and 
+            (is_null($nfEntrada->faturaSankhya) or $nfEntrada->faturaConfirmadaSankhya <> 'S')) {
+
+            Self::informaProcessoFaturaArmazenagem($idNFEntrada, $nfEntrada->faturaSankhya, 'X');
+
             $fatura = Self::CriaFaturaArmazenagem($nfEntrada);
+            $nfEntrada->faturaSankhya = $fatura->faturaSankhya;
 
             if ($fatura->errorCode) {
-                $result->errorCode    = $fatura->errorCode;
-                $result->errorMessage = $fatura->errorMessage;
+                $result->errorCode     = $fatura->errorCode;
+                $result->errorMessage  = $fatura->errorMessage;
+
+                // Avisa qdo conseguiu cria a fatura mesmo com erro
+                if ($nfEntrada->faturaSankhya) {
+                    Self::informaProcessoFaturaArmazenagem($idNFEntrada, $nfEntrada->faturaSankhya, 'X', $result->errorMessage);
+                }
+
                 return $result;
             }
-
-            $nfEntrada->faturaSankhya = $fatura->faturaSankhya;
-            $nfEntrada->faturaConfirmadaSankhya = $fatura->faturaConfirmadaSankhya;
 
             $resultItem = Self::alteraItemNota(
                 $nfEntrada->faturaSankhya,
@@ -304,6 +332,7 @@ class Sankhya
                 $nfEntrada->vlrUnit,
                 $nfEntrada->observacao
             );
+
 
             if ($resultItem['errorCode']) {
                 $result->errorCode    = $resultItem['errorCode'];
@@ -317,11 +346,12 @@ class Sankhya
                 $nfEntrada->produtorNFSankhya,
                 $nfEntrada->dataEntrada,
                 null
-            ); // $nfEntrada->CCSankhya
+            );
 
             if ($resultSet['errorCode']) {
                 $result->errorCode    = $resultSet['errorCode'];
                 $result->errorMessage = $resultSet['errorMessage'];
+                Self::informaProcessoFaturaArmazenagem($nfEntrada->nfEntrada, $nfEntrada->faturaSankhya, 'X', $result->errorMessage);
                 return $result;
             }
 
@@ -332,6 +362,10 @@ class Sankhya
                 $result->errorMessage = "{$resultSet->errorCode}: {$resultSet->errorMessage}";
                 return $result;
             }
+
+            // Informa que confirmou no Sankhya
+            Self::informaProcessoFaturaArmazenagem($nfEntrada->nfEntrada, $nfEntrada->faturaSankhya, 'S');
+
         }
 
         return $result;
@@ -342,16 +376,14 @@ class Sankhya
         $result = [
             'errorCode' => null,
             'errorMessage' => null,
-            'contratoSankhya' => null
+            'contratoSankhya' => $nfEntrada->contratoSankhya
         ];
 
         $result = (object) $result;
 
         if ($nfEntrada->contratoSankhya) {
-            // retorna erro que já existe contrato
-            $result->contratoSankhya = $nfEntrada->contratoSankhya;
+            // retorna erro se já existe contrato
             $result->errorMessage    = "Contrato já gerado para a NF $nfEntrada->nfEntrada.";
-            $result->contratoSankhya = $nfEntrada->contratoSankhya;
             return $result;
         }
 
@@ -406,31 +438,15 @@ class Sankhya
             )
         );
 
-        $statusProcesso = 'X';
-        $result->errorMessage = Self::informaProcessoContratoArmazenagem($nfEntrada->nfEntrada, $nfEntrada->contratoSankhya, $statusProcesso);
-
-        if ($result->errorMessage) {
-            $result->errorCode = 1;
-            return $result;
-        }
-
         $resultServiceAPI = Self::serviceExecuteAPI($GLOBALS['urlApiCriaPedido'], $body);
+
+        // Pode retornar um erro e com a fatura gerada
+        $result->contratoSankhya = $resultServiceAPI['rows']['pk']['NUNOTA']['$'] ?? null;
 
         if ($resultServiceAPI['errorCode']) {
             $result->errorCode    = $resultServiceAPI['errorCode'];
             $result->errorMessage = $resultServiceAPI['errorMessage'];
             return $result;
-        }
-
-        $result->contratoSankhya = $resultServiceAPI['rows']['pk']['NUNOTA']['$'] ?? null;
-
-        $statusProcesso = $nfEntrada->contratoSankhya && $result->errorMessage ? 'X' : 'N';
-
-        // Informa ao Suif que a entrada está sendo processada
-        $result->errorMessage = Self::informaProcessoContratoArmazenagem($nfEntrada->nfEntrada, $result->contratoSankhya, $statusProcesso);
-
-        if ($result->errorMessage) {
-            $result->errorCode = 2;
         }
 
         return $result;
@@ -441,7 +457,7 @@ class Sankhya
         $result = [
             'errorCode' => null,
             'errorMessage' => null,
-            'faturaSankhya' => null,
+            'faturaSankhya' => $nfEntrada->faturaSankhya,
             'faturaConfirmadaSankhya' => $nfEntrada->faturaConfirmadaSankhya
         ];
 
@@ -485,32 +501,15 @@ class Sankhya
             )
         );
 
-        $statusProcesso = 'X';
-        $result->errorMessage = Self::informaProcessoFaturaArmazenagem($nfEntrada->nfEntrada, $nfEntrada->faturaSankhya, $statusProcesso);
-
-        if ($result->errorMessage) {
-            $result->errorCode = 1;
-            return $result;
-        }
-
         $resultServiceAPI = Self::serviceExecuteAPI($GLOBALS['urlApiFaturamentoPedido'], $body);
+
+        // pode ter criado a fatura e dado erro no retorno da API
+        $result->faturaSankhya = $resultServiceAPI['rows']['notas']['nota']['$'] ?? null;
 
         if ($resultServiceAPI['errorCode']) {
             $result->errorCode    = $resultServiceAPI['errorCode'];
             $result->errorMessage = $resultServiceAPI['errorMessage'];
             return $result;
-        }
-
-        $result->faturaSankhya = $resultServiceAPI['rows']['notas']['nota']['$'];
-        $statusProcesso = $nfEntrada->faturaSankhya && $result->errorMessage ? 'X' : 'N';
-
-        // Informa ao Suif que a entrada está sendo processada
-        $result->errorMessage = Self::informaProcessoFaturaArmazenagem($nfEntrada->nfEntrada, $nfEntrada->faturaSankhya, $statusProcesso);
-
-        if ($result->errorMessage) {
-            $result->errorCode = 2;
-        } else {
-            $result->faturaConfirmadaSankhya = $statusProcesso;
         }
 
         return $result;
@@ -541,16 +540,11 @@ class Sankhya
 
         $resultServiceAPI = Self::serviceExecuteAPI($GLOBALS['urlApiConfirmaPedido'], $body);
 
-        if ($resultServiceAPI['errorCode']) {
+        if ($resultServiceAPI['errorCode'] and !strpos($resultServiceAPI['errorMessage'], 'confirmada(s)')) {
             $result->errorCode    = 1;
             $result->errorMessage = $resultServiceAPI['errorMessage'];
-        } else {
-            $result->errorMessage = Self::informaProcessoContratoArmazenagem($nfEntrada->nfEntrada, $nfEntrada->contratoSankhya, 'S');
-
-            if ($result->errorMessage) {
-                $result->errorCode = 2;
-            }
-        }
+            return $result;
+        } 
 
         return $result;
     }
@@ -579,21 +573,15 @@ class Sankhya
 
         $resultServiceAPI = Self::serviceExecuteAPI($GLOBALS['urlApiConfirmaPedido'], $body);
 
-        if ($resultServiceAPI['errorCode']) {
+        if ($resultServiceAPI['errorCode'] and !strpos($resultServiceAPI['errorMessage'], 'confirmada(s)')) {
             $result->errorCode    = 1;
             $result->errorMessage = $resultServiceAPI['errorMessage'];
-        } else {
-            $result->errorMessage = Self::informaProcessoFaturaArmazenagem($nfEntrada->nfEntrada, $nfEntrada->faturaSankhya, 'S');
-
-            if ($result->errorMessage) {
-                $result->errorCode = 2;
-            }
-        }
+        } 
 
         return $result;
     }
 
-    public static function CancelaContratoArmazenagem($contrato, $motivo = '') 
+    public static function CancelaContratoArmazenagem($contrato, $motivo = '')
     {
         $result = [
             'errorCode'       => null,
@@ -609,7 +597,7 @@ class Sankhya
             return $result;
         }
 
-        $cancela = Self::cancelaDocumento($contrato,$motivo);
+        $cancela = Self::cancelaDocumento($contrato, $motivo);
 
         if ($cancela['errorCode']) {
             $result->errorCode    = $cancela['errorCode'];
@@ -1112,15 +1100,14 @@ class Sankhya
                 "rows" => [],
                 "effectedRows" => 0,
                 "errorCode" => $resultServiceAPI['errorCode'],
-                "errorMessage" => "Fatura: $numNota Produtor: $idParceiro Favorecido: $idParceiroNota Faturamento: $dataNegociacao  <br>" .
-                    $resultServiceAPI['errorMessage']
+                "errorMessage" => str_replace('"', '', str_replace("'", "", $resultServiceAPI['errorMessage']))
             );
         } else {
             return array(
                 "rows" => $resultServiceAPI['rows'],
                 "effectedRows" => 0,
                 "errorCode" => "",
-                "errorMessage" => "alteraCabecalhoNotaCarga ok"
+                "errorMessage" => ""
             );
         }
     }
@@ -1429,7 +1416,7 @@ class Sankhya
     public static function atualizaDadosCompra($idCompra, $idContratoSankhya, $situacaoContrato, $logSankhya = ''): array
     {
         $contrato = $idContratoSankhya ?? 'id_pedido_sankhya';
-        $textLog = str_replace('"','',str_replace("'","", $logSankhya));
+        $textLog = str_replace('"', '', str_replace("'", "", $logSankhya));
 
         $sql = "update compras 
                    set id_pedido_sankhya         = $contrato,
@@ -1452,14 +1439,19 @@ class Sankhya
     public static function atualizaDadosPagamentoFavorecido($idPagamento, $idFaturaSankhya, $situacaoFatura, $logSankhya = ''): array
     {
         $fatura = $idFaturaSankhya ?? 'id_pedido_sankhya';
-        $textLog = str_replace('"','',str_replace("'","", $logSankhya));
+        $textLog = str_replace(array("\r", "\n"), '', str_replace('"', '', str_replace("'", "", $logSankhya)));
+        
+        if (substr($textLog,0,21) == 'ORA-20101: Parceiro n') {
+            $textLog = 'Parceiro não está ativo';
+        }
+
         $sql = "update favorecidos_pgto 
                    set pedido_confirmado_sankhya = '$situacaoFatura',
                        id_pedido_sankhya         = $fatura,
-                       log_sankhya               = '$textLog' 
+                       log_sankhya               = '$textLog'
                  where codigo                    = $idPagamento";
 
-        return Sankhya::queryExecuteDB($sql);
+        return  Sankhya::queryExecuteDB($sql);
     }
 
     public static function getParceiroById($id): array
@@ -1791,13 +1783,17 @@ class Sankhya
         }
     }
 
-    public static function informaProcessoContratoArmazenagem($entradaNF, $contratoSankhya, $situacao)
+    public static function informaProcessoContratoArmazenagem($entradaNF, $contratoSankhya = '', $situacao = '', $logMessage = '')
     {
-        $contrato = isset($contratoSankhya) ? $contratoSankhya : "null";
+        $textLog = str_replace('"', '', str_replace("'", "", $logMessage));
+
+        $setPedido   = $contratoSankhya ? "id_pedido_sankhya = $contratoSankhya," : "";
+        $setSituacao = $situacao ? "pedido_confirmado_sankhya = '$situacao'," : "";
 
         $sql = "update nota_fiscal_entrada 
-                   set id_pedido_sankhya         = $contrato,
-                       pedido_confirmado_sankhya = '$situacao'
+                   set $setPedido
+                       $setSituacao
+                       log_sankhya = '$textLog'
                  where codigo = $entradaNF";
 
         $resultSet = Sankhya::queryExecuteDB($sql);
@@ -1805,25 +1801,19 @@ class Sankhya
         return $resultSet['errorMessage'];
     }
 
-    public static function informaProcessoFaturaArmazenagem($entradaNF, $faturaSankhya, $situacao)
+    public static function informaProcessoFaturaArmazenagem($entradaNF, $faturaSankhya = '', $situacao = '', $logMessage = '')
     {
+        $textLog = str_replace('"', '', str_replace("'", "", $logMessage));
+
+        $setFatura   = $faturaSankhya ? "id_fatura_sankhya = $faturaSankhya," : "";
+        $setSituacao = $situacao ? "fatura_confirmada_sankhya = '$situacao'," : "";
+
         $fatura = isset($faturaSankhya) ? $faturaSankhya : "null";
 
         $sql = "update nota_fiscal_entrada 
-                   set id_fatura_sankhya         = $fatura,
-                       fatura_confirmada_sankhya = '$situacao'
-                 where codigo = $entradaNF";
-
-        $resultSet = Sankhya::queryExecuteDB($sql);
-
-        return $resultSet['errorMessage'];
-    }
-
-    public static function informaProcessoNFEntrada($entradaNF, $pedidoSankhya, $situacao)
-    {
-        $sql = "update nota_fiscal_entrada 
-                   set id_pedido_sankhya         = $pedidoSankhya,
-                       pedido_confirmado_sankhya = '$situacao'
+                   set $setFatura
+                       $setSituacao
+                       log_sankhya = '$textLog'
                  where codigo = $entradaNF";
 
         $resultSet = Sankhya::queryExecuteDB($sql);

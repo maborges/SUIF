@@ -274,11 +274,10 @@ if ($botao == "INCLUIR_NF") {
 														 '$cod_produto', '$fornecedor', '$fornecedor_print', 
 														 '$natureza_operacao_nf', '$serie_nf', '$data_saida_nf')");
 
-												
-		if ($natureza_operacao_nf == 'ARMAZENAGEM') {
-			// obtém a chave do registro 
-			$idNotaFiscalEntrada = mysqli_insert_id($conexao);
+		// obtém a chave do registro 
+		$idNotaFiscalEntrada = mysqli_insert_id($conexao);
 
+		if ($natureza_operacao_nf == 'ARMAZENAGEM') {
 			$resultSankhya = Sankhya::IncluiArmazenagem($idNotaFiscalEntrada);
 
 			if ($resultSankhya->errorCode) {
@@ -320,7 +319,7 @@ elseif ($botao == "EXCLUIR_NF") {
 			$erro = 10;
 			$msg_erro = "Erro Sankhya: $resultSankhya->errorCode.";
 		}
-	} 
+	}
 
 	if ($idContratoSankhya and !$resultSankhya->errorCode) {
 		$resultSankhya = Sankhya::CancelaContratoArmazenagem($idContratoSankhya, 'Cancelamento NF de Armazenamento');
@@ -330,8 +329,6 @@ elseif ($botao == "EXCLUIR_NF") {
 			$msg_erro = "Erro Sankhya: $resultSankhya->errorCode.";
 		}
 	}
-
-
 }
 // ======================================================================================================
 
@@ -389,12 +386,22 @@ include('../../includes/head.php');
 <script type="text/javascript">
 	<?php include('../../includes/javascript.php'); ?>
 </script>
+
+<script src=<?= "../../includes/loading/loading.js" ?>></script>
+
 </head>
 
 
 <!-- ====== INÍCIO ================================================================================================ -->
 
-<body onload="javascript:foco('ok');">
+<body onload="loading();">
+
+	<?php
+	// Informações do loadgin
+	$loadTitle = 'Aguarde...';
+	$loadMessage = 'Atualizando no SUIF e Sankhya';
+	include("../../includes/loading/loading.php");
+	?>
 
 
 	<!-- ====== TOPO ================================================================================================== -->
@@ -624,43 +631,43 @@ include('../../includes/head.php');
 			<div class="ct_titulo_2" style="width:300px; float:right; text-align:right; border:0px solid #000; color:#444">
 			</div>
 
-			<form name="popup" action="<?php echo "$servidor/$diretorio_servidor"; ?>/estoque/nota_fiscal_entrada/nota_fiscal.php" method="post">
-				<input type="hidden" name="numero_romaneio" value="<?php echo "$numero_romaneio"; ?>" />
-				<input type='hidden' name='numero_romaneio' value='<?php echo "$numero_romaneio"; ?>'>
-				<input type="hidden" name="botao" value="INCLUIR_NF" />
-				<input type="hidden" name="botao_mae" value="<?php echo "$botao_mae"; ?>" />
-				<input type="hidden" name="botao_relatorio" value="<?php echo "$botao_relatorio"; ?>" />
-				<input type='hidden' name='pagina_mae' value='<?php echo "$pagina_mae"; ?>'>
-				<input type='hidden' name='pagina_filha' value='<?php echo "$pagina_filha"; ?>'>
-				<input type='hidden' name='data_inicial_busca' value='<?php echo "$data_inicial_busca"; ?>'>
-				<input type='hidden' name='data_final_busca' value='<?php echo "$data_final_busca"; ?>'>
-				<input type='hidden' name='cod_produto_busca' value='<?php echo "$cod_produto_busca"; ?>'>
-				<input type='hidden' name='fornecedor_busca' value='<?php echo "$fornecedor_busca"; ?>'>
-				<input type='hidden' name='situacao_romaneio_busca' value='<?php echo "$situacao_romaneio_busca"; ?>'>
-				<input type='hidden' name='numero_romaneio_busca' value='<?php echo "$numero_romaneio_busca"; ?>'>
-				<input type='hidden' name='forma_pesagem_busca' value='<?php echo "$forma_pesagem_busca"; ?>'>
+			<form name="popup" action="<?php echo "$servidor/$diretorio_servidor"; ?>/estoque/nota_fiscal_entrada/nota_fiscal.php" method="post" onsubmit="showLoading()">
+			<input type=" hidden" name="numero_romaneio" value="<?php echo "$numero_romaneio"; ?>" />
+			<input type='hidden' name='numero_romaneio' value='<?php echo "$numero_romaneio"; ?>'>
+			<input type="hidden" name="botao" value="INCLUIR_NF" />
+			<input type="hidden" name="botao_mae" value="<?php echo "$botao_mae"; ?>" />
+			<input type="hidden" name="botao_relatorio" value="<?php echo "$botao_relatorio"; ?>" />
+			<input type='hidden' name='pagina_mae' value='<?php echo "$pagina_mae"; ?>'>
+			<input type='hidden' name='pagina_filha' value='<?php echo "$pagina_filha"; ?>'>
+			<input type='hidden' name='data_inicial_busca' value='<?php echo "$data_inicial_busca"; ?>'>
+			<input type='hidden' name='data_final_busca' value='<?php echo "$data_final_busca"; ?>'>
+			<input type='hidden' name='cod_produto_busca' value='<?php echo "$cod_produto_busca"; ?>'>
+			<input type='hidden' name='fornecedor_busca' value='<?php echo "$fornecedor_busca"; ?>'>
+			<input type='hidden' name='situacao_romaneio_busca' value='<?php echo "$situacao_romaneio_busca"; ?>'>
+			<input type='hidden' name='numero_romaneio_busca' value='<?php echo "$numero_romaneio_busca"; ?>'>
+			<input type='hidden' name='forma_pesagem_busca' value='<?php echo "$forma_pesagem_busca"; ?>'>
 
-				<script type="text/javascript">
-					function abrir(programa, janela) {
-						if (janela == "") janela = "janela";
-						window.open(programa, janela, 'height=370,width=900');
+			<script type="text/javascript">
+				function abrir(programa, janela) {
+					if (janela == "") janela = "janela";
+					window.open(programa, janela, 'height=370,width=900');
+				}
+			</script>
+
+			<script type="text/javascript" src="fornecedor_funcao.js"></script>
+
+			<script type="text/javascript">
+				document.onkeyup = function(e) {
+					if (e.which == 113) {
+						//Pressionou F2, aqui vai a função para esta tecla.
+						//alert(tecla F2);
+						var aux_f2 = document.popup.fornecedor.value;
+						javascript: foco('busca');
+						javascript: abrir('busca_pessoa_popup.php');
+						//javascript:buscarNoticias(aux_f2);
 					}
-				</script>
-
-				<script type="text/javascript" src="fornecedor_funcao.js"></script>
-
-				<script type="text/javascript">
-					document.onkeyup = function(e) {
-						if (e.which == 113) {
-							//Pressionou F2, aqui vai a função para esta tecla.
-							//alert(tecla F2);
-							var aux_f2 = document.popup.fornecedor.value;
-							javascript: foco('busca');
-							javascript: abrir('busca_pessoa_popup.php');
-							//javascript:buscarNoticias(aux_f2);
-						}
-					}
-				</script>
+				}
+			</script>
 
 		</div>
 		<!-- ============================================================================================================= -->

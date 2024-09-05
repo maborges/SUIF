@@ -337,14 +337,10 @@ $numeroCompra = $_POST['numeroCompra'] ?? '';
 <?php
 function GeraContratos($contrato = '')
 {
-    global $msgOk, $msgEr, $sqlWhere, $situacaoSankhya, $resultSet;
+    global $msgOk, $sqlWhere, $situacaoSankhya;
 
     $contador = 0;
     $msgOk = '';
-    $msgEr = '';
-    $msgAu = '';
-    $sqlContrato = '';
-
 
     if ($contrato) {
         $sqlCompras = "select a.numero_compra, a.fornecedor, a.id_pedido_sankhya, a.pedido_confirmado_sankhya
@@ -362,130 +358,100 @@ function GeraContratos($contrato = '')
                         and a.pedido_confirmado_sankhya <> 'S'
                             $sqlWhere
                             $situacaoSankhya
-                            $sqlContrato
                     order by a.data_compra, a.numero_compra";
     }
 
     $resultSet = Sankhya::queryExecuteDB($sqlCompras);
-    $recordCount = count($resultSet['rows']);
-    $idCompraAu = '';
 
     foreach ($resultSet['rows'] as $compra) {
-        $error             = false;
         $numeroCompra      = $compra[0];
         $idProdutor        = $compra[1];
         $pedidoSankhya     = $compra[2] ?? '';
-        $pedidoConfirmado  = $compra[3];
+        $statusProcesso    = 'X';
+        $rowsCount         = 0;
+        $localMessage      = '';
 
-        $produtorSankhya   = 0;
-        $codigoPessoa      = 0;
-        $favorecidoSankhya = 0;
+        // Status intermediário informado que Sankhya esta sendo gerado
+        Sankhya::atualizaDadosCompra(
+            $numeroCompra,
+            $pedidoSankhya,
+            $statusProcesso,
+            null
+        );
 
-        // Busca código Sankhya do Produtor
-        $sql = "select id_sankhya, 
+        if (!$pedidoSankhya) {
+            // Busca código Sankhya do Produtor
+            $sql = "select id_sankhya, 
                        codigo_pessoa
                   from cadastro_pessoa 
                  where codigo = $idProdutor";
 
-        $resultSet = Sankhya::queryExecuteDB($sql);
-
-        if ($resultSet['errorCode']) {
-            $error  = true;
-            $msgAu  .= "{$resultSet['errorCode']}: {$resultSet['errorMessage']} <br>";
-        } else {
-            $rowsCount = Count($resultSet['rows']);
-            if ($rowsCount == 0) {
-                $error = true;
-                $msgAu .= "Produtor $idProdutor não cadastrado no SUIF. <br>";
-            } else if ($rowsCount > 1) {
-                $error = true;
-                $msgAu .= "Existe mais de uma produtor cadastrado com o código $idProdutor. <br>";
-            } else {
-                $produtorSankhya = $resultSet['rows'][0][0];
-                $codigoPessoa    = $resultSet['rows'][0][1];
-            }
-        }
-
-        if (!$pedidoSankhya) {
-            // Status intermediário informado que Sankhya esta sendo gerado
-            $sql = "update compras 
-                       set pedido_confirmado_sankhya = 'X',
-                           log_sankhya = null
-                     where numero_compra = $numeroCompra";
-
             $resultSet = Sankhya::queryExecuteDB($sql);
+
+            if ($resultSet['errorCode']) {
+                $localMessage = $resultSet['errorMessage'];
+            } else {
+                $rowsCount = Count($resultSet['rows']);
+                if ($rowsCount == 0) {
+                    $localMessage = "Produtor $idProdutor não cadastrado no SUIF.";
+                } else if ($rowsCount > 1) {
+                    $localMessage = "Produtor $idProdutor não cadastrado no SUIF.";
+                }
+            }
+
+            if ($resultSet['errorCode'] or $rowsCount <> 1) {
+                Sankhya::atualizaDadosCompra(
+                    $numeroCompra,
+                    $pedidoSankhya,
+                    $statusProcesso,
+                    $localMessage
+                );
+                continue;
+            }
 
             // Faz a gravação do pedido no Sankhya 
             $resultSet = Sankhya::insertPedidoCompra($numeroCompra);
 
             if ($resultSet['errorCode']) {
-                $error = true;
-                $msgAu .= "{$resultSet['errorMessage']} <br>";
-            } else {
-                $pedidoSankhya = $resultSet['rows']['pk']['NUNOTA']['$'];
-
-                // Atualiza o número do pedido Sankhya
-                if ($pedidoSankhya) {
-                    $sql = "update compras 
-                               set id_pedido_sankhya         = $pedidoSankhya,
-                                   pedido_confirmado_sankhya = 'S',
-                                   log_sankhya = null
-                             where numero_compra = $numeroCompra";
-
-                    $resultSet = Sankhya::queryExecuteDB($sql);
-
-                    if ($resultSet['errorCode']) {
-                        $error = true;
-                        $msgAu .= "Erro ao atualizar contrato $numeroCompra no SUIF como o código Sankhya $pedidoSankhya <br>";
-                        $msgAu .= "Verifique se o contrato foi gerado corretamente no Sankhya e no SUIF <br>";
-                        $msgAu .= "{$resultSet['errorMessage']} <br>";
-                    }
-                }
+                Sankhya::atualizaDadosCompra(
+                    $numeroCompra,
+                    $pedidoSankhya,
+                    $statusProcesso,
+                    $resultSet['errorMessage']
+                );
+                continue;
             }
+
+            $pedidoSankhya = $resultSet['rows']['pk']['NUNOTA']['$'];
         }
 
         // Faz a confirmação do pedido 
-        if (!$error && $pedidoConfirmado == 'N') {
-            $resultSet = Sankhya::confirmaPedidoCompra($pedidoSankhya);
-            $pedidoConfirmado = 'S';
+        $resultSet = Sankhya::confirmaPedidoCompra($pedidoSankhya);
 
-            if ($resultSet['errorCode']) {
-                if (!strpos(strtolower($resultSet['errorMessage']), 'confirmada')) {
-                    $msgAu .= "{$resultSet['errorMessage']} <br>";
-                    $pedidoConfirmado = 'N';
-                } else {
-                    $contador += 1;
-                }
+        if ($resultSet['errorCode']) {
+            if (!strpos(strtolower($resultSet['errorMessage']), 'confirmada')) {
+                Sankhya::atualizaDadosCompra(
+                    $numeroCompra,
+                    $pedidoSankhya,
+                    $statusProcesso,
+                    $resultSet['errorMessage']
+                );
+
+                continue;
             }
+
         }
+
+        $contador += 1;
+        $statusProcesso = 'S';
 
         // Atualiza o número do pedido Sankhya e confirmação na compra do SUIF
-        if ($pedidoSankhya) {
-            $sql = "update compras 
-                       set pedido_confirmado_sankhya = '$pedidoConfirmado',
-                           log_sankhya = null
-                      where numero_compra = $numeroCompra";
-
-            $resultSet = Sankhya::queryExecuteDB($sql);
-
-            if ($resultSet['errorCode']) {
-                $error = true;
-                $msgAu .= "{$resultSet['errorMessage']} <br>";
-            }
-        }
-
-        if ($error) {
-            $sql = "update compras 
-                       set log_sankhya = '" . str_replace("<br>", " ", $msgAu) . "' where numero_compra = $numeroCompra";
-
-            $resultSet = Sankhya::queryExecuteDB($sql);
-
-            if ($idCompraAu <> $numeroCompra) {
-                $idCompraAu = $numeroCompra;
-                $msgEr .= "<b>Compra $numeroCompra </b><br>";
-            }
-            $msgEr .= $msgAu;
-        }
+        Sankhya::atualizaDadosCompra(
+            $numeroCompra,
+            $pedidoSankhya,
+            $statusProcesso,
+            null
+        );
     }
 
     if ($contador) {
@@ -595,7 +561,6 @@ function GeraPedidos()
             }
 
             GeraContratos($idCompra);
-
         } elseif ($idContratoSankhya and $contratoConfirmado <> 'S') {
             Sankhya::atualizaDadosPagamentoFavorecido(
                 $idPagamentoFavorecido,
@@ -622,7 +587,6 @@ function GeraPedidos()
 
         $error = false;
         $situacaoFatura = $faturaConfirmada;
-
         // Verifica se favorecido foi informado
         if (!$idFavorecidoSankya) {
             Sankhya::atualizaDadosPagamentoFavorecido(
@@ -684,11 +648,11 @@ function GeraPedidos()
         $resultSet = Sankhya::alteraCabecalhoNota($idFaturaSankhya, $idProdutorSankhya, $idFavorecidoSankya, $dataFaturamento, $idCCSankhya);
 
         if ($resultSet['errorCode']) {
-            Sankhya::atualizaDadosPagamentoFavorecido(
+            $resultado = Sankhya::atualizaDadosPagamentoFavorecido(
                 $idPagamentoFavorecido,
                 $idFaturaSankhya,
                 $faturaConfirmada,
-                'Erro ao tentar alterar o cabeçalho da nota'
+                $resultSet['errorMessage']
             );
             continue;
         }
