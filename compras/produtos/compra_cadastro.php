@@ -534,7 +534,7 @@ include("../../includes/head.php");
 					<select name="tipo_compra" onkeydown="if (getKey(event) == 13) return false;" style="color:#0000FF; width:149px; font-size:12px; text-align:left">
 						<option value=0 <?=$tipo_compra == 0 ? 'Selected' : ''?>></option>
 						<option value=1 <?=$tipo_compra == 1 ? 'Selected' : ''?>>Normal</option>
-						<option value=2 <?=$tipo_compra == 2 ? 'Selected' : ''?>>Armazenado</option>
+						<option value=2 <?=$tipo_compra == 2 ? 'Selected' : ''?>>Armazenagem</option>
 					</select>
 				</div>
 				<!-- =============================================================================================== -->

@@ -13,5 +13,10 @@ $_SESSION['batch_status'] = 'completed';
 // Retorna uma resposta de sucesso
 echo json_encode([
     "status" => "success",
-    "message" => "Processo concluído com sucesso!"
+    "message" => "Processo concluído com sucesso!",
+    "valor1" => $_GET['$varlor1'],
+    "valor2" => $_GET['$varlor2']
 ]);
+
+
+

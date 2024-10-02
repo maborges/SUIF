@@ -257,7 +257,7 @@ class Sankhya
         */
         if (is_null($nfEntrada->contratoSankhya) or $nfEntrada->contratoConfirmadoSankhya <> 'S') {
             // Informa que está processando contrato
-            Self::informaProcessoContratoArmazenagem($nfEntrada->nfEntrada,$nfEntrada->contratoSankhya,'X');
+            Self::informaProcessoContratoArmazenagem($nfEntrada->nfEntrada, $nfEntrada->contratoSankhya, 'X');
             $contrato = Self::CriaContratoArmazenagem($nfEntrada);
 
             $nfEntrada->contratoSankhya = $contrato->contratoSankhya;
@@ -288,12 +288,14 @@ class Sankhya
             }
 
             $nfEntrada->contratoConfirmadoSankhya = 'S';
-            
+
             // Informa que confirmou no Sankhya
-            Self::informaProcessoContratoArmazenagem($nfEntrada->nfEntrada, 
-                                                     $nfEntrada->contratoSankhya,
-                                                     $nfEntrada->contratoConfirmadoSankhya, 
-                                                     $result->errorMessage);
+            Self::informaProcessoContratoArmazenagem(
+                $nfEntrada->nfEntrada,
+                $nfEntrada->contratoSankhya,
+                $nfEntrada->contratoConfirmadoSankhya,
+                $result->errorMessage
+            );
         }
 
 
@@ -303,8 +305,9 @@ class Sankhya
 
         // Cria fatura quando da inclusão do contrato
         // Para criar a fatura, o contrato já deverá estar criado e confirmado
-        if (($nfEntrada->contratoSankhya && $nfEntrada->contratoConfirmadoSankhya == 'S') and 
-            (is_null($nfEntrada->faturaSankhya) or $nfEntrada->faturaConfirmadaSankhya <> 'S')) {
+        if (($nfEntrada->contratoSankhya && $nfEntrada->contratoConfirmadoSankhya == 'S') and
+            (is_null($nfEntrada->faturaSankhya) or $nfEntrada->faturaConfirmadaSankhya <> 'S')
+        ) {
 
             Self::informaProcessoFaturaArmazenagem($idNFEntrada, $nfEntrada->faturaSankhya, 'X');
 
@@ -345,6 +348,9 @@ class Sankhya
                 $nfEntrada->produtorRomaneioSankhya,
                 $nfEntrada->produtorNFSankhya,
                 $nfEntrada->dataEntrada,
+                null,
+                $nfEntrada->tipoVenda,
+                null,
                 null
             );
 
@@ -365,7 +371,6 @@ class Sankhya
 
             // Informa que confirmou no Sankhya
             Self::informaProcessoFaturaArmazenagem($nfEntrada->nfEntrada, $nfEntrada->faturaSankhya, 'S');
-
         }
 
         return $result;
@@ -414,7 +419,7 @@ class Sankhya
                     'AD_PERCIMPUREZA' => array('$' => ""),
                     'AD_PERCUMIDADE' => array('$' => ""),
                     'AD_PERCBROCA' => array('$' => ""),
-                    'AD_TIPOCOMPRA' => array('$' => 2), // para contrato de armazenagem é 2
+                    'AD_TIPOCOMPRASUIF' => array('$' => 2), // para contrato de armazenagem é 2
                     'AD_TIPOPRODUTO' => array('$' => "$nfEntrada->codigoTipo"),
                     'OBSERVACAO' => array('$' => $nfEntrada->observacao),
                     'IRFRETIDO' => array('$' => 'S')
@@ -544,7 +549,7 @@ class Sankhya
             $result->errorCode    = 1;
             $result->errorMessage = $resultServiceAPI['errorMessage'];
             return $result;
-        } 
+        }
 
         return $result;
     }
@@ -576,7 +581,7 @@ class Sankhya
         if ($resultServiceAPI['errorCode'] and !strpos($resultServiceAPI['errorMessage'], 'confirmada(s)')) {
             $result->errorCode    = 1;
             $result->errorMessage = $resultServiceAPI['errorMessage'];
-        } 
+        }
 
         return $result;
     }
@@ -700,6 +705,7 @@ class Sankhya
                 $error  = 3;
                 $msg   = "Existe mais de uma compra cadastada com o número $idCompra.";
             } else {
+
                 $produtorSUIF       = $resultSetCompra['rows'][0][2];
                 $produtoSUIF        = $resultSetCompra['rows'][0][39];
                 $estadoRegistro     = $resultSetCompra['rows'][0][24];
@@ -964,7 +970,7 @@ class Sankhya
                         'AD_PERCIMPUREZA' => array('$' => "$impureza"),
                         'AD_PERCUMIDADE' => array('$' => "$umidade"),
                         'AD_PERCBROCA' => array('$' => "$broca"),
-                        'AD_TIPOCOMPRA' => array('$' => $tipoCompra),
+                        'AD_TIPOCOMPRASUIF' => array('$' => $tipoCompra),
                         'AD_TIPOPRODUTO' => array('$' => "$codigoTipo"),
                         'OBSERVACAO' => array('$' => $observacao),
                         'IRFRETIDO' => array('$' => 'S')
@@ -1072,8 +1078,9 @@ class Sankhya
         }
     }
 
-    public static function alteraCabecalhoNota($numNota, $idParceiro, $idParceiroNota, $dataNegociacao, $idCCSankhya = null)
+    public static function alteraCabecalhoNota($numNota, $idParceiro, $idParceiroNota, $dataNegociacao, $idCCSankhya = null, $tipoVenda, $bancoPagamento = '', $numeroCheque = '' )
     {
+
         $body = "<?xml version='1.0'?>
                 <serviceRequest serviceName='CACSP.incluirAlterarCabecalhoNota'>
                     <requestBody>
@@ -1083,10 +1090,14 @@ class Sankhya
                                 <AD_CODPARCFICHA>$idParceiro</AD_CODPARCFICHA>
                                 <AD_CODPARCNOTA>$idParceiroNota</AD_CODPARCNOTA>
                                 <AD_CODCTAPAG>$idCCSankhya</AD_CODCTAPAG>
+                                <AD_CODBCOSUIF>$bancoPagamento</AD_CODBCOSUIF>
+                                <AD_NUMCHEQUESUIF>$numeroCheque</AD_NUMCHEQUESUIF>
                                 <DTNEG>$dataNegociacao</DTNEG>
                                 <DTENTSAI>$dataNegociacao</DTENTSAI>
                                 <DTMOV>$dataNegociacao</DTMOV>
                                 <DTFATUR>$dataNegociacao</DTFATUR>
+                                <CODTIPVENDA>$tipoVenda</CODTIPVENDA>
+
                             </cabecalho>
                         </nota>
                     </requestBody>
@@ -1415,8 +1426,8 @@ class Sankhya
      */
     public static function atualizaDadosCompra($idCompra, $idContratoSankhya, $situacaoContrato, $logSankhya = ''): array
     {
-        $contrato = $idContratoSankhya ?? 'id_pedido_sankhya';
-        $textLog = str_replace('"', '', str_replace("'", "", $logSankhya));
+        $contrato = $idContratoSankhya <> '' ? $idContratoSankhya : 'id_pedido_sankhya';
+        $textLog = str_replace(array("\r", "\n"), '', str_replace('"', '', str_replace("'", "", $logSankhya)));
 
         $sql = "update compras 
                    set id_pedido_sankhya         = $contrato,
@@ -1440,8 +1451,8 @@ class Sankhya
     {
         $fatura = $idFaturaSankhya ?? 'id_pedido_sankhya';
         $textLog = str_replace(array("\r", "\n"), '', str_replace('"', '', str_replace("'", "", $logSankhya)));
-        
-        if (substr($textLog,0,21) == 'ORA-20101: Parceiro n') {
+
+        if (substr($textLog, 0, 21) == 'ORA-20101: Parceiro n') {
             $textLog = 'Parceiro não está ativo';
         }
 
@@ -1785,8 +1796,7 @@ class Sankhya
 
     public static function informaProcessoContratoArmazenagem($entradaNF, $contratoSankhya = '', $situacao = '', $logMessage = '')
     {
-        $textLog = str_replace('"', '', str_replace("'", "", $logMessage));
-
+        $textLog = str_replace(array("\r", "\n"), '', str_replace('"', '', str_replace("'", "", $logMessage)));
         $setPedido   = $contratoSankhya ? "id_pedido_sankhya = $contratoSankhya," : "";
         $setSituacao = $situacao ? "pedido_confirmado_sankhya = '$situacao'," : "";
 
@@ -1803,8 +1813,7 @@ class Sankhya
 
     public static function informaProcessoFaturaArmazenagem($entradaNF, $faturaSankhya = '', $situacao = '', $logMessage = '')
     {
-        $textLog = str_replace('"', '', str_replace("'", "", $logMessage));
-
+        $textLog = str_replace(array("\r", "\n"), '', str_replace('"', '', str_replace("'", "", $logMessage)));
         $setFatura   = $faturaSankhya ? "id_fatura_sankhya = $faturaSankhya," : "";
         $setSituacao = $situacao ? "fatura_confirmada_sankhya = '$situacao'," : "";
 

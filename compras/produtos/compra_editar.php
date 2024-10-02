@@ -53,7 +53,7 @@ $data_cadastro = date('d/m/Y', strtotime($aux_bc[20]));
 $hora_cadastro = $aux_bc[19];
 $tipo_registro = $aux_bc[16];
 $tipoCompra = $aux_bc[57];
-$tipoCompraText = $tipoCompra == 1 ? "NORMAL" : ($tipoCompra == 2 ? 'ARMAZENADO' : '');
+$tipoCompraText = $tipoCompra == 1 ? "NORMAL" : ($tipoCompra == 2 ? 'ARMAZENAGEM' : '');
 
 // ======================================================================================================
 

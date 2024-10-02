@@ -82,7 +82,7 @@ include("../../includes/head.php");
 	$data_pagamento = Helpers::ConverteData($_POST["data_pagamento"]);
 	$data_pgto = $_POST["data_pagamento"];
 	$tipo_compra = $_POST["tipo_compra"] ?? 0;
-	$tipoCompraText = $tipo_compra == 1 ? 'Normal' : ($tipo_compra == 2 ? 'Armazenado' : '');
+	$tipoCompraText = $tipo_compra == 1 ? 'Normal' : ($tipo_compra == 2 ? 'Armazenagem' : '');
 	$observacao = $_POST["observacao"];
 	$data_compra = date('Y/m/d', time());
 	$filial = $filial_usuario;

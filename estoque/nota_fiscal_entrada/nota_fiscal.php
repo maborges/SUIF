@@ -632,7 +632,7 @@ include('../../includes/head.php');
 			</div>
 
 			<form name="popup" action="<?php echo "$servidor/$diretorio_servidor"; ?>/estoque/nota_fiscal_entrada/nota_fiscal.php" method="post" onsubmit="showLoading()">
-			<input type=" hidden" name="numero_romaneio" value="<?php echo "$numero_romaneio"; ?>" />
+			<input type="hidden" name="numero_romaneio" value="<?php echo "$numero_romaneio"; ?>" />
 			<input type='hidden' name='numero_romaneio' value='<?php echo "$numero_romaneio"; ?>'>
 			<input type="hidden" name="botao" value="INCLUIR_NF" />
 			<input type="hidden" name="botao_mae" value="<?php echo "$botao_mae"; ?>" />

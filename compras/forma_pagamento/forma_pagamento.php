@@ -441,6 +441,8 @@ include("../../includes/head.php");
 			}
 
 			if (!$erro && !$errorSankhya) {
+				$retorno_rovereti = null;
+
 				if ($forma_pagamento == "TED") {
 					// =================================================================================================================================
 					// ====== INTEGRAÇÃO ROVERETI ======================================================================================================
@@ -621,8 +623,11 @@ include("../../includes/head.php");
 
 
 				if (!$errorSankhya && $pedidoFaturamento) {
+					$tipoVendaSankhya = strtoupper($forma_pagamento) == 'A NEGOCIAR' ? 100 : 11;
+
 					// Grava Favorecido na nota no Sankhya
-					$resultCabecalhoNF = Sankhya::alteraCabecalhoNota($pedidoFaturamento, $produtorSankhya, $favorecidoSankya, $data_pagamento_print, $idCCSankhya);
+					$resultCabecalhoNF = Sankhya::alteraCabecalhoNota($pedidoFaturamento, $produtorSankhya, $favorecidoSankya, $data_pagamento_print, 
+																  	  $idCCSankhya, $tipoVendaSankhya, $banco_ted, $numero_cheque);
 
 					if ($resultCabecalhoNF['errorCode']) {
 						$errorSankhya = $resultCabecalhoNF['errorCode'];
@@ -868,6 +873,13 @@ include("../../includes/head.php");
 					} else {
 						echo "<option value='PREVISAO'>(PREVIS&Atilde;O)</option>";
 					}
+
+					if ($botao == "incluir" and $forma_pagamento == "A NEGOCIAR") {
+						echo "<option value='A NEGOCIAR' selected='selected'>A NEGOCIAR</option>";
+					} else {
+						echo "<option value='A NEGOCIAR'>A NEGOCIAR</option>";
+					}
+
 					?>
 
 					</select>
@@ -1133,6 +1145,8 @@ include("../../includes/head.php");
 				$forma_pagamento_2 = "Outra";
 			} elseif ($aux_favorecido[3] == "PREVISAO") {
 				$forma_pagamento_2 = "(PREVIS&Atilde;O)";
+			} elseif (strtoupper($aux_favorecido[3]) == "A NEGOCIAR") {
+				$forma_pagamento_2 = "A NEGOCIAR";
 			} else {
 				$forma_pagamento_2 = "-";
 			}

@@ -489,7 +489,10 @@ function GeraPedidos()
                     a.observacao,
                     a.nf_adto,
                     d.sequencia_cc_sankhya,
-                    b.pedido_confirmado_sankhya
+                    b.pedido_confirmado_sankhya,
+                    a.forma_pagamento,
+                    a.banco_ted, 
+                    a.numero_cheque 
                 from favorecidos_pgto a
                         inner join compras b 
                             on b.numero_compra   = a.codigo_compra
@@ -543,6 +546,9 @@ function GeraPedidos()
         $referenciaPagto       = $fatura[18] ?? '';
         $idCCSankhya           = $fatura[19];
         $contratoConfirmado    = $fatura[20];
+        $tipoVendaSankhya      = strtoupper($fatura[21]) == 'A NEGOCIAR' ? 100 : 11;
+        $bancoPagamento        = $fatura[21];
+        $numeroCheque          = $fatura[22];
 
         // Double checking :)
         if ($faturaConfirmada == 'S') {
@@ -645,7 +651,8 @@ function GeraPedidos()
         }
 
         // Atualiza favorecido e confirma faturamento
-        $resultSet = Sankhya::alteraCabecalhoNota($idFaturaSankhya, $idProdutorSankhya, $idFavorecidoSankya, $dataFaturamento, $idCCSankhya);
+        $resultSet = Sankhya::alteraCabecalhoNota($idFaturaSankhya, $idProdutorSankhya, $idFavorecidoSankya, $dataFaturamento, 
+                                                  $idCCSankhya, $tipoVendaSankhya, $bancoPagamento, $numeroCheque);
 
         if ($resultSet['errorCode']) {
             $resultado = Sankhya::atualizaDadosPagamentoFavorecido(
