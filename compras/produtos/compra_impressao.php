@@ -92,6 +92,7 @@ $filial_print = $aux_compra[25];
 $produtor_ficha = $aux_compra[2];
 $produto_list = $aux_compra[3];
 $filial = $aux_compra[25];
+$idSankhya = $aux_compra[55] ?? '';
 
 //$ano_atual_rodape = date(Y);
 

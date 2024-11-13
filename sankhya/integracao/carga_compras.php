@@ -7,7 +7,7 @@ $titulo = "Sankhya";
 $modulo = "sankhya";
 $menu   = "integracao_sankhya";
 require_once("../Sankhya.php");
-
+ 
 set_time_limit(0);
 ini_set('memory_limit', '512M');
 
@@ -513,6 +513,7 @@ function GeraPedidos()
                     $sqlWhere
                     $situacaoSankhya
              order by b.numero_compra, b.data_cadastro";
+
     $faturas = Sankhya::queryExecuteDB($sql);
 
     if ($faturas['errorCode']) {
@@ -547,8 +548,8 @@ function GeraPedidos()
         $idCCSankhya           = $fatura[19];
         $contratoConfirmado    = $fatura[20];
         $tipoVendaSankhya      = strtoupper($fatura[21]) == 'A NEGOCIAR' ? 100 : 11;
-        $bancoPagamento        = $fatura[21];
-        $numeroCheque          = $fatura[22];
+        $bancoPagamento        = $fatura[22];
+        $numeroCheque          = $fatura[23];
 
         // Double checking :)
         if ($faturaConfirmada == 'S') {
@@ -678,6 +679,7 @@ function GeraPedidos()
         }
 
         Sankhya::atualizaDadosPagamentoFavorecido($idPagamentoFavorecido, $idFaturaSankhya, $situacaoFatura, $msgConfirma);
+
     }
 
     if ($contador) {

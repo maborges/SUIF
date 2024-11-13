@@ -8,13 +8,12 @@ include_once "../Sankhya/sankhya.php";
 
 //print_r(helpers::TiraAcentos("confirmaçao n 03077 Lorencini"));
 
-//$teste = Sankhya::queryExecuteDB("select observacao  from compras where numero_compra = 261420");
-// print_r($teste);
+$teste = Sankhya::atualizaSERASASankhya(202401083,'N','N');
+print_r($teste);
 
+/*
 try {
-    /*
-    $resultado = mysqli_query($conexao, "select observacao  from compras where numero_compra = 303154");
-    */
+
     $resultado = Sankhya::queryExecuteDBOnly("select observacao from compras where numero_compra = 303154");
 
     if (!$resultado['errorCode']) {
@@ -53,7 +52,7 @@ try {
    print_r($e);
 
 }
-
+*/
 
 
 /*

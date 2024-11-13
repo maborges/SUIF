@@ -6,6 +6,8 @@ static $urlApiLogin             = 'https://api.sankhya.com.br/login';
 
 static $urlApiQuery             = 'https://api.sankhya.com.br/gateway/v1/mge/service.sbr?serviceName=DbExplorerSP.executeQuery&outputType=json';
 
+static $urlApiUpdate             = 'https://api.sankhya.com.br/gateway/v1/mge/service.sbr?serviceName=DatasetSP.save&outputType=json';
+
 static $urlApiCriaPedido        = "https://api.sankhya.com.br/gateway/v1/mgecom/service.sbr?serviceName=CACSP.incluirNota&outputType=json";
 
 static $urlApiAlteraCabecalhoNota = "https://api.sankhya.com.br/gateway/v1/mgecom/service.sbr?serviceName=CACSP.incluirAlterarCabecalhoNota&outputType=xlm";
@@ -19,6 +21,7 @@ static $urlApiCancelaPedido    = "https://api.sankhya.com.br/gateway/v1/mgecom/s
 static $urlApiFaturamentoPedido = "https://api.sankhya.com.br/gateway/v1/mgecom/service.sbr?serviceName=SelecaoDocumentoSP.faturar&outputType=json";
 
 static $serviceNameQuery        = 'DbExplorerSP.executeQuery';
+static $serviceNameUpdate       = 'DatasetSP.save';
 
 static $contentType = 'Content-Type: application/';
 static $Bearer = 'Authorization: Bearer ';

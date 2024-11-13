@@ -109,9 +109,14 @@
 		</div>
 
 		<!-- ========================================================== DADOS DA COMPRA ============================================================================= -->
-		<div id="tabela_2" style="width:730px; height:12px; border:0px solid #000; font-size:9px; margin-top:20px">
+		<div id="tabela_2" style="width:590px; height:12px; border:0px solid #000; font-size:9px; margin-top:20px">
 			<div style="margin-top:0px; margin-left:5px">Dados da Compra:</div>
 		</div>
+
+		<div id="tabela_2" style="width:120px; height:12px; border:0px solid #000; font-size:9px; margin-top:20px">
+			<div style="margin-top:0px; margin-right:5px; text-align: right;">Código Sankhya: <?= $idSankhya ?></div>
+		</div>
+
 		<div id="tabela_2" style="width:730px; height:70px; border:1px solid #999; color:#000; border-radius:5px; overflow:hidden">
 
 			<div style="width:705px; height:5px; border:0px solid #000; float:left; font-size:10px"></div>

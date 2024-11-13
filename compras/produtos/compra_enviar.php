@@ -410,10 +410,7 @@ include("../../includes/head.php");
 					$retorno_rovereti = "$retorno $error $errno";
 
 					// ========================================================================================================================================================
-
-					$inserir = mysqli_query(
-						$conexao,
-						"INSERT INTO compras
+					$mySQL = "INSERT INTO compras
 									(codigo,
 									numero_compra,
 									fornecedor,
@@ -486,8 +483,9 @@ include("../../includes/head.php");
 									'$valor_total',
 									'$plano_conta_mae',
 									'$plano_conta',
-								  	 $tipo_compra)"
-					);
+								  	 $tipo_compra)";
+
+					$inserir = mysqli_query($conexao, $mySQL);
 
 					if ($inserir) {
 						if ($forma_pagamento == "PREVISAO") {
@@ -499,7 +497,7 @@ include("../../includes/head.php");
 							}
 						}
 					} else {
-						$errorSUIF = 'Erro ao grava no SUIF (compras): ' . $inserir;
+						$errorSUIF = 'Erro ao grava no SUIF (compras): ' . mysqli_error($conexao);
 					}
 					
 					$errorSankhya = 0;

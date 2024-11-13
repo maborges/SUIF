@@ -161,6 +161,21 @@ include("../../includes/head.php");
 			$badge = 'badge-warning';
 		}
 
+		$embargadoText  = '';
+		$embargadoBadge = '';
+
+		include("../../includes/conecta_bd.php");
+		$busca_pessoa = mysqli_query($conexao, "SELECT embargado FROM cadastro_pessoa WHERE codigo='$fornecedor'");
+		include("../../includes/desconecta_bd.php");
+		$aux_pessoa = mysqli_fetch_row($busca_pessoa);
+		$fornecedorEmbargado = $aux_pessoa[0];
+		
+
+		if ($fornecedorEmbargado == 'S') {
+			$embargadoText = 'Embargado';
+			$embargadoBadge = 'badge-danger';
+		} 
+
 		$observacao = $aux_compra[13];
 		$motivo_alteracao_quant = $aux_compra[35];
 		$quantidade_original = number_format($aux_compra[36], 2, ",", ".");
@@ -413,7 +428,7 @@ include("../../includes/head.php");
 				}
 
 				// Faturamento Sankhya
-				$sql = "select b.id_sankhya, a.sequencia_cc_sankhya
+				$sql = "select b.id_sankhya, a.sequencia_cc_sankhya, b.embargado
 			 	          from cadastro_favorecido a,
 			 		           cadastro_pessoa b
 	   			         where a.codigo = $codigo_favorecido
@@ -421,22 +436,27 @@ include("../../includes/head.php");
 
 				$resultFavorecido = Sankhya::queryExecuteDB($sql);
 
-				$favorecidoSankya  = '';
-				$pedidoFaturamento = '';
-				$pedidoConfirmado  = 'X';
-				$idCCSankhya       = null;
+				$favorecidoSankya    = 'S';
+				$favorecidoEmbargado = '';
+				$pedidoFaturamento   = '';
+				$pedidoConfirmado    = 'X';
+				$idCCSankhya         = null;
 
 				if ($resultFavorecido['errorCode']) {
 					$errorSankhya = $resultFavorecido['errorCode'];
 					$msgSankhya   = $resultFavorecido['errorMessage'];
 				} else {
-					$favorecidoSankya = $resultFavorecido['rows'][0][0];
-					$idCCSankhya      = $resultFavorecido['rows'][0][1];
+					$favorecidoSankya    = $resultFavorecido['rows'][0][0];
+					$idCCSankhya         = $resultFavorecido['rows'][0][1];
+					$favorecidoEmbargado = $resultFavorecido['rows'][0][2];
 				}
 
 				if (!$favorecidoSankya) {
 					$errorSankhya = 1;
 					$msgSankhya   = 'Código Sankhya do favorecido não informado';
+				} elseif ($favorecidoEmbargado == 'S') {
+					$errorSankhya = 1;
+					$msgSankhya   = 'Favorecido embargado. Verifique o cadastro.';
 				}
 			}
 
@@ -749,6 +769,7 @@ include("../../includes/head.php");
 							<?php echo "
 									<div style='display: flex;justify-content: space-between'>
 										<div>Número da Compra: $numero_compra</div>
+										<span class='badge $embargadoBadge' style='font-size:120%'>$embargadoText</span>
 										<span class='badge $badge' style='font-size:120%'>$tipoCompraText</span>
 										<div>Contrato Sankhya: $idContratoSankhya</div>
 									</div>

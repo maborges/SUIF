@@ -54,7 +54,7 @@ if ($botao == "selecionar") {
 
 // ===== BUSCA CADASTRO PESSOAS =============================================================================================
 if ($nome_form != "") {
-	$busca_pessoa_geral = mysqli_query($conexao, "SELECT codigo, nome, tipo, cpf, cnpj, cidade, estado, telefone_1, situacao_compra, id_sankhya FROM cadastro_pessoa WHERE estado_registro='ATIVO' AND nome LIKE '%$nome_form%' ORDER BY nome");
+	$busca_pessoa_geral = mysqli_query($conexao, "SELECT codigo, nome, tipo, cpf, cnpj, cidade, estado, telefone_1, situacao_compra, id_sankhya, cadastro_validado FROM cadastro_pessoa WHERE estado_registro='ATIVO' AND nome LIKE '%$nome_form%' ORDER BY nome");
 	$linha_pessoa_geral = mysqli_num_rows($busca_pessoa_geral);
 } else {
 	$busca_pessoa_geral = 0;
@@ -186,8 +186,8 @@ include("../../includes/head.php");
 				<table border='0' align='center' style='color:#FFF; font-size:11px'>
 				<tr>
 				<td width='370x' height='24px' align='center' bgcolor='#006699'>Nome</td>
-				<td width='70px' height='24px' align='center' bgcolor='#006699'>Id Sankhya</td>
-				<td width='200px' align='center' bgcolor='#006699'>CPF/CNPJ</td>
+				<td width='90px' height='24px' align='center' bgcolor='#006699'>Id Sankhya</td>
+				<td width='180px' align='center' bgcolor='#006699'>CPF/CNPJ</td>
 				<td width='150px' align='center' bgcolor='#006699'>Telefone</td>
 				<td width='300px' align='center' bgcolor='#006699'>Cidade/UF</td>
 				<td width='100px' align='center' bgcolor='#006699'>Situação</td>
@@ -212,7 +212,8 @@ include("../../includes/head.php");
 			$cidade_pessoa_w = $aux_pessoa_geral[5];
 			$estado_pessoa_w = $aux_pessoa_geral[6];
 			$telefone_pessoa_w = $aux_pessoa_geral[7];
-			$idSankhya_pessoa_w =$aux_pessoa_geral[9]; 
+			$idSankhya_pessoa_w = $aux_pessoa_geral[9];
+			$cadastroValidado = $aux_pessoa_geral[10] ?? 'N'; 
 			
 			if ($tipo_pessoa_w == "PF" or $tipo_pessoa_w == "pf") {
 				$cpf_cnpj_w = $cpf_pessoa_w;
@@ -240,15 +241,46 @@ include("../../includes/head.php");
 			// ====== RELATORIO ========================================================================================
 			echo "<tr class='tabela_1'>";
 
-			if ($situacao_w == 2) {
-				echo "<td width='400px' height='24px' align='left'>
+			$totalCompras = 0;
+
+			if ($cadastroValidado == 'N') {
+				include("../../includes/conecta_bd.php");
+
+				try {
+					$contaCompras = mysqli_query($conexao, "select count(1) 
+															  from compras 
+															 where fornecedor      = $codigo_pessoa_w 
+															   and movimentacao    = 'COMPRA' 
+															   and estado_registro = 'ATIVO'");
+					$totalCompras = mysqli_fetch_row($contaCompras);
+
+				} finally {
+					include("../../includes/desconecta_bd.php");
+				}
+			}
+
+
+			// total de compras somente será maior que zeros qdo o 
+			// produtar ainda não estiver validado e já tem compras
+			// segundo definição, o produtor só poderá fazem uma 
+			// compra até que seu cadastro seja validado
+
+			if ($totalCompras) {
+				echo "<td width='367px' height='24px' align='left'>
+						<div style='margin-left:15px' onclick='alert(\"Produtor bloqueado para novas compras até que seu cadastro seja validado! \");'>
+							$nome_pessoa_w
+						</div>
+					</td>";
+
+			} elseif ($situacao_w == 2) {
+				echo "<td width='367px' height='24px' align='left'>
 					<div style='margin-left:15px' onclick='alert(\"Compra bloqueada para este produtor \");'>
 						$nome_pessoa_w
 					</div>
 					</td>";
 			} else {
 				if (!isset($selecionar)) {$selecionar = '';}
-				echo "<td width='360px' height='24px' align='left'>
+				echo "<td width='367px' height='24px' align='left'>
 					<div style='margin-left:10px'>
 					<form action='$servidor/$diretorio_servidor/compras/produtos/compra_cadastro.php' method='post'>
 					<input type='hidden' name='botao' value='$selecionar' />
@@ -263,8 +295,8 @@ include("../../includes/head.php");
 				</td>";
 			}
 			echo 
-				"<td width='70px' align='center'>$idSankhya_pessoa_w</td>
-				<td width='200px' align='center'>$cpf_cnpj_w</td>
+				"<td width='90px' align='center'>$idSankhya_pessoa_w</td>
+				<td width='180px' align='center'>$cpf_cnpj_w</td>
 				<td width='150px' align='center'>$telefone_pessoa_w</td>
 				<td width='300px' align='center'>$cidade_pessoa_w/$estado_pessoa_w</td>
 				<td width='100px' align='center' style='background-color:$color_bg_w'>$situacao_compra_w</td>

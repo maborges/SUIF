@@ -1078,7 +1078,7 @@ class Sankhya
         }
     }
 
-    public static function alteraCabecalhoNota($numNota, $idParceiro, $idParceiroNota, $dataNegociacao, $idCCSankhya = null, $tipoVenda, $bancoPagamento = '', $numeroCheque = '' )
+    public static function alteraCabecalhoNota($numNota, $idParceiro, $idParceiroNota, $dataNegociacao, $idCCSankhya = null, $tipoVenda, $bancoPagamento = '', $numeroCheque = '')
     {
 
         $body = "<?xml version='1.0'?>
@@ -1462,17 +1462,40 @@ class Sankhya
                        log_sankhya               = '$textLog'
                  where codigo                    = $idPagamento";
 
-        return  Sankhya::queryExecuteDB($sql);
+        $result = Sankhya::queryExecuteDB($sql);
+
+        return $result;
     }
 
     public static function getParceiroById($id): array
     {
-        $sql =  "SELECT A.CODPARC, DECODE(A.TIPPESSOA,'F','PF','J','PJ'), A.NOMEPARC, A.RAZAOSOCIAL, A.CGC_CPF, 
-                        A.IDENTINSCESTAD IE_RG, A.TELEFONE, A.TIMTELEFONE02,
+        $sql =  "SELECT A.CODPARC, 
+                        DECODE(A.TIPPESSOA,'F','PF','J','PJ'), 
+                        A.NOMEPARC, 
+                        A.RAZAOSOCIAL, 
+                        A.CGC_CPF, 
+                        A.IDENTINSCESTAD IE_RG, 
+                        A.TELEFONE, 
+                        A.TIMTELEFONE02,
                         DECODE(B.TIPO, null,B.NOMEEND, B.TIPO || ' ' || B.NOMEEND), 
-                        A.NUMEND, C.NOMEBAI, A.CEP, A.EMAIL, D.UF, D.NOMECID, E.UF, 
-                        A.DTNASC, DECODE(A.SEXO,'M','MASCULINO','FEMININO') SEXO, 
-                        A.AD_TIPOPRODFAV, A.CODBCO, A.CODAGE, A.CODCTABCO, A.COMPLEMENTO, A.AD_FAVORECIDO
+                        A.NUMEND, 
+                        C.NOMEBAI, 
+                        A.CEP, 
+                        A.EMAIL, 
+                        D.UF, 
+                        D.NOMECID, 
+                        E.UF, 
+                        A.DTNASC, 
+                        DECODE(A.SEXO,'M','MASCULINO','FEMININO') SEXO, 
+                        A.AD_TIPOPRODFAV, 
+                        A.CODBCO, 
+                        A.CODAGE, 
+                        A.CODCTABCO, 
+                        A.COMPLEMENTO, 
+                        A.AD_FAVORECIDO, 
+                        A.AD_CADASTROREVISADO, 
+                        A.AD_SERASA_EMBARGO, 
+                        A.AD_CONS_SERASA
                    from TGFPAR A 
                         LEFT JOIN TSIEND B 
                             ON B.CODEND = A.CODEND
@@ -1824,9 +1847,7 @@ class Sankhya
                        $setSituacao
                        log_sankhya = '$textLog'
                  where codigo = $entradaNF";
-
         $resultSet = Sankhya::queryExecuteDB($sql);
-
         return $resultSet['errorMessage'];
     }
 
@@ -1868,5 +1889,86 @@ class Sankhya
         }
 
         return (object) $result;
+    }
+
+    public static function atualizaSERASASankhya($idParceiro, $validado, $embargado): array
+    {
+        $tokenSankhya = Sankhya::login();
+
+        // Verifica se a API executou
+        if ($tokenSankhya['errorCode']) {
+            return array(
+                "rows" => $tokenSankhya['rows'],
+                "errorCode" => $tokenSankhya['errorCode'] ?? 1,
+                "errorMessage" => $tokenSankhya['errorMessage']
+            );
+        }
+
+        $jsonData = json_encode(array(
+            'serviceName' => $GLOBALS['serviceNameUpdate'],
+            'requestBody' => array(
+                'entityName' => "Parceiro",
+                'standAlone' => false,
+                'fields' => array(
+                    'CODPARC',
+                    'AD_CONS_SERASA',
+                    'AD_SERASA_EMBARGO'
+                ),
+                'records' => array(
+                    array(
+                        'pk' => array(
+                            'CODPARC' => $idParceiro
+                        ),
+                        'values' => array(
+                            '1' => $validado,
+                            '2' => $embargado
+                        ),
+                    ),
+                ),
+            )
+        ), JSON_PRETTY_PRINT);
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $GLOBALS['urlApiUpdate'],
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => array(
+                $GLOBALS['contentType'] . 'json', // Se a requisição for JSON
+                $GLOBALS['Bearer'] . $tokenSankhya['rows'],
+            ),
+            CURLOPT_POSTFIELDS => $jsonData,
+        ]);
+
+        $result = curl_exec($curl);
+        $jsonResult = json_decode($result, true);
+
+        // Verifica se a API executou
+        if ($jsonResult['error'] ?? '') {
+            return array(
+                "rows" => [],
+                "errorCode" => 1,
+                "errorMessage" => $jsonResult['error']['descricao']
+            );
+        }
+
+        if (!$jsonResult['status']) {
+            return array(
+                "rows" => [],
+                "errorCode" => 1,
+                "errorMessage" => $jsonResult['statusMessage']
+            );
+        }
+
+        // Fechar a sessão cURL
+        curl_close($curl);
+        $rows = json_decode($result, true)['responseBody'];
+
+        return array(
+            "rows" => $rows,
+            "errorCode" => 0,
+            "errorMessage" => "ok"
+        );
     }
 }

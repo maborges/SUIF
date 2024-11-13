@@ -244,6 +244,8 @@ echo "
 	<input type='hidden' name='id_w' value='$id_w'>
 	<input type='hidden' name='idSankhya_w' value='$idSankhya_w'>
 	<input type='hidden' name='idSankhyaInformado' value='$idSankhyaInformado'>
+	<input type='hidden' name='validadoSERASA' value='$validadoSERASA'>
+	<input type='hidden' name='embargado' value='$embargado'>
 	<input type='hidden' name='codigo_pessoa_w' value='$codigo_pessoa_w'>
 	<input type='hidden' name='pesquisar_por_busca' value='$pesquisar_por_busca'>
 	<input type='hidden' name='nome_busca' value='$nome_busca'>
@@ -338,6 +340,8 @@ echo "
 	<input type='hidden' name='id_w' value='$id_w'>
 	<input type='hidden' name='idSankhya_w' value='$idSankhya_w'>
 	<input type='hidden' name='idSankhyaInformado' value='$idSankhyaInformado'>
+	<input type='hidden' name='validadoSERASA' value='$validadoSERASA'>
+	<input type='hidden' name='embargado' value='$embargado'>
 	<input type='hidden' name='codigo_pessoa_w' value='$codigo_pessoa_w'>
 	<input type='hidden' name='pesquisar_por_busca' value='$pesquisar_por_busca'>
 	<input type='hidden' name='nome_busca' value='$nome_busca'>
@@ -610,7 +614,8 @@ $estado_registro_w = $aux_pessoa[34];
 $codigo_pessoa_w = $aux_pessoa[35];
 $idSankhya_w = $aux_pessoa[41];
 $idSankhyaInformado = $aux_pessoa[41] > 0;
-
+$validadoSERASA = $aux_pessoa[48];
+$embargado = $aux_pessoa[49];
 
 if ($tipo_w == "PF" or $tipo_w == "pf")
 {$cpf_cnpj_print = $cpf_w;}
@@ -708,6 +713,8 @@ echo "
 		<input type='hidden' name='id_w' value='$id_w'>
 		<input type='hidden' name='idSankhya_w' value='$idSankhya_w'>
 		<input type='hidden' name='idSankhyaInformado' value='$idSankhyaInformado'>
+		<input type='hidden' name='validadoSERASA' value='$validadoSERASA'>
+		<input type='hidden' name='embargado' value='$embargado'>
 		<input type='hidden' name='codigo_pessoa_w' value='$codigo_pessoa_w'>
 		<input type='hidden' name='pesquisar_por_busca' value='$pesquisar_por_busca'>
 		<input type='hidden' name='nome_busca' value='$nome_busca'>
@@ -731,6 +738,8 @@ echo "
 		<input type='hidden' name='id_w' value='$id_w'>
 		<input type='hidden' name='idSankhya_w' value='$idSankhya_w'>
 		<input type='hidden' name='idSankhyaInformado' value='$idSankhyaInformado'>
+		<input type='hidden' name='validadoSERASA' value='$validadoSERASA'>
+		<input type='hidden' name='embargado' value='$embargado'>
 		<input type='hidden' name='codigo_pessoa_w' value='$codigo_pessoa_w'>
 		<input type='hidden' name='pesquisar_por_busca' value='$pesquisar_por_busca'>
 		<input type='hidden' name='nome_busca' value='$nome_busca'>
@@ -761,6 +770,8 @@ echo "
 		<input type='hidden' name='id_w' value='$id_w'>
 		<input type='hidden' name='idSankhya_w' value='$idSankhya_w'>
 		<input type='hidden' name='idSankhyaInformado' value='$idSankhyaInformado'>
+		<input type='hidden' name='validadoSERASA' value='$validadoSERASA'>
+		<input type='hidden' name='embargado' value='$embargado'>
 		<input type='hidden' name='codigo_pessoa_w' value='$codigo_pessoa_w'>
 		<input type='hidden' name='pesquisar_por_busca' value='$pesquisar_por_busca'>
 		<input type='hidden' name='nome_busca' value='$nome_busca'>
@@ -783,6 +794,8 @@ echo "
 		<input type='hidden' name='id_w' value='$id_w'>
 		<input type='hidden' name='idSankhya_w' value='$idSankhya_w'>
 		<input type='hidden' name='idSankhyaInformado' value='$idSankhyaInformado'>
+		<input type='hidden' name='validadoSERASA' value='$validadoSERASA'>
+		<input type='hidden' name='embargado' value='$embargado'>
 		<input type='hidden' name='codigo_pessoa_w' value='$codigo_pessoa_w'>
 		<input type='hidden' name='pesquisar_por_busca' value='$pesquisar_por_busca'>
 		<input type='hidden' name='nome_busca' value='$nome_busca'>
@@ -813,6 +826,8 @@ echo "
 		<input type='hidden' name='id_w' value='$id_w'>
 		<input type='hidden' name='idSankhya_w' value='$idSankhya_w'>
 		<input type='hidden' name='idSankhyaInformado' value='$idSankhyaInformado'>
+		<input type='hidden' name='validadoSERASA' value='$validadoSERASA'>
+		<input type='hidden' name='embargado' value='$embargado'>
 		<input type='hidden' name='codigo_pessoa_w' value='$codigo_pessoa_w'>
 		<input type='hidden' name='pesquisar_por_busca' value='$pesquisar_por_busca'>
 		<input type='hidden' name='nome_busca' value='$nome_busca'>

@@ -39,7 +39,10 @@ $email_form = $_POST["email_form"];
 $obs_form = $_POST["obs_form"];
 $classificacao_1_form = $_POST["classificacao_1_form"];
 $favorecido_form = $_POST["favorecido_form"];
-
+$cadastroRevisado_form = $_POST['cadastro_revisado_form'] ?? 'N';
+$embargado_form = $_POST['embargado_form'] ?? 'N';
+$validadoSerasa_form = $_POST['validadoSerasa_form'] ?? 'N';
+	
 $banco_form = $_POST["banco_form"];
 $agencia_form = $_POST["agencia_form"];
 $numero_conta_form = $_POST["numero_conta_form"];
@@ -379,7 +382,7 @@ if ($botao == "NOVO_CADASTRO") {
 		$altera_contador = mysqli_query($conexao, "UPDATE configuracoes SET contador_codigo_pessoa='$contador_codigo_pessoa'");
 
 		// ====== TABELA CADASTRO_PESSOA ==========================================================================
-		$inserir = mysqli_query($conexao, "INSERT INTO cadastro_pessoa (codigo, nome, tipo, cpf, cnpj, rg, sexo, data_nascimento, endereco, bairro, cidade, cep, estado, telefone_1, telefone_2, email, classificacao_1, observacao, nome_fantasia, numero_residencia, complemento, usuario_cadastro, hora_cadastro, data_cadastro, estado_registro, codigo_pessoa, id_sankhya) VALUES (NULL, '$nome_form', '$tipo_pessoa_form', '$cpf_form', '$cnpj_form', '$rg_form', '$sexo_form', '$data_nascimento_aux', '$endereco_form', '$bairro_form', '$cidade_aux', '$cep_form', '$estado_aux', '$telefone_1_form', '$telefone_2_form', '$email_form', '$classificacao_1_form', '$obs_form', '$nome_fantasia_form', '$numero_residencia_form', '$complemento_form', '$usuario_cadastro', '$hora_cadastro', '$data_cadastro', 'ATIVO', '$codigo_pessoa', '$idSankhya_form')");
+		$inserir = mysqli_query($conexao, "INSERT INTO cadastro_pessoa (codigo, nome, tipo, cpf, cnpj, rg, sexo, data_nascimento, endereco, bairro, cidade, cep, estado, telefone_1, telefone_2, email, classificacao_1, observacao, nome_fantasia, numero_residencia, complemento, usuario_cadastro, hora_cadastro, data_cadastro, estado_registro, codigo_pessoa, id_sankhya, cadastro_validado, embargado, cadastro_validado) VALUES (NULL, '$nome_form', '$tipo_pessoa_form', '$cpf_form', '$cnpj_form', '$rg_form', '$sexo_form', '$data_nascimento_aux', '$endereco_form', '$bairro_form', '$cidade_aux', '$cep_form', '$estado_aux', '$telefone_1_form', '$telefone_2_form', '$email_form', '$classificacao_1_form', '$obs_form', '$nome_fantasia_form', '$numero_residencia_form', '$complemento_form', '$usuario_cadastro', '$hora_cadastro', '$data_cadastro', 'ATIVO', '$codigo_pessoa', '$idSankhya_form', '$cadastroRevisado_form', '$embargado_form','$validadoSerasa_form')");
 
 		// ====== TABELA CADASTRO_FAVORECIDO ======================================================================
 		if ($idSankhyaCC_form) {
@@ -1017,6 +1020,10 @@ include("../../includes/head.php");
 		<input type='hidden' name='tipo_conta_form' value='$tipo_conta_form'>
 		<input type='hidden' name='tipo_chave_pix_form' value='$tipo_chave_pix_form'>
 		<input type='hidden' name='chave_pix_form' value='$chave_pix_form'>
+		<input type='hidden' name='cadastro_revisado_form' value='$cadastroRevisado_form'>
+		<input type='hidden' name='embargado_form' value='$embargado_form'>
+		<input type='hidden' name='validadoSerasa_form' value='$validadoSerasa_form'>
+		
 		<button type='submit' class='botao_2' style='margin-left:10px; width:180px'>Editar</button>
 		</form>
     </div>";
@@ -1103,6 +1110,9 @@ include("../../includes/head.php");
 	<input type='hidden' name='obs_form' value='$obs_form'>
 	<input type='hidden' name='classificacao_1_form' value='$classificacao_1_form'>
 	<input type='hidden' name='favorecido_form' value='$favorecido_form'>
+	<input type='hidden' name='cadastro_revisado_form' value='$cadastroRevisado_form'>
+	<input type='hidden' name='embargado_form' value='$embargado_form'>
+	<input type='hidden' name='validadoSerasa_form' value='$validadoSerasa_form'>
 	<input type='hidden' name='banco_form' value='$banco_form'>
 	<input type='hidden' name='agencia_form' value='$agencia_form'>
 	<input type='hidden' name='numero_conta_form' value='$numero_conta_form'>

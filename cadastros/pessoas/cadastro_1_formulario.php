@@ -68,6 +68,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				$_POST["data_nascimento_form"] = $parceiro['rows'][0][16];
 				$_POST["sexo_form"] = $parceiro['rows'][0][17];
 				$_POST["favorecido_form"] = $parceiro['rows'][0][23];
+				$_POST["cadastro_revisado_form"] = $parceiro['rows'][0][24] ?? 'N';
+				$_POST["embargado_form"] = $parceiro['rows'][0][25] ?? 'N';
+				$_POST["validadoSerasa_form"] = $parceiro['rows'][0][26] ?? 'N';
+
 
 				if ($parceiro['rows'][0][18] == 'P' or $parceiro['rows'][0][18] == 'PC') {  // PRODUTOR
 					$_POST["classificacao_1_form"] = 63;
@@ -208,8 +212,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$_POST["agencia_form"]      = '';
 			$_POST["numero_conta_form"] = '';
 			$_POST["tipo_conta_form"]   = '';
-			$_POST["tipo_chave_pix_form"] = '';		
-			$_POST["chave_pix_form"] = '';	
+			$_POST["tipo_chave_pix_form"] = '';
+			$_POST["chave_pix_form"] = '';
 			$erro = 1;
 			$msg  = "<div style='color:#FF0000'>Informe um código Sankhya da Conta Corrente válido</div>";
 		}
@@ -249,6 +253,28 @@ $numero_conta_form = $_POST["numero_conta_form"] ?? '';
 $tipo_conta_form = $_POST["tipo_conta_form"] ?? '';
 $tipo_chave_pix_form = $_POST["tipo_chave_pix_form"] ?? '';
 $chave_pix_form = $_POST["chave_pix_form"] ?? '';
+$cadastroRevisado_form = $_POST["cadastro_revisado_form"] ?? 'N';
+$embargado_form = $_POST["embargado_form"] ?? 'N';
+$validadoSerasa_form = $_POST["validadoSerasa_form"] ?? 'N';
+
+$badge = 'badge-success';
+$cadastroRevisado_texto = '';
+
+if ($cadastroRevisado_form == 'S') {
+	$cadastroRevisado_texto = 'Revisado';
+} elseif ($cadastroRevisado_form == 'N') {
+	$cadastroRevisado_texto = 'Não Revisado';
+	$badge = 'badge-warning';
+}
+
+$badgeEmbargado = 'badge-success';
+$embargado_texto = '';
+
+if ($embargado_form == 'S') {
+	$embargado_texto = 'Embargado';
+	$badgeEmbargado = 'badge-danger';
+}
+
 
 // ====== MONTA MENSAGEM ===================================================================================
 if ($permissao[5] != "S") {
@@ -516,7 +542,18 @@ include("../../includes/head.php");
 
 							<div class="pqa_campo" style="margin-left: 10px;">
 								<button type='submit' id="btnGetSankhya" name="btnGetSankhya" style='float:left'>Buscar</button>
+								<div style="border:0px solid #000; font-size:12px; float:left; align-items:center; padding-left: 20px">
+									<span class="badge <?= $badge ?>" style='font-size:110%'><?= $cadastroRevisado_texto ?></span>
+								</div>
+
+								<?php if ($embargado_texto) : ?>
+									<div style="border:0px solid #000; font-size:12px; float:left; align-items:center; padding-left: 20px">
+										<span class="badge <?= $badgeEmbargado ?>" style='font-size:110%'><?= $embargado_texto ?></span>
+									</div>
+								<?php endif; ?>
+
 							</div>
+
 						</div>
 
 					</form>
@@ -532,6 +569,9 @@ include("../../includes/head.php");
 
 					<form id="frmTipoPessoa" action="<?php echo "$servidor/$diretorio_servidor"; ?>/cadastros/pessoas/cadastro_1_formulario.php" method="post">
 						<input readonly type="hidden" name="botao" value="TIPO_PESSOA" />
+						<input type='hidden' name='cadastro_revisado_form' value="<?= $cadastroRevisado_form ?>" />
+						<input type='hidden' name='embargado_form' value="<?= $embargado_form ?>" />
+						<input type='hidden' name='validadoSerasa_form' value="<?= $validadoSerasa_form ?>" />
 
 						<select readonly="readonly" id="tipo_pessoa_form" name="tipo_pessoa_form" class="form_select" onkeydown="if (getKey(event) == 13) return false;" onchange="document.tipo_pessoa.submit()" style="background-color:#EEE; width:154px">
 							<option></option>
@@ -560,7 +600,7 @@ include("../../includes/head.php");
 				<input type="hidden" name="tipo_pessoa_form" value="<?= $tipo_pessoa_form ?>" />
 				<input type="hidden" name="idSankhya_form" value="<?= $idSankhya_form ?>" />
 				<input type="hidden" name="banco_form" value="<?= $banco_form ?>" />
-				<input type="hidden" name="agencia_form" value="<?=$agencia_form?>" />
+				<input type="hidden" name="agencia_form" value="<?= $agencia_form ?>" />
 				<input type="hidden" name="numero_conta_form" value="<?= $numero_conta_form ?>" />
 				<input type="hidden" name="tipo_conta_form" value="<?= $tipo_conta_form ?>" />
 				<input type="hidden" name="tipo_chave_pix_form" value="<?= $tipo_chave_pix_form ?>" />
@@ -568,7 +608,9 @@ include("../../includes/head.php");
 				<input type="hidden" name="idSankhyaCC_form" value="<?= $idSankhyaCC_form ?>" />
 				<input type='hidden' name='estado' value="<?= $estado ?>" />
 				<input type='hidden' name='cidade' value="<?= $cidade ?>" />
-				<input type='hidden' name='favorecido_form' value="<?= $favorecido_form ?>" />
+				<input type='hidden' name='cadastro_revisado_form' value="<?= $cadastroRevisado_form ?>" />
+				<input type='hidden' name='embargado_form' value="<?= $embargado_form ?>" />
+				<input type='hidden' name='validadoSerasa_form' value="<?= $validadoSerasa_form ?>" />
 
 				<!-- =======  NOME / RAZAO SOCIAL =================================================================================== -->
 				<div style="width:510px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
@@ -676,24 +718,24 @@ include("../../includes/head.php");
 							
 							<div style='width:167px; height:25px; float:left; border:1px solid transparent'>
 							<select readonly='readonly' name='sexo_form' id='sexo_form' class='form_select' onkeydown='if (getKey(event) == 13) return false;' style='width:154px' />";
-										if ($sexo_form == "MASCULINO") {
-											echo "
+					if ($sexo_form == "MASCULINO") {
+						echo "
 							<option></option>
 							<option selected='selected' value='MASCULINO'>MASCULINO</option>
 							<option value='FEMININO'>FEMININO</option>";
-										} elseif ($sexo_form == "FEMININO") {
-											echo "
+					} elseif ($sexo_form == "FEMININO") {
+						echo "
 							<option></option>
 							<option value='MASCULINO'>MASCULINO</option>
 							<option selected='selected' value='FEMININO'>FEMININO</option>";
-										} else {
-											echo "
+					} else {
+						echo "
 							<option></option>
 							<option value='MASCULINO'>MASCULINO</option>
 							<option value='FEMININO'>FEMININO</option>";
-										}
+					}
 
-										echo "
+					echo "
 							</select>
 							</div>
 						</div>";
@@ -909,6 +951,10 @@ include("../../includes/head.php");
 						<form name="frmSankhyaCC" action="<?php echo "$servidor/$diretorio_servidor"; ?>/cadastros/pessoas/cadastro_1_formulario.php" method="post">
 
 							<input type="hidden" name="idSankhya" value="<?php echo "$idSankhya_form"; ?>" />
+							<input type='hidden' name='cadastro_revisado_form' value="<?= $cadastroRevisado_form ?>" />
+							<input type='hidden' name='embargado_form' value="<?= $embargado_form ?>" />
+							<input type='hidden' name='validadoSerasa_form' value="<?= $validadoSerasa_form ?>" />
+
 
 							<div class="pqa_caixa">
 								<div class="pqa_rotulo" style="margin-left:0px;">
@@ -928,9 +974,6 @@ include("../../includes/head.php");
 									<button type='submit' id="btnGetSankhyaCC" name="btnGetSankhyaCC" style='float:left' onclick="<?php echo "BuscaCC('$servidor/$diretorio_servidor/cadastros/pessoas/cadastro_1_formulario.php')"; ?>">Buscar CC</button>
 								</div>
 							</div>
-
-
-
 						</form>
 					</div>
 				</div>
@@ -973,7 +1016,7 @@ include("../../includes/head.php");
 					</div>
 
 					<div style="width:167px; height:25px; float:left; border:1px solid transparent">
-						<input readonly type="text" name="agencia_form" id="agencia_form" class="form_input" maxlength="8" onBlur="alteraMaiusculo(this)" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:145px; text-align:left; padding-left:5px" value="<?=$agencia_form?>" />
+						<input readonly type="text" name="agencia_form" id="agencia_form" class="form_input" maxlength="8" onBlur="alteraMaiusculo(this)" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:145px; text-align:left; padding-left:5px" value="<?= $agencia_form ?>" />
 					</div>
 				</div>
 				<!-- ================================================================================================================ -->
@@ -986,7 +1029,7 @@ include("../../includes/head.php");
 					</div>
 
 					<div style="width:167px; height:25px; float:left; border:1px solid transparent">
-						<input readonly type="text" name="numero_conta_form" id="numero_conta_form" class="form_input" maxlength="13" id="conta_bancaria" onBlur="alteraMaiusculo(this)" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:145px; text-align:left; padding-left:5px" value="<?=$numero_conta_form?>" />
+						<input readonly type="text" name="numero_conta_form" id="numero_conta_form" class="form_input" maxlength="13" id="conta_bancaria" onBlur="alteraMaiusculo(this)" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:145px; text-align:left; padding-left:5px" value="<?= $numero_conta_form ?>" />
 					</div>
 				</div>
 				<!-- ================================================================================================================ -->
@@ -1080,7 +1123,7 @@ include("../../includes/head.php");
 					</div>
 
 					<div style="width:167px; height:25px; float:left; border:1px solid transparent">
-						<input readonly type="text" name="chave_pix_form" id="chave_pix_form" class="form_input" maxlength="50" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:145px; text-align:left; padding-left:5px" value="<?=$chave_pix_form?>" />
+						<input readonly type="text" name="chave_pix_form" id="chave_pix_form" class="form_input" maxlength="50" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:145px; text-align:left; padding-left:5px" value="<?= $chave_pix_form ?>" />
 					</div>
 				</div>
 				<!-- ================================================================================================================ -->

@@ -31,4 +31,10 @@
 
 
 16/08/2024
-    Gerar as sequencias que estão faltando no conta dos favorecidos identificando as contas repetidas.
+    Ok Gerar as sequencias que estão faltando no conta dos favorecidos identificando as contas repetidas.
+
+12/11/20241
+    Criar uma nova tela, cópia de compras, onde os registros filtrados serão "estado_registro = 'FAZENDA'"
+    Alterar a API como Sankhya e passar o novo campo AD_ESTATOREGISTROSUIF = 'FAZENDA'
+    Esta compra não poderá aparecer nas outras funcionalidades do sistema
+

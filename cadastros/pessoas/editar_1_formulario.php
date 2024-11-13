@@ -59,6 +59,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btnGetSankhya'])) {
 			$_POST["obs_form"] = substr($parceiro['rows'][0][13], 1, 150);
 			$_POST["data_nascimento_form"] = $parceiro['rows'][0][16];
 			$_POST["sexo_form"] = $parceiro['rows'][0][17];
+			$_POST['cadastroRevisado'] = $parceiro['rows'][0][24];
+			$_POST['embargado'] = $parceiro['rows'][0][25];
+			$_POST['validadoSERASA'] = $parceiro['rows'][0][26];
 
 			if ($parceiro['rows'][0][18] == 'P' or $parceiro['rows'][0][18] == 'PC') {  // PRODUTOR
 				$_POST["classificacao_1_form"] = 63;
@@ -91,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btnGetSankhya'])) {
 
 			$cidade = Sankhya::getIdCidadeDeParaSankhya($estado['rows'][0][0], $parceiro['rows'][0][14]);
 			$rowsCount = 0;
-			
+
 			if ($cidade['errorCode']) {
 				$erro = 1;
 				$msg  = "<div style='color:#FF0000'>Erro: {$cidade['errorCode']}: {$cidade['errorMessage']}</div>";
@@ -108,7 +111,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btnGetSankhya'])) {
 					$_POST["cidade"] = $cidade['rows'][0][1];
 				}
 			}
-
 		}
 	} else {
 		$erro = 1;
@@ -172,6 +174,9 @@ if ($botao == "EDITAR") {
 	$complemento_form = $aux_pessoa[26];
 	$estado_registro_form = $aux_pessoa[34];
 	$codigo_pessoa_form = $aux_pessoa[35];
+	$cadastroRevisado = $aux_pessoa[46];
+	$validadoSERASA = $aux_pessoa[47];
+	$embargado = $aux_pessoa[48];
 
 	if ($data_nascimento_form == "1900-01-01" or $data_nascimento_form == "" or empty($data_nascimento_form)) {
 		$data_nascimento_print = "";
@@ -236,6 +241,9 @@ if ($botao == "EDITAR") {
 	$agencia_form = $_POST["agencia_form"] ?? '';
 	$numero_conta_form = $_POST["numero_conta_form"] ?? '';
 	$tipo_conta_form = $_POST["tipo_conta_form"] ?? '';
+	$cadastroRevisado = $_POST['cadastroRevisado'] ?? '';
+	$validadoSERASA = $_POST['validadoSERASA'] ?? 'N';
+	$embargado = $_POST['embargado'] ?? 'N';
 
 	if ($data_nascimento_form == "1900-01-01" or $data_nascimento_form == "" or empty($data_nascimento_form)) {
 		$data_nascimento_print = "";
@@ -260,9 +268,19 @@ if ($tipo_pessoa_form == "PF" or $tipo_pessoa_form == "pf") {
 if ($permissao[69] != "S") {
 	$erro = 1;
 	$msg = "<div style='color:#FF0000'>Usu&aacute;rio sem autoriza&ccedil;&atilde;o para editar cadastro de pessoa.</div>";
-} 
+}
 // ======================================================================================================
 
+
+$badge = 'badge-success';
+$cadastroRevisado_texto = '';
+
+if ($cadastroRevisado == 'S') {
+	$cadastroRevisado_texto = 'Revisado';
+} else {
+	$cadastroRevisado_texto = 'Não Revisado';
+	$badge = 'badge-warning';
+}
 
 // =============================================================================
 include("../../includes/head.php");
@@ -309,7 +327,7 @@ include("../../includes/head.php");
 
 		}
 
-        // trata os elementos combo
+		// trata os elementos combo
 		document.getElementById("tipo_pessoa_form").innerText = "";
 		document.getElementById("estado").value = "";
 		document.getElementById("cidade").value = "";
@@ -324,12 +342,9 @@ include("../../includes/head.php");
 		elem = document.getElementById("sexo_form");
 		if (elem) {
 			elem.value = '';
-		} 
+		}
 
 	}
-
-
-	
 </script>
 
 <!-- ====== MÁSCARAS JQUERY ====== -->
@@ -480,17 +495,23 @@ include("../../includes/head.php");
 						<input type="hidden" name="cnpj_busca" value="<?php echo "$cnpj_busca"; ?>" />
 						<input type="hidden" name="fantasia_busca" value="<?php echo "$fantasia_busca"; ?>" />
 						<input type="hidden" name="pagina_mae" value="<?php echo "$pagina_mae"; ?>" />
-						
+						<input type='hidden' name='cadastroRevisado' value="<?= $cadastroRevisado ?>">
+						<input type='hidden' name='validadoSERASA' value="<?= $validadoSERASA ?>">
+						<input type='hidden' name='embargado' value="<?= $embargado ?>">
 
 						<div class="pqa_caixa">
 							<div class="pqa_rotulo" style="margin-left:0px;">
 								ID Sankhya:
 							</div>
-<!--
+							<!--
 							<div class="pqa_campo" style="margin-left:0px;">
-								<input <?php if ($idSankhyaInformado) {echo 'readonly';} ?>  type="number" name="IdSankhya" class="pqa_input" id="IdSankhya_w" maxlength="8" onchange="LimpaForms()" style="width:145px; <?php if ($idSankhyaInformado) {echo ' background-color:#EEE;';} ?>" value="<?php echo $idSankhya_w ?>" />
+								<input <?php if ($idSankhyaInformado) {
+											echo 'readonly';
+										} ?>  type="number" name="IdSankhya" class="pqa_input" id="IdSankhya_w" maxlength="8" onchange="LimpaForms()" style="width:145px; <?php if ($idSankhyaInformado) {
+																																												echo ' background-color:#EEE;';
+																																											} ?>" value="<?php echo $idSankhya_w ?>" />
 							</div>
--->							
+-->
 							<div class="pqa_campo" style="margin-left:0px;">
 								<input readonly type="number" name="IdSankhya" class="pqa_input" id="IdSankhya_w" maxlength="8" onchange="LimpaForms()" style="width:145px; background-color:#EEE" value="<?php echo $idSankhya_w ?>" />
 							</div>
@@ -502,18 +523,22 @@ include("../../includes/head.php");
 							</div>
 
 							<div class="pqa_campo" style="margin-left: 10px;">
-								<button type= 
-									<?php 	
-										// Botão de atualização só fica visivel qdo Id Sankhya informado
-										if ($idSankhyaInformado) {
-											echo 'submit';
-										} 
-										else {
-											echo 'hidden';
-										} 
-									?> 
-								id="btnGetSankhya" name="btnGetSankhya" style='float:left'>Atualizar</button>
+								<button type=<?php
+												// Botão de atualização só fica visivel qdo Id Sankhya informado
+												if ($idSankhyaInformado) {
+													echo 'submit';
+												} else {
+													echo 'hidden';
+												}
+												?>
+									id="btnGetSankhya" name="btnGetSankhya" style='float:left'>Atualizar</button>
+
+								<div style="border:0px solid #000; font-size:12px; float:left; align-items:center; padding-left: 20px">
+									<span class="badge <?= $badge ?>" style='font-size:110%'><?= $cadastroRevisado_texto ?></span>
+								</div>
 							</div>
+
+
 						</div>
 
 						<input type="hidden" name="codigo_pessoa_w" value="<?php echo "$codigo_pessoa_w"; ?>" />
@@ -541,97 +566,100 @@ include("../../includes/head.php");
 
 
 			<form id="frmCampos" action="<?php echo "$servidor/$diretorio_servidor"; ?>/cadastros/pessoas/editar_2_enviar.php" method="post">
-			<input type="hidden" name="botao" value="EDITAR_CADASTRO" />
-			<input type="hidden" name="id_w" value="<?php echo "$id_w"; ?>" />
-			<input type="hidden" name="idSankhya_w" value="<?php echo "$idSankhya_w"; ?>" />
-			<input type="hidden" name="codigo_pessoa_w" value="<?php echo "$codigo_pessoa_w"; ?>" />
-			<input type="hidden" name="tipo_pessoa_form" value="<?php echo "$tipo_pessoa_form"; ?>" />
-			<input type="hidden" name="pesquisar_por_busca" value="<?php echo "$pesquisar_por_busca"; ?>" />
-			<input type="hidden" name="nome_busca" value="<?php echo "$nome_busca"; ?>" />
-			<input type="hidden" name="cpf_busca" value="<?php echo "$cpf_busca"; ?>" />
-			<input type="hidden" name="cnpj_busca" value="<?php echo "$cnpj_busca"; ?>" />
-			<input type="hidden" name="fantasia_busca" value="<?php echo "$fantasia_busca"; ?>" />
-			<input type="hidden" name="pagina_mae" value="<?php echo "$pagina_mae"; ?>" />
+				<input type="hidden" name="botao" value="EDITAR_CADASTRO" />
+				<input type="hidden" name="id_w" value="<?php echo "$id_w"; ?>" />
+				<input type="hidden" name="idSankhya_w" value="<?php echo "$idSankhya_w"; ?>" />
+				<input type="hidden" name="codigo_pessoa_w" value="<?php echo "$codigo_pessoa_w"; ?>" />
+				<input type="hidden" name="tipo_pessoa_form" value="<?php echo "$tipo_pessoa_form"; ?>" />
+				<input type="hidden" name="pesquisar_por_busca" value="<?php echo "$pesquisar_por_busca"; ?>" />
+				<input type="hidden" name="nome_busca" value="<?php echo "$nome_busca"; ?>" />
+				<input type="hidden" name="cpf_busca" value="<?php echo "$cpf_busca"; ?>" />
+				<input type="hidden" name="cnpj_busca" value="<?php echo "$cnpj_busca"; ?>" />
+				<input type="hidden" name="fantasia_busca" value="<?php echo "$fantasia_busca"; ?>" />
+				<input type="hidden" name="pagina_mae" value="<?php echo "$pagina_mae"; ?>" />
+				<input type='hidden' name='cadastroRevisado' value="<?= $cadastroRevisado ?>">
+				<input type='hidden' name='embargado' value="<?= $embargado ?>">
+				<input type='hidden' name='validadoSERASA' value="<?= $validadoSERASA ?>">
 
-			<!-- =======  NOME / RAZAO SOCIAL =================================================================================== -->
-			<div style="width:510px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
-				<div class="form_rotulo" style="width:500px; height:17px; border:1px solid transparent; float:left">
-					<?php
-					if ($tipo_pessoa_form == "PJ" or $tipo_pessoa_form == "pj") {
-						echo "Raz&atilde;o Social:";
-					} else {
-						echo "Nome:";
-					}
-					?>
-				</div>
+				<!-- =======  NOME / RAZAO SOCIAL =================================================================================== -->
+				<div style="width:510px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
+					<div class="form_rotulo" style="width:500px; height:17px; border:1px solid transparent; float:left">
+						<?php
+						if ($tipo_pessoa_form == "PJ" or $tipo_pessoa_form == "pj") {
+							echo "Raz&atilde;o Social:";
+						} else {
+							echo "Nome:";
+						}
+						?>
+					</div>
 
-				<div style="width:500px; height:25px; float:left; border:1px solid transparent">
-					<?php
-					if ($tipo_pessoa_form == "PJ" or $tipo_pessoa_form == "pj" or $tipo_pessoa_form == "PF" or $tipo_pessoa_form == "pf") {
-						echo "
+					<div style="width:500px; height:25px; float:left; border:1px solid transparent">
+						<?php
+						if ($tipo_pessoa_form == "PJ" or $tipo_pessoa_form == "pj" or $tipo_pessoa_form == "PF" or $tipo_pessoa_form == "pf") {
+							echo "
         <input readonly type='text' name='nome_form' class='form_input' id='ok' maxlength='70' onBlur='alteraMaiusculo(this)' 
         onkeydown='if (getKey(event) == 13) return false;' style='background-color:#EEE; width:486px; text-align:left; padding-left:5px' value='$nome_form' />";
-					} else {
-						echo "
+						} else {
+							echo "
         <input readonly type='text' name='nome_form' class='form_input' maxlength='70' onBlur='alteraMaiusculo(this)' 
         onkeydown='if (getKey(event) == 13) return false;' style='background-color:#EEE; width:486px; text-align:left; padding-left:5px' disabled='disabled' title='Selecione o tipo de pessoa' value='$nome_form' />";
-					}
-					?>
+						}
+						?>
+					</div>
 				</div>
-			</div>
-			<!-- ================================================================================================================ -->
+				<!-- ================================================================================================================ -->
 
 
-			<!-- ======= CPF / CNPJ ============================================================================================= -->
-			<div style="width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
-				<div class="form_rotulo" style="width:167px; height:17px; border:1px solid transparent; float:left">
-					<?php
-					if ($tipo_pessoa_form == "PJ" or $tipo_pessoa_form == "pj") {
-						echo "CNPJ:";
-					} else {
-						echo "CPF:";
-					}
-					?>
-				</div>
+				<!-- ======= CPF / CNPJ ============================================================================================= -->
+				<div style="width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
+					<div class="form_rotulo" style="width:167px; height:17px; border:1px solid transparent; float:left">
+						<?php
+						if ($tipo_pessoa_form == "PJ" or $tipo_pessoa_form == "pj") {
+							echo "CNPJ:";
+						} else {
+							echo "CPF:";
+						}
+						?>
+					</div>
 
-				<div style="width:167px; height:25px; float:left; border:1px solid transparent">
-					<?php
-					if ($tipo_pessoa_form == "PJ" or $tipo_pessoa_form == "pj") {
-						echo "<input readonly type='text' name='cnpj_form' class='form_input' maxlength='18' id='cnpj' 
+					<div style="width:167px; height:25px; float:left; border:1px solid transparent">
+						<?php
+						if ($tipo_pessoa_form == "PJ" or $tipo_pessoa_form == "pj") {
+							echo "<input readonly type='text' name='cnpj_form' class='form_input' maxlength='18' id='cnpj' 
         onkeydown='if (getKey(event) == 13) return false;' style='width:145px; text-align:left; padding-left:5px' value='$cnpj_form' />";
-					} else {
-						echo "<input readonly type='text' name='cpf_form' class='form_input' maxlength='14' id='cpf' 
+						} else {
+							echo "<input readonly type='text' name='cpf_form' class='form_input' maxlength='14' id='cpf' 
         onkeydown='if (getKey(event) == 13) return false;' style='background-color:#EEE; width:145px; text-align:left; padding-left:5px' value='$cpf_form' />";
-					}
-					?>
+						}
+						?>
+					</div>
 				</div>
-			</div>
-			<!-- ================================================================================================================ -->
+				<!-- ================================================================================================================ -->
 
 
-			<!-- ======= RG / IE ================================================================================================ -->
-			<div style="width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
-				<div class="form_rotulo" style="width:167px; height:17px; border:1px solid transparent; float:left">
-					<?php
-					if ($tipo_pessoa_form == "PJ" or $tipo_pessoa_form == "pj") {
-						echo "IE:";
-					} else {
-						echo "RG:";
-					}
-					?>
+				<!-- ======= RG / IE ================================================================================================ -->
+				<div style="width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
+					<div class="form_rotulo" style="width:167px; height:17px; border:1px solid transparent; float:left">
+						<?php
+						if ($tipo_pessoa_form == "PJ" or $tipo_pessoa_form == "pj") {
+							echo "IE:";
+						} else {
+							echo "RG:";
+						}
+						?>
+					</div>
+
+					<div style="width:167px; height:25px; float:left; border:1px solid transparent">
+						<input readonly type="text" name="rg_form" class="form_input" maxlength="20" onBlur="alteraMaiusculo(this)" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:145px; text-align:left; padding-left:5px" value="<?php echo "$rg_form"; ?>" />
+					</div>
 				</div>
-
-				<div style="width:167px; height:25px; float:left; border:1px solid transparent">
-					<input readonly type="text" name="rg_form" class="form_input" maxlength="20" onBlur="alteraMaiusculo(this)" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:145px; text-align:left; padding-left:5px" value="<?php echo "$rg_form"; ?>" />
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
+				<!-- ================================================================================================================ -->
 
 
-			<!-- ======= DATA NASCIMENTO ======================================================================================== -->
-			<?php
-			if ($tipo_pessoa_form == "PF" or $tipo_pessoa_form == "pf") {
-				echo "
+				<!-- ======= DATA NASCIMENTO ======================================================================================== -->
+				<?php
+				if ($tipo_pessoa_form == "PF" or $tipo_pessoa_form == "pf") {
+					echo "
 	<div style='width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left'>
         <div class='form_rotulo' style='width:167px; height:17px; border:1px solid transparent; float:left'>
 		Data de Nascimento:
@@ -642,15 +670,15 @@ include("../../includes/head.php");
         onkeydown='if (getKey(event) == 13) return false;' style='background-color:#EEE; width:145px; text-align:left; padding-left:5px' value='$data_nascimento_print' />
         </div>
 	</div>";
-			}
-			?>
-			<!-- ================================================================================================================ -->
+				}
+				?>
+				<!-- ================================================================================================================ -->
 
 
-			<!-- ======= SEXO =================================================================================================== -->
-			<?php
-			if ($tipo_pessoa_form == "PF" or $tipo_pessoa_form == "pf") {
-				echo "
+				<!-- ======= SEXO =================================================================================================== -->
+				<?php
+				if ($tipo_pessoa_form == "PF" or $tipo_pessoa_form == "pf") {
+					echo "
 	<div style='width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left'>
         <div class='form_rotulo' style='width:167px; height:17px; border:1px solid transparent; float:left'>
 		Sexo:
@@ -658,36 +686,36 @@ include("../../includes/head.php");
         
         <div style='width:167px; height:25px; float:left; border:1px solid transparent'>
 		<select readonly name='sexo_form' id='sexo_form' class='form_select' onkeydown='if (getKey(event) == 13) return false;' style='background-color:#EEE; width:154px' />";
-				if ($sexo_form == "MASCULINO") {
-					echo "
+					if ($sexo_form == "MASCULINO") {
+						echo "
 		<option></option>
 		<option selected='selected' value='MASCULINO'>MASCULINO</option>
 		<option value='FEMININO'>FEMININO</option>";
-				} elseif ($sexo_form == "FEMININO") {
-					echo "
+					} elseif ($sexo_form == "FEMININO") {
+						echo "
 		<option></option>
 		<option value='MASCULINO'>MASCULINO</option>
 		<option selected='selected' value='FEMININO'>FEMININO</option>";
-				} else {
-					echo "
+					} else {
+						echo "
 		<option></option>
 		<option value='MASCULINO'>MASCULINO</option>
 		<option value='FEMININO'>FEMININO</option>";
-				}
+					}
 
-				echo "
+					echo "
 		</select>
 		</div>
 	</div>";
-			}
-			?>
-			<!-- ================================================================================================================ -->
+				}
+				?>
+				<!-- ================================================================================================================ -->
 
 
-			<!-- ======= NOME FANTASIA ========================================================================================== -->
-			<?php
-			if ($tipo_pessoa_form == "PJ" or $tipo_pessoa_form == "pj") {
-				echo "
+				<!-- ======= NOME FANTASIA ========================================================================================== -->
+				<?php
+				if ($tipo_pessoa_form == "PJ" or $tipo_pessoa_form == "pj") {
+					echo "
 	<div style='width:339px; height:50px; border:1px solid transparent; margin-top:10px; float:left'>
         <div class='form_rotulo' style='width:334px; height:17px; border:1px solid transparent; float:left'>
 		Nome Fantasia:
@@ -698,231 +726,236 @@ include("../../includes/head.php");
         onkeydown='if (getKey(event) == 13) return false;' style='background-color:#EEE; width:315px; text-align:left; padding-left:5px' value='$nome_fantasia_form' />
         </div>
 	</div>";
-			}
-			?>
-			<!-- ================================================================================================================ -->
+				}
+				?>
+				<!-- ================================================================================================================ -->
 
 
-			<!-- ======= TELEFONE 1 ============================================================================================= -->
-			<div style="width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
-				<div class="form_rotulo" style="width:167px; height:17px; border:1px solid transparent; float:left">
-					Telefone 1:
+				<!-- ======= TELEFONE 1 ============================================================================================= -->
+				<div style="width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
+					<div class="form_rotulo" style="width:167px; height:17px; border:1px solid transparent; float:left">
+						Telefone 1:
+					</div>
+
+					<div style="width:167px; height:25px; float:left; border:1px solid transparent">
+						<input readonly type="text" name="telefone_1_form" class="form_input" id="telddd_1" maxlength="15" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:145px; text-align:left; padding-left:5px" value="<?php echo "$telefone_1_form"; ?>" />
+					</div>
 				</div>
+				<!-- ================================================================================================================ -->
 
-				<div style="width:167px; height:25px; float:left; border:1px solid transparent">
-					<input readonly type="text" name="telefone_1_form" class="form_input" id="telddd_1" maxlength="15" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:145px; text-align:left; padding-left:5px" value="<?php echo "$telefone_1_form"; ?>" />
+
+				<!-- ======= TELEFONE 2 ============================================================================================= -->
+				<div style="width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
+					<div class="form_rotulo" style="width:167px; height:17px; border:1px solid transparent; float:left">
+						Telefone 2:
+					</div>
+
+					<div style="width:167px; height:25px; float:left; border:1px solid transparent">
+						<input readonly type="text" name="telefone_2_form" class="form_input" id="telddd_2" maxlength="15" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:145px; text-align:left; padding-left:5px" value="<?php echo "$telefone_2_form"; ?>" />
+					</div>
 				</div>
-			</div>
-			<!-- ================================================================================================================ -->
+				<!-- ================================================================================================================ -->
 
 
-			<!-- ======= TELEFONE 2 ============================================================================================= -->
-			<div style="width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
-				<div class="form_rotulo" style="width:167px; height:17px; border:1px solid transparent; float:left">
-					Telefone 2:
+				<!-- =======  ENDEREÇO ============================================================================================== -->
+				<div style="width:339px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
+					<div class="form_rotulo" style="width:334px; height:17px; border:1px solid transparent; float:left">
+						Endere&ccedil;o:
+					</div>
+
+					<div style="width:334px; height:25px; float:left; border:1px solid transparent">
+						<input readonly type="text" name="endereco_form" class="form_input" maxlength="70" onBlur="alteraMaiusculo(this)" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:315px; text-align:left; padding-left:5px" value="<?php echo "$endereco_form"; ?>" />
+					</div>
 				</div>
+				<!-- ================================================================================================================ -->
 
-				<div style="width:167px; height:25px; float:left; border:1px solid transparent">
-					<input readonly type="text" name="telefone_2_form" class="form_input" id="telddd_2" maxlength="15" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:145px; text-align:left; padding-left:5px" value="<?php echo "$telefone_2_form"; ?>" />
+
+				<!-- ======= NUMERO ================================================================================================= -->
+				<div style="width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
+					<div class="form_rotulo" style="width:167px; height:17px; border:1px solid transparent; float:left">
+						N&uacute;mero:
+					</div>
+
+					<div style="width:167px; height:25px; float:left; border:1px solid transparent">
+						<input readonly type="text" name="numero_residencia_form" class="form_input" maxlength="10" onBlur="alteraMaiusculo(this)" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:145px; text-align:left; padding-left:5px" value="<?php echo "$numero_residencia_form"; ?>" />
+					</div>
 				</div>
-			</div>
-			<!-- ================================================================================================================ -->
+				<!-- ================================================================================================================ -->
 
 
-			<!-- =======  ENDEREÇO ============================================================================================== -->
-			<div style="width:339px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
-				<div class="form_rotulo" style="width:334px; height:17px; border:1px solid transparent; float:left">
-					Endere&ccedil;o:
+				<!-- ======= BAIRRO ==================================================================================================== -->
+				<div style="width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
+					<div class="form_rotulo" style="width:167px; height:17px; border:1px solid transparent; float:left">
+						Bairro/Distrito:
+					</div>
+
+					<div style="width:167px; height:25px; float:left; border:1px solid transparent">
+						<input readonly type="text" name="bairro_form" class="form_input" maxlength="40" onBlur="alteraMaiusculo(this)" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:145px; text-align:left; padding-left:5px" value="<?php echo "$bairro_form"; ?>" />
+					</div>
 				</div>
-
-				<div style="width:334px; height:25px; float:left; border:1px solid transparent">
-					<input readonly type="text" name="endereco_form" class="form_input" maxlength="70" onBlur="alteraMaiusculo(this)" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:315px; text-align:left; padding-left:5px" value="<?php echo "$endereco_form"; ?>" />
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
+				<!-- ================================================================================================================ -->
 
 
-			<!-- ======= NUMERO ================================================================================================= -->
-			<div style="width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
-				<div class="form_rotulo" style="width:167px; height:17px; border:1px solid transparent; float:left">
-					N&uacute;mero:
-				</div>
+				<!-- ======= ESTADO =================================================================================================== -->
+				<div style="width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
+					<div class="form_rotulo" style="width:167px; height:17px; border:1px solid transparent; float:left">
+						Estado:
+					</div>
 
-				<div style="width:167px; height:25px; float:left; border:1px solid transparent">
-					<input readonly type="text" name="numero_residencia_form" class="form_input" maxlength="10" onBlur="alteraMaiusculo(this)" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:145px; text-align:left; padding-left:5px" value="<?php echo "$numero_residencia_form"; ?>" />
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-
-			<!-- ======= BAIRRO ==================================================================================================== -->
-			<div style="width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
-				<div class="form_rotulo" style="width:167px; height:17px; border:1px solid transparent; float:left">
-					Bairro/Distrito:
-				</div>
-
-				<div style="width:167px; height:25px; float:left; border:1px solid transparent">
-					<input readonly type="text" name="bairro_form" class="form_input" maxlength="40" onBlur="alteraMaiusculo(this)" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:145px; text-align:left; padding-left:5px" value="<?php echo "$bairro_form"; ?>" />
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-
-			<!-- ======= ESTADO =================================================================================================== -->
-			<div style="width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
-				<div class="form_rotulo" style="width:167px; height:17px; border:1px solid transparent; float:left">
-					Estado:
-				</div>
-
-				<div style="width:167px; height:25px; float:left; border:1px solid transparent">
-					<select readonly name="estado" id="estado" class="form_select" onchange="buscar_cidades()" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:154px" />
-					<option></option>
-					<?php
-					$busca_estado = mysqli_query($conexao, "SELECT * FROM cad_estados ORDER BY est_sigla");
-					$linhas_estado = mysqli_num_rows($busca_estado);
-
-					for ($i = 0; $i < $linhas_estado; $i++) {
-						$aux_estado = mysqli_fetch_array($busca_estado);
-						$arrEstados[$aux_estado['est_id']] = $aux_estado['est_sigla'];
-					}
-
-					foreach ($arrEstados as $value => $name) {
-						if ($estado == $name) {
-							echo "<option selected='selected' value='{$value}'>{$name}</option>";
-						} else {
-							echo "<option value='{$value}'>{$name}</option>";
-						}
-					}
-
-					?>
-					</select>
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-
-			<!-- ======= CIDADE =================================================================================================== -->
-			<div style="width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
-				<div class="form_rotulo" style="width:167px; height:17px; border:1px solid transparent; float:left">
-					Cidade:
-				</div>
-
-				<div style="width:167px; height:25px; float:left; border:1px solid transparent">
-					<div id="load_cidades">
-						<select readonly name="cidade" id="cidade" class="form_select" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:154px; font-size:12px" />
+					<div style="width:167px; height:25px; float:left; border:1px solid transparent">
+						<select readonly name="estado" id="estado" class="form_select" onchange="buscar_cidades()" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:154px" />
 						<option></option>
 						<?php
-						if ($estado != "") {
-							$busca_cidade = mysqli_query($conexao, "SELECT * FROM cad_cidades ORDER BY cid_nome");
-							$linhas_cidade = mysqli_num_rows($busca_cidade);
+						$busca_estado = mysqli_query($conexao, "SELECT * FROM cad_estados ORDER BY est_sigla");
+						$linhas_estado = mysqli_num_rows($busca_estado);
 
-							for ($i = 1; $i <= $linhas_cidade; $i++) {
-								$aux_cidade = mysqli_fetch_row($busca_cidade);
-								if ($aux_cidade[1] == $cidade) {
-									echo "<option selected='selected' value='$aux_cidade[0]'>$aux_cidade[1]</option>";
-								} else {
-									echo "<option value='$aux_cidade[0]'>$aux_cidade[1]</option>";
+						for ($i = 0; $i < $linhas_estado; $i++) {
+							$aux_estado = mysqli_fetch_array($busca_estado);
+							$arrEstados[$aux_estado['est_id']] = $aux_estado['est_sigla'];
+						}
+
+						foreach ($arrEstados as $value => $name) {
+							if ($estado == $name) {
+								echo "<option selected='selected' value='{$value}'>{$name}</option>";
+							} else {
+								echo "<option value='{$value}'>{$name}</option>";
+							}
+						}
+
+						?>
+						</select>
+					</div>
+				</div>
+				<!-- ================================================================================================================ -->
+
+
+				<!-- ======= CIDADE =================================================================================================== -->
+				<div style="width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
+					<div class="form_rotulo" style="width:167px; height:17px; border:1px solid transparent; float:left">
+						Cidade:
+					</div>
+
+					<div style="width:167px; height:25px; float:left; border:1px solid transparent">
+						<div id="load_cidades">
+							<select readonly name="cidade" id="cidade" class="form_select" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:154px; font-size:12px" />
+							<option></option>
+							<?php
+							if ($estado != "") {
+								$busca_cidade = mysqli_query($conexao, "SELECT * FROM cad_cidades ORDER BY cid_nome");
+								$linhas_cidade = mysqli_num_rows($busca_cidade);
+
+								for ($i = 1; $i <= $linhas_cidade; $i++) {
+									$aux_cidade = mysqli_fetch_row($busca_cidade);
+									if ($aux_cidade[1] == $cidade) {
+										echo "<option selected='selected' value='$aux_cidade[0]'>$aux_cidade[1]</option>";
+									} else {
+										echo "<option value='$aux_cidade[0]'>$aux_cidade[1]</option>";
+									}
 								}
+							}
+							?>
+							</select>
+						</div>
+					</div>
+				</div>
+				<!-- ================================================================================================================ -->
+
+
+				<!-- ======= COMPLEMENTO ============================================================================================ -->
+				<div style="width:339px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
+					<div class="form_rotulo" style="width:334px; height:17px; border:1px solid transparent; float:left">
+						Complemento:
+					</div>
+
+					<div style="width:334px; height:25px; float:left; border:1px solid transparent">
+						<input readonly type="text" name="complemento_form" class="form_input" maxlength="70" onBlur="alteraMaiusculo(this)" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:315px; text-align:left; padding-left:5px" value="<?php echo "$complemento_form"; ?>" />
+					</div>
+				</div>
+				<!-- ================================================================================================================ -->
+
+
+				<!-- ======= CEP ==================================================================================================== -->
+				<div style="width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
+					<div class="form_rotulo" style="width:167px; height:17px; border:1px solid transparent; float:left">
+						CEP:
+					</div>
+
+					<div style="width:167px; height:25px; float:left; border:1px solid transparent">
+						<input readonly type="text" name="cep_form" class="form_input" maxlength="10" id="cep" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:145px; text-align:left; padding-left:5px" value="<?php echo "$cep_form"; ?>" />
+					</div>
+				</div>
+				<!-- ================================================================================================================ -->
+
+
+				<!-- ======= E-MAIL ================================================================================================= -->
+				<div style="width:339px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
+					<div class="form_rotulo" style="width:334px; height:17px; border:1px solid transparent; float:left">
+						E-mail:
+					</div>
+
+					<div style="width:334px; height:25px; float:left; border:1px solid transparent">
+						<input readonly type="text" name="email_form" class="form_input" maxlength="70" onBlur="alteraMinusculo(this)" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:315px; text-align:left; padding-left:5px" value="<?php echo "$email_form"; ?>" />
+					</div>
+				</div>
+				<!-- ================================================================================================================ -->
+
+
+				<!-- ======= OBSERVAÇÃO ============================================================================================= -->
+				<div style="width:339px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
+					<div class="form_rotulo" style="width:334px; height:17px; border:1px solid transparent; float:left">
+						Observa&ccedil;&atilde;o:
+					</div>
+
+					<div style="width:334px; height:25px; float:left; border:1px solid transparent">
+						<input readonly type="text" name="obs_form" class="form_input" maxlength="150" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:315px; text-align:left; padding-left:5px" value="<?php echo "$obs_form"; ?>" />
+					</div>
+				</div>
+				<!-- ================================================================================================================ -->
+
+
+				<!-- ======= CLASSIFICACAO ========================================================================================== -->
+				<div style="width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
+					<div class="form_rotulo" style="width:167px; height:17px; border:1px solid transparent; float:left">
+						Classifica&ccedil;&atilde;o:
+					</div>
+
+					<div style="width:167px; height:25px; float:left; border:1px solid transparent">
+						<select readonly name="classificacao_1_form" id="classificacao_1_form" class="form_select" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:154px" />
+						<option></option>
+						<?php
+						$busca_classificacao = mysqli_query($conexao, "SELECT * FROM classificacao_pessoa WHERE tipo='classificacao' AND estado_registro='ATIVO' ORDER BY codigo");
+						$linhas_classificacao = mysqli_num_rows($busca_classificacao);
+
+						for ($i = 1; $i <= $linhas_classificacao; $i++) {
+							$aux_classificacao = mysqli_fetch_row($busca_classificacao);
+
+							if ($aux_classificacao[0] == $classificacao_1_form) {
+								echo "<option selected='selected' value='$aux_classificacao[0]'>$aux_classificacao[1]</option>";
+							} else {
+								echo "<option value='$aux_classificacao[0]'>$aux_classificacao[1]</option>";
 							}
 						}
 						?>
 						</select>
 					</div>
 				</div>
-			</div>
-			<!-- ================================================================================================================ -->
 
-
-			<!-- ======= COMPLEMENTO ============================================================================================ -->
-			<div style="width:339px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
-				<div class="form_rotulo" style="width:334px; height:17px; border:1px solid transparent; float:left">
-					Complemento:
+				<!-- ======= SERASA ============================================================================================= -->
+				<div style="width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
+					<input type="checkbox" id="validadoSERASA" name="validadoSERASA" value="S" <?= $validadoSERASA == 'S' ? 'checked' : '' ?>>
+					<label for="validadoSERASA" class="form_rotulo"> Validado SERASA</label><br>
 				</div>
 
-				<div style="width:334px; height:25px; float:left; border:1px solid transparent">
-					<input readonly type="text" name="complemento_form" class="form_input" maxlength="70" onBlur="alteraMaiusculo(this)" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:315px; text-align:left; padding-left:5px" value="<?php echo "$complemento_form"; ?>" />
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-
-			<!-- ======= CEP ==================================================================================================== -->
-			<div style="width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
-				<div class="form_rotulo" style="width:167px; height:17px; border:1px solid transparent; float:left">
-					CEP:
+				<div style="width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
+					<input type="checkbox" id="embargado" name="embargado" value="S" <?= $embargado == 'S' ? 'checked' : '' ?>>
+					<label for="embargado" class="form_rotulo"> Embargado</label><br>
 				</div>
 
-				<div style="width:167px; height:25px; float:left; border:1px solid transparent">
-					<input readonly type="text" name="cep_form" class="form_input" maxlength="10" id="cep" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:145px; text-align:left; padding-left:5px" value="<?php echo "$cep_form"; ?>" />
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
+				<!-- ================================================================================================================ -->
 
 
-			<!-- ======= E-MAIL ================================================================================================= -->
-			<div style="width:339px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
-				<div class="form_rotulo" style="width:334px; height:17px; border:1px solid transparent; float:left">
-					E-mail:
-				</div>
-
-				<div style="width:334px; height:25px; float:left; border:1px solid transparent">
-					<input readonly type="text" name="email_form" class="form_input" maxlength="70" onBlur="alteraMinusculo(this)" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:315px; text-align:left; padding-left:5px" value="<?php echo "$email_form"; ?>" />
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-
-			<!-- ======= OBSERVAÇÃO ============================================================================================= -->
-			<div style="width:339px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
-				<div class="form_rotulo" style="width:334px; height:17px; border:1px solid transparent; float:left">
-					Observa&ccedil;&atilde;o:
-				</div>
-
-				<div style="width:334px; height:25px; float:left; border:1px solid transparent">
-					<input readonly type="text" name="obs_form" class="form_input" maxlength="150" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:315px; text-align:left; padding-left:5px" value="<?php echo "$obs_form"; ?>" />
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-
-			<!-- ======= CLASSIFICACAO ========================================================================================== -->
-			<div style="width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
-				<div class="form_rotulo" style="width:167px; height:17px; border:1px solid transparent; float:left">
-					Classifica&ccedil;&atilde;o:
-				</div>
-
-				<div style="width:167px; height:25px; float:left; border:1px solid transparent">
-					<select readonly name="classificacao_1_form" id="classificacao_1_form" class="form_select" onkeydown="if (getKey(event) == 13) return false;" style="background-color:#EEE; width:154px" />
-					<option></option>
-					<?php
-					$busca_classificacao = mysqli_query($conexao, "SELECT * FROM classificacao_pessoa WHERE tipo='classificacao' AND estado_registro='ATIVO' ORDER BY codigo");
-					$linhas_classificacao = mysqli_num_rows($busca_classificacao);
-
-					for ($i = 1; $i <= $linhas_classificacao; $i++) {
-						$aux_classificacao = mysqli_fetch_row($busca_classificacao);
-
-						if ($aux_classificacao[0] == $classificacao_1_form) {
-							echo "<option selected='selected' value='$aux_classificacao[0]'>$aux_classificacao[1]</option>";
-						} else {
-							echo "<option value='$aux_classificacao[0]'>$aux_classificacao[1]</option>";
-						}
-					}
-					?>
-					</select>
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-
-			<!-- ================================================================================================================ -->
-			<div style="width:1020px; height:10px; float:left"></div>
-
-
-
-
-
-
-
+				<!-- ================================================================================================================ -->
+				<div style="width:1020px; height:10px; float:left"></div>
 		</div>
 		<!-- ===========  FIM DO FORMULÁRIO =========== -->
 
