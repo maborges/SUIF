@@ -2,41 +2,19 @@
 	include ('../../includes/config.php');
 	include ('../../includes/conecta_bd.php');
 	include ('../../includes/valida_cookies.php');
+	include("../../helpers.php");
 	$pagina = 'relatorio_fornecedor_impressao';
 	$titulo = 'Relat&oacute;rio de Compras';
 	$modulo = 'compras';
 	$menu = 'produtos';
 
-
-// ====== CONVERTE DATA ================================================================================	
-// Função para converter a data de formato nacional para formato americano. Usado para inserir data no mysql
-function ConverteData($data){
-	if (strstr($data, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-// ======================================================================================================
-
-
-// ====== CONVERTE VALOR =================================================================================	
-function ConverteValor($valor){
-	$valor_1 = str_replace(".", "", $valor);
-	$valor_2 = str_replace(",", ".", $valor_1);
-	return $valor_2;
-}
-// =======================================================================================================
-
-
 // ====== DADOS PARA BUSCA =================================================================================
 $data_hoje = date('Y-m-d', time());
 $filial = $filial_usuario;
 $data_inicial_aux = $_POST["data_inicial"];
-$data_inicial = ConverteData($_POST["data_inicial"]);
+$data_inicial = Helpers::ConverteData($_POST["data_inicial"]);
 $data_final_aux = $_POST["data_final"];
-$data_final = ConverteData($_POST["data_final"]);
+$data_final = Helpers::ConverteData($_POST["data_final"]);
 $fornecedor = $_POST["fornecedor"];
 $cod_produto = $_POST["cod_produto"];
 $cod_tipo = $_POST["cod_tipo"];
@@ -104,7 +82,7 @@ else
 ?>
 
 
-<!-- ==================================   T Í T U L O   D A   P Á G I N A   ====================================== -->
+<!-- ==================================   T ï¿½ T U L O   D A   P ï¿½ G I N A   ====================================== -->
 <title>
 <?php echo "$titulo"; ?>
 </title>
@@ -117,15 +95,15 @@ else
 </head>
 
 
-<!-- =============================================   I N Í C I O   =============================================== -->
+<!-- =============================================   I N ï¿½ C I O   =============================================== -->
 <body onLoad="imprimir()">
 
 <div id="centro" style="width:745px; border:0px solid #F00">
 
 <?php
 // ##############################################################################################################
-// ####### Determina-se aqui nesse "FOR" "limite_registros" a quantidade de linhas que aparecerá em cada página de impressão #######
-// #######           É importante sempre testar antes para ver quantas linhas são necessárias             #######
+// ####### Determina-se aqui nesse "FOR" "limite_registros" a quantidade de linhas que aparecerï¿½ em cada pï¿½gina de impressï¿½o #######
+// #######           ï¿½ importante sempre testar antes para ver quantas linhas sï¿½o necessï¿½rias             #######
 // ############################################################################################################## 
 $limite_registros = 44;
 $numero_paginas = ceil($linha_compra / $limite_registros);
@@ -453,7 +431,7 @@ echo "
 <!-- =============================================================================================== -->
 <div id='centro' style='width:720px; height:27px; border:0px solid #f85; float:left; margin-left:40px; font-size:17px' align='center'>
 	<div id='centro' style='width:180px; height:25px; border:0px solid #000; font-size:9px; float:left' align='left'>";
-	$ano_atual_rodape = date(Y);
+	$ano_atual_rodape = date('Y');
 	echo"&copy; $ano_atual_rodape Suif - Solu&ccedil;&otilde;es Web | $nome_fantasia";
 	
 	echo"
@@ -467,7 +445,7 @@ echo "
 
 <!-- ####################################################################### -->";
 
-echo "</div>"; // quebra de página
+echo "</div>"; // quebra de pï¿½gina
 } // fim do primeiro "FOR"
 ?>
 

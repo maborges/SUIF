@@ -2,6 +2,8 @@
 include ('../../includes/config.php'); 
 include ('../../includes/conecta_bd.php');
 include ('../../includes/valida_cookies.php');
+include ("../../helpers.php");
+
 $pagina = 'nota_fiscal';
 $titulo = 'Estoque - Nota Fiscal de Entrada';
 $modulo = 'estoque';
@@ -28,33 +30,6 @@ include ('../../includes/head.php');
 
 
 <?php
-// ============================================== CONVERTE DATA ====================================================	
-// Função para converter a data de formato nacional para formato americano. Muito útil para inserir data no mysql
-
-function ConverteData($data){
-
-	if (strstr($data, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-//echo ConverteData($data_emissao);
-// =================================================================================================================
-
-
-// ============================================== CONVERTE VALOR ====================================================	
-function ConverteValor($valor){
-
-	$valor_1 = str_replace(".", "", $valor);
-	$valor_2 = str_replace(",", ".", $valor_1);
-	return $valor_2;
-}
-// =================================================================================================================
-
-
-
 // ==================================================================================================================	
 
 $filial = $filial_usuario;
@@ -73,11 +48,11 @@ $monstra_situacao = $_POST["monstra_situacao"];
 $codigo_nf = $_POST["codigo_nf"];
 
 $codigo_fornecedor = $_POST["representante"];
-$data_emissao = ConverteData($_POST["data_emissao"]);
+$data_emissao = Helpers::ConverteData($_POST["data_emissao"]);
 $numero_nf = $_POST["numero_nf"];
 $unidade = $_POST["unidade"];
 $quantidade = $_POST["quantidade"];
-$valor_unitario = ConverteValor($_POST["valor_unitario"]);
+$valor_unitario = Helpers::ConverteValor($_POST["valor_unitario"]);
 $observacao = $_POST["observacao"];
 
 $valor_total = ($quantidade * $valor_unitario);

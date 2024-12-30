@@ -23,7 +23,11 @@ if (!empty($_POST)) {
 	// ======= LOGIN ==========================================================================================
 	if ($botao == "login") {
 		include("includes/conecta_bd.php");
-		$resultado = mysqli_query($conexao, "SELECT username, senha, primeiro_nome, contador_bloqueio, filial, nome_filial FROM usuarios WHERE username='$suif_usuario' AND estado_registro='ATIVO'");
+		$resultado = mysqli_query($conexao, "SELECT a.username, a.senha, a.primeiro_nome, a.contador_bloqueio, a.filial, a.nome_filial, a.id_sankhya, b.codigo
+											   FROM usuarios a 
+								  		            INNER JOIN filiais b 
+										 		 ON b.descricao = a.filial
+									          WHERE a.username='$suif_usuario' AND a.estado_registro='ATIVO'");
 		include("includes/desconecta_bd.php");
 
 		$linhas = mysqli_num_rows($resultado);
@@ -35,6 +39,8 @@ if (!empty($_POST)) {
 		$contador_bloqueio = $suif_aux[3];
 		$filial = $suif_aux[4];
 		$nome_filial = $suif_aux[5];
+		$idUserSankhya = $suif_aux[6];
+		$idFilial  = $suif_aux[7];
 
 
 		// ------ USUÁRIO INCORRETO ---------------------------------------------------------------------------
@@ -90,6 +96,8 @@ if (!empty($_POST)) {
 			setcookie("n_suif", $nome, time() + 43200);
 			setcookie("filial_suif", $filial, time() + 43200);
 			setcookie("nome_filial", $nome_filial, time() + 43200);
+			setcookie("idFilial", $idFilial, time() + 43200);
+			setcookie("u_sankhya", $idUserSankhya, time() + 43200);
 			// ---------------------------------------
 
 			$cont = 0;
@@ -177,7 +185,7 @@ include("includes/head.php");
 				<div style="height:30px; width:160px; border:0px solid #000; margin:auto; float:left">
 					<div style="height:6px; width:155px; border:0px solid #000"></div>
 					&#160;<input type="text" name="suif_u" maxlength="30" style="font-size:14px; color:#003466; width:145px; 
-        background-color:transparent; border:0px solid #FFFFFF" id="ok" />
+        			background-color:transparent; border:0px solid #FFFFFF" id="ok" />
 				</div>
 
 

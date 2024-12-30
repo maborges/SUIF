@@ -10,11 +10,11 @@ $menu = "cadastro_usuarios";
 
 
 // ====== RECEBE POST ==============================================================================================
-$botao = $_POST["botao"];
+$botao = $_POST["botao"] ?? '';
 //$username = $_SESSION["u_suif"];
-$username = $_COOKIE["u_suif"];
-$nova_senha = $_POST["nova_senha"];
-$confirma_senha = $_POST["confirma_senha"];
+$username = $_COOKIE["u_suif"] ?? '';
+$nova_senha = $_POST["nova_senha"] ?? '';
+$confirma_senha = $_POST["confirma_senha"] ?? '';
 
 $usuario_cadastro_form = $nome_usuario_print;
 $data_cadastro_form = date('Y-m-d', time());

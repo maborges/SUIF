@@ -10,14 +10,15 @@ $menu = "cadastro_produtos";
 
 
 // ====== RECEBE POST ==============================================================================================
-$botao = $_POST["botao"];
-$codigo_w = $_POST["codigo_w"];
+$botao = $_POST["botao"] ?? '';
+$codigo_w = $_POST["codigo_w"] ?? '';
 
-$nome_form = $_POST["nome_form"];
-$cod_unidade_form = $_POST["cod_unidade_form"];
-$quant_unidade_form = $_POST["quant_unidade_form"];
-$quant_kg_saca_form = $_POST["quant_kg_saca_form"];
-$tipo_form = $_POST["tipo_form"];
+$nome_form = $_POST["nome_form"] ?? '';
+$idSankhya_form = $_POST["idSankhya_form"] ?? '';
+$cod_unidade_form = $_POST["cod_unidade_form"] ?? '';
+$quant_unidade_form = $_POST["quant_unidade_form"] ?? '';
+$quant_kg_saca_form = $_POST["quant_kg_saca_form"] ?? '';
+$tipo_form = $_POST["tipo_form"] ?? '';
 
 $usuario_cadastro_form = $nome_usuario_print;
 $data_cadastro_form = date('Y-m-d', time());
@@ -38,6 +39,9 @@ if ($botao == "CADASTRAR" and $nome_form == "") {
 } elseif ($botao == "CADASTRAR" and $cod_unidade_form == "") {
 	$erro = 2;
 	$msg = "<div style='color:#FF0000'>Informe a unidade de medida</div>";
+} elseif ($botao == "CADASTRAR" and $idSankhya_form == "") {
+	$erro = 10;
+	$msg = "<div style='color:#FF0000'>Informe o código Sankhya do produto</div>";
 } elseif ($botao == "CADASTRAR" and (!is_numeric($quant_unidade_form) or $quant_unidade_form == "")) {
 	$erro = 3;
 	$msg = "<div style='color:#FF0000'>Informe a quantidade de unidade em Kg</div>";
@@ -52,6 +56,7 @@ if ($botao == "CADASTRAR" and $nome_form == "") {
 	$quant_unidade_form = "";
 	$quant_kg_saca_form = "";
 	$tipo_form = "";
+	$idSankhya_form = '';
 } elseif ($botao == "EDITAR" and $cod_unidade_form == "") {
 	$erro = 6;
 	$msg = "<div style='color:#FF0000'>Informe a unidade de medida</div>";
@@ -60,6 +65,7 @@ if ($botao == "CADASTRAR" and $nome_form == "") {
 	$quant_unidade_form = "";
 	$quant_kg_saca_form = "";
 	$tipo_form = "";
+	$idSankhya_form = '';
 } elseif ($botao == "EDITAR" and (!is_numeric($quant_unidade_form) or $quant_unidade_form == "")) {
 	$erro = 7;
 	$msg = "<div style='color:#FF0000'>Informe a quantidade de unidade em Kg</div>";
@@ -68,6 +74,7 @@ if ($botao == "CADASTRAR" and $nome_form == "") {
 	$quant_unidade_form = "";
 	$quant_kg_saca_form = "";
 	$tipo_form = "";
+	$idSankhya_form = '';
 } elseif ($botao == "EDITAR" and (!is_numeric($quant_kg_saca_form) or $quant_kg_saca_form == "")) {
 	$erro = 8;
 	$msg = "<div style='color:#FF0000'>Informe a quantidade da saca em Kg</div>";
@@ -76,6 +83,10 @@ if ($botao == "CADASTRAR" and $nome_form == "") {
 	$quant_unidade_form = "";
 	$quant_kg_saca_form = "";
 	$tipo_form = "";
+	$idSankhya_form = '';
+} elseif ($botao == "EDITAR" and $idSankhya_form == "") {
+	$erro = 10;
+	$msg = "<div style='color:#FF0000'>Informe o código Sankhya do produto</div>";
 } elseif ($botao == "EXCLUSAO") {
 	$erro = 9;
 	$msg = "<div style='color:#FF0000'>Deseja realmente excluir este produto?</div>";
@@ -103,18 +114,19 @@ if ($botao == "CADASTRAR" and $erro == 0 and $permissao[7] == "S") {
 	$un_descricao = $aux_un_med[2];
 	// ======================================================================================================
 
-	// ====== CONVERTE MAIÚSCULAS EM MINÚSCULAS =============================================================
+	// ======CONVERTE MAIÚSCULAS EM MINÚSCULAS =============================================================
 	$produto_print_minu = ucfirst(strtolower($nome_form));
 	$produto_apelido = str_replace($comAcentos, $semAcentos, $nome_form);
 	// ======================================================================================================
 
 	// CADASTRO
-	
-	$inserir = mysqli_query($conexao, "INSERT INTO cadastro_produto (codigo, descricao, codigo_produto, unidade, usuario_cadastro, hora_cadastro, data_cadastro, estado_registro, apelido, produto_print, quantidade_un, unidade_print, quant_kg_saca, cod_tipo_preferencial) VALUES ($contador_cod_produto, '$nome_form', '$codigo_produto', '$cod_unidade_form', '$usuario_cadastro_form', '$hora_cadastro_form', '$data_cadastro_form', 'ATIVO', '$produto_apelido', '$produto_print_minu', '$quant_unidade_form', '$un_descricao', '$quant_kg_saca_form', '$tipo_form')");
+
+	$inserir = mysqli_query($conexao, "INSERT INTO cadastro_produto (codigo, descricao, codigo_produto, unidade, usuario_cadastro, hora_cadastro, data_cadastro, estado_registro, apelido, produto_print, quantidade_un, unidade_print, quant_kg_saca, cod_tipo_preferencial, id_sankhya) VALUES ($contador_cod_produto, '$nome_form', '$codigo_produto', '$cod_unidade_form', '$usuario_cadastro_form', '$hora_cadastro_form', '$data_cadastro_form', 'ATIVO', '$produto_apelido', '$produto_print_minu', '$quant_unidade_form', '$un_descricao', '$quant_kg_saca_form', '$tipo_form', '$idSankhya_form')");
 
 	// MONTA MENSAGEM
 	$msg = "<div id='oculta' style='color:#0000FF'>Produto cadastrado com sucesso!</div>";
 	$nome_form = "";
+	$idSankhya_form = "";
 	$cod_unidade_form = "";
 	$quant_unidade_form = "";
 	$quant_kg_saca_form = "";
@@ -123,6 +135,7 @@ if ($botao == "CADASTRAR" and $erro == 0 and $permissao[7] == "S") {
 	// MONTA MENSAGEM
 	$msg = "<div id='oculta' style='color:#FF0000'>Usu&aacute;rio sem autoriza&ccedil;&atilde;o para cadastrar produto</div>";
 	$nome_form = "";
+	$idSankhya_form = '';
 	$cod_unidade_form = "";
 	$quant_unidade_form = "";
 	$quant_kg_saca_form = "";
@@ -142,17 +155,18 @@ if ($botao == "EDITAR" and $erro == 0 and $permissao[7] == "S") {
 	$un_descricao = $aux_un_med[2];
 	// ======================================================================================================
 
-	// ====== CONVERTE MAIÚSCULAS EM MINÚSCULAS =============================================================
+	// ======CONVERTE MAIÚSCULAS EM MINÚSCULAS =============================================================
 	$produto_print_minu = ucfirst(strtolower($nome_form));
 	$produto_apelido = str_replace($comAcentos, $semAcentos, $nome_form);
 	// ======================================================================================================
 
 	// EDIÇÃO
-	$editar = mysqli_query($conexao, "UPDATE cadastro_produto SET descricao='$nome_form', unidade='$cod_unidade_form', usuario_alteracao='$usuario_cadastro_form', hora_alteracao='$hora_cadastro_form', data_alteracao='$data_cadastro_form', apelido='$produto_apelido', produto_print='$produto_print_minu', quantidade_un='$quant_unidade_form', unidade_print='$un_descricao', quant_kg_saca='$quant_kg_saca_form', cod_tipo_preferencial='$tipo_form' WHERE codigo='$codigo_w'");
+	$editar = mysqli_query($conexao, "UPDATE cadastro_produto SET descricao='$nome_form', unidade='$cod_unidade_form', usuario_alteracao='$usuario_cadastro_form', hora_alteracao='$hora_cadastro_form', data_alteracao='$data_cadastro_form', apelido='$produto_apelido', produto_print='$produto_print_minu', quantidade_un='$quant_unidade_form', unidade_print='$un_descricao', quant_kg_saca='$quant_kg_saca_form', cod_tipo_preferencial='$tipo_form', id_sankhya='$idSankhya_form' WHERE codigo='$codigo_w'");
 
 	// MONTA MENSAGEM
 	$msg = "<div id='oculta' style='color:#0000FF'>Produto editado com sucesso!</div>";
 	$nome_form = "";
+	$idSankhya_form = "";
 	$cod_unidade_form = "";
 	$quant_unidade_form = "";
 	$quant_kg_saca_form = "";
@@ -161,6 +175,7 @@ if ($botao == "EDITAR" and $erro == 0 and $permissao[7] == "S") {
 	// MONTA MENSAGEM
 	$msg = "<div id='oculta' style='color:#FF0000'>Usu&aacute;rio sem autoriza&ccedil;&atilde;o para editar produto</div>";
 	$nome_form = "";
+	$idSankhya_form = "";
 	$cod_unidade_form = "";
 	$quant_unidade_form = "";
 	$quant_kg_saca_form = "";
@@ -202,6 +217,7 @@ if ($botao == "EXCLUIR" and $permissao[7] == "S") {
 	// MONTA MENSAGEM
 	$msg = "<div id='oculta' style='color:#FF0000'>Usu&aacute;rio sem autoriza&ccedil;&atilde;o para excluir produto</div>";
 	$nome_form = "";
+	$idSankhya_form = "";
 	$cod_unidade_form = "";
 	$quant_unidade_form = "";
 	$quant_kg_saca_form = "";
@@ -315,12 +331,12 @@ include("../../includes/head.php");
 				<?php
 				if ($botao == "EDICAO") {
 					echo "
-	<input type='hidden' name='botao' value='EDITAR' />
-	<input type='hidden' name='codigo_w' value='$codigo_w' />";
+						<input type='hidden' name='botao' value='EDITAR' />
+						<input type='hidden' name='codigo_w' value='$codigo_w' />";
 				} elseif ($botao == "EXCLUSAO") {
 					echo "
-	<input type='hidden' name='botao' value='EXCLUIR' />
-	<input type='hidden' name='codigo_w' value='$codigo_w' />";
+						<input type='hidden' name='botao' value='EXCLUIR' />
+						<input type='hidden' name='codigo_w' value='$codigo_w' />";
 				} else {
 					echo "<input type='hidden' name='botao' value='CADASTRAR' />";
 				}
@@ -425,6 +441,18 @@ include("../../includes/head.php");
 			</div>
 			<!-- ================================================================================================================ -->
 
+			<!-- ======= CÓDIGO sANKHYA ======================================================================================== -->
+			<div style="width:154px; height:50px; border:1px solid transparent; margin-top:6px; float:left">
+				<div class="form_rotulo" style="width:150px; height:17px; border:1px solid transparent; float:left">
+					Código Sankhya:
+				</div>
+
+				<div style="width:150px; height:25px; float:left; border:1px solid transparent">
+					<input type="number" name="idSankhya_form" class="form_input" maxlength="4" onkeydown="if (getKey(event) == 13) return false;" style="width:125px; text-align:left; padding-left:5px" value="<?= "$idSankhya_form"; ?>" />
+				</div>
+			</div>
+			<!-- ================================================================================================================ -->
+
 
 			<!-- ======= BOTAO ================================================================================================== -->
 			<div style="width:100px; height:50px; border:1px solid transparent; margin-top:6px; float:left">
@@ -458,14 +486,14 @@ include("../../includes/head.php");
 					<?php
 					if ($botao == "EDICAO") {
 						echo "
-	<form action='$servidor/$diretorio_servidor/cadastros/produtos/produtos_cadastro.php' method='post' />
-	<button type='submit' class='botao_1'>Cancelar</button>
-	</form>";
+							<form action='$servidor/$diretorio_servidor/cadastros/produtos/produtos_cadastro.php' method='post' />
+							<button type='submit' class='botao_1'>Cancelar</button>
+							</form>";
 					} elseif ($botao == "EXCLUSAO") {
 						echo "
-	<form action='$servidor/$diretorio_servidor/cadastros/produtos/produtos_cadastro.php' method='post' />
-	<button type='submit' class='botao_1'>Cancelar</button>
-	</form>";
+							<form action='$servidor/$diretorio_servidor/cadastros/produtos/produtos_cadastro.php' method='post' />
+							<button type='submit' class='botao_1'>Cancelar</button>
+							</form>";
 					} else {
 					}
 					?>
@@ -488,26 +516,27 @@ include("../../includes/head.php");
 		<?php
 		if ($linha_registro == 0) {
 			echo "
-<div style='height:210px'>
-<div class='espacamento_30'></div>";
+				<div style='height:210px'>
+				<div class='espacamento_30'></div>";
 		} else {
 			echo "
-<div class='ct_relatorio'>
-<div class='espacamento_10'></div>
+				<div class='ct_relatorio'>
+				<div class='espacamento_10'></div>
 
-<table class='tabela_cabecalho'>
-<tr>
-<td width='100px'>C&oacute;digo</td>
-<td width='350px'>Nome</td>
-<td width='130px'>Unidade Medida</td>
-<td width='130px'>Quantidade Unidade</td>
-<td width='130px'>Quantidade Saca</td>
-<td width='160px'>Tipo Preferencial</td>
-<td width='60px'>Editar</td>
-<td width='60px'>Inativar</td>
-<td width='60px'>Excluir</td>
-</tr>
-</table>";
+				<table class='tabela_cabecalho'>
+				<tr>
+				<td width='75px'>Código</td>
+				<td width='75px'>Sankhya</td>
+				<td width='300px'>Nome</td>
+				<td width='130px'>Unidade Medida</td>
+				<td width='130px'>Quantidade Unidade</td>
+				<td width='130px'>Quantidade Saca</td>
+				<td width='160px'>Tipo Preferencial</td>
+				<td width='60px'>Editar</td>
+				<td width='60px'>Inativar</td>
+				<td width='60px'>Excluir</td>
+				</tr>
+				</table>";
 		}
 
 
@@ -520,6 +549,7 @@ include("../../includes/head.php");
 
 			// ====== DADOS DO USUÁRIO ============================================================================
 			$codigo_w = $aux_registro[0];
+			$idSankhya_w = $aux_registro[42];
 			$nome_w = $aux_registro[1];
 			$cod_unidade_w = $aux_registro[7];
 			$quant_unidade_w = $aux_registro[23];
@@ -602,81 +632,83 @@ else
 
 
 			echo "
-<td width='100px' align='center'>$codigo_w</td>
-<td width='350px' align='left'><div style='height:14px; margin-left:7px; overflow:hidden'>$nome_w</div></td>
-<td width='130px' align='center'>$un_descricao</td>
-<td width='130px' align='center'>$quant_unidade_w Kg</td>
-<td width='130px' align='center'>$quant_saca_w Kg</td>
-<td width='160px' align='center'>$tipo_produto_print</td>";
+				<td width='75px' align='center'>$codigo_w</td>
+				<td width='75px' align='center'>$idSankhya_w</td>
+				<td width='300px' align='left'><div style='height:14px; margin-left:7px; overflow:hidden'>$nome_w</div></td>
+				<td width='130px' align='center'>$un_descricao</td>
+				<td width='130px' align='center'>$quant_unidade_w Kg</td>
+				<td width='130px' align='center'>$quant_saca_w Kg</td>
+				<td width='160px' align='center'>$tipo_produto_print</td>";
 
 			// ====== BOTAO EDITAR ===================================================================================================
 			if ($permite_editar == "SIM") {
 				echo "
-		<td width='60px' align='center'>
-		<form action='$servidor/$diretorio_servidor/cadastros/produtos/produtos_cadastro.php' method='post'>
-		<input type='hidden' name='pagina_mae' value='$pagina'>
-		<input type='hidden' name='botao' value='EDICAO'>
-		<input type='hidden' name='codigo_w' value='$codigo_w'>
-		<input type='hidden' name='nome_form' value='$nome_w'>
-		<input type='hidden' name='cod_unidade_form' value='$cod_unidade_w'>
-		<input type='hidden' name='quant_unidade_form' value='$quant_unidade_w'>
-		<input type='hidden' name='quant_kg_saca_form' value='$quant_saca_w'>
-		<input type='hidden' name='tipo_form' value='$tipo_w'>
-		<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/editar.png' height='20px' border='0	' />
-		</form>	
-		</td>";
+					<td width='60px' align='center'>
+					<form action='$servidor/$diretorio_servidor/cadastros/produtos/produtos_cadastro.php' method='post'>
+					<input type='hidden' name='pagina_mae' value='$pagina'>
+					<input type='hidden' name='botao' value='EDICAO'>
+					<input type='hidden' name='codigo_w' value='$codigo_w'>
+					<input type='hidden' name='nome_form' value='$nome_w'>
+					<input type='hidden' name='idSankhya_form' value='$idSankhya_w'>
+					<input type='hidden' name='cod_unidade_form' value='$cod_unidade_w'>
+					<input type='hidden' name='quant_unidade_form' value='$quant_unidade_w'>
+					<input type='hidden' name='quant_kg_saca_form' value='$quant_saca_w'>
+					<input type='hidden' name='tipo_form' value='$tipo_w'>
+					<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/editar.png' height='20px' border='0	' />
+					</form>	
+					</td>";
 			} else {
-				echo "
-		<td width='60px' align='center'></td>";
+				echo "<td width='60px' align='center'></td>";
 			}
 			// =================================================================================================================
 
 			// ====== BOTAO ATIVAR / INATIVAR ==================================================================================
 			if ($permite_ativar == "SIM" and $estado_registro_w == "INATIVO") {
 				echo "
-		<td width='60px' align='center'>
-		<form action='$servidor/$diretorio_servidor/cadastros/produtos/produtos_cadastro.php' method='post'>
-		<input type='hidden' name='pagina_mae' value='$pagina'>
-		<input type='hidden' name='botao' value='ATIVAR'>
-		<input type='hidden' name='codigo_w' value='$codigo_w'>
-		<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/inativo.png' height='20px' border='0' />
-		</form>	
-		</td>";
+					<td width='60px' align='center'>
+					<form action='$servidor/$diretorio_servidor/cadastros/produtos/produtos_cadastro.php' method='post'>
+					<input type='hidden' name='pagina_mae' value='$pagina'>
+					<input type='hidden' name='botao' value='ATIVAR'>
+					<input type='hidden' name='codigo_w' value='$codigo_w'>
+					<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/inativo.png' height='20px' border='0' />
+					</form>	
+					</td>";
 			} elseif ($permite_ativar == "SIM" and $estado_registro_w == "ATIVO") {
 				echo "
-		<td width='60px' align='center'>
-		<form action='$servidor/$diretorio_servidor/cadastros/produtos/produtos_cadastro.php' method='post'>
-		<input type='hidden' name='pagina_mae' value='$pagina'>
-		<input type='hidden' name='botao' value='INATIVAR'>
-		<input type='hidden' name='codigo_w' value='$codigo_w'>
-		<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/ativo.png' height='20px' border='0' />
-		</form>	
-		</td>";
+					<td width='60px' align='center'>
+					<form action='$servidor/$diretorio_servidor/cadastros/produtos/produtos_cadastro.php' method='post'>
+					<input type='hidden' name='pagina_mae' value='$pagina'>
+					<input type='hidden' name='botao' value='INATIVAR'>
+					<input type='hidden' name='codigo_w' value='$codigo_w'>
+					<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/ativo.png' height='20px' border='0' />
+					</form>	
+					</td>";
 			} else {
 				echo "
-		<td width='60px' align='center'></td>";
+					<td width='60px' align='center'></td>";
 			}
 			// =================================================================================================================
 
 			// ====== BOTAO EXCLUIR ===================================================================================================
 			if ($permite_excluir == "SIM") {
 				echo "
-		<td width='60px' align='center'>
-		<form action='$servidor/$diretorio_servidor/cadastros/produtos/produtos_cadastro.php' method='post'>
-		<input type='hidden' name='pagina_mae' value='$pagina'>
-		<input type='hidden' name='botao' value='EXCLUSAO'>
-		<input type='hidden' name='codigo_w' value='$codigo_w'>
-		<input type='hidden' name='nome_form' value='$nome_w'>
-		<input type='hidden' name='cod_unidade_form' value='$cod_unidade_w'>
-		<input type='hidden' name='quant_unidade_form' value='$quant_unidade_w'>
-		<input type='hidden' name='quant_kg_saca_form' value='$quant_saca_w'>
-		<input type='hidden' name='tipo_form' value='$tipo_w'>
-		<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/excluir.png' height='20px' border='0' />
-		</form>	
-		</td>";
+					<td width='60px' align='center'>
+					<form action='$servidor/$diretorio_servidor/cadastros/produtos/produtos_cadastro.php' method='post'>
+					<input type='hidden' name='pagina_mae' value='$pagina'>
+					<input type='hidden' name='botao' value='EXCLUSAO'>
+					<input type='hidden' name='codigo_w' value='$codigo_w'>
+					<input type='hidden' name='nome_form' value='$nome_w'>
+					<input type='hidden' name='idSankhya_form' value='$idSankhya_w'>
+					<input type='hidden' name='cod_unidade_form' value='$cod_unidade_w'>
+					<input type='hidden' name='quant_unidade_form' value='$quant_unidade_w'>
+					<input type='hidden' name='quant_kg_saca_form' value='$quant_saca_w'>
+					<input type='hidden' name='tipo_form' value='$tipo_w'>
+					<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/excluir.png' height='20px' border='0' />
+					</form>	
+					</td>";
 			} else {
 				echo "
-		<td width='60px' align='center'></td>";
+					<td width='60px' align='center'></td>";
 			}
 			// =================================================================================================================
 
@@ -691,9 +723,9 @@ else
 		// =================================================================================================================
 		if ($linha_registro == 0) {
 			echo "
-<div class='espacamento_30'></div>
-<div style='height:30px; width:880px; border:0px solid #000; color:#F00; font-size:14px; margin:auto; text-align:center'>
-<i>Nenhum produto cadastrado.</i></div>";
+				<div class='espacamento_30'></div>
+				<div style='height:30px; width:880px; border:0px solid #000; color:#F00; font-size:14px; margin:auto; text-align:center'>
+				<i>Nenhum produto cadastrado.</i></div>";
 		}
 		// =================================================================================================================
 		?>

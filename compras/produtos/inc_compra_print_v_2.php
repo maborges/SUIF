@@ -11,10 +11,13 @@
     <div id="centro" style="width:238px; height:24px; border:0px solid #000; font-size:10px; float:left" align="left"></div>
 
     <div id="centro" style="width:238px; height:24px; border:0px solid #000; font-size:13px; float:left" align="center">
-    <b>CONFIRMA&Ccedil;&Atilde;O DE COMPRA</b></div>
+    <b>CONFIRMA&Ccedil;&Atilde;O DE COMPRA2</b></div>
 
     <div id="centro" style="width:238px; height:24px; border:0px solid #000; font-size:9px; float:left" align="right"></div>
-		
+
+    <div id="centro" style="width:238px; height:24px; border:0px solid #000; font-size:13px; float:left">
+    <b><?=$tipoCompraText?></b></div>
+
 
     <div id="centro" style="width:238px; height:24px; border:0px solid #000; font-size:12px; float:left" align="left">N&ordm; <?php echo"$numero_compra"; ?></div>
 
@@ -371,7 +374,7 @@ else
 <!-- =============================================================================================== -->
 <div id="centro" style="width:720px; height:27px; border:0px solid #000; margin-left:10px; font-size:17px; float:left" align="center">
     <div id="centro" style="width:230px; height:25px; border:0px solid #000; font-size:9px; float:left" align="left">
-    <?php echo "&copy; $ano_atual_rodape Suif - Solu&ccedil;&otilde;es Web | $nome_fantasia"; ?>
+    <?php echo "&copy; $ano_atual_rodape Suif - Solu&ccedil;&otilde;es Web (V2.0) | $nome_fantasia  (V2)"; ?>
     </div>
 
     <div id="centro" style="width:250px; height:25px; border:0px solid #000; font-size:9px; float:left" align="center">
@@ -545,7 +548,7 @@ else
 <!-- =============================================================================================== -->
 <div id="centro" style="width:720px; height:27px; border:0px solid #000; margin-left:10px; font-size:17px; float:left" align="center">
     <div id="centro" style="width:230px; height:25px; border:0px solid #000; font-size:9px; float:left" align="left">
-    <?php echo "&copy; $ano_atual_rodape Suif - Solu&ccedil;&otilde;es Web | $nome_fantasia"; ?>
+    <?php echo "&copy; $ano_atual_rodape Suif - Solu&ccedil;&otilde;es Web (V2.0) | $nome_fantasia"; ?>
     </div>
 
     <div id="centro" style="width:250px; height:25px; border:0px solid #000; font-size:9px; float:left" align="center">

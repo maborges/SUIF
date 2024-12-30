@@ -8,29 +8,6 @@ $modulo = "compras";
 $menu = "ficha_produtor";
 // ======================================================================================================
 
-
-// =========== CONVERTE DATA ==========================================================================	
-// Função para converter a data de formato nacional para formato americano. Usado para inserir data no mysql
-function ConverteData($data){
-	if (strstr($data, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-// ======================================================================================================
-
-
-// ========== CONVERTE VALOR ============================================================================	
-function ConverteValor($valor){
-	$valor_1 = str_replace(".", "", $valor);
-	$valor_2 = str_replace(",", ".", $valor_1);
-	return $valor_2;
-}
-// ========================================================================================================
-
-
 // ======= RECEBENDO POST =================================================================================
 $filial = $filial_usuario;
 
@@ -41,8 +18,8 @@ $cod_produto = $_POST["cod_produto"];
 $produto_list = $_POST["produto"];
 $data_compra = date('Y/m/d', time());
 $fornecedor = $_POST["fornecedor"];
-$quantidade_kg = $_POST["quantidade"];
-$desconto_aux = $_POST["desconto"];
+$quantidade_kg = $_POST["quantidade"] ?? 0;
+$desconto_aux = $_POST["desconto"] ?? 0;
 	if (!is_numeric($desconto_aux) or $desconto_aux < 0)
 	{$desconto = 0;}
 	else
@@ -77,6 +54,7 @@ else
 {$quantidade = ($quantidade_kg - $desconto);}
 
 $quantidade_print = number_format($quantidade,2,",",".");
+
 // ======================================================================================================
 
 
@@ -289,7 +267,6 @@ else
 	}
 	else
 	{
-	
 	$inserir = mysqli_query ($conexao, "INSERT INTO compras (codigo, numero_compra, fornecedor, produto, data_compra, quantidade, unidade, tipo, observacao, movimentacao, usuario_cadastro, hora_cadastro, data_cadastro, estado_registro, filial, numero_romaneio, desconto_quantidade, cod_produto, cod_unidade, cod_tipo, fornecedor_print) VALUES (NULL, '$numero_compra', '$fornecedor', '$produto', '$data_compra', '$quantidade', '$unidade_print', '$tipo_print', '$observacao', '$movimentacao', '$usuario_cadastro', '$hora_cadastro', '$data_cadastro', 'ATIVO', '$filial', '$numero_romaneio', '$desconto', '$cod_produto', '$cod_unidade', '$cod_tipo', '$fornecedor_print')");
 
 

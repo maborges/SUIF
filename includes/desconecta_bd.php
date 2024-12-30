@@ -1,12 +1,5 @@
 <?php
-if (isset($conexao) && $conexao->ping()) {
-    mysqli_close($conexao);
+if (isset($conexao)) {
+	mysqli_close($conexao);
 }
-
-/*
-<?php
-mysqli_close($conexao);
 ?>
-*/
-
-

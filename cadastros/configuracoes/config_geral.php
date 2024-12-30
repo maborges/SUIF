@@ -10,56 +10,57 @@ $menu = "config";
 
 
 // ======= RECEBENDO POST =================================================================================
-$botao = $_POST["botao"];
+$botao = $_POST["botao"] ?? '';
 $data_hoje = date('Y-m-d', time());
 $data_hoje_br = date('d/m/Y', time());
 $filial = $filial_usuario;
 
-$servidor_w = $_POST["servidor_w"];
-$diretorio_servidor_w = $_POST["diretorio_servidor_w"];
-$razao_social_w = $_POST["razao_social_w"];
-$email_dest_exclusao = $_POST["email_dest_exclusao"];
-$enviar_email_exclusao = $_POST["enviar_email_exclusao"];
-$limite_dias_exclusao_reg = $_POST["limite_dias_exclusao_reg"];
-$versao_impressao_compra = $_POST["versao_impressao_compra"];
-$limite_dias_exclusao_romaneio = $_POST["limite_dias_exclusao_romaneio"];
-$limite_dias_edicao_romaneio = $_POST["limite_dias_edicao_romaneio"];
-$integracao_rovereti = $_POST["integracao_rovereti"];
-$romaneio_automatico = $_POST["romaneio_automatico"];
-$romaneio_filial_origem = $_POST["romaneio_filial_origem"];
-$romaneio_motorista = $_POST["romaneio_motorista"];
-$romaneio_cpf_motorista = $_POST["romaneio_cpf_motorista"];
-$romaneio_placa_veiculo = $_POST["romaneio_placa_veiculo"];
-$limite_dias_exc_venda = $_POST["limite_dias_exc_venda"];
-$limite_dias_edi_venda = $_POST["limite_dias_edi_venda"];
-$versao_impressao_venda = $_POST["versao_impressao_venda"];
-$nome_fantasia_config = $_POST["nome_fantasia_config"];
-$nome_fantasia_m_config = $_POST["nome_fantasia_m_config"];
-$cpf_cnpj_config = $_POST["cpf_cnpj_config"];
-$telefone_1_config = $_POST["telefone_1_config"];
-$telefone_2_config = $_POST["telefone_2_config"];
-$email_config = $_POST["email_config"];
-$endereco_config = $_POST["endereco_config"];
-$cidade_config = $_POST["cidade_config"];
-$uf_config = $_POST["uf_config"];
+$servidor_w = $_POST["servidor_w"] ?? '';
+$diretorio_servidor_w = $_POST["diretorio_servidor_w"] ?? '';
+$razao_social_w = $_POST["razao_social_w"] ?? '';
+$email_dest_exclusao = $_POST["email_dest_exclusao"] ?? '';
+$enviar_email_exclusao = $_POST["enviar_email_exclusao"] ?? '';
+$limite_dias_exclusao_reg = $_POST["limite_dias_exclusao_reg"] ?? '';
+$versao_impressao_compra = $_POST["versao_impressao_compra"] ?? '';
+$limite_dias_exclusao_romaneio = $_POST["limite_dias_exclusao_romaneio"] ?? '';
+$limite_dias_edicao_romaneio = $_POST["limite_dias_edicao_romaneio"] ?? '';
+$integracao_rovereti = $_POST["integracao_rovereti"] ?? '';
+$romaneio_automatico = $_POST["romaneio_automatico"] ?? '';
+$romaneio_filial_origem = $_POST["romaneio_filial_origem"] ?? '';
+$romaneio_motorista = $_POST["romaneio_motorista"] ?? '';
+$romaneio_cpf_motorista = $_POST["romaneio_cpf_motorista"] ?? '';
+$romaneio_placa_veiculo = $_POST["romaneio_placa_veiculo"] ?? '';
+$limite_dias_exc_venda = $_POST["limite_dias_exc_venda"] ?? '';
+$limite_dias_edi_venda = $_POST["limite_dias_edi_venda"] ?? '';
+$versao_impressao_venda = $_POST["versao_impressao_venda"] ?? '';
+$nome_fantasia_config = $_POST["nome_fantasia_config"] ?? '';
+$nome_fantasia_m_config = $_POST["nome_fantasia_m_config"] ?? '';
+$cpf_cnpj_config = $_POST["cpf_cnpj_config"] ?? '';
+$telefone_1_config = $_POST["telefone_1_config"] ?? '';
+$telefone_2_config = $_POST["telefone_2_config"] ?? '';
+$email_config = $_POST["email_config"] ?? '';
+$endereco_config = $_POST["endereco_config"] ?? '';
+$cidade_config = $_POST["cidade_config"] ?? '';
+$uf_config = $_POST["uf_config"] ?? '';
 
-$icones_select_produto = $_POST["icones_select_produto"];
-$mostrar_preco_produto = $_POST["mostrar_preco_produto"];
-$mostrar_outros_produtos = $_POST["mostrar_outros_produtos"];
-$relat_consol_estoque = $_POST["relat_consol_estoque"];
-$versao_impr_compra_f = $_POST["versao_impr_compra_f"];
-$romaneio_bal_rodoviaria = $_POST["romaneio_bal_rodoviaria"];
-$fechamento_romaneio_automatico = $_POST["fechamento_romaneio_automatico"];
-$nome_fantasia_filial = $_POST["nome_fantasia_filial"];
-$nome_fantasia_m_filial = $_POST["nome_fantasia_m_filial"];
-$cpf_cnpj_filial = $_POST["cpf_cnpj_filial"];
-$telefone_1_filial = $_POST["telefone_1_filial"];
-$telefone_2_filial = $_POST["telefone_2_filial"];
-$email_filial = $_POST["email_filial"];
-$endereco_filial = $_POST["endereco_filial"];
-$cidade_filial = $_POST["cidade_filial"];
-$uf_filial = $_POST["uf_filial"];
-$produtos_relatorio = $_POST["produtos_relatorio"];
+$icones_select_produto = $_POST["icones_select_produto"] ?? '';
+$mostrar_preco_produto = $_POST["mostrar_preco_produto"] ?? '';
+$mostrar_outros_produtos = $_POST["mostrar_outros_produtos"] ?? '';
+$relat_consol_estoque = $_POST["relat_consol_estoque"] ?? '';
+$versao_impr_compra_f = $_POST["versao_impr_compra_f"] ?? '';
+$romaneio_bal_rodoviaria = $_POST["romaneio_bal_rodoviaria"] ?? '';
+$fechamento_romaneio_automatico = $_POST["fechamento_romaneio_automatico"] ?? '';
+$nome_fantasia_filial = $_POST["nome_fantasia_filial"] ?? '';
+$nome_fantasia_m_filial = $_POST["nome_fantasia_m_filial"] ?? '';
+$cpf_cnpj_filial = $_POST["cpf_cnpj_filial"] ?? '';
+$telefone_1_filial = $_POST["telefone_1_filial"] ?? '';
+$telefone_2_filial = $_POST["telefone_2_filial"] ?? '';
+$email_filial = $_POST["email_filial"] ?? '';
+$endereco_filial = $_POST["endereco_filial"] ?? '';
+$cidade_filial = $_POST["cidade_filial"] ?? '';
+$uf_filial = $_POST["uf_filial"] ?? '';
+$produtos_relatorio = $_POST["produtos_relatorio"] ?? '';
+$msg = '';
 // ========================================================================================================
 
 
@@ -67,10 +68,10 @@ $produtos_relatorio = $_POST["produtos_relatorio"];
 if ($botao == "SALVAR_CONFIG" and $permissao[131] == "S")
 {
 // EDIÇÃO TABELA CONFIGURACOES
-$editar = mysqli_query ($conexao, "UPDATE suif_grancafe.configuracoes SET razao_social='$razao_social_w', email_dest_exclusao='$email_dest_exclusao', enviar_email_exclusao='$enviar_email_exclusao', limite_dias_exclusao_reg='$limite_dias_exclusao_reg', versao_impressao_compra='$versao_impressao_compra', limite_dias_exclusao_romaneio='$limite_dias_exclusao_romaneio', limite_dias_exclusao_romaneio='$limite_dias_exclusao_romaneio', limite_dias_edicao_romaneio='$limite_dias_edicao_romaneio', integracao_rovereti='$integracao_rovereti', romaneio_automatico='$romaneio_automatico', romaneio_filial_origem='$romaneio_filial_origem', romaneio_motorista='$romaneio_motorista', romaneio_cpf_motorista='$romaneio_cpf_motorista', romaneio_placa_veiculo='$romaneio_placa_veiculo', limite_dias_exc_venda='$limite_dias_exc_venda', limite_dias_edi_venda='$limite_dias_edi_venda', versao_impressao_venda='$versao_impressao_venda', nome_fantasia='$nome_fantasia_config', nome_fantasia_m='$nome_fantasia_m_config', cpf_cnpj='$cpf_cnpj_config', telefone_1='$telefone_1_config', telefone_2='$telefone_2_config', email='$email_config', endereco='$endereco_config', cidade='$cidade_config', uf='$uf_config' WHERE codigo='1'");
+$editar = mysqli_query ($conexao, "UPDATE configuracoes SET razao_social='$razao_social_w', email_dest_exclusao='$email_dest_exclusao', enviar_email_exclusao='$enviar_email_exclusao', limite_dias_exclusao_reg='$limite_dias_exclusao_reg', versao_impressao_compra='$versao_impressao_compra', limite_dias_exclusao_romaneio='$limite_dias_exclusao_romaneio', limite_dias_exclusao_romaneio='$limite_dias_exclusao_romaneio', limite_dias_edicao_romaneio='$limite_dias_edicao_romaneio', integracao_rovereti='$integracao_rovereti', romaneio_automatico='$romaneio_automatico', romaneio_filial_origem='$romaneio_filial_origem', romaneio_motorista='$romaneio_motorista', romaneio_cpf_motorista='$romaneio_cpf_motorista', romaneio_placa_veiculo='$romaneio_placa_veiculo', limite_dias_exc_venda='$limite_dias_exc_venda', limite_dias_edi_venda='$limite_dias_edi_venda', versao_impressao_venda='$versao_impressao_venda', nome_fantasia='$nome_fantasia_config', nome_fantasia_m='$nome_fantasia_m_config', cpf_cnpj='$cpf_cnpj_config', telefone_1='$telefone_1_config', telefone_2='$telefone_2_config', email='$email_config', endereco='$endereco_config', cidade='$cidade_config', uf='$uf_config' WHERE codigo='1'");
 
 // EDIÇÃO TABELA FILIAIS
-$editar = mysqli_query ($conexao, "UPDATE suif_grancafe.filiais SET icones_select_produto='$icones_select_produto', mostrar_preco_produto='$mostrar_preco_produto', mostrar_outros_produtos='$mostrar_outros_produtos', relat_consol_estoque='$relat_consol_estoque', versao_impressao_compra='$versao_impr_compra_f', romaneio_bal_rodoviaria='$romaneio_bal_rodoviaria', fechamento_romaneio_automatico='$fechamento_romaneio_automatico', nome_fantasia='$nome_fantasia_filial', nome_fantasia_m='$nome_fantasia_m_filial', cpf_cnpj='$cpf_cnpj_filial', telefone_1='$telefone_1_filial', telefone_2='$telefone_2_filial', email='$email_filial', endereco='$endereco_filial', cidade='$cidade_filial', uf='$uf_filial', produtos_relatorio='$produtos_relatorio' WHERE descricao='$filial'");
+$editar = mysqli_query ($conexao, "UPDATE filiais SET icones_select_produto='$icones_select_produto', mostrar_preco_produto='$mostrar_preco_produto', mostrar_outros_produtos='$mostrar_outros_produtos', relat_consol_estoque='$relat_consol_estoque', versao_impressao_compra='$versao_impr_compra_f', romaneio_bal_rodoviaria='$romaneio_bal_rodoviaria', fechamento_romaneio_automatico='$fechamento_romaneio_automatico', nome_fantasia='$nome_fantasia_filial', nome_fantasia_m='$nome_fantasia_m_filial', cpf_cnpj='$cpf_cnpj_filial', telefone_1='$telefone_1_filial', telefone_2='$telefone_2_filial', email='$email_filial', endereco='$endereco_filial', cidade='$cidade_filial', uf='$uf_filial', produtos_relatorio='$produtos_relatorio' WHERE descricao='$filial'");
 
 // MONTA MENSAGEM
 $msg = "<div id='oculta' style='color:#0000FF'>Configura&ccedil;&otilde;es editadas com sucesso!</div>";
@@ -118,6 +119,7 @@ $email_config = $aux_config[50];
 $endereco_config = $aux_config[51];
 $cidade_config = $aux_config[52];
 $uf_config = $aux_config[53];
+$db_environment = $aux_config[55];
 // ======================================================================================================
 
 

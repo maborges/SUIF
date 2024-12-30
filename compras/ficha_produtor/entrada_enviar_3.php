@@ -19,28 +19,6 @@ $altera_contador = mysqli_query ($conexao, "UPDATE configuracoes SET contador_nu
 // ========================================================================================================
 
 
-// =========== CONVERTE DATA ==========================================================================	
-// Função para converter a data de formato nacional para formato americano. Usado para inserir data no mysql
-function ConverteData($data){
-	if (strstr($data, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-// ======================================================================================================
-
-
-// ========== CONVERTE VALOR ============================================================================	
-function ConverteValor($valor){
-	$valor_1 = str_replace(".", "", $valor);
-	$valor_2 = str_replace(",", ".", $valor_1);
-	return $valor_2;
-}
-// ========================================================================================================
-
-
 // ======= RECEBENDO POST =================================================================================
 $filial = $filial_usuario;
 
@@ -400,7 +378,7 @@ include ('../../includes/atualisa_saldo_armaz.php');
 
 		<div id='centro' style='float:left; height:90px; width:185px; color:#00F; text-align:center; border:0px solid #000'>
 		<form action='$servidor/$diretorio_servidor/compras/ficha_produtor/entrada_seleciona_3.php' method='post'>
-		<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/voltar_2.jpg' border='0' /></form>
+		<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/voltar.png' border='0' /></form>
 		</div>	
 
 
@@ -409,7 +387,7 @@ include ('../../includes/atualisa_saldo_armaz.php');
 		<input type='hidden' name='botao' value='seleciona'>
 		<input type='hidden' name='fornecedor' value='$fornecedor'>
 		<input type='hidden' name='cod_produto' value='$cod_produto'>
-		<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/movimentacao.jpg' border='0' /></form>
+		<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/doc_3.png' border='0' /></form>
 		</div>";	
 
 

@@ -10,6 +10,9 @@ if(isset($_COOKIE["filial_suif"]))
 	$filial_usuario = $_COOKIE["filial_suif"];
 if(isset($_COOKIE["nome_filial"]))
 	$nome_filial = $_COOKIE["nome_filial"];
+if(isset($_COOKIE["u_sankhya"]))
+	$idUserSankhya = $_COOKIE["u_sankhya"];
+
 // ===============================================================================================================
 
 

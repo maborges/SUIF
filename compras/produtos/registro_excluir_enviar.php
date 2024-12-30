@@ -2,6 +2,9 @@
 include ("../../includes/config.php");
 include ("../../includes/conecta_bd.php");
 include ("../../includes/valida_cookies.php");
+include("../../sankhya/Sankhya.php");
+include_once("../../helpers.php");
+
 $pagina = "registro_excluir_enviar";
 $titulo = "Excluir";
 $modulo = "compras";
@@ -12,29 +15,30 @@ $menu = "compras";
 // ====== RECEBE POST =====================================================================================
 $filial = $filial_usuario;
 $numero_compra = $_POST["numero_compra"];
-$numero_compra_aux = $_POST["numero_compra_aux"];
-$motivo_exclusao = $_POST["motivo_exclusao"];
+$numero_compra_aux = $_POST["numero_compra_aux"] ?? '';
+$motivo_exclusao = $_POST["motivo_exclusao"] ?? '';
 
-$pagina_mae = $_POST["pagina_mae"];
-$pagina_filha = $_POST["pagina_filha"];
-$botao = $_POST["botao"];
-$data_inicial = $_POST["data_inicial"];
-$data_final = $_POST["data_final"];
-$produto_list = $_POST["produto_list"];
-$produtor_ficha = $_POST["produtor_ficha"];
-$monstra_situacao = $_POST["monstra_situacao"];
-$numero_compra_aux = $_POST["numero_compra_aux"];
-$numero_romaneio = $_POST["numero_romaneio"];
-$numero_transferencia = $_POST["numero_transferencia"];
-$quantidade = $_POST["quantidade"];
-$fornecedor = $_POST["fornecedor"];
-$fornecedor_print = $_POST["fornecedor_print"];
-$cod_produto = $_POST["cod_produto"];
-$produto_print = $_POST["produto_print"];
-$unidade_print = $_POST["unidade_print"];
-$tipo = $_POST["tipo"];
-$cod_tipo = $_POST["cod_tipo"];
-$tipo_print = $_POST["tipo"];
+$pagina_mae = $_POST["pagina_mae"] ?? '';
+$pagina_filha = $_POST["pagina_filha"] ?? '';
+$botao = $_POST["botao"] ?? '';
+$data_inicial = $_POST["data_inicial"] ?? '';
+$data_final = $_POST["data_final"] ?? '';
+$produto_list = $_POST["produto_list"] ?? '';
+$produtor_ficha = $_POST["produtor_ficha"] ?? '';
+$monstra_situacao = $_POST["monstra_situacao"] ?? '';
+$numero_compra_aux = $_POST["numero_compra_aux"] ?? '';
+$numero_romaneio = $_POST["numero_romaneio"] ?? '';
+$numero_transferencia = $_POST["numero_transferencia"] ?? '';
+$quantidade = $_POST["quantidade"] ?? '';
+$fornecedor = $_POST["fornecedor"] ?? '';
+$fornecedor_print = $_POST["fornecedor_print"] ?? '';
+$cod_produto = $_POST["cod_produto"] ?? '';
+$produto_print = $_POST["produto_print"] ?? '';
+$unidade_print = $_POST["unidade_print"] ?? '';
+$tipo = $_POST["tipo"] ?? '';
+$cod_tipo = $_POST["cod_tipo"] ?? '';
+$tipo_print = $_POST["tipo"] ?? '';
+$pedidoSankhya = $_POST['pedidoSankhya'] ?? '';
 
 $usuario_alteracao = $nome_usuario_print;
 $hora_alteracao = date('G:i:s', time());
@@ -54,6 +58,7 @@ $filial_registro = $aux_compra[25];
 $movimentacao = $aux_compra[16];
 $produto = $aux_compra[3];
 $numero_transferencia = $aux_compra[30];
+$pedidoSankhya = $aux_compra[55];
 // ========================================================================================================
 
 
@@ -213,6 +218,11 @@ else
 	include ('../../includes/busca_saldo_armaz.php');
 	$saldo = $saldo_produtor + $quantidade;
 	include ('../../includes/atualisa_saldo_armaz.php');
+
+	// Cancela pedido de faturamento no Sankhya
+	if ($pedidoSankhya) {
+		$resultCancela = Sankhya::cancelaDocumento($pedidoSankhya);
+	}
 	}
 	// ====================================================================================================
 

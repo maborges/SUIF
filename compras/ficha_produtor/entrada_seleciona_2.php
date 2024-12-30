@@ -7,7 +7,7 @@ $titulo = 'Entrada de Mercadoria';
 $menu = 'ficha_produtor';
 $modulo = 'compras';
 
-$aux_cod_produtor = $_POST["aux_cod_produtor"];
+$aux_cod_produtor = $_POST["aux_cod_produtor"] ?? '';
 
 include ('../../includes/head.php'); 
 ?>

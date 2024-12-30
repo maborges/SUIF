@@ -8,7 +8,11 @@ $modulo = "estoque";
 $menu = "entrada";
 // ================================================================================================================
 
-
+$numero_romaneio_w = $_POST['numero_romaneio_w'] ?? '';
+$fornecedor_form = $_POST['fornecedor_form'] ?? '';
+$numero_romaneio_busca = $_POST['numero_romaneio_busca'] ?? '';
+$situacao_romaneio_busca = $_POST['situacao_romaneio_busca'] ?? '';
+$forma_pesagem_busca = $_POST['forma_pesagem_busca'] ?? '';
 
 // ================================================================================================================
 include ('include_comando.php'); 
@@ -46,7 +50,7 @@ include ('../../includes/head.php');
 <!-- ====== MENU ================================================================================================== -->
 <div id="menu_geral">
 <?php include ("../../includes/menu_estoque.php"); ?>
-<?php include ("../../includes/sub_menu_estoque_entrada.php"); ?>
+<?php include ("../../includes/submenu_estoque_entrada.php"); ?>
 </div>
 
 

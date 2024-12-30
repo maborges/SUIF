@@ -22,7 +22,8 @@ $altera_contador = mysqli_query ($conexao, "UPDATE configuracoes SET contador_nu
 // ====== RECEBE POST ==============================================================================================
 $aux_cod_produtor = $_POST["aux_cod_produtor"];
 $num_romaneio_manual = $_POST["num_romaneio_manual"];
-$cod_produto = $_POST["cod_produto"];
+$cod_produto = $_POST["cod_produto"] ?? '';
+$fornecedor = $_POST["fornecedor"] ?? '';
 // ================================================================================================================
 
 
@@ -67,6 +68,7 @@ $numero_rme = $aux_rme[1];
 
 
 // ====== MONTA MENSAGEM ===================================================================================
+$produto_print_titulo = '';
 if ($num_romaneio_manual == "")
 {$erro = 1;
 $msg_erro = "* Informe o n&uacute;mero do romaneio manual.";}
@@ -228,7 +230,7 @@ document.onkeyup=function(e)
 </script>
 
 <!-- ========================================================================================================== -->
-<input id="busca" type="text" name="fornecedor" onClick="buscarNoticias(this.value)" onBlur="buscarNoticias(this.value)" onkeydown="if (getKey(event) == 13) return false; " style="color:#0000FF; width:50px; font-size:12px; text-align:center" value="<?php echo"$fornecedor"; ?>" />&#160;</div>
+<input id="busca" type="text" name="fornecedor" onClick="buscarNoticias(this.value)" onBlur="buscarNoticias(this.value)" onkeydown="if (getKey(event) == 13) return false; " style="color:#0000FF; width:50px; font-size:12px; text-align:center" value=<?php echo "$fornecedor"; ?>>&#160;</div>
 
 
 <div id="tabela_1" style="width:30px; border:0px solid #000"></div>

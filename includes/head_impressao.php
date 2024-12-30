@@ -3,5 +3,6 @@
 <head>
 
 <meta charset="UTF-8" />
+<link rel="stylesheet" type="text/css" href="<?php echo"$servidor/$diretorio_servidor"; ?>/padrao.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo"$servidor/$diretorio_servidor"; ?>/impressao.css" />
 <link rel="shortcut icon" href="<?php echo"$servidor/$diretorio_servidor"; ?>/imagens/favicon_suif.ico" type="image/x-icon" />

@@ -3,23 +3,11 @@
 include ('../../includes/config.php'); 
 include ('../../includes/conecta_bd.php');
 include ('../../includes/valida_cookies.php');
+include ("../../helpers.php");
 $pagina = 'relatorio_lote_periodo';
 $titulo = 'Relat&oacute;rio de Lote';
 $modulo = 'estoque';
 $menu = 'movimentacao';
-// ================================================================================================================
-
-
-// ====== CONVERTE DATA ===========================================================================================
-// Função para converter a data de formato nacional para formato americano. Muito útil para inserir data no mysql
-function ConverteData($data_x){
-	if (strstr($data_x, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data_x);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
 // ================================================================================================================
 
 
@@ -33,9 +21,9 @@ $filial = $filial_usuario;
 $data_hoje = date('Y-m-d', time());
 $data_hoje_br = date('d/m/Y', time());
 $data_inicial_br = $_POST["data_inicial"];
-$data_inicial = ConverteData($_POST["data_inicial"]);
+$data_inicial = Helpers::ConverteData($_POST["data_inicial"]);
 $data_final_br = $_POST["data_final"];
-$data_final = ConverteData($_POST["data_final"]);
+$data_final = Helpers::ConverteData($_POST["data_final"]);
 $mes_atras = date ('Y-m-d', strtotime('-30 days'));
 $mes_atras_br = date ('d/m/Y', strtotime('-30 days'));
 
@@ -46,9 +34,9 @@ if (empty($data_inicial_br) or empty($data_final_br))
 	$data_final = $data_hoje;}
 else
 	{$data_inicial_br = $_POST["data_inicial"];
-	$data_inicial = ConverteData($_POST["data_inicial"]);
+	$data_inicial = Helpers::ConverteData($_POST["data_inicial"]);
 	$data_final_br = $_POST["data_final"];
-	$data_final = ConverteData($_POST["data_final"]);}
+	$data_final = Helpers::ConverteData($_POST["data_final"]);}
 
 $mysql_filtro_data = "data BETWEEN '$data_inicial' AND '$data_final'";
 

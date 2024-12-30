@@ -9,20 +9,6 @@ $modulo = 'compras';
 // ========================================================================================================
 
 
-// ============================================== CONVERTE DATA ====================================================	
-// Função para converter a data de formato nacional para formato americano. Muito útil para inserir data no mysql
-function ConverteData($data){
-
-	if (strstr($data, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-// ==================================================================================================================	
-
-
 // ====== RECEBE POST ==============================================================================================
 $fornecedor = $_POST["fornecedor"];
 $cod_produto = $_POST["cod_produto"];
@@ -55,7 +41,7 @@ $quantidade_un = $aux_bp[23];
 $soma_quant_total_produto_e = mysqli_fetch_row(mysqli_query ($conexao, "SELECT SUM(quantidade) FROM compras WHERE estado_registro!='EXCLUIDO' AND (movimentacao='ENTRADA' OR movimentacao='TRANSFERENCIA_ENTRADA' OR movimentacao='ENTRADA_FUTURO') AND cod_produto='$cod_produto' AND fornecedor='$fornecedor' AND filial='$filial'"));
 $quant_produto_total_e_print = number_format($soma_quant_total_produto_e[0],2,",",".");
 
-// ------ SOMA QUANTIDADE DE SAÍDA (GERAL) -----------------------------------------------------------------------
+// ------ SOMA QUANTIDADE DE SAï¿½DA (GERAL) -----------------------------------------------------------------------
 $soma_quant_total_produto_s = mysqli_fetch_row(mysqli_query ($conexao, "SELECT SUM(quantidade) FROM compras WHERE estado_registro!='EXCLUIDO' AND (movimentacao='COMPRA' OR movimentacao='TRANSFERENCIA_SAIDA' OR movimentacao='SAIDA' OR movimentacao='SAIDA_FUTURO') AND cod_produto='$cod_produto' AND fornecedor='$fornecedor' AND filial='$filial'"));
 $quant_produto_total_s_print = number_format($soma_quant_total_produto_s[0],2,",",".");
 
@@ -116,7 +102,7 @@ $linha_talao = mysqli_num_rows ($busca_talao);
 include ('../../includes/head_impressao.php');
 ?>
 
-<!-- ==================================   T Í T U L O   D A   P Á G I N A   ====================================== -->
+<!-- ==================================   T ï¿½ T U L O   D A   P ï¿½ G I N A   ====================================== -->
 <title>
 <?php echo "$titulo"; ?>
 </title>
@@ -129,7 +115,7 @@ include ('../../includes/head_impressao.php');
 </head>
 
 
-<!-- =============================================   I N Í C I O   =============================================== -->
+<!-- =============================================   I N ï¿½ C I O   =============================================== -->
 <body onLoad="imprimir()">
 
 <?php

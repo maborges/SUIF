@@ -2,6 +2,8 @@
 include ('../../includes/config.php'); 
 include ('../../includes/conecta_bd.php');
 include ('../../includes/valida_cookies.php');
+include ("../../helpers.php");
+
 $pagina = 'compra_impressao';
 $titulo = 'Impress&atilde;o de Compra';
 $menu = 'produtos';
@@ -12,7 +14,7 @@ include ('../../includes/head_impressao.php');
 
 
 
-<!-- ==================================   T Í T U L O   D A   P Á G I N A   ====================================== -->
+<!-- ==================================   T ï¿½ T U L O   D A   P ï¿½ G I N A   ====================================== -->
 <title>
 <?php echo "$titulo"; ?>
 </title>
@@ -25,25 +27,14 @@ include ('../../includes/head_impressao.php');
 </head>
 
 
-<!-- =============================================   I N Í C I O   =============================================== -->
+<!-- =============================================   I N ï¿½ C I O   =============================================== -->
 <body onLoad="imprimir()">
 
 <div style='border:1px solid #FFF'>
 <div id="centro" style="width:745px; border:0px solid #000; float:left; page-break-after:always">
 
 <?php
-// ============================================== CONVERTE DATA ====================================================	
-// Função para converter a data de formato nacional para formato americano. Muito útil para inserir data no mysql
 
-function ConverteData($data){
-
-	if (strstr($data, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
 
 
 	$meses = array ("Janeiro", "Fevereiro", "Mar&ccedil;o", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro");
@@ -51,45 +42,6 @@ function ConverteData($data){
 	$mes = date ("m", time());
 	$ano = date ("Y", time());
 	$hoje = date ("Y-m-d", time());
-
-// ==================================================================================================================
-    function valorPorExtenso($valor=0) {
-    $singular = array("CENTAVO", "REAL", "MIL", "MILH&Atilde;O", "BILH&Atilde;O", "TRILH&Atilde;O", "QUATRILH&Atilde;O");
-    $plural = array("CENTAVOS", "REAIS", "MIL", "MILH&Otilde;ES", "BILH&Otilde;ES", "TRILH&Otilde;ES","QUATRILH&Otilde;ES");
-     
-    $c = array("", "CEM", "DUZENTOS", "TREZENTOS", "QUATROCENTOS","QUINHENTOS", "SEISCENTOS", "SETECENTOS", "OITOCENTOS", "NOVECENTOS");
-    $d = array("", "DEZ", "VINTE", "TRINTA", "QUARENTA", "CINQUENTA","SESSENTA", "SETENTA", "OITENTA", "NOVENTA");
-    $d10 = array("DEZ", "ONZE", "DOZE", "TREZE", "QUATORZE", "QUINZE","DEZESSEIS", "DEZESETE", "DEZOITO", "DEZENOVE");
-    $u = array("", "UM", "DOIS", "TR&Ecirc;S", "QUATRO", "CINCO", "SEIS","SETE", "OITO", "NOVE");
-     
-    $z=0;
-     
-    $valor = number_format($valor, 2, ".", ".");
-    $inteiro = explode(".", $valor);
-    for($i=0;$i<count($inteiro);$i++)
-    for($ii=strlen($inteiro[$i]);$ii<3;$ii++)
-    $inteiro[$i] = "0".$inteiro[$i];
-     
-    // $fim identifica onde que deve se dar junção de centenas por "e" ou por "," ;)
-    $fim = count($inteiro) - ($inteiro[count($inteiro)-1] > 0 ? 1 : 2);
-    for ($i=0;$i<count($inteiro);$i++) {
-    $valor = $inteiro[$i];
-    $rc = (($valor > 100) && ($valor < 200)) ? "CENTO" : $c[$valor[0]];
-    $rd = ($valor[1] < 2) ? "" : $d[$valor[1]];
-    $ru = ($valor > 0) ? (($valor[1] == 1) ? $d10[$valor[2]] : $u[$valor[2]]) : "";
-    $r = $rc.(($rc && ($rd || $ru)) ? " E " : "").$rd.(($rd && $ru) ? " E " : "").$ru;
-    $t = count($inteiro)-1-$i;
-    $r .= $r ? " ".($valor > 1 ? $plural[$t] : $singular[$t]) : "";
-    if ($valor == "000")$z++; elseif ($z > 0) $z--;
-    if (($t==1) && ($z>0) && ($inteiro[0] > 0)) $r .= (($z>1) ? " DE " : "").$plural[$t];
-    if ($r) $rt = $rt . ((($i > 0) && ($i <= $fim) && ($inteiro[0] > 0) && ($z < 1)) ? ( ($i < $fim) ? ", " : " E ") : " ") . $r;
-    }
-     
-    return($rt ? $rt : "zero");
-    }
-	
-// ==================================================================================================================================================	
-
 
 // ==================================================================================================================	
 
@@ -170,7 +122,7 @@ $produto_apelido = $aux_bp[20];
 	else
 	{$unidade_print = "-";}
 
-// SITUAÇÃO PRINT  ==========================================================================================
+// SITUAï¿½ï¿½O PRINT  ==========================================================================================
 	if ($situacao == "POSTO")
 	{$situacao_print = "POSTO";}
 	elseif ($situacao == "A_RETIRAR")
@@ -773,7 +725,7 @@ for ($c=1 ; $c<=$linha_favorecidos_ch ; $c++)
 	</div>
 
 	<div id='centro' style='width:600px; height:40px; border:0px solid #000; font-size:14px; float:left' align='left'>";
-	echo valorPorExtenso($valor_cheque);
+	echo Helpers::valorPorExtenso($valor_cheque);
 	
 	echo "
 	</div>

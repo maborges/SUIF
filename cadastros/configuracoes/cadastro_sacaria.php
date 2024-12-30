@@ -2,6 +2,8 @@
 include ("../../includes/config.php"); 
 include ("../../includes/conecta_bd.php");
 include ("../../includes/valida_cookies.php");
+include ("../../helpers.php");
+
 $pagina = "cadastro_sacaria";
 $titulo = "Cadastro de Sacaria";
 $modulo = "cadastros";
@@ -9,21 +11,12 @@ $menu = "config";
 // ================================================================================================================
 
 
-// ====== CONVERTE PESO ==========================================================================================
-function ConvertePeso($peso_x){
-	$peso_1 = str_replace(".", "", $peso_x);
-	$peso_2 = str_replace(",", ".", $peso_1);
-	return $peso_2;
-}
-// ================================================================================================================
-
-
 // ====== RECEBE POST ==============================================================================================
 $botao = $_POST["botao"];
 $descricao_sacaria_form = $_POST["descricao_sacaria_form"];
 $movimentacao_sacaria_form = $_POST["movimentacao_sacaria_form"];
-$peso_sacaria_form = ConvertePeso($_POST["peso_sacaria_form"]);
-$capacidade_sacaria_form = ConvertePeso($_POST["capacidade_sacaria_form"]);
+$peso_sacaria_form = Helpers::ConvertePeso($_POST["peso_sacaria_form"]);
+$capacidade_sacaria_form = Helpers::ConvertePeso($_POST["capacidade_sacaria_form"]);
 $codigo_w = $_POST["codigo_w"];
 $bloqueio_w = $_POST["bloqueio_w"];
 
@@ -34,8 +27,8 @@ $capacidade_sacaria_form = $_POST["capacidade_sacaria_form"];
 }
 else
 {
-$peso_sacaria_form = ConvertePeso($_POST["peso_sacaria_form"]);
-$capacidade_sacaria_form = ConvertePeso($_POST["capacidade_sacaria_form"]);
+$peso_sacaria_form = Helpers::ConvertePeso($_POST["peso_sacaria_form"]);
+$capacidade_sacaria_form = Helpers::ConvertePeso($_POST["capacidade_sacaria_form"]);
 }
 
 $usuario_cadastro_form = $nome_usuario_print;

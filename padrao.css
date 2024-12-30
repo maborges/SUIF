@@ -1,1221 +1,1574 @@
 @charset "utf-8";
 
-body /*  ===========  ATIVO  =========== */
-{
-	font-family:Verdana, Arial, Helvetica, sans-serif;
-	font-style:normal;
-	background-color:#FFF;
-	margin:0px;
+body
+
+/*  ===========  ATIVO  =========== */
+	{
+	font-family: Verdana, Arial, Helvetica, sans-serif !important;
+	font-style: normal;
+	background-color: #FFF;
+	margin: 0px;
 }
 
-div#fundo_principal /* SERÁ INATIVADO */
-{
-	background-color:#FFF;
-	border-radius:0px;
-	border:0px solid #FFF;
-	width:950px;
-	margin:auto;
+div#fundo_principal
+
+/* SERÁ INATIVADO */
+	{
+	background-color: #FFF;
+	border-radius: 0px;
+	border: 0px solid #FFF;
+	width: 950px;
+	margin: auto;
 }
 
-.topo /*  ===========  ATIVO  =========== */
-{
-	background-color:#003466;
-	width:auto;
-	height:65px;
+.topo
+
+/*  ===========  ATIVO  =========== */
+	{
+	background-color: #003466;
+	width: auto;
+	height: 65px;
 	margin: 0px 0px 0px 0px;
 }
 
-div#topo /* SERÁ INATIVADO */
-{
-	font-style:normal;	
+div#topo
+
+/* SERÁ INATIVADO */
+	{
+	font-style: normal;
 }
 
-div#topo_geral /* SERÁ INATIVADO */
-{
-	background-color:#003466;
-	width:auto;
-	height:65px;
+div#topo_geral
+
+/* SERÁ INATIVADO */
+	{
+	background-color: #003466;
+	width: auto;
+	height: 65px;
 	margin: 0px 0px 0px 0px;
 }
 
-div#topo_geral_2 /* SERÁ INATIVADO */
-{
-	background-color:#003466;
-	width:auto;
-	height:65px;
+div#topo_geral_2
+
+/* SERÁ INATIVADO */
+	{
+	background-color: #003466;
+	width: auto;
+	height: 65px;
 	margin: 0px 0px 0px 0px;
 }
 
-div#topo_geral_app /* SERÁ INATIVADO */
-{
-	width:auto;
-	height:auto;
+div#topo_geral_app
+
+/* SERÁ INATIVADO */
+	{
+	width: auto;
+	height: auto;
 	margin: 0px 0px 0px 0px;
 }
 
-div#ct_1 /* SERÁ INATIVADO */
-{
-	width:1280px;
-	height:auto;
-	margin:auto;
-	background-color:#FFF;
-	border-radius:7px;
-	border:1px solid #FFF;
+div#ct_1
+
+/* SERÁ INATIVADO */
+	{
+	width: 1280px;
+	height: auto;
+	margin: auto;
+	background-color: #FFF;
+	border-radius: 7px;
+	border: 1px solid #FFF;
+}
+
+
+.ct_1
+
+/*  ===========  ATIVO  =========== */
+	{
+	width: 1280px;
+	height: auto;
+	margin: auto;
+	background-color: #FFF;
+	border-radius: 7px;
+	border: 1px solid #FFF;
+}
+
+
+.ct_fixo
+
+/*  ===========  ATIVO  =========== */
+	{
+	width: auto;
+	height: 500px;
+	margin: auto;
+	background-color: #FFF;
+	border: 1px solid #FFF;
+}
+
+.ct_auto
+
+/*  ===========  ATIVO  =========== */
+	{
+	width: auto;
+	height: auto;
+	margin: auto;
+	background-color: #FFF;
+	border: 1px solid #FFF;
+}
+
+.ct_relatorio
+
+/*  ===========  ATIVO  =========== */
+	{
+	/*	width:1250px;*/
+	width: auto;
+	height: auto;
+	margin: auto;
+	border: 0px solid #999;
+}
+
+.espacamento
+
+/*  ===========  ATIVO  =========== */
+	{
+	width: 1240px;
+	margin: auto;
+}
+
+.espacamento_5
+
+/* SERÁ INATIVADO */
+	{
+	width: 1240px;
+	height: 5px;
+	margin: auto;
+}
+
+.espacamento_10
+
+/* SERÁ INATIVADO */
+	{
+	width: 1240px;
+	height: 10px;
+	margin: auto;
+}
+
+.espacamento_15
+
+/* SERÁ INATIVADO */
+	{
+	width: 1240px;
+	height: 15px;
+	margin: auto;
+}
+
+.espacamento_20
+
+/* SERÁ INATIVADO */
+	{
+	width: 1240px;
+	height: 20px;
+	margin: auto;
+}
+
+.espacamento_25
+
+/* SERÁ INATIVADO */
+	{
+	width: 1240px;
+	height: 20px;
+	margin: auto;
+}
+
+.espacamento_30
+
+/* SERÁ INATIVADO */
+	{
+	width: 1240px;
+	height: 30px;
+	margin: auto;
+}
+
+.espacamento_40
+
+/* SERÁ INATIVADO */
+	{
+	width: 1240px;
+	height: 40px;
+	margin: auto;
+}
+
+
+div#titulo_1
+
+/* SERÁ INATIVADO */
+	{
+	font-size: 22px;
+	color: #090;
+}
+
+div#titulo_2
+
+/* SERÁ INATIVADO */
+	{
+	font-size: 14px;
+	color: #003466;
+}
+
+div#titulo_3
+
+/* SERÁ INATIVADO */
+	{
+	font-size: 14px;
+	color: #003466;
+	font-style: italic;
+}
+
+div#titulo_4
+
+/* SERÁ INATIVADO */
+	{
+	font-size: 14px;
+	color: #003466;
+	font-style: italic;
+}
+
+
+.ct_topo_1
+
+/*  ===========  ATIVO  =========== */
+	{
+	width: 1450px;
+	height: 40px;
+	border: 0px solid #000;
+	margin: auto;
+}
+
+.ct_topo_2
+
+/*  ===========  ATIVO  =========== */
+	{
+	width: 1450px;
+	height: 25px;
+	border: 0px solid #000;
+	margin: auto;
+}
+
+.ct_titulo_1
+
+/*  ===========  ATIVO  =========== */
+	{
+	width: 900px;
+	height: 30px;
+	float: left;
+	text-align: left;
+	font-size: 22px;
+	font-style: normal;
+	color: #009900;
+	margin-left: 0px;
+}
+
+.ct_titulo_2
+
+/*  ===========  ATIVO  =========== */
+	{
+	width: 400px;
+	height: 30px;
+	float: right;
+	text-align: right;
+	font-size: 22px;
+	font-style: normal;
+	color: #009900;
+	margin-right: 0px;
+}
+
+.ct_subtitulo_left
+
+/*  ===========  ATIVO  =========== */
+	{
+	width: 900px;
+	height: 20px;
+	float: left;
+	text-align: left;
+	font-size: 16px;
+	font-style: normal;
+	color: #666;
+	margin-left: 0px;
+}
+
+.ct_subtitulo_right
+
+/*  ===========  ATIVO  =========== */
+	{
+	width: 400px;
+	height: 20px;
+	float: right;
+	text-align: right;
+	font-size: 16px;
+	font-style: normal;
+	color: #666;
+	margin-right: 0px;
+}
+
+.ct_subtitulo_left a
+
+/*  ===========  ATIVO  =========== */
+	{
+	color: #003466;
+	text-decoration: none;
+}
+
+.ct_subtitulo_left a:hover
+
+/*  ===========  ATIVO  =========== */
+	{
+	color: #090;
+	text-decoration: none;
+}
+
+.ct_subtitulo_left hover
+
+/*  ===========  ATIVO  =========== */
+	{
+	color: #090;
+	text-decoration: none;
+}
+
+
+.total
+
+/*  ===========  ATIVO  =========== */
+	{
+	font-size: 11px;
+	border: 1px solid #009900;
+	border-radius: 0px;
+	background-color: #EEE;
+	float: left;
+}
+
+.total_nome
+
+/*  ===========  ATIVO  =========== */
+	{
+	color: #009900;
+	margin-left: 8px;
+	margin-top: 6px;
+	text-align: left;
+	float: left;
+	overflow: hidden;
+}
+
+.total_valor
+
+/*  ===========  ATIVO  =========== */
+	{
+	color: #444;
+	margin-left: 0px;
+	margin-top: 6px;
+	text-align: left;
+	float: left;
+	overflow: hidden;
+}
+
+.contador
+
+/*  ===========  ATIVO  =========== */
+	{
+	height: 28px;
+	width: 1270px;
+	border: 0px solid #999;
+	border-radius: 0px;
+	margin: auto;
+	background-color: transparent;
+}
+
+.contador_text
+
+/*  ===========  ATIVO  =========== */
+	{
+	height: 26px;
+	font-size: 12px;
+	color: #003466;
+}
+
+.contador_interno
+
+/*  ===========  ATIVO  =========== */
+	{
+	margin-top: 6px;
+}
+
+
+.pqa
+
+/*  ===========  ATIVO  =========== */
+	{
+	border: 1px solid #999;
+	background-color: #EEE;
+	margin: auto;
+	height: 63px;
+	width: 1450px;
+}
+
+.pqa_caixa
+
+/*  ===========  ATIVO  =========== */
+	{
+	width: auto;
+	height: 50px;
+	float: left;
+	margin-top: 6px;
+	border: 1px solid transparent;
+}
+
+.pqa_rotulo
+
+/*  ===========  ATIVO  =========== */
+	{
+	width: auto;
+	height: 17px;
+	font-size: 12px;
+	color: #444;
+	font-style: italic;
+	margin-left: 30px;
+	border: 1px solid transparent;
+}
+
+.pqa_campo
+
+/*  ===========  ATIVO  =========== */
+	{
+	width: auto;
+	height: 30px;
+	margin-left: 30px;
+	border: 1px solid transparent;
+}
+
+.pqa_input
+
+/*  ===========  ATIVO  =========== */
+	{
+	font-size: 14px;
+	color: #0000FF;
+	text-align: left;
+	height: 22px;
+	border: 1px solid #999;
+	border-radius: 3px;
+	background-color: #FFF;
+	padding-left: 6px;
+}
+
+.pqa_select
+
+/*  ===========  ATIVO  =========== */
+	{
+	font-size: 14px;
+	color: #0000FF;
+	text-align: left;
+	height: 26px;
+	border: 1px solid #999;
+	border-radius: 3px;
+	background-color: #FFF;
+	padding-left: 6px;
+}
+
+
+.visualizar
+
+/*  ===========  ATIVO  =========== */
+	{
+	width: auto;
+	height: 50px;
+	float: left;
+	margin-top: 10px;
+	border: 1px solid transparent;
+}
+
+.visualizar_rotulo
+
+/*  ===========  ATIVO  =========== */
+	{
+	width: auto;
+	height: 17px;
+	font-size: 12px;
+	color: #444;
+	font-style: italic;
+	margin-right: 30px;
+	border: 1px solid transparent;
+}
+
+.visualizar_caixa
+
+/*  ===========  ATIVO  =========== */
+	{
+	width: auto;
+	height: 30px;
+	margin-right: 30px;
+	border: 1px solid transparent;
+}
+
+.visualizar_campo
+
+/*  ===========  ATIVO  =========== */
+	{
+	width: auto;
+	height: 25px;
+	background-color: #EEE;
+	border: 1px solid #999;
+	font-size: 12px;
+	color: #003466;
+	float: left;
+}
+
+.visualizar_hidden
+
+/*  ===========  ATIVO  =========== */
+	{
+	width: auto;
+	height: 16px;
+	margin-left: 5px;
+	margin-top: 6px;
+	text-align: left;
+	overflow: hidden;
+}
+
+
+
+
+.form
+
+/*  ===========  ATIVO  =========== */
+	{
+	border: 0px solid #999;
+	border-radius: 0px;
+	background-color: transparent;
+	margin: auto;
+	width: 1260px;
+}
+
+.form_rotulo
+
+/*  ===========  ATIVO  =========== */
+	{
+	font-size: 12px;
+	color: #444;
+	float: left;
+	font-style: italic;
+}
+
+.form_input
+
+/*  ===========  ATIVO  =========== */
+	{
+	font-size: 14px;
+	color: #0000FF;
+	height: 22px;
+	border: 1px solid #999;
+	border-radius: 3px;
+	background-color: #FFF;
+}
+
+.form_select
+
+/*  ===========  ATIVO  =========== */
+	{
+	font-size: 14px;
+	color: #0000FF;
+	height: 26px;
+	border: 1px solid #999;
+	border-radius: 3px;
+	background-color: #FFF;
+}
+
+.botao_modulo_on
+
+/*  ===========  ATIVO  =========== */
+	{
+	background: #EEE;
+	border: 0px solid #999;
+	border-radius: 0px 0px 5px 5px;
+	padding: 4px 20px;
+	color: #009900;
+	display: inline-block;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: normal;
+	text-align: center;
+	float: left;
+	width: 100px;
+	height: 26px;
+}
+
+.botao_modulo_on:hover
+
+/*  ===========  ATIVO  =========== */
+	{
+	background: #999;
+	color: #FFF;
+}
+
+
+.botao_modulo_off
+
+/*  ===========  ATIVO  =========== */
+	{
+	background: #006699;
+	border: 0px solid #999;
+	border-radius: 0px 0px 5px 5px;
+	padding: 4px 20px;
+	color: #FFF;
+	display: inline-block;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: normal;
+	text-align: center;
+	float: left;
+	width: 100px;
+	height: 26px;
+}
+
+.botao_modulo_off:hover
+
+/*  ===========  ATIVO  =========== */
+	{
+	background: #999;
+	color: #FFF;
+}
+
+.botao_menu_on
+
+/*  ===========  ATIVO  =========== */
+	{
+	background: #FCFCFC;
+	border: 0px solid #999;
+	border-radius: 5px;
+	padding: 6px 10px;
+	color: #009900;
+	display: inline-block;
+	font-size: 13px;
+	font-style: normal;
+	font-weight: normal;
+	text-align: center;
+	float: left;
+	width: 160px;
+	height: 30px;
+	box-shadow: 1px 1px 2px #666;
+}
+
+.botao_menu_on:hover
+
+/*  ===========  ATIVO  =========== */
+	{
+	background: #FFF;
+	color: #009900;
+	box-shadow: 2px 2px 2px #666;
+}
+
+
+.botao_menu_off
+
+/*  ===========  ATIVO  =========== */
+	{
+	background: #FCFCFC;
+	border: 0px solid #999;
+	border-radius: 5px;
+	padding: 6px 10px;
+	color: #444;
+	display: inline-block;
+	font-size: 13px;
+	font-style: normal;
+	font-weight: normal;
+	text-align: center;
+	float: left;
+	width: 160px;
+	height: 30px;
 }
 
+.botao_menu_off:hover
 
-.ct_1 /*  ===========  ATIVO  =========== */
-{
-	width:1280px;
-	height:auto;
-	margin:auto;
-	background-color:#FFF;
-	border-radius:7px;
-	border:1px solid #FFF;
+/*  ===========  ATIVO  =========== */
+	{
+	background: #FFF;
+	color: #009900;
+	box-shadow: 2px 2px 2px #666;
 }
+
 
+.botao_1
 
-.ct_fixo /*  ===========  ATIVO  =========== */
-{
-	width:auto;
-	height:500px;
-	margin:auto;
-	background-color:#FFF;
-	border:1px solid #FFF;
+/*  ===========  ATIVO  =========== */
+	{
+	background: #FCFCFC;
+	background: linear-gradient(#FCFCFC, #CCC);
+	border: 0px solid #999;
+	border-radius: 5px;
+	padding: 4px 20px;
+	color: #444;
+	display: inline-block;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: normal;
+	font-family: "Calibri", sans-serif;
+	text-align: center;
+	box-shadow: 1px 1px 2px #666;
+	float: left;
 }
 
-.ct_auto /*  ===========  ATIVO  =========== */
-{
-	width:auto;
-	height:auto;
-	margin:auto;
-	background-color:#FFF;
-	border:1px solid #FFF;
+.botao_1:hover
+
+/*  ===========  ATIVO  =========== */
+	{
+	background: #FFF;
+	background: linear-gradient(#FFF, #999);
+	color: #009900;
+	box-shadow: 2px 2px 2px #666;
+	/*	box-shadow:2px 2px 4px #666;*/
 }
 
-.ct_relatorio /*  ===========  ATIVO  =========== */
-{
-/*	width:1250px;*/
-	width:auto;
-	height:auto;
-	margin:auto;
-	border:0px solid #999;
+.botao_2
+
+/*  ===========  ATIVO  =========== */
+	{
+	background: #FCFCFC;
+	background: linear-gradient(#FCFCFC, #CCC);
+	border: 0px solid #999;
+	border-radius: 5px;
+	padding: 8px 15px;
+	color: #444;
+	display: inline-block;
+	font-size: 17px;
+	font-style: normal;
+	font-weight: normal;
+	font-family: "Calibri", sans-serif;
+	text-align: center;
+	box-shadow: 1px 1px 2px #666;
+	float: left;
 }
+
+.botao_2:hover
 
-.espacamento /*  ===========  ATIVO  =========== */
-{
-	width:1240px;
-	margin:auto;
+/*  ===========  ATIVO  =========== */
+	{
+	background: #FFF;
+	background: linear-gradient(#FFF, #999);
+	color: #009900;
+	box-shadow: 2px 2px 2px #666;
+	/*	box-shadow:2px 2px 4px #666;*/
 }
 
-.espacamento_5 /* SERÁ INATIVADO */
-{
-	width:1240px;
-	height:5px;
-	margin:auto;
+
+.produto
+
+/*  ===========  ATIVO  =========== */
+	{
+	border: 2px solid #003466;
+	color: #003466;
 }
+
+
+.produto:hover
 
-.espacamento_10 /* SERÁ INATIVADO */
-{
-	width:1240px;
-	height:10px;
-	margin:auto;
+/*  ===========  ATIVO  =========== */
+	{
+	border: 2px solid #009900;
+	color: #009900;
+	background-color: #EEE;
 }
 
-.espacamento_15 /* SERÁ INATIVADO */
-{
-	width:1240px;
-	height:15px;
-	margin:auto;
+
+.produto_2
+
+/*  ===========  ATIVO  =========== */
+	{
+	border: 2px solid #999;
+	color: #999;
 }
+
 
-.espacamento_20 /* SERÁ INATIVADO */
-{
-	width:1240px;
-	height:20px;
-	margin:auto;
+.produto_2:hover
+
+/*  ===========  ATIVO  =========== */
+	{
+	border: 2px solid #009900;
+	color: #003466;
+	background-color: #EEE;
 }
+
 
-.espacamento_25 /* SERÁ INATIVADO */
-{
-	width:1240px;
-	height:20px;
-	margin:auto;
+.link a
+
+/*  ===========  ATIVO  =========== */
+	{
+	color: #0000FF;
+	text-decoration: none;
+	font-style: normal;
 }
+
+.link a:hover
 
-.espacamento_30 /* SERÁ INATIVADO */
-{
-	width:1240px;
-	height:30px;
-	margin:auto;
+/*  ===========  ATIVO  =========== */
+	{
+	color: #009900;
+	text-decoration: none;
+	font-style: normal;
 }
 
-.espacamento_40 /* SERÁ INATIVADO */
-{
-	width:1240px;
-	height:40px;
-	margin:auto;
+.link_2:hover
+
+/*  ===========  ATIVO  =========== */
+	{
+	color: #009900;
+	text-decoration: none;
+	font-style: italic;
 }
 
+.link_3 a
 
-div#titulo_1 /* SERÁ INATIVADO */
-{
-	font-size:22px;
-	color:#090;
+/*  ===========  ATIVO  =========== */
+	{
+	color: #EEE;
+	text-decoration: none;
+	font-style: normal;
 }
 
-div#titulo_2 /* SERÁ INATIVADO */
-{
-	font-size:14px;
-	color:#003466;
+.link_3 a:hover
+
+/*  ===========  ATIVO  =========== */
+	{
+	color: #EEE;
+	text-decoration: none;
+	font-style: normal;
 }
+
+.link_4 a
 
-div#titulo_3 /* SERÁ INATIVADO */
-{
-	font-size:14px;
-	color:#003466;
-	font-style:italic;
+/*  ===========  ATIVO  =========== */
+	{
+	color: #666;
+	text-decoration: none;
+	font-style: normal;
 }
 
-div#titulo_4 /* SERÁ INATIVADO */
-{
-	font-size:14px;
-	color:#003466;
-	font-style:italic;
+.link_4 a:hover
+
+/*  ===========  ATIVO  =========== */
+	{
+	color: #090;
+	text-decoration: none;
+	font-style: normal;
 }
 
 
-.ct_topo_1 /*  ===========  ATIVO  =========== */
-{
-	width:1450px;
-	height:40px;
-	border:0px solid #000;
-	margin:auto;
+.tabela_cabecalho
+
+/*  ===========  ATIVO  =========== */
+	{
+	font-size: 10px;
+	color: #FFF;
+	margin: auto;
 }
+
+.tabela_cabecalho td
 
-.ct_topo_2 /*  ===========  ATIVO  =========== */
-{
-	width:1450px;
-	height:25px;
-	border:0px solid #000;
-	margin:auto;
+/*  ===========  ATIVO  =========== */
+	{
+	height: 24px;
+	background-color: #006699;
+	text-align: center;
 }
 
-.ct_titulo_1 /*  ===========  ATIVO  =========== */
-{
-	width:900px;
-	height:30px;
-	float:left;
-	text-align:left;
-	font-size:22px;
-	font-style:normal;
-	color:#009900;
-	margin-left:0px;
-}
-
-.ct_titulo_2 /*  ===========  ATIVO  =========== */
-{
-	width:400px;
-	height:30px;
-	float:right;
-	text-align:right;
-	font-size:22px;
-	font-style:normal;
-	color:#009900;
-	margin-right:0px;
+.tabela_geral
+
+/*  ===========  ATIVO  =========== */
+	{
+	font-size: 12px;
+	border: 0px solid #000;
+	margin: auto;
 }
 
-.ct_subtitulo_left /*  ===========  ATIVO  =========== */
-{
-	width:900px;
-	height:20px;
-	float:left;
-	text-align:left;
-	font-size:16px;
-	font-style:normal;
-	color:#666;
-	margin-left:0px; 
+.tabela_geral td
+
+/*  ===========  ATIVO  =========== */
+	{
+	height: 24px;
 }
 
-.ct_subtitulo_right /*  ===========  ATIVO  =========== */
-{
-	width:400px;
-	height:20px;
-	float:right;
-	text-align:right;
-	font-size:16px;
-	font-style:normal;
-	color:#666;
-	margin-right:0px; 
-}
+.tabela_1
 
-.ct_subtitulo_left a /*  ===========  ATIVO  =========== */
-{
-	color:#003466;
-	text-decoration:none;
+/* Azul */
+/*  ===========  ATIVO  =========== */
+	{
+	border: 1px solid #FFF;
+	background-color: #E0EEEE;
+	color: #003466;
 }
-
-.ct_subtitulo_left a:hover /*  ===========  ATIVO  =========== */
-{
-	color:#090;
-	text-decoration:none;
+
+.tabela_1:hover
+
+/*  ===========  ATIVO  =========== */
+	{
+	background: #0C0;
+	background: linear-gradient(#0C0, #006400);
+	color: #FFF;
 }
+
+.tabela_2
 
-.ct_subtitulo_left hover /*  ===========  ATIVO  =========== */
-{
-	color:#090;
-	text-decoration:none;
-}
-
-
-.total /*  ===========  ATIVO  =========== */
-{
-	font-size:11px;
-	border:1px solid #009900;
-	border-radius:0px;
-	background-color:#EEE;
-	float:left;
-}
-
-.total_nome /*  ===========  ATIVO  =========== */
-{
-	color:#009900;
-	margin-left:8px;
-	margin-top:6px;
-	text-align:left;
-	float:left;
-	overflow:hidden;
-}
-
-.total_valor /*  ===========  ATIVO  =========== */
-{
-	color:#444;
-	margin-left:0px;
-	margin-top:6px;
-	text-align:left;
-	float:left;
-	overflow:hidden;
-}
-
-.contador /*  ===========  ATIVO  =========== */
-{
-	height:28px;
-	width:1270px;
-	border:0px solid #999;
-	border-radius:0px;
-	margin:auto;
-	background-color:transparent;
-}
-
-.contador_text /*  ===========  ATIVO  =========== */
-{
-	height:26px;
-	font-size:12px;
-	color:#003466;
-}
-
-.contador_interno /*  ===========  ATIVO  =========== */
-{
-	margin-top:6px;
-}
-
-
-.pqa /*  ===========  ATIVO  =========== */
-{
-	border:1px solid #999;
-	background-color:#EEE;
-	margin:auto;
-	height:63px;
-	width:1450px;
-}
-
-.pqa_caixa /*  ===========  ATIVO  =========== */
-{
-	width:auto;
-	height:50px;
-	float:left;
-	margin-top:6px;
-	border:1px solid transparent;
-}
-
-.pqa_rotulo /*  ===========  ATIVO  =========== */
-{
-	width:auto;
-	height:17px;
-	font-size:12px;
-	color:#444;
-	font-style:italic;
-	margin-left:30px;
-	border:1px solid transparent;
-}
-
-.pqa_campo /*  ===========  ATIVO  =========== */
-{
-	width:auto;
-	height:30px;
-	margin-left:30px;
-	border:1px solid transparent;
-}
-
-.pqa_input /*  ===========  ATIVO  =========== */
-{
-	font-size:14px;
-	color:#0000FF;
-	text-align:left;
-	height:22px;
-	border:1px solid #999;
-	border-radius:3px;
-	background-color:#FFF;
-	padding-left:6px;
-}
-
-.pqa_select /*  ===========  ATIVO  =========== */
-{
-	font-size:14px;
-	color:#0000FF;
-	text-align:left;
-	height:26px;
-	border:1px solid #999;
-	border-radius:3px;
-	background-color:#FFF;
-	padding-left:6px;
-}
-
-
-.visualizar /*  ===========  ATIVO  =========== */
-{
-	width:auto;
-	height:50px;
-	float:left;
-	margin-top:10px;
-	border:1px solid transparent;
-}
-
-.visualizar_rotulo /*  ===========  ATIVO  =========== */
-{
-	width:auto;
-	height:17px;
-	font-size:12px;
-	color:#444;
-	font-style:italic;
-	margin-right:30px;
-	border:1px solid transparent;
-}
-
-.visualizar_caixa /*  ===========  ATIVO  =========== */
-{
-	width:auto;
-	height:30px;
-	margin-right:30px;
-	border:1px solid transparent;
-}
-
-.visualizar_campo /*  ===========  ATIVO  =========== */
-{
-	width:auto;
-	height:25px;
-	background-color:#EEE;
-	border:1px solid #999;
-	font-size:12px;
-	color:#003466;
-	float:left;
-}
-
-.visualizar_hidden /*  ===========  ATIVO  =========== */
-{
-	width:auto;
-	height:16px;
-	margin-left:5px;
-	margin-top:6px;
-	text-align:left;
-	overflow:hidden;
-}
-
-
-
-
-.form /*  ===========  ATIVO  =========== */
-{
-	border:0px solid #999;
-	border-radius:0px;
-	background-color:transparent;
-	margin:auto;
-	width:1260px;
-}
-
-.form_rotulo /*  ===========  ATIVO  =========== */
-{
-	font-size:12px;
-	color:#444;
-	float:left;
-	font-style:italic;
-}
-
-.form_input /*  ===========  ATIVO  =========== */
-{
-	font-size:14px;
-	color:#0000FF;
-	height:22px;
-	border:1px solid #999;
-	border-radius:3px;
-	background-color:#FFF;
-}
-
-.form_select /*  ===========  ATIVO  =========== */
-{
-	font-size:14px;
-	color:#0000FF;
-	height:26px;
-	border:1px solid #999;
-	border-radius:3px;
-	background-color:#FFF;
-}
-
-.botao_modulo_on /*  ===========  ATIVO  =========== */
-{
-	background:#EEE;
-	border:0px solid #999;
-	border-radius:0px 0px 5px 5px ;
-	padding:4px 20px;
-	color:#009900;
-	display:inline-block;
-	font-size:12px;
-	font-style:normal;
-	font-weight:normal;
-	text-align:center;
-	float:left;
-	width:100px;
-	height:26px;
-}
-
-.botao_modulo_on:hover /*  ===========  ATIVO  =========== */
-{
-	background:#999;
-	color:#FFF;
-}
-
-
-.botao_modulo_off /*  ===========  ATIVO  =========== */
-{
-	background:#006699;
-	border:0px solid #999;
-	border-radius:0px 0px 5px 5px ;
-	padding:4px 20px;
-	color:#FFF;
-	display:inline-block;
-	font-size:12px;
-	font-style:normal;
-	font-weight:normal;
-	text-align:center;
-	float:left;
-	width:100px;
-	height:26px;
-}
-
-.botao_modulo_off:hover /*  ===========  ATIVO  =========== */
-{
-	background:#999;
-	color:#FFF;
-}
-
-.botao_menu_on /*  ===========  ATIVO  =========== */
-{
-	background:#FCFCFC;
-	border:0px solid #999;
-	border-radius:5px;
-	padding:6px 10px;
-	color:#009900;
-	display:inline-block;
-	font-size:13px;
-	font-style:normal;
-	font-weight:normal;
-	text-align:center;
-	float:left;
-	width:160px;
-	height:30px;
-	box-shadow:1px 1px 2px #666;
-}
-
-.botao_menu_on:hover /*  ===========  ATIVO  =========== */
-{
-	background:#FFF;
-	color:#009900;
-	box-shadow:2px 2px 2px #666;
-}
-
-
-.botao_menu_off /*  ===========  ATIVO  =========== */
-{
-	background:#FCFCFC;
-	border:0px solid #999;
-	border-radius:5px;
-	padding:6px 10px;
-	color:#444;
-	display:inline-block;
-	font-size:13px;
-	font-style:normal;
-	font-weight:normal;
-	text-align:center;
-	float:left;
-	width:160px;
-	height:30px;
-}
-
-.botao_menu_off:hover /*  ===========  ATIVO  =========== */
-{
-	background:#FFF;
-	color:#009900;
-	box-shadow:2px 2px 2px #666;
-}
-
-
-.botao_1 /*  ===========  ATIVO  =========== */
-{
-	background:#FCFCFC;
-	background:linear-gradient(#FCFCFC, #CCC);
-	border:0px solid #999;
-	border-radius:5px;
-	padding:4px 20px;
-	color:#444;
-	display:inline-block;
-	font-size:14px;
-	font-style:normal;
-	font-weight:normal;
-	font-family:"Calibri", sans-serif;
-	text-align:center;
-	box-shadow:1px 1px 2px #666;
-	float:left;
-}
-
-.botao_1:hover /*  ===========  ATIVO  =========== */
-{
-	background:#FFF;
-	background:linear-gradient(#FFF, #999);
-	color:#009900;
-	box-shadow:2px 2px 2px #666;
-/*	box-shadow:2px 2px 4px #666;*/
-}
-
-.botao_2 /*  ===========  ATIVO  =========== */
-{
-	background:#FCFCFC;
-	background:linear-gradient(#FCFCFC, #CCC);
-	border:0px solid #999;
-	border-radius:5px;
-	padding:8px 15px;
-	color:#444;
-	display:inline-block;
-	font-size:17px;
-	font-style:normal;
-	font-weight:normal;
-	font-family:"Calibri", sans-serif;
-	text-align:center;
-	box-shadow:1px 1px 2px #666;
-	float:left;
-}
-
-.botao_2:hover /*  ===========  ATIVO  =========== */
-{
-	background:#FFF;
-	background:linear-gradient(#FFF, #999);
-	color:#009900;
-	box-shadow:2px 2px 2px #666;
-/*	box-shadow:2px 2px 4px #666;*/
-}
-
-
-.produto /*  ===========  ATIVO  =========== */
-{
-	border:2px solid #003466;
-	color:#003466;
-}
-
-
-.produto:hover /*  ===========  ATIVO  =========== */
-{
-	border:2px solid #009900;
-	color:#009900;
-	background-color:#EEE;
-}
-
-
-.produto_2 /*  ===========  ATIVO  =========== */
-{
-	border:2px solid #999;
-	color:#999;
-}
-
-
-.produto_2:hover /*  ===========  ATIVO  =========== */
-{
-	border:2px solid #009900;
-	color:#003466;
-	background-color:#EEE;
-}
-
-
-.link a /*  ===========  ATIVO  =========== */
-{
-	color:#0000FF;
-	text-decoration:none;
-	font-style:normal;
-}
-	
-.link a:hover /*  ===========  ATIVO  =========== */
-{
-	color:#009900;
-	text-decoration:none;
-	font-style:normal;
-}
-
-.link_2:hover /*  ===========  ATIVO  =========== */
-{
-	color:#009900;
-	text-decoration:none;
-	font-style:italic;
-}
-
-.link_3 a /*  ===========  ATIVO  =========== */
-{
-	color:#EEE;
-	text-decoration:none;
-	font-style:normal;
-}
-	
-.link_3 a:hover /*  ===========  ATIVO  =========== */
-{
-	color:#EEE;
-	text-decoration:none;
-	font-style:normal;
-}
-
-.link_4 a /*  ===========  ATIVO  =========== */
-{
-	color:#666;
-	text-decoration:none;
-	font-style:normal;
-}
-	
-.link_4 a:hover /*  ===========  ATIVO  =========== */
-{
-	color:#090;
-	text-decoration:none;
-	font-style:normal;
-}
-
-
-.tabela_cabecalho /*  ===========  ATIVO  =========== */
-{
-	font-size:10px;
-	color:#FFF;
-	margin:auto;
-}
-
-.tabela_cabecalho td /*  ===========  ATIVO  =========== */
-{
-	height:24px;
-	background-color:#006699;
-	text-align:center;
-}
-
-.tabela_geral /*  ===========  ATIVO  =========== */
-{
-	font-size:12px;
-	border:0px solid #000;
-	margin:auto;
-}
-
-.tabela_geral td /*  ===========  ATIVO  =========== */
-{
-	height:24px;
-}
-
-.tabela_1 /* Azul */  /*  ===========  ATIVO  =========== */
-{
-	border:1px solid #FFF;
-	background-color:#E0EEEE;
-	color:#003466;
-}
-
-.tabela_1:hover  /*  ===========  ATIVO  =========== */
-{
-	background:#0C0;
-	background:linear-gradient(#0C0, #006400);
-	color:#FFF;
-}
-
-.tabela_2 /* Verde */  /*  ===========  ATIVO  =========== */
-{
-	border:1px solid #FFF;
-	background-color:#E0EEEE;
-	color:#006400;
+/* Verde */
+/*  ===========  ATIVO  =========== */
+	{
+	border: 1px solid #FFF;
+	background-color: #E0EEEE;
+	color: #006400;
 }
 
-.tabela_2:hover  /*  ===========  ATIVO  =========== */
-{
-	background:#0C0;
-	background:linear-gradient(#0C0, #006400);
-	color:#FFF;
+.tabela_2:hover
+
+/*  ===========  ATIVO  =========== */
+	{
+	background: #0C0;
+	background: linear-gradient(#0C0, #006400);
+	color: #FFF;
 }
+
+.tabela_3
 
-.tabela_3 /* Cinza Escuro */  /*  ===========  ATIVO  =========== */
-{
-	border:1px solid #FFF;
-	background-color:#E0EEEE;
-	color:#444;
+/* Cinza Escuro */
+/*  ===========  ATIVO  =========== */
+	{
+	border: 1px solid #FFF;
+	background-color: #E0EEEE;
+	color: #444;
 }
 
-.tabela_3:hover  /*  ===========  ATIVO  =========== */
-{
-	background:#0C0;
-	background:linear-gradient(#0C0, #006400);
-	color:#FFF;
+.tabela_3:hover
+
+/*  ===========  ATIVO  =========== */
+	{
+	background: #0C0;
+	background: linear-gradient(#0C0, #006400);
+	color: #FFF;
 }
 
-.tabela_4 /* Cinza Claro */  /*  ===========  ATIVO  =========== */
-{
-	border:1px solid #FFF;
-	background-color:#E0EEEE;
-	color:#C0C0C0;
+.tabela_4
+
+/* Cinza Claro */
+/*  ===========  ATIVO  =========== */
+	{
+	border: 1px solid #FFF;
+	background-color: #E0EEEE;
+	color: #C0C0C0;
 }
+
+.tabela_4:hover
 
-.tabela_4:hover  /*  ===========  ATIVO  =========== */
-{
-	background:#0C0;
-	background:linear-gradient(#0C0, #006400);
-	color:#FFF;
+/*  ===========  ATIVO  =========== */
+	{
+	background: #0C0;
+	background: linear-gradient(#0C0, #006400);
+	color: #FFF;
 }
 
-.tabela_5 /* Vermelho */  /*  ===========  ATIVO  =========== */
-{
-	border:1px solid #FFF;
-	background-color:#E0EEEE;
-	color:#FF0000;
+.tabela_5
+
+/* Vermelho */
+/*  ===========  ATIVO  =========== */
+	{
+	border: 1px solid #FFF;
+	background-color: #E0EEEE;
+	color: #FF0000;
 }
+
+.tabela_5:hover
 
-.tabela_5:hover  /*  ===========  ATIVO  =========== */
-{
-	background:#0C0;
-	background:linear-gradient(#0C0, #006400);
-	color:#FFF;
+/*  ===========  ATIVO  =========== */
+	{
+	background: #0C0;
+	background: linear-gradient(#0C0, #006400);
+	color: #FFF;
 }
 
-.tabela_6 /* Azul Claro */  /*  ===========  ATIVO  =========== */
-{
-	border:1px solid #FFF;
-	background-color:#E0EEEE;
-	color:#0000FF;
+.tabela_6
+
+/* Azul Claro */
+/*  ===========  ATIVO  =========== */
+	{
+	border: 1px solid #FFF;
+	background-color: #E0EEEE;
+	color: #0000FF;
 }
+
+.tabela_6:hover
 
-.tabela_6:hover  /*  ===========  ATIVO  =========== */
-{
-	background:#0C0;
-	background:linear-gradient(#0C0, #006400);
-	color:#FFF;
+/*  ===========  ATIVO  =========== */
+	{
+	background: #0C0;
+	background: linear-gradient(#0C0, #006400);
+	color: #FFF;
 }
 
 
-.tabela_7 /* Vermelho Escuro */  /*  ===========  ATIVO  =========== */
-{
-	border:1px solid #FFF;
-	background-color:#E0EEEE;
-	color:#CD0000;
+.tabela_7
+
+/* Vermelho Escuro */
+/*  ===========  ATIVO  =========== */
+	{
+	border: 1px solid #FFF;
+	background-color: #E0EEEE;
+	color: #CD0000;
 }
 
-.tabela_7:hover  /*  ===========  ATIVO  =========== */
-{
-	background:#0C0;
-	background:linear-gradient(#0C0, #006400);
-	color:#FFF;
+.tabela_7:hover
+
+/*  ===========  ATIVO  =========== */
+	{
+	background: #0C0;
+	background: linear-gradient(#0C0, #006400);
+	color: #FFF;
 }
+
 
+.transparente
 
-.transparente /*  ===========  ATIVO  =========== */
-{
-/* de 0 a 1 */
-opacity:0.3;
+/*  ===========  ATIVO  =========== */
+	{
+	/* de 0 a 1 */
+	opacity: 0.3;
 }
 
-.preto_branco /*  ===========  ATIVO  =========== */
-{
--webkit-filter: grayscale(100%); /* Chrome */
-filter: grayscale(100%); /* Firefox e outros */
-filter: gray; /* IE */
+.preto_branco
 
-opacity:0.4;
+/*  ===========  ATIVO  =========== */
+	{
+	-webkit-filter: grayscale(100%);
+	/* Chrome */
+	filter: grayscale(100%);
+	/* Firefox e outros */
+	filter: gray;
+	/* IE */
+
+	opacity: 0.4;
 }
+
 
+div#centro
 
-div#centro /* SERÁ INATIVADO */
-{
-	font-style:normal;
+/* SERÁ INATIVADO */
+	{
+	font-style: normal;
 }
 
-div#geral /* SERÁ INATIVADO */
-{
-	font-style:normal;
+div#geral
+
+/* SERÁ INATIVADO */
+	{
+	font-style: normal;
 }
+
+div#centro_geral
 
-div#centro_geral /* SERÁ INATIVADO */
-{
-	width:1100px;
-/*	width:950px; */
-	height:auto;
-	margin:auto;
-	background-color:#FFF;
-	border:1px solid #FFF;
+/* SERÁ INATIVADO */
+	{
+	width: 1100px;
+	/*	width:950px; */
+	height: auto;
+	margin: auto;
+	background-color: #FFF;
+	border: 1px solid #FFF;
 
-/*	border-radius:7px;
+	/*	border-radius:7px;
 	border:1px solid #999; */
 
 }
 
-div#centro_geral_login /* SERÁ INATIVADO */
-{
-	width:950px;
-	height:auto;
-	margin:auto;
-	background-color:#FFF;
-	border:1px solid #FFF;
+div#centro_geral_login
 
-/*	background-color:#FFF; 
+/* SERÁ INATIVADO */
+	{
+	width: 950px;
+	height: auto;
+	margin: auto;
+	background-color: #FFF;
+	border: 1px solid #FFF;
+
+	/*	background-color:#FFF; 
 	background-image:url(http://www.suif.com.br/config/imagens/index_login.jpg);
 	border-radius:7px;
 	border:1px solid #999; */
 }
 
-div#centro_geral_2 /* SERÁ INATIVADO */
-{
-	width:950px;
-	height:auto;
-	background-color:#FFF;
-	border-radius:7px;
-	border:1px solid #999;
-	float:left;
-	margin:auto;
+div#centro_geral_2
+
+/* SERÁ INATIVADO */
+	{
+	width: 950px;
+	height: auto;
+	background-color: #FFF;
+	border-radius: 7px;
+	border: 1px solid #999;
+	float: left;
+	margin: auto;
 }
 
-div#centro_geral_pdv /* SERÁ INATIVADO */
-{
-	width:950px;
-	height:auto;
-	margin:auto;
-	background-color:#FFF;
-	border-radius:7px;
-	border:1px solid #999;
+div#centro_geral_pdv
+
+/* SERÁ INATIVADO */
+	{
+	width: 950px;
+	height: auto;
+	margin: auto;
+	background-color: #FFF;
+	border-radius: 7px;
+	border: 1px solid #999;
 }
 
-div#centro_2 /* SERÁ INATIVADO */
-{
-	width:940px;
-	height:auto;
-	float:left;
+div#centro_2
+
+/* SERÁ INATIVADO */
+	{
+	width: 940px;
+	height: auto;
+	float: left;
 }
 
-div#centro_3 /* SERÁ INATIVADO */
-{
-	font-style:normal;
-	height:auto;
-	width:900px;
-	margin:auto;
-	border:0px solid #F0F;
+div#centro_3
+
+/* SERÁ INATIVADO */
+	{
+	font-style: normal;
+	height: auto;
+	width: 900px;
+	margin: auto;
+	border: 0px solid #F0F;
 }
 
-div#centro_4 /* SERÁ INATIVADO */
-{
-	font-style:normal;
-	height:auto;
-	width:890px;
-	margin:auto;
-	border:1px solid #999;
-	border-radius:10px;
+div#centro_4
+
+/* SERÁ INATIVADO */
+	{
+	font-style: normal;
+	height: auto;
+	width: 890px;
+	margin: auto;
+	border: 1px solid #999;
+	border-radius: 10px;
 }
 
-div#titulo_form_1 /* SERÁ INATIVADO */
-{
-	font-style:normal;
-	color:#009900;
-	font-size:22px;
-	font-style:normal;
+div#titulo_form_1
+
+/* SERÁ INATIVADO */
+	{
+	font-style: normal;
+	color: #009900;
+	font-size: 22px;
+	font-style: normal;
 }
 
-div#titulo_form_2 /* SERÁ INATIVADO */
-{
-	font-style:normal;
-	color:#003466;
-	font-size:11px;
-	font-style:italic;
+div#titulo_form_2
+
+/* SERÁ INATIVADO */
+	{
+	font-style: normal;
+	color: #003466;
+	font-size: 11px;
+	font-style: italic;
 }
 
-div#titulo_form_3 /* SERÁ INATIVADO */
-{
-	font-style:normal;
-	color:#F00;
-	font-size:11px;
-	font-style:italic;
+div#titulo_form_3
+
+/* SERÁ INATIVADO */
+	{
+	font-style: normal;
+	color: #F00;
+	font-size: 11px;
+	font-style: italic;
 }
 
-div#titulo_form_4 /* SERÁ INATIVADO */
-{
-	font-style:normal;
-	color:#666;
-	font-size:11px;
-	font-style:italic;
+div#titulo_form_4
+
+/* SERÁ INATIVADO */
+	{
+	font-style: normal;
+	color: #666;
+	font-size: 11px;
+	font-style: italic;
 }
 
-div#menu_geral /* SERÁ INATIVADO */
-{
-	background-color:#CFCFCF;
-/*	width:1100px;*/
-	width:auto;
-	height:80px;
-	margin:auto;
-	border:0px solid #000;
+div#menu_geral
+
+/* SERÁ INATIVADO */
+	{
+	background-color: #CFCFCF;
+	/*	width:1100px;*/
+	width: auto;
+	height: 80px;
+	margin: auto;
+	border: 0px solid #000;
 }
 
-.menu /*  ===========  ATIVO  =========== */
-{
-	width:auto;
-	height:42px;
-	font-style:normal;
-	font-size:12px;
-	background-color:#CFCFCF;
+.menu
+
+/*  ===========  ATIVO  =========== */
+	{
+	width: auto;
+	height: 42px;
+	font-style: normal;
+	font-size: 12px;
+	background-color: #CFCFCF;
 	margin: 0px 0px 0px 0px;
 }
 
-.submenu /*  ===========  ATIVO  =========== */
-{
-	width:auto;
-	height:23px;
-	font-style:normal;
-	font-size:12px;
-	background-color:#CFCFCF;
+.submenu
+
+/*  ===========  ATIVO  =========== */
+	{
+	width: auto;
+	height: 23px;
+	font-style: normal;
+	font-size: 12px;
+	background-color: #CFCFCF;
 	margin: 0px 0px 0px 0px;
 }
 
-div#menu
-{
-	font-style:normal;
+div#menu {
+	font-style: normal;
 }
 
-#menu_atalho a /*  ===========  ATIVO  =========== */
-{
-	color:#444;
-	text-decoration:none;
-	font-size:11px;
-	font-style:normal;
-}
-	
-#menu_atalho a:hover /*  ===========  ATIVO  =========== */
-{
-	color:#090;
-	text-decoration:none;
-	font-size:11px;
-	font-style:normal;
+#menu_atalho a
+
+/*  ===========  ATIVO  =========== */
+	{
+	color: #444;
+	text-decoration: none;
+	font-size: 11px;
+	font-style: normal;
 }
 
-#menu_atalho_2 a /* SERÁ INATIVADO */
-{
-	color:#FFF;
-	text-decoration:none;
-	font-size:10px;
-	font-style:normal;
-}
-	
-#menu_atalho_2 a:hover /* SERÁ INATIVADO */
-{
-	color:#090;
-	text-decoration:none;
-	font-size:10px;
-	font-style:normal;
+#menu_atalho a:hover
+
+/*  ===========  ATIVO  =========== */
+	{
+	color: #090;
+	text-decoration: none;
+	font-size: 11px;
+	font-style: normal;
 }
 
-#menu_atalho_3 a /* SERÁ INATIVADO */
-{
-	color:#444;
-	text-decoration:none;
-	font-style:normal;
-}
-	
-#menu_atalho_3 a:hover /* SERÁ INATIVADO */
-{
-	color:#090;
-	text-decoration:none;
-	font-style:normal;
+#menu_atalho_2 a
+
+/* SERÁ INATIVADO */
+	{
+	color: #FFF;
+	text-decoration: none;
+	font-size: 10px;
+	font-style: normal;
 }
 
-div#tabela_1 /* SERÁ INATIVADO */
-{
-	float:left;
-	height:25px;
-	border:0px solid #000;
-	color:#666;
-	font-size:11px;
-	text-align:right;
-	font-style:normal;
+#menu_atalho_2 a:hover
+
+/* SERÁ INATIVADO */
+	{
+	color: #090;
+	text-decoration: none;
+	font-size: 10px;
+	font-style: normal;
 }
 
-div#tabela_2 /* SERÁ INATIVADO */
-{
-	float:left;
-	height:25px;
-	border:0px solid #000;
-	color:#666;
-	font-size:11px;
-	font-style:normal;
+#menu_atalho_3 a
+
+/* SERÁ INATIVADO */
+	{
+	color: #444;
+	text-decoration: none;
+	font-style: normal;
 }
 
-#tabela_3 tr /* SERÁ INATIVADO */
-{
+#menu_atalho_3 a:hover
+
+/* SERÁ INATIVADO */
+	{
+	color: #090;
+	text-decoration: none;
+	font-style: normal;
+}
+
+div#tabela_1
+
+/* SERÁ INATIVADO */
+	{
+	float: left;
+	height: 25px;
+	border: 0px solid #000;
+	color: #666;
+	font-size: 11px;
+	text-align: right;
+	font-style: normal;
+}
+
+div#tabela_2
+
+/* SERÁ INATIVADO */
+	{
+	float: left;
+	height: 25px;
+	border: 0px solid #000;
+	color: #666;
+	font-size: 11px;
+	font-style: normal;
+}
+
+#tabela_3 tr
+
+/* SERÁ INATIVADO */
+	{
 	border: 1px solid #00CCFF;
-	background-color:#9CF;
-	height:20px;
+	background-color: #9CF;
+	height: 20px;
 }
 
-#tabela_3 tr:hover /* SERÁ INATIVADO */
-{
-	background:#0C0 2px 45% no-repeat;
+#tabela_3 tr:hover
+
+/* SERÁ INATIVADO */
+	{
+	background: #0C0 2px 45% no-repeat;
 	/*#00CC99 */
 }
 
-#tabela_4 tr /* SERÁ INATIVADO */
-{
+#tabela_4 tr
+
+/* SERÁ INATIVADO */
+	{
 	border: 1px solid #00CCFF;
-	background-color:#E0EEEE;
-	height:20px;
-/*	background-color:#9CF; 
+	background-color: #E0EEEE;
+	height: 20px;
+	/*	background-color:#9CF; 
 	background-color:#E0EEEE;*/
 }
 
-#tabela_4 tr:hover /* SERÁ INATIVADO */
-{
-	background:#0C0;
-/*	color:#FFFFFF;
+#tabela_4 tr:hover
+
+/* SERÁ INATIVADO */
+	{
+	background: #0C0;
+	/*	color:#FFFFFF;
 	background:#009900 2px 45% no-repeat;
 	background:#0C0 2px 45% no-repeat; */
 	/*#00CC99 */
 }
 
-div#celula_1 /* SERÁ INATIVADO */
-{
-	float:left;
-	height:18px;
-	border:0px solid #000;
-	font-size:10px;
-	font-style:normal;
+div#celula_1
+
+/* SERÁ INATIVADO */
+	{
+	float: left;
+	height: 18px;
+	border: 0px solid #000;
+	font-size: 10px;
+	font-style: normal;
 }
 
-div#espaco_1 /* SERÁ INATIVADO */
-{
-	float:left;
-	height:3px;
-	border:0px solid #000;
-	color:#666;
-	font-size:11px;
-	text-align:right;
-	font-style:normal;
+div#espaco_1
+
+/* SERÁ INATIVADO */
+	{
+	float: left;
+	height: 3px;
+	border: 0px solid #000;
+	color: #666;
+	font-size: 11px;
+	text-align: right;
+	font-style: normal;
 }
 
-div#espaco_2 /* SERÁ INATIVADO */
-{
-	float:left;
-	height:10px;
-	border:0px solid #000;
-	color:#666;
-	font-size:11px;
-	text-align:right;
-	font-style:normal;
+div#espaco_2
+
+/* SERÁ INATIVADO */
+	{
+	float: left;
+	height: 10px;
+	border: 0px solid #000;
+	color: #666;
+	font-size: 11px;
+	text-align: right;
+	font-style: normal;
 }
 
-.rdp_1 /*  ===========  ATIVO  =========== */
-{
-/*	width:1280px;*/
-	width:auto;
-	height:45px;
-	margin:auto;
-	background-color:transparent;
-	border-radius:0px;
-	border:0px solid #999;
-	text-decoration:none;
-	font-style:normal;
-	font-size:10px;
-/*	color:#003466;*/
-	color:#999;
-/*	color:#444;*/
+.rdp_1
+
+/*  ===========  ATIVO  =========== */
+	{
+	/*	width:1280px;*/
+	width: auto;
+	height: 45px;
+	margin: auto;
+	background-color: transparent;
+	border-radius: 0px;
+	border: 0px solid #999;
+	text-decoration: none;
+	font-style: normal;
+	font-size: 10px;
+	/*	color:#003466;*/
+	color: #999;
+	/*	color:#444;*/
 }
 
-.rdp_1 a /*  ===========  ATIVO  =========== */
-{
-	text-decoration:none;
-	font-style:normal;
-	font-size:10px;
-	color:#999;
-}
-	
-.rdp_1 a:hover /*  ===========  ATIVO  =========== */
-{
-	text-decoration:none;
-	font-style:normal;
-	font-size:10px;
-	color:#999;
+.rdp_1 a
+
+/*  ===========  ATIVO  =========== */
+	{
+	text-decoration: none;
+	font-style: normal;
+	font-size: 10px;
+	color: #999;
 }
 
-div#rodape_geral /* SERÁ INATIVADO */
-{
-/*	width:1280px;*/
-	width:1100px;
-	height:45px;
-	margin:auto;
-	background-color:transparent;
-	border-radius:0px;
-	border:0px solid #999;
-	text-decoration:none;
-	font-style:normal;
-	font-size:10px;
-	color:#003466;
+.rdp_1 a:hover
+
+/*  ===========  ATIVO  =========== */
+	{
+	text-decoration: none;
+	font-style: normal;
+	font-size: 10px;
+	color: #999;
 }
 
-div#rodape_geral a /* SERÁ INATIVADO */
-{
-	text-decoration:none;
-	font-style:normal;
-	font-size:10px;
-	color:#003466;
-}
-	
-div#rodape_geral a:hover /* SERÁ INATIVADO */
-{
-	text-decoration:none;
-	font-style:normal;
-	font-size:10px;
-	color:#090;
+div#rodape_geral
+
+/* SERÁ INATIVADO */
+	{
+	/*	width:1280px;*/
+	width: 1100px;
+	height: 45px;
+	margin: auto;
+	background-color: transparent;
+	border-radius: 0px;
+	border: 0px solid #999;
+	text-decoration: none;
+	font-style: normal;
+	font-size: 10px;
+	color: #003466;
 }
 
-div#rodape /* SERÁ INATIVADO */
-{
-/*	width:1280px;*/
-	width:1100px;
-	height:45px;
-	margin:auto;
-	background-color:transparent;
-	border-radius:0px;
-	border:0px solid #999;
-	text-decoration:none;
-	font-style:normal;
-	font-size:10px;
-	color:#003466;
+div#rodape_geral a
+
+/* SERÁ INATIVADO */
+	{
+	text-decoration: none;
+	font-style: normal;
+	font-size: 10px;
+	color: #003466;
 }
 
-/* By Borges - Estilo da tag Dialog */
-dialog{
-	padding: 0;
-	border: 0px;
-	border-radius: 7px;
-	box-shadow: 0 0 px black;
-	flex-direction:column;
+div#rodape_geral a:hover
+
+/* SERÁ INATIVADO */
+	{
+	text-decoration: none;
+	font-style: normal;
+	font-size: 10px;
+	color: #090;
+}
+
+div#rodape
+
+/* SERÁ INATIVADO */
+	{
+	/*	width:1280px;*/
+	width: 1100px;
+	height: 45px;
+	margin: auto;
+	background-color: transparent;
+	border-radius: 0px;
+	border: 0px solid #999;
+	text-decoration: none;
+	font-style: normal;
+	font-size: 10px;
+	color: #003466;
+}
+
+/* By Borgus - Estilo da tag Dialog */
+dialog::blackdrop {
+	background-color: rgba(0, 0, 0, 0.3);
+}
+
+dialog {
 	padding: 10px;
+	border: none;
+	border-radius: .5rem;
+	box-shadow: 0 0 1em rgba(0 0 0 / .3);
+	flex-direction: column;
 }
 
-dialog::blackdrop{
-	background-color: rgba(0, 0, 0, 0.5);
+input:read-only {
+	background-color: #EEE;
+}
+
+.readonly-link {
+	pointer-events: none;
+	color: grey;
+	text-decoration: none;
+	cursor: default;
+}
+
+.badge {
+	display: inline-block;
+	padding: 0.25em 0.5em;
+	font-size: 75%;
+	font-weight: 700;
+	line-height: 1;
+	text-align: center;
+	vertical-align: baseline;
+	border-radius: 0.25rem;
+}
+
+.badge-warning {
+	color: #ffffff;
+	background-color: #f0ad4e;
+}
+
+.badge-primary {
+	color: #ffffff;
+	background-color: #007bff;
+}
+
+.badge-secondary {
+	color: #000;
+	background-color: #b3afaf;
+}
+
+.badge-report {
+	color: #ffffff;
+	background-color: #000;
+}
+
+.badge-success {
+	color: #ffffff;
+	background-color: #28a745;
+}
+
+.badge-danger {
+	color: #ffffff;
+	background-color: #dc3545;
+}
+
+.badge-info {
+	color: #ffffff;
+	background-color: #17a2b8;
+}
+
+table.dataTable thead th,
+table.dataTable tfoot th {
+	font-weight: 500 !important;
+}
+
+table.dataTable caption {
+    caption-side: top;
+    /* Define que o caption deve estar no topo */
+    text-align: left;
+    /* Alinha o texto à esquerda (ou você pode escolher centralizar) */
+    font-weight: bold;
+    /* Adiciona um destaque à legenda */
+}
+
+.dt-paging .dt-paging-button {
+	padding: 2px;
 }

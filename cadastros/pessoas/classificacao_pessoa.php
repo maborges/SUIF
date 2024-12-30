@@ -10,11 +10,11 @@ $menu = "cadastro_pessoas";
 
 
 // ====== RECEBE POST ==============================================================================================
-$botao = $_POST["botao"];
-$codigo_w = $_POST["codigo_w"];
-$bloqueio_w = $_POST["bloqueio_w"];
-$nome_form = $_POST["nome_form"];
-$tipo_form = $_POST["tipo_form"];
+$botao = $_POST["botao"] ?? '';
+$codigo_w = $_POST["codigo_w"] ?? '';
+$bloqueio_w = $_POST["bloqueio_w"] ?? '';
+$nome_form = $_POST["nome_form"] ?? '';
+$tipo_form = $_POST["tipo_form"] ?? '';
 
 $usuario_cadastro = $nome_usuario_print;
 $data_cadastro = date('Y-m-d', time());

@@ -123,8 +123,9 @@ else
 
 <table class='tabela_cabecalho'>
 <tr>
-<td width='80px'>C&oacute;digo</td>
-<td width='350px'>Nome</td>
+<td width='65px'>C&oacute;digo</td>
+<td width='65px'>Sankhya</td>
+<td width='300px'>Nome</td>
 <td width='200px'>CPF/CNPJ</td>
 <td width='150px'>Telefone</td>
 <td width='250px'>Cidade/UF</td>
@@ -143,6 +144,7 @@ $aux_registro = mysqli_fetch_row($busca_registro);
 
 // ====== DADOS DO CADASTRO ============================================================================
 $id_w = $aux_registro[0];
+$idSankhya_w = $aux_registro[41];
 $nome_w = $aux_registro[1];
 $tipo_w = $aux_registro[2];
 $cpf_w = $aux_registro[3];
@@ -220,8 +222,9 @@ else
 {echo "<tr class='tabela_1' title=' Nome: $nome_w &#13; ID Cadastro: $id_w &#13; Status Cadastro: $estado_registro_w &#13; Classifica&ccedil;&atilde;o: $classificacao_print $dados_cadastro_w $dados_alteracao_w $dados_exclusao_w'>";}
 
 echo "
-<td width='80px' align='left'><div style='height:14px; margin-left:7px'>$id_w</div></td>
-<td width='350px' align='left'><div style='height:14px; margin-left:7px; overflow:hidden'>$nome_w</div></td>
+<td width='65px' align='left'><div style='height:14px; margin-left:7px'>$id_w</div></td>
+<td width='65px' align='left'><div style='height:14px; margin-left:7px'>$idSankhya_w</div></td>
+<td width='300px' align='left'><div style='height:14px; margin-left:7px; overflow:hidden'>$nome_w</div></td>
 <td width='200px' align='center'>$cpf_cnpj_print</td>
 <td width='150px' align='center'>$telefone_1_w</td>
 <td width='250px' align='center'>$cidade_w/$estado_w</td>

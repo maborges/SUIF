@@ -2,6 +2,7 @@
 include ("../../includes/config.php"); 
 include ("../../includes/conecta_bd.php");
 include ("../../includes/valida_cookies.php");
+include ("../../helpers.php");
 $pagina = "copia_cheque";
 $titulo = "Impress&atilde;o de C&oacute;pia de Cheque";
 $menu = "contas_pagar";
@@ -11,7 +12,7 @@ include ("../../includes/head_impressao.php");
 ?>
 
 
-<!-- ==================================   T Õ T U L O   D A   P ¡ G I N A   ====================================== -->
+<!-- ==================================   T ÔøΩ T U L O   D A   P ÔøΩ G I N A   ====================================== -->
 <title>
 <?php echo "$titulo"; ?>
 </title>
@@ -24,63 +25,15 @@ include ("../../includes/head_impressao.php");
 </head>
 
 
-<!-- =============================================   I N Õ C I O   =============================================== -->
+<!-- =============================================   I N ÔøΩ C I O   =============================================== -->
 <body onLoad="imprimir()">
 
 <div style='border:1px solid #FFF'>
 <div id="centro" style="width:745px; border:0px solid #000; float:left; page-break-after:always">
 
 <?php
-// ============================================== CONVERTE DATA ====================================================	
-// FunÁ„o para converter a data de formato nacional para formato americano. Muito ˙til para inserir data no mysql
-
-function ConverteData($data){
-
-	if (strstr($data, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
 
 
-// ==================================================================================================================
-    function valorPorExtenso($valor=0) {
-    $singular = array("CENTAVO", "REAL", "MIL", "MILH&Atilde;O", "BILH&Atilde;O", "TRILH&Atilde;O", "QUATRILH&Atilde;O");
-    $plural = array("CENTAVOS", "REAIS", "MIL", "MILH&Otilde;ES", "BILH&Otilde;ES", "TRILH&Otilde;ES","QUATRILH&Otilde;ES");
-     
-    $c = array("", "CEM", "DUZENTOS", "TREZENTOS", "QUATROCENTOS","QUINHENTOS", "SEISCENTOS", "SETECENTOS", "OITOCENTOS", "NOVECENTOS");
-    $d = array("", "DEZ", "VINTE", "TRINTA", "QUARENTA", "CINQUENTA","SESSENTA", "SETENTA", "OITENTA", "NOVENTA");
-    $d10 = array("DEZ", "ONZE", "DOZE", "TREZE", "QUATORZE", "QUINZE","DEZESSEIS", "DEZESETE", "DEZOITO", "DEZENOVE");
-    $u = array("", "UM", "DOIS", "TR&Ecirc;S", "QUATRO", "CINCO", "SEIS","SETE", "OITO", "NOVE");
-     
-    $z=0;
-     
-    $valor = number_format($valor, 2, ".", ".");
-    $inteiro = explode(".", $valor);
-    for($i=0;$i<count($inteiro);$i++)
-    for($ii=strlen($inteiro[$i]);$ii<3;$ii++)
-    $inteiro[$i] = "0".$inteiro[$i];
-     
-    // $fim identifica onde que deve se dar junÁ„o de centenas por "e" ou por "," ;)
-    $fim = count($inteiro) - ($inteiro[count($inteiro)-1] > 0 ? 1 : 2);
-    for ($i=0;$i<count($inteiro);$i++) {
-    $valor = $inteiro[$i];
-    $rc = (($valor > 100) && ($valor < 200)) ? "CENTO" : $c[$valor[0]];
-    $rd = ($valor[1] < 2) ? "" : $d[$valor[1]];
-    $ru = ($valor > 0) ? (($valor[1] == 1) ? $d10[$valor[2]] : $u[$valor[2]]) : "";
-    $r = $rc.(($rc && ($rd || $ru)) ? " E " : "").$rd.(($rd && $ru) ? " E " : "").$ru;
-    $t = count($inteiro)-1-$i;
-    $r .= $r ? " ".($valor > 1 ? $plural[$t] : $singular[$t]) : "";
-    if ($valor == "000")$z++; elseif ($z > 0) $z--;
-    if (($t==1) && ($z>0) && ($inteiro[0] > 0)) $r .= (($z>1) ? " DE " : "").$plural[$t];
-    if ($r) $rt = $rt . ((($i > 0) && ($i <= $fim) && ($inteiro[0] > 0) && ($z < 1)) ? ( ($i < $fim) ? ", " : " E ") : " ") . $r;
-    }
-     
-    return($rt ? $rt : "zero");
-    }
-	
 // ==================================================================================================================================================	
 
 
@@ -239,7 +192,7 @@ for ($c=1 ; $c<=$linha_favorecidos_ch ; $c++)
 	</div>
 
 	<div id='centro' style='width:600px; height:40px; border:0px solid #000; font-size:14px; float:left' align='left'>";
-	echo valorPorExtenso($soma_pagamentos[0]);
+	echo Helpers::valorPorExtenso($soma_pagamentos[0]);
 	
 	echo "
 	</div>
@@ -319,8 +272,8 @@ for ($c=1 ; $c<=$linha_favorecidos_ch ; $c++)
 <div id='centro' style='width:690px; height:20px; border:0px solid #000; margin-left:10px; font-size:17px; float:left' align='center'></div>
 
 <div id='centro' style='width:700px; height:30px; border:0px solid #000; margin-left:20px; float:left' align='center'>
-	<div id='centro' style='width:240px; height:30px; border:0px solid #000; font-size:11px; float:left' align='left'>
-	Confirma&ccedil;&atilde;o de Compra: $cod_compra
+	<div id='centro' style='width:680px; border:0px solid #000; font-size:11px; float:left' align='left'>
+	Confirma√ß√£o de Compra: $cod_compra
 	</div>
 
 	<div id='centro' style='width:40px; height:30px; border:0px solid #000; font-size:11px; float:left' align='center'>

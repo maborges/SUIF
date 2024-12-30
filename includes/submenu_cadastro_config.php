@@ -38,6 +38,24 @@
 	<div class='link_4' style='float:left; width:auto; height:18px; border:0px solid #000'>
 	<a href='$servidor/$diretorio_servidor/cadastros/configuracoes/cadastro_servico.php' >&#8226; Cadastro de Servi&ccedil;os</a></div>";
 
+	echo "
+	<div style='float:left; width:20px; height:15px; border:0px solid #000'></div>
+	<div class='link_4' style='float:left; width:auto; height:18px; border:0px solid #000'>
+	<a href='$servidor/$diretorio_servidor/sankhya/filial/filiais.php' >&#8226; Atualiza Filiais</a></div>";
 
+	echo "
+	<div style='float:left; width:20px; height:15px; border:0px solid #000'></div>
+	<div class='link_4' style='float:left; width:auto; height:18px; border:0px solid #000'>
+	<a href='$servidor/$diretorio_servidor/sankhya/produto/produtos.php' >&#8226; Atualiza Produtos</a></div>";
+
+	echo "
+	<div style='float:left; width:20px; height:15px; border:0px solid #000'></div>
+	<div class='link_4' style='float:left; width:auto; height:18px; border:0px solid #000'>
+	<a href='$servidor/$diretorio_servidor/sankhya/tops/tops.php' >&#8226; T.O.P.S.</a></div>";
+
+	echo "
+	<div style='float:left; width:20px; height:15px; border:0px solid #000'></div>
+	<div class='link_4' style='float:left; width:auto; height:18px; border:0px solid #000'>
+	<a href='$servidor/$diretorio_servidor/sankhya/centro_custo/centro_custo.php' >&#8226; Centro Custo Sankhya</a></div>";
 ?>
 </div>

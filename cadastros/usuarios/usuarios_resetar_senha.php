@@ -10,8 +10,8 @@ $menu = "cadastro_usuarios";
 
 
 // ====== RECEBE POST ==============================================================================================
-$botao = $_POST["botao"];
-$username_w = $_POST["username_w"];
+$botao = $_POST["botao"] ?? '';
+$username_w = $_POST["username_w"] ?? '';
 
 $usuario_cadastro_form = $nome_usuario_print;
 $data_cadastro_form = date('Y-m-d', time());

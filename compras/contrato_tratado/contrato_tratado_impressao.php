@@ -3,6 +3,7 @@ include ('../../includes/config.php');
 include ('../../includes/conecta_bd.php');
 include ('../../includes/valida_cookies.php');
 include ('../../includes/numero_extenso.php');
+include ("../../helpers.php");
 $pagina = 'contrato_tratado_impressao';
 $menu = 'contratos';
 $titulo = 'Contrato Tratado';
@@ -11,44 +12,6 @@ $modulo = 'compras';
 
 // ====== DADOS PARA BUSCA =================================================================================
 $numero_contrato = $_POST["numero_contrato"];
-// =========================================================================================================
-
-
-// =========================================================================================================
-function valorPorExtenso($valor=0) {
-$singular = array("CENTAVO", "REAL", "MIL", "MILHÃO", "BILHÃO", "TRILHÃO", "QUATRILHÃO");
-$plural = array("CENTAVOS", "REAIS", "MIL", "MILHÕES", "BILHÕES", "TRILHÕES","QUATRILHÕES");
- 
-$c = array("", "CEM", "DUZENTOS", "TREZENTOS", "QUATROCENTOS","QUINHENTOS", "SEISCENTOS", "SETECENTOS", "OITOCENTOS", "NOVECENTOS");
-$d = array("", "DEZ", "VINTE", "TRINTA", "QUARENTA", "CINQUENTA","SESSENTA", "SETENTA", "OITENTA", "NOVENTA");
-$d10 = array("DEZ", "ONZE", "DOZE", "TREZE", "QUATORZE", "QUINZE","DEZESSEIS", "DEZESETE", "DEZOITO", "DEZENOVE");
-$u = array("", "UM", "DOIS", "TRÊS", "QUATRO", "CINCO", "SEIS","SETE", "OITO", "NOVE");
- 
-$z=0;
- 
-$valor = number_format($valor, 2, ".", ".");
-$inteiro = explode(".", $valor);
-for($i=0;$i<count($inteiro);$i++)
-for($ii=strlen($inteiro[$i]);$ii<3;$ii++)
-$inteiro[$i] = "0".$inteiro[$i];
- 
-// $fim identifica onde que deve se dar junção de centenas por "e" ou por "," ;)
-$fim = count($inteiro) - ($inteiro[count($inteiro)-1] > 0 ? 1 : 2);
-for ($i=0;$i<count($inteiro);$i++) {
-$valor = $inteiro[$i];
-$rc = (($valor > 100) && ($valor < 200)) ? "CENTO" : $c[$valor[0]];
-$rd = ($valor[1] < 2) ? "" : $d[$valor[1]];
-$ru = ($valor > 0) ? (($valor[1] == 1) ? $d10[$valor[2]] : $u[$valor[2]]) : "";
-$r = $rc.(($rc && ($rd || $ru)) ? " E " : "").$rd.(($rd && $ru) ? " E " : "").$ru;
-$t = count($inteiro)-1-$i;
-$r .= $r ? " ".($valor > 1 ? $plural[$t] : $singular[$t]) : "";
-if ($valor == "000")$z++; elseif ($z > 0) $z--;
-if (($t==1) && ($z>0) && ($inteiro[0] > 0)) $r .= (($z>1) ? " DE " : "").$plural[$t];
-if ($r) $rt = $rt . ((($i > 0) && ($i <= $fim) && ($inteiro[0] > 0) && ($z < 1)) ? ( ($i < $fim) ? ", " : " E ") : " ") . $r;
-}
- 
-return($rt ? $rt : "zero");
-}
 // =========================================================================================================
 
 
@@ -89,7 +52,7 @@ $usuario_cadastro = $aux_contrato[24];
 $hora_cadastro = $aux_contrato[26];
 $data_cadastro = $aux_contrato[25];
 
-$meses = array ("Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro");
+$meses = array ("Janeiro", "Fevereiro", "Marï¿½o", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro");
 $data_aux = explode("-", $data_contrato_aux);
 $dia = $data_aux[2];
 $mes = $data_aux[1];
@@ -184,7 +147,7 @@ else
 ?>
 
 
-<!-- ==================================   T Í T U L O   D A   P Á G I N A   ====================================== -->
+<!-- ==================================   T ï¿½ T U L O   D A   P ï¿½ G I N A   ====================================== -->
 <title>
 <?php echo "$titulo"; ?>
 </title>
@@ -197,7 +160,7 @@ else
 </head>
 
 
-<!-- =============================================   I N Í C I O   =============================================== -->
+<!-- =============================================   I N ï¿½ C I O   =============================================== -->
 <body onLoad="imprimir()">
 
 <div id="centro" style="width:750px; border:0px solid #000; float:left">
@@ -295,7 +258,7 @@ O objeto do referente contrato dever&aacute; ser entregue no per&iacute;odo entr
 </div>
 
 <div id="centro" style="width:640px; border:0px solid #000; margin-top:0px; margin-left:80px; font-size:13px" align="justify">
-O pre&ccedil;o ser&aacute; equivalente a <b><?php echo "R$ $novo_valor"; ?></b> (<?php echo valorPorExtenso($valor_2); ?> ) por
+O pre&ccedil;o ser&aacute; equivalente a <b><?php echo "R$ $novo_valor"; ?></b> (<?php echo Helpers::valorPorExtenso($valor_2); ?> ) por
 
 <?php
 echo "$unidade_print";
@@ -363,7 +326,7 @@ Se a compradora tiver que utilizar-se de meios judiciais ou legais para receber 
 <div id="centro" style="width:640px; height:30px; border:0px solid #000; margin-left:80px;"></div>
 
 <div id="centro" style="width:640px; height:20px; border:0px solid #000; margin-top:0px; margin-left:80px; font-size:13px" align="center">
-<!-- <u>CL&Aacute;USULA S&Eacute;TIMA – DO FORO</u> -->
+<!-- <u>CL&Aacute;USULA S&Eacute;TIMA ï¿½ DO FORO</u> -->
 </div>
 
 <div id="centro" style="width:640px; border:0px solid #000; margin-top:0px; margin-left:80px; font-size:13px" align="justify">

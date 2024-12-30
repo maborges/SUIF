@@ -3,6 +3,7 @@
 include ('../../includes/config.php'); 
 include ('../../includes/conecta_bd.php');
 include ('../../includes/valida_cookies.php');
+include_once("../../helpers.php");
 $pagina = 'contrato_futuro_relatorio_impressao';
 $titulo = 'Relat&oacute;rio - Contratos Futuros';
 $modulo = 'compras';
@@ -10,28 +11,8 @@ $menu = 'contratos';
 // ================================================================================================================
 
 
-// ====== CONVERTE DATA ===========================================================================================
-// Função para converter a data de formato nacional para formato americano. Muito útil para inserir data no mysql
-function ConverteData($data){
-	if (strstr($data, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-
 $data_atual = date('d/m/Y', time());
 $hora_atual = date('G:i:s', time());
-// ================================================================================================================
-
-
-// ====== CONVERTE VALOR ==========================================================================================
-function ConverteValor($valor){
-	$valor_1 = str_replace(".", "", $valor);
-	$valor_2 = str_replace(",", ".", $valor_1);
-	return $valor_2;
-}
 // ================================================================================================================
 
 
@@ -42,9 +23,9 @@ $pagina_mae = $_POST["pagina_mae"];
 $data_hoje = date('Y-m-d', time());
 $data_hoje_aux = date('d/m/Y', time());
 $data_inicial_aux = $_POST["data_inicial"];
-$data_inicial = ConverteData($_POST["data_inicial"]);
+$data_inicial = Helpers::ConverteData($_POST["data_inicial"]);
 $data_final_aux = $_POST["data_final"];
-$data_final = ConverteData($_POST["data_final"]);
+$data_final = Helpers::ConverteData($_POST["data_final"]);
 $filial = $filial_usuario;
 
 $fornecedor_form = $_POST["fornecedor_form"];
@@ -54,9 +35,9 @@ $filtro_data = $_POST["filtro_data"];
 
 if ($botao_mae == "BUSCAR")
 	{$data_inicial_aux = $_POST["data_inicial"];
-	$data_inicial = ConverteData($_POST["data_inicial"]);
+	$data_inicial = Helpers::ConverteData($_POST["data_inicial"]);
 	$data_final_aux = $_POST["data_final"];
-	$data_final = ConverteData($_POST["data_final"]);}
+	$data_final = Helpers::ConverteData($_POST["data_final"]);}
 else
 	{$data_inicial_aux = $data_hoje_aux;
 	$data_inicial = $data_hoje;
@@ -174,7 +155,7 @@ else
 include ('../../includes/head_impressao.php');
 ?>
 
-<!-- ====== TÍTULO DA PÁGINA ====================================================================================== -->
+<!-- ====== Tï¿½TULO DA Pï¿½GINA ====================================================================================== -->
 <title>
 <?php echo "$titulo"; ?>
 </title>
@@ -187,15 +168,15 @@ include ('../../includes/head_impressao.php');
 </head>
 
 
-<!-- ====== INÍCIO ================================================================================================ -->
+<!-- ====== INï¿½CIO ================================================================================================ -->
 <body onLoad="imprimir()">
 
 <div id="centro" style="width:770px; border:0px solid #F00">
 
 <?php
 // #################################################################################################################################
-// ####### Determina-se aqui nesse "FOR" "limite_registros" a quantidade de linhas que aparecerá em cada página de impressão #######
-// #######           É importante sempre testar antes para ver quantas linhas são necessárias             					 #######
+// ####### Determina-se aqui nesse "FOR" "limite_registros" a quantidade de linhas que aparecerï¿½ em cada pï¿½gina de impressï¿½o #######
+// #######           ï¿½ importante sempre testar antes para ver quantas linhas sï¿½o necessï¿½rias             					 #######
 // #################################################################################################################################
 $limite_registros = 48;
 $numero_paginas = ceil($linha_cont_futuro / $limite_registros);
@@ -514,7 +495,7 @@ echo "
 
 
 <!-- =============================================================================================== -->";
-echo "</div>"; // quebra de página
+echo "</div>"; // quebra de pï¿½gina
 } // fim do primeiro "FOR"
 ?>
 

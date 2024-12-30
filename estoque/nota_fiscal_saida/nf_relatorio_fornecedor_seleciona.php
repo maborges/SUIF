@@ -62,7 +62,7 @@ include ('../../includes/head.php');
 <!-- ====== MENU ================================================================================================== -->
 <div id="menu_geral">
 <?php include ('../../includes/menu_estoque.php'); ?>
-<?php // include ('../../includes/sub_menu_estoque_entrada.php'); ?>
+<?php // include ('../../includes/submenu_estoque_entrada.php'); ?>
 </div>
 
 

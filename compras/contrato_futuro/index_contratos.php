@@ -65,11 +65,11 @@ include ("../../includes/head.php");
 
 <!-- ====== RODAPÉ =============================================================================================== -->
 <div class="rdp_1">
-<?php include ("../includes/rodape.php"); ?>
+<?php include ("../../includes/rodape.php"); ?>
 </div>
 
 
 <!-- ====== FIM ================================================================================================== -->
-<?php include ("../includes/desconecta_bd.php"); ?>
+<?php include ("../../includes/desconecta_bd.php"); ?>
 </body>
 </html>

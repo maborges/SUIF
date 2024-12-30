@@ -1,46 +1,13 @@
 <?php
 include ("../../includes/config.php"); 
 include ("../../includes/valida_cookies.php");
+include ("../../helpers.php");
+
 $pagina = "cadastro_1_formulario";
 $titulo = "Nova Compra";
 $modulo = "compras";
 $menu = "compras";
 // ================================================================================================================
-
-
-// ====== CONVERTE DATA ===========================================================================================
-function ConverteData($data_x)
-{
-	if (strstr($data_x, "/"))
-	{
-	$d = explode ("/", $data_x);
-	$rstData = "$d[2]-$d[1]-$d[0]";
-	return $rstData;
-	}
-}
-// ================================================================================================================
-
-// ====== CONVERTE VALOR ==========================================================================================
-function ConverteValor($valor_x)
-{
-	$valor_1 = str_replace("R$ ", "", $valor_x);
-	$valor_2 = str_replace(".", "", $valor_1);
-	$valor_3 = str_replace(",", ".", $valor_2);
-	return $valor_3;
-}
-// ================================================================================================================
-
-// ====== CONVERTE PESO ==========================================================================================
-function ConvertePeso($peso_x)
-{
-	$peso_1 = str_replace(",", ".", $peso_x);
-	return $peso_1;
-//	$peso_1 = str_replace(".", "", $peso_x);
-//	$peso_2 = str_replace(",", "", $peso_1);
-//	return $peso_2;
-}
-// ================================================================================================================
-
 
 // ======= RECEBENDO POST =================================================================================
 $botao = $_POST["botao"];
@@ -185,8 +152,8 @@ else
 // ====== CALCULA SUB TOTAL =============================================================================
 if ($botao == "CALCULA_TOTAL")
 {
-$quantidade_aux = ConvertePeso($_POST["quantidade_form"]);
-$preco_aux = ConverteValor($_POST["preco_form"]);
+$quantidade_aux = Helpers::ConvertePeso($_POST["quantidade_form"], $config[30]);
+$preco_aux = Helpers::ConverteValor($_POST["preco_form"]);
 
 $sub_total = ($quantidade_aux * $preco_aux);
 $sub_total_print = "R$ " . number_format($sub_total,2,",",".");

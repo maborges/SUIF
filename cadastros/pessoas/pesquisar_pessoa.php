@@ -10,27 +10,30 @@ $menu = "cadastro_pessoas";
 
 
 // ======= RECEBENDO POST =========================================================================================
-$botao = $_POST["botao"];
-$botao_2 = $_POST["botao_2"];
-$id_w = $_POST["id_w"];
-$codigo_pessoa_w = $_POST["codigo_pessoa_w"];
-$pagina_mae = $_POST["pagina_mae"];
+$botao = $_POST["botao"] ?? '';
+$botao_2 = $_POST["botao_2"] ?? '';
+$id_w = $_POST["id_w"] ?? '';
+$idSankhya_w = $_POST["idSankhya_w"] ?? '';
+$codigo_pessoa_w = $_POST["codigo_pessoa_w"] ?? '';
+$pagina_mae = $_POST["pagina_mae"] ?? '';
 
-$pesquisar_por_busca = $_POST["pesquisar_por_busca"];
-$nome_busca = $_POST["nome_busca"];
-$cpf_busca = $_POST["cpf_busca"];
-$cnpj_busca = $_POST["cnpj_busca"];
-$fantasia_busca = $_POST["fantasia_busca"];
+$pesquisar_por_busca = $_POST["pesquisar_por_busca"] ?? '';
+$nome_busca = $_POST["nome_busca"] ?? '';
+$cpf_busca = $_POST["cpf_busca"] ?? '';
+$cnpj_busca = $_POST["cnpj_busca"] ?? '';
+$fantasia_busca = $_POST["fantasia_busca"] ?? '';
 
-$nome_w = $_POST["nome_w"];
-$cpf_cnpj_w = $_POST["cpf_cnpj_w"];
-$telefone_1_w = $_POST["telefone_1_w"];
-$cidade_w = $_POST["cidade_w"];
+$nome_w = $_POST["nome_w"] ?? '';
+$cpf_cnpj_w = $_POST["cpf_cnpj_w"] ?? '';
+$telefone_1_w = $_POST["telefone_1_w"] ?? '';
+$cidade_w = $_POST["cidade_w"] ?? '';
 
 $usuario_alteracao = $nome_usuario_print;
 $hora_alteracao = date('G:i:s', time());
 $data_alteracao = date('Y-m-d', time());
-$motivo_exclusao = $_POST["motivo_exclusao"];
+$motivo_exclusao = $_POST["motivo_exclusao"] ?? '';
+$linha_pessoa = 0;
+$msg = '';
 // ================================================================================================================
 
 
@@ -214,7 +217,7 @@ jQuery(function($){
 <!-- ============================================================================================================= -->
 <div class="ct_topo_2">
 	<div class="ct_subtitulo_left">
-    <?php echo"$msg"; ?>
+    <?php echo "$msg"; ?>
     </div>
 
 	<div class="ct_subtitulo_right">
@@ -222,10 +225,6 @@ jQuery(function($){
     </div>
 </div>
 <!-- ============================================================================================================= -->
-
-
-
-
 
 <?php
 if ($botao_2 == "EXCLUSAO")
@@ -243,6 +242,10 @@ echo "
 	<input type='hidden' name='botao' value='BUSCAR'>
 	<input type='hidden' name='botao_2' value='EXCLUIR'>
 	<input type='hidden' name='id_w' value='$id_w'>
+	<input type='hidden' name='idSankhya_w' value='$idSankhya_w'>
+	<input type='hidden' name='idSankhyaInformado' value='$idSankhyaInformado'>
+	<input type='hidden' name='validadoSERASA' value='$validadoSERASA'>
+	<input type='hidden' name='embargado' value='$embargado'>
 	<input type='hidden' name='codigo_pessoa_w' value='$codigo_pessoa_w'>
 	<input type='hidden' name='pesquisar_por_busca' value='$pesquisar_por_busca'>
 	<input type='hidden' name='nome_busca' value='$nome_busca'>
@@ -335,6 +338,10 @@ echo "
 	<input type='hidden' name='pagina_mae' value='$pagina'>
 	<input type='hidden' name='botao' value='BUSCAR'>
 	<input type='hidden' name='id_w' value='$id_w'>
+	<input type='hidden' name='idSankhya_w' value='$idSankhya_w'>
+	<input type='hidden' name='idSankhyaInformado' value='$idSankhyaInformado'>
+	<input type='hidden' name='validadoSERASA' value='$validadoSERASA'>
+	<input type='hidden' name='embargado' value='$embargado'>
 	<input type='hidden' name='codigo_pessoa_w' value='$codigo_pessoa_w'>
 	<input type='hidden' name='pesquisar_por_busca' value='$pesquisar_por_busca'>
 	<input type='hidden' name='nome_busca' value='$nome_busca'>
@@ -558,8 +565,9 @@ else
 
 <table class='tabela_cabecalho'>
 <tr>
-<td width='70px'>C&oacute;digo</td>
-<td width='340px'>Nome</td>
+<td width='60px'>C&oacute;digo</td>
+<td width='80px'>Sankhya</td>
+<td width='270px'>Nome</td>
 <td width='160px'>CPF/CNPJ</td>
 <td width='130px'>Telefone</td>
 <td width='250px'>Cidade/UF</td>
@@ -604,6 +612,10 @@ $numero_residencia_w = $aux_pessoa[25];
 $complemento_w = $aux_pessoa[26];
 $estado_registro_w = $aux_pessoa[34];
 $codigo_pessoa_w = $aux_pessoa[35];
+$idSankhya_w = $aux_pessoa[41];
+$idSankhyaInformado = $aux_pessoa[41] > 0;
+$validadoSERASA = $aux_pessoa[48];
+$embargado = $aux_pessoa[49];
 
 if ($tipo_w == "PF" or $tipo_w == "pf")
 {$cpf_cnpj_print = $cpf_w;}
@@ -685,8 +697,9 @@ else
 {echo "<tr class='tabela_1' title=' Nome: $nome_w &#13; ID Cadastro: $id_w &#13; Status Cadastro: $estado_registro_w &#13; Classifica&ccedil;&atilde;o: $classificacao_print $dados_cadastro_w $dados_alteracao_w $dados_exclusao_w'>";}
 
 echo "
-<td width='70px' align='left'><div style='height:14px; margin-left:7px'>$id_w</div></td>
-<td width='340px' align='left'><div style='height:14px; margin-left:7px; overflow:hidden'>$nome_w</div></td>
+<td width='60px' align='left'><div style='height:14px; margin-left:7px'>$id_w</div></td>
+<td width='80px' align='left'><div style='height:14px; margin-left:7px'>$idSankhya_w</div></td>
+<td width='270px' align='left'><div style='height:14px; margin-left:7px; overflow:hidden'>$nome_w</div></td>
 <td width='160px' align='center'>$cpf_cnpj_print</td>
 <td width='130px' align='center'>$telefone_1_w</td>
 <td width='250px' align='center'>$cidade_w/$estado_w</td>";
@@ -698,6 +711,10 @@ echo "
 		<input type='hidden' name='pagina_mae' value='$pagina'>
 		<input type='hidden' name='botao' value='VISUALIZAR'>
 		<input type='hidden' name='id_w' value='$id_w'>
+		<input type='hidden' name='idSankhya_w' value='$idSankhya_w'>
+		<input type='hidden' name='idSankhyaInformado' value='$idSankhyaInformado'>
+		<input type='hidden' name='validadoSERASA' value='$validadoSERASA'>
+		<input type='hidden' name='embargado' value='$embargado'>
 		<input type='hidden' name='codigo_pessoa_w' value='$codigo_pessoa_w'>
 		<input type='hidden' name='pesquisar_por_busca' value='$pesquisar_por_busca'>
 		<input type='hidden' name='nome_busca' value='$nome_busca'>
@@ -719,6 +736,10 @@ echo "
 		<input type='hidden' name='pagina_mae' value='$pagina'>
 		<input type='hidden' name='botao' value='EDITAR'>
 		<input type='hidden' name='id_w' value='$id_w'>
+		<input type='hidden' name='idSankhya_w' value='$idSankhya_w'>
+		<input type='hidden' name='idSankhyaInformado' value='$idSankhyaInformado'>
+		<input type='hidden' name='validadoSERASA' value='$validadoSERASA'>
+		<input type='hidden' name='embargado' value='$embargado'>
 		<input type='hidden' name='codigo_pessoa_w' value='$codigo_pessoa_w'>
 		<input type='hidden' name='pesquisar_por_busca' value='$pesquisar_por_busca'>
 		<input type='hidden' name='nome_busca' value='$nome_busca'>
@@ -747,6 +768,10 @@ echo "
 		<input type='hidden' name='botao' value='BUSCAR'>
 		<input type='hidden' name='botao_2' value='ATIVAR'>
 		<input type='hidden' name='id_w' value='$id_w'>
+		<input type='hidden' name='idSankhya_w' value='$idSankhya_w'>
+		<input type='hidden' name='idSankhyaInformado' value='$idSankhyaInformado'>
+		<input type='hidden' name='validadoSERASA' value='$validadoSERASA'>
+		<input type='hidden' name='embargado' value='$embargado'>
 		<input type='hidden' name='codigo_pessoa_w' value='$codigo_pessoa_w'>
 		<input type='hidden' name='pesquisar_por_busca' value='$pesquisar_por_busca'>
 		<input type='hidden' name='nome_busca' value='$nome_busca'>
@@ -767,6 +792,10 @@ echo "
 		<input type='hidden' name='botao' value='BUSCAR'>
 		<input type='hidden' name='botao_2' value='INATIVAR'>
 		<input type='hidden' name='id_w' value='$id_w'>
+		<input type='hidden' name='idSankhya_w' value='$idSankhya_w'>
+		<input type='hidden' name='idSankhyaInformado' value='$idSankhyaInformado'>
+		<input type='hidden' name='validadoSERASA' value='$validadoSERASA'>
+		<input type='hidden' name='embargado' value='$embargado'>
 		<input type='hidden' name='codigo_pessoa_w' value='$codigo_pessoa_w'>
 		<input type='hidden' name='pesquisar_por_busca' value='$pesquisar_por_busca'>
 		<input type='hidden' name='nome_busca' value='$nome_busca'>
@@ -795,6 +824,10 @@ echo "
 		<input type='hidden' name='botao' value='BUSCAR'>
 		<input type='hidden' name='botao_2' value='EXCLUSAO'>
 		<input type='hidden' name='id_w' value='$id_w'>
+		<input type='hidden' name='idSankhya_w' value='$idSankhya_w'>
+		<input type='hidden' name='idSankhyaInformado' value='$idSankhyaInformado'>
+		<input type='hidden' name='validadoSERASA' value='$validadoSERASA'>
+		<input type='hidden' name='embargado' value='$embargado'>
 		<input type='hidden' name='codigo_pessoa_w' value='$codigo_pessoa_w'>
 		<input type='hidden' name='pesquisar_por_busca' value='$pesquisar_por_busca'>
 		<input type='hidden' name='nome_busca' value='$nome_busca'>

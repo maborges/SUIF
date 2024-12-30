@@ -1,17 +1,16 @@
 <?php
 include ("../../includes/config.php"); 
+include("../../includes/conecta_bd.php");
 include ("../../includes/valida_cookies.php");
+require_once("../../sankhya/Sankhya.php");
+require_once("../../sankhya/SankhyaKeys.php");
+require_once("../../helpers.php");
+
 $pagina = "cadastro_3_enviar";
 $titulo = "Cadastro de Favorecido";
 $modulo = "cadastros";
 $menu = "cadastro_favorecidos";
 // ================================================================================================================
-
-
-// ====== CONVERTE DATA, VALOR e PESO =============================================================================
-include ("../../includes/converte.php");
-// ================================================================================================================
-
 
 // ======= RECEBENDO POST =========================================================================================
 $botao = $_POST["botao"];
@@ -19,16 +18,40 @@ $data_hoje = date('Y-m-d', time());
 $data_hoje_br = date('d/m/Y', time());
 $filial = $filial_usuario;
 
-$nome_form = $_POST["nome_form"];
-$fornecedor_form = $_POST["fornecedor_form"];
-$banco_form = $_POST["banco_form"];
-$agencia_form = $_POST["agencia_form"];
-$numero_conta_form = $_POST["numero_conta_form"];
-$tipo_conta_form = $_POST["tipo_conta_form"];
-$conta_conjunta_form = $_POST["conta_conjunta_form"];
-$obs_form = $_POST["obs_form"];
-$tipo_chave_pix_form = $_POST["tipo_chave_pix_form"];
-$chave_pix_form = $_POST["chave_pix_form"];
+$idSankhya_form = $_POST["idSankhya_pessoa"] ?? '';
+$idSankhyaCC_form = $_POST["idSankhyaCC_form"] ?? '';
+$nome_form = $_POST["nome_form"] ?? '';
+$fornecedor_form = $_POST["fornecedor_form"] ?? '';
+$banco_form = $_POST["banco_form"] ?? '';
+$agencia_form = $_POST["agencia_form"] ?? '';
+$numero_conta_form = $_POST["numero_conta_form"] ?? '';
+$tipo_conta_form = $_POST["tipo_conta_form"] ?? '';
+$conta_conjunta_form = $_POST["conta_conjunta_form"] ?? 'NAO';
+$obs_form = $_POST["obs_form"] ?? '';
+$tipo_chave_pix_form = $_POST["tipo_chave_pix_form"] ?? '';
+$chave_pix_form = $_POST["chave_pix_form"] ?? '';
+
+$tipo_pessoa_form = $_POST["chave_pix_form"] ?? '';
+$cpf_form = $_POST["cpf_form"] ?? '';
+$cnpj_form = $_POST["cnpj_form"] ?? '';
+$rg_form = $_POST["rg_form"] ?? '';
+$data_nascimento_form = $_POST["data_nascimento_form"] ?? '';
+$sexo_form = $_POST["sexo_form"] ?? '';
+$nome_fantasia_form = $_POST["nome_fantasia_form"] ?? '';
+$telefone_1_form = $_POST["telefone_1_form"] ?? '';
+$telefone_2_form = $_POST["telefone_2_form"] ?? '';
+$endereco_form = $_POST["endereco_form"] ?? '';
+$numero_residencia_form = $_POST["numero_residencia_form"] ?? '';
+$bairro_form = $_POST["bairro_form"] ?? '';
+$estado = $_POST["estado"] ?? '';
+$cidade = $_POST["cidade"] ?? '';
+$complemento_form = $_POST["complemento_form"] ?? '';
+$cep_form = $_POST["cep_form"] ?? '';
+$email_form = $_POST["email_form"] ?? '';
+$classificacao_1_form = $_POST["classificacao_1_form"] ?? '';
+
+
+$msg_titulo = '';
 
 
 if ($conta_conjunta_form == "")
@@ -152,46 +175,64 @@ else
 {$permite_novo = "NAO";}
 // ================================================================================================================
 
-
 // ====== ENVIA CADASTRO P/ BD E MONTA MENSAGEM =========================================================
-if ($botao == "NOVO_CADASTRO")
-{
-	if ($fornecedor_form == "")
-	{$erro = 1;
-	$msg = "<div style='color:#FF0000'>Selecione uma pessoa.</div>";
-	$msg_titulo = "<div style='color:#009900'>$titulo</div>";}
+if ($botao == "NOVO_CADASTRO") {
 
-	elseif ($banco_form == "")
-	{$erro = 2;
-	$msg = "<div style='color:#FF0000'>Selecione um banco.</div>";
-	$msg_titulo = "<div style='color:#009900'>$titulo</div>";}
+	$erro = 0;
+    $msg = "";
+    $msg_titulo = "<div style='color:#0000FF'>Cadastro Realizado com Sucesso!</div>";
 
-	elseif ($agencia_form == "")
-	{$erro = 3;
-	$msg = "<div style='color:#FF0000'>Digite o n&uacute;mero da ag&ecirc;ncia banc&aacute;ria.</div>";
-	$msg_titulo = "<div style='color:#009900'>$titulo</div>";}
+	if (!$idSankhyaCC_form) {
+        $erro = 4;
+        $msg = "<div style='color:#FF0000'>Informe o Código da CC Sankhya.</div>";
+        $msg_titulo = "<div style='color:#009900'>$titulo</div>";
+	} else if (!$idSankhya_form) {
+        $erro = 5;
+        $msg = "<div style='color:#FF0000'>Informe da ID Sankhya.</div>";
+        $msg_titulo = "<div style='color:#009900'>$titulo</div>";
+	} else {
+		$favorecidoSUIF = Sankhya::getFavorecidoSUIF($idSankhya_form, $idSankhyaCC_form);
 
-	elseif ($numero_conta_form == "")
-	{$erro = 4;
-	$msg = "<div style='color:#FF0000'>Digite o n&uacute;mero da conta banc&aacute;ria.</div>";
-	$msg_titulo = "<div style='color:#009900'>$titulo</div>";}
-
-	elseif ($tipo_conta_form == "")
-	{$erro = 5;
-	$msg = "<div style='color:#FF0000'>Informe o tipo de conta.</div>";
-	$msg_titulo = "<div style='color:#009900'>$titulo</div>";}
-
-	else
-	{$erro = 0;
-	$msg = "";
-	$msg_titulo = "<div style='color:#0000FF'>Cadastro Realizado com Sucesso!</div>";
-
-
-	// ====== TABELA CADASTRO_FAVORECIDO ======================================================================
-include ("../../includes/conecta_bd.php");
-$inserir_favorecido = mysqli_query ($conexao, "INSERT INTO cadastro_favorecido (codigo, codigo_pessoa, banco, agencia, conta, tipo_conta, usuario_cadastro, hora_cadastro, data_cadastro, observacao, estado_registro, nome, conta_conjunta, tipo_chave_pix, chave_pix, cpf_cnpj, nome_banco) VALUES (NULL, '$codigo_pessoa', '$banco_form', '$agencia_form', '$numero_conta_form', '$tipo_conta_form', '$usuario_cadastro', '$hora_cadastro', '$data_cadastro', '$obs_form', 'ATIVO', '$nome_pessoa', '$conta_conjunta_aux', '$tipo_chave_pix_form', '$chave_pix_form', '$cpf_cnpj', '$apelido_banco')");
-include ("../../includes/desconecta_bd.php");
+		if ($favorecidoSUIF['errorCode']) {
+			$erro = 6;
+			$msg  = "<div style='color:#FF0000'>Erro: {$favorecidoSUIF['errorCode']}: {$favorecidoSUIF['errorMessage']}</div>";
+			$msg_titulo = "<div style='color:#009900'>$titulo</div>";
+		} else if (Count($favorecidoSUIF['rows']) > 0) {
+			$erro = 7;
+			$msg  = "<div style='color:#FF0000'>Conta corrente já cadastrada para {$favorecidoSUIF['rows'][0][0]}.</div>";
+			$msg_titulo = "<div style='color:#009900'>$titulo</div>";
+		} 
 	}
+    
+	if (!$erro) {
+		if ($fornecedor_form == "") {
+			$erro = 1;
+			$msg = "<div style='color:#FF0000'>Selecione uma pessoa.</div>";
+			$msg_titulo = "<div style='color:#009900'>$titulo</div>";
+		} elseif ($banco_form == "") {
+			$erro = 2;
+			$msg = "<div style='color:#FF0000'>Selecione um banco.</div>";
+			$msg_titulo = "<div style='color:#009900'>$titulo</div>";
+		} elseif ($agencia_form == "") {
+			$erro = 3;
+			$msg = "<div style='color:#FF0000'>Digite o n&uacute;mero da ag&ecirc;ncia banc&aacute;ria.</div>";
+			$msg_titulo = "<div style='color:#009900'>$titulo</div>";
+		} elseif ($numero_conta_form == "") {
+			$erro = 4;
+			$msg = "<div style='color:#FF0000'>Digite o n&uacute;mero da conta banc&aacute;ria.</div>";
+			$msg_titulo = "<div style='color:#009900'>$titulo</div>";
+		} elseif ($tipo_conta_form == "") {
+			$erro = 5;
+			$msg = "<div style='color:#FF0000'>Informe o tipo de conta.</div>";
+			$msg_titulo = "<div style='color:#009900'>$titulo</div>";
+		} else {
+			// ====== TABELA CADASTRO_FAVORECIDO ======================================================================
+			include("../../includes/conecta_bd.php");
+			$inserir_favorecido = mysqli_query($conexao, "INSERT INTO cadastro_favorecido (codigo, codigo_pessoa, banco, agencia, conta, tipo_conta, usuario_cadastro, hora_cadastro, data_cadastro, observacao, estado_registro, nome, conta_conjunta, tipo_chave_pix, chave_pix, cpf_cnpj, nome_banco, id_sankhya, sequencia_cc_sankhya) VALUES (NULL, '$codigo_pessoa', '$banco_form', '$agencia_form', '$numero_conta_form', '$tipo_conta_form', '$usuario_cadastro', '$hora_cadastro', '$data_cadastro', '$obs_form', 'ATIVO', '$nome_pessoa', '$conta_conjunta_aux', '$tipo_chave_pix_form', '$chave_pix_form', '$cpf_cnpj', '$apelido_banco', $idSankhya_form, $idSankhyaCC_form)");
+			include("../../includes/desconecta_bd.php");
+		}
+	}
+	
 }
 // ======================================================================================================
 
@@ -272,6 +313,22 @@ include ("../../includes/head.php");
 <div style="width:1030px; height:400px; margin:auto; border:1px solid transparent; color:#003466">
 
 
+	<!-- SANKHYA-->
+	<div style="width:100%; height:50px; border:1px solid transparent;  float:left">
+		<div>
+			<div class="pqa_caixa">
+				<div class="pqa_rotulo" style="margin-left:0px;">
+					ID Sankhya:
+				</div>
+
+				<div class="pqa_campo" style="margin-left:0px;">
+					<input readonly type="number" name="idSankhya_pessoa" class="pqa_input" id="idSankhya_pessoa" maxlength="8" style="width:145px; background-color:#EEE" value="<?php echo $idSankhya_form ?>" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- FIM SANKHYA-->
+
 <!-- =======  NOME / RAZAO SOCIAL =================================================================================== -->
 	<div style="width:511px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
         <div class="form_rotulo" style="width:500px; height:17px; border:1px solid transparent; float:left">
@@ -350,7 +407,17 @@ include ("../../includes/head.php");
         </div>
 	</div>
 <!-- ================================================================================================================ -->
+<div style="width:100%; height:50px; border:1px solid transparent;  float:left">
+	<form>
+	<div class="pqa_caixa">
+		<div class="pqa_rotulo" style="margin-left:0px;">Código da CC Sankhya:</div>
 
+		<div class="pqa_campo" style="margin-left:0px;">
+			<input readonly	type="number" name="idSankhyaCC_form" class="pqa_input" id="idSankhyaCC_form" maxlength="8" onchange="LimpaFormsCC()" style="width:145px; background-color:#EEE;" value="<?php echo $idSankhyaCC_form ?>">
+		</div>
+	</div>
+	</form>
+</div>
 
 <!-- =======  BANCO ============================================================================================== -->
 	<div style="width:339px; height:200px; border:1px solid transparent; margin-top:10px; float:left; text-align:center">
@@ -519,25 +586,27 @@ if ($erro == 0)
 	<div id='centro' style='float:left; height:55px; width:200px; color:#00F; text-align:center; border:0px solid #000'>
 		<form action='$servidor/$diretorio_servidor/cadastros/favorecidos/cadastro_2_formulario.php' method='post'>
 		<input type='hidden' name='pagina_mae' value='$pagina'>
-		<input type='hidden' name='nome_form' value='$nome_form' />
-		<input type='hidden' name='tipo_pessoa_form' value='$tipo_pessoa_form' />
-		<input type='hidden' name='nome_form' value='$nome_form' />
-		<input type='hidden' name='cpf_form' value='$cpf_form' />
-		<input type='hidden' name='cnpj_form' value='$cnpj_form' />
-		<input type='hidden' name='rg_form' value='$rg_form' />
-		<input type='hidden' name='data_nascimento_form' value='$data_nascimento_form' />
-		<input type='hidden' name='sexo_form' value='$sexo_form' />
-		<input type='hidden' name='nome_fantasia_form' value='$nome_fantasia_form' />
-		<input type='hidden' name='telefone_1_form' value='$telefone_1_form' />
-		<input type='hidden' name='telefone_2_form' value='$telefone_2_form' />
-		<input type='hidden' name='endereco_form' value='$endereco_form' />
-		<input type='hidden' name='numero_residencia_form' value='$numero_residencia_form' />
-		<input type='hidden' name='bairro_form' value='$bairro_form' />
-		<input type='hidden' name='estado' value='$estado' />
-		<input type='hidden' name='cidade' value='$cidade' />
-		<input type='hidden' name='complemento_form' value='$complemento_form' />
-		<input type='hidden' name='cep_form' value='$cep_form' />
-		<input type='hidden' name='email_form' value='$email_form' />
+		<input type='hidden' name='pagina_mae' value='$pagina'>
+		<input type='hidden' name='idSankhya_pessoa' value='$idSankhya_form'>
+		<input type='hidden' name='fornecedor_form' value='$fornecedor_form' />
+		<input type='hidden' name='tipo_pessoa_form' value='$tipo_pessoa_form'>
+		<input type='hidden' name='nome_form' value='$nome_form'>
+		<input type='hidden' name='cpf_form' value='$cpf_form'>
+		<input type='hidden' name='cnpj_form' value='$cnpj_form'>
+		<input type='hidden' name='rg_form' value='$rg_form'>
+		<input type='hidden' name='data_nascimento_form' value='$data_nascimento_form'>
+		<input type='hidden' name='sexo_form' value='$sexo_form'>
+		<input type='hidden' name='nome_fantasia_form' value='$nome_fantasia_form'>
+		<input type='hidden' name='telefone_1_form' value='$telefone_1_form'>
+		<input type='hidden' name='telefone_2_form' value='$telefone_2_form'>
+		<input type='hidden' name='endereco_form' value='$endereco_form'>
+		<input type='hidden' name='numero_residencia_form' value='$numero_residencia_form'>
+		<input type='hidden' name='bairro_form' value='$bairro_form'>
+		<input type='hidden' name='estado' value='$estado'>
+		<input type='hidden' name='cidade' value='$cidade'>
+		<input type='hidden' name='complemento_form' value='$complemento_form'>
+		<input type='hidden' name='cep_form' value='$cep_form'>
+		<input type='hidden' name='email_form' value='$email_form'>
 		<input type='hidden' name='obs_form' value='$obs_form'>
 		<input type='hidden' name='classificacao_1_form' value='$classificacao_1_form'>
 		<input type='hidden' name='banco_form' value='$banco_form'>
@@ -546,6 +615,10 @@ if ($erro == 0)
 		<input type='hidden' name='tipo_conta_form' value='$tipo_conta_form'>
 		<input type='hidden' name='tipo_chave_pix_form' value='$tipo_chave_pix_form'>
 		<input type='hidden' name='chave_pix_form' value='$chave_pix_form'>
+		<input type='hidden' name='conta_conjunta_form' value='$conta_conjunta_form'>
+		<input type='hidden' name='idSankhyaCC_form' value='$idSankhyaCC_form'>
+		<input type='hidden' name='idSankhyaCC_edicao_form' value='true'>
+		
 		<button type='submit' class='botao_2' style='margin-left:10px; width:180px'>Editar</button>
 		</form>
     </div>";
@@ -590,6 +663,7 @@ else
 	<input type='hidden' name='tipo_chave_pix_form' value='$tipo_chave_pix_form'>
 	<input type='hidden' name='chave_pix_form' value='$chave_pix_form'>
 	<input type='hidden' name='obs_form' value='$obs_form' />
+	<input type='hidden' name='idSankhyaCC_form' value='$idSankhyaCC_form'>
     <button type='submit' class='botao_2' style='margin-left:10px; width:180px'>Voltar</button>
     </form>
     </div>";

@@ -3,32 +3,12 @@
 include ('../../includes/config.php'); 
 include ('../../includes/conecta_bd.php');
 include ('../../includes/valida_cookies.php');
+include ("../../helpers.php");
+
 $pagina = 'relatorio_contratos_excluidos';
 $titulo = 'Relat&oacute;rios de Contratos Futuros';
 $modulo = 'compras';
 $menu = 'contratos';
-// ================================================================================================================
-
-
-// ====== CONVERTE DATA ===========================================================================================
-// Função para converter a data de formato nacional para formato americano. Muito útil para inserir data no mysql
-function ConverteData($data){
-	if (strstr($data, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-// ================================================================================================================
-
-
-// ====== CONVERTE VALOR ==========================================================================================
-function ConverteValor($valor){
-	$valor_1 = str_replace(".", "", $valor);
-	$valor_2 = str_replace(",", ".", $valor_1);
-	return $valor_2;
-}
 // ================================================================================================================
 
 
@@ -37,9 +17,9 @@ $botao = $_POST["botao"];
 $data_hoje = date('Y-m-d', time());
 $data_hoje_aux = date('d/m/Y', time());
 $data_inicial_aux = $_POST["data_inicial"];
-$data_inicial = ConverteData($_POST["data_inicial"]);
+$data_inicial = Helpers::ConverteData($_POST["data_inicial"]);
 $data_final_aux = $_POST["data_final"];
-$data_final = ConverteData($_POST["data_final"]);
+$data_final = Helpers::ConverteData($_POST["data_final"]);
 $filial = $filial_usuario;
 
 $fornecedor_form = $_POST["fornecedor_form"];
@@ -71,9 +51,9 @@ $data_baixa = date('Y/m/d', time());
 
 if ($botao == "BUSCAR")
 	{$data_inicial_aux = $_POST["data_inicial"];
-	$data_inicial = ConverteData($_POST["data_inicial"]);
+	$data_inicial = Helpers::ConverteData($_POST["data_inicial"]);
 	$data_final_aux = $_POST["data_final"];
-	$data_final = ConverteData($_POST["data_final"]);}
+	$data_final = Helpers::ConverteData($_POST["data_final"]);}
 else
 	{$data_inicial_aux = $data_hoje_aux;
 	$data_inicial = $data_hoje;

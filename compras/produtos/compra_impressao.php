@@ -7,29 +7,6 @@ $titulo = 'Impress&atilde;o de Compra';
 $modulo = 'compras';
 $menu = 'produtos';
 
-
-// ====== CONVERTE DATA ================================================================================	
-// Função para converter a data de formato nacional para formato americano. Usado para inserir data no mysql
-function ConverteData($data){
-	if (strstr($data, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-// ======================================================================================================
-
-
-// ====== CONVERTE VALOR =================================================================================	
-function ConverteValor($valor){
-	$valor_1 = str_replace(".", "", $valor);
-	$valor_2 = str_replace(",", ".", $valor_1);
-	return $valor_2;
-}
-// =======================================================================================================
-
-
 // ====== DADOS PARA BUSCA =================================================================================
 $numero_compra = $_POST["numero_compra"];
 // =======================================================================================================
@@ -42,8 +19,10 @@ $linha_compra = mysqli_num_rows ($busca_compra);
 
 
 // ====== BUSCA POR PRODUTOS GERAL  =======================================================================
+/* #Bi
 $busca_produto_geral = mysqli_query ($conexao, "SELECT * FROM cadastro_produto WHERE estado_registro!='EXCLUIDO' AND codigo='$cod_produto'");
 $linhas_bp_geral = mysqli_num_rows ($busca_produto_geral);
+#Bf */
 // =======================================================================================================
 
 
@@ -52,7 +31,7 @@ include ('../../includes/head_impressao.php');
 ?>
 
 
-<!-- ==================================   T Í T U L O   D A   P Á G I N A   ====================================== -->
+<!-- ==================================   T ï¿½ T U L O   D A   P ï¿½ G I N A   ====================================== -->
 <title>
 <?php echo "$titulo"; ?>
 </title>
@@ -65,7 +44,7 @@ include ('../../includes/head_impressao.php');
 </head>
 
 
-<!-- =============================================   I N Í C I O   =============================================== -->
+<!-- =============================================   I N ï¿½ C I O   =============================================== -->
 <body onLoad="imprimir()">
 
 <?php
@@ -93,6 +72,8 @@ $broca = $aux_compra[11];
 $umidade = $aux_compra[12];
 $situacao = $aux_compra[17];
 $impureza = $aux_compra[43];
+$tipo_compra  = $aux_compra[57] ?? 0;
+$tipoCompraText = $tipo_compra == 2 ? 'ARMAZENADO' : '';
 $observacao = $aux_compra[13];
 $motivo_alteracao_quant = $aux_compra[35];
 $quantidade_original = number_format($aux_compra[36],2,",",".");
@@ -111,6 +92,7 @@ $filial_print = $aux_compra[25];
 $produtor_ficha = $aux_compra[2];
 $produto_list = $aux_compra[3];
 $filial = $aux_compra[25];
+$idSankhya = $aux_compra[55] ?? '';
 
 //$ano_atual_rodape = date(Y);
 
@@ -147,11 +129,11 @@ else
 $versao_impressao_compra = $filial_config[8];
 
 
-// ====== 1.0 (GRANCAFÉ) ======
+// ====== 1.0 (GRANCAFï¿½) ======
 if ($versao_impressao_compra == "1.0")
 {include ('inc_compra_print_v_1.php');}
 
-// ====== 1.1 (GRANCAFÉ) ======
+// ====== 1.1 (GRANCAFï¿½) ======
 elseif ($versao_impressao_compra == "1.1")
 {include ('inc_compra_print_v_1_1.php');}
 

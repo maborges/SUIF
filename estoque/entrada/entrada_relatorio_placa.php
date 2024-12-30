@@ -2,43 +2,12 @@
 include ("../../includes/config.php"); 
 include ("../../includes/conecta_bd.php");
 include ("../../includes/valida_cookies.php");
+include ("../../helpers.php");
 $pagina = "entrada_relatorio_placa";
 $titulo = "Estoque - Relat&oacute;rio de Entradas";
 $modulo = "estoque";
 $menu = "entrada";
 // ================================================================================================================
-
-
-// ====== CONVERTE DATA ===========================================================================================
-// Função para converter a data de formato nacional para formato americano. Muito útil para inserir data no mysql
-function ConverteData($data_x){
-	if (strstr($data_x, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data_x);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-// ================================================================================================================
-
-
-// ====== CONVERTE VALOR ==========================================================================================
-function ConverteValor($valor_x){
-	$valor_1 = str_replace(".", "", $valor_x);
-	$valor_2 = str_replace(",", ".", $valor_1);
-	return $valor_2;
-}
-// ================================================================================================================
-
-
-// ====== CONVERTE PESO ==========================================================================================
-function ConvertePeso($peso_x){
-	$peso_1 = str_replace(".", "", $peso_x);
-	$peso_2 = str_replace(",", "", $peso_1);
-	return $peso_2;
-}
-// ================================================================================================================
-
 
 // ====== RECEBE POST ==============================================================================================
 $botao = $_POST["botao"];
@@ -47,9 +16,9 @@ $pagina_mae = $_POST["pagina_mae"];
 $data_hoje = date('Y-m-d', time());
 $data_hoje_br = date('d/m/Y', time());
 $data_inicial_br = $_POST["data_inicial_busca"];
-$data_inicial_busca = ConverteData($_POST["data_inicial_busca"]);
+$data_inicial_busca = Helpers::ConverteData($_POST["data_inicial_busca"]);
 $data_final_br = $_POST["data_final_busca"];
-$data_final_busca = ConverteData($_POST["data_final_busca"]);
+$data_final_busca = Helpers::ConverteData($_POST["data_final_busca"]);
 $mes_atras = date ('Y-m-d', strtotime('-30 days'));
 $mes_atras_br = date ('d/m/Y', strtotime('-30 days'));
 $filial = $filial_usuario;
@@ -70,9 +39,9 @@ if (empty($data_inicial_br) or empty($data_final_br))
 	$data_final_busca = $data_hoje;}
 else
 	{$data_inicial_br = $_POST["data_inicial_busca"];
-	$data_inicial_busca = ConverteData($_POST["data_inicial_busca"]);
+	$data_inicial_busca = Helpers::ConverteData($_POST["data_inicial_busca"]);
 	$data_final_br = $_POST["data_final_busca"];
-	$data_final_busca = ConverteData($_POST["data_final_busca"]);}
+	$data_final_busca = Helpers::ConverteData($_POST["data_final_busca"]);}
 
 $mysql_filtro_data = "data BETWEEN '$data_inicial_busca' AND '$data_final_busca'";
 
@@ -171,7 +140,7 @@ include ('../../includes/head.php');
 <!-- ====== MENU ================================================================================================== -->
 <div id="menu_geral">
 <?php include ("../../includes/menu_estoque.php"); ?>
-<?php include ("../../includes/sub_menu_estoque_entrada.php"); ?>
+<?php include ("../../includes/submenu_estoque_entrada.php"); ?>
 </div>
 
 

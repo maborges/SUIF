@@ -2,10 +2,11 @@
 include ("includes/config.php"); 
 
 setcookie("u_suif");
+setcookie("u_sankhya");
 setcookie("s_suif");
 setcookie("n_suif");
 setcookie("filial_suif");
-setcookie ("nome_filial");
+setcookie("nome_filial");
 
 include ("includes/desconecta_bd.php");
 

@@ -1,34 +1,12 @@
 <?php
 include ("../../includes/config.php"); 
 include ("../../includes/valida_cookies.php");
+include ("../../helpers.php");
+
 $pagina = "relatorio_adto";
 $titulo = "Pagamentos - Adiantamentos e Notas Fiscais";
 $modulo = "financeiro";
 $menu = "contas_pagar";
-// ================================================================================================================
-
-
-// ====== CONVERTE DATA ===========================================================================================
-function ConverteData($data_x){
-	if (strstr($data_x, "/"))
-	{
-	$d = explode ("/", $data_x);
-	$rstData = "$d[2]-$d[1]-$d[0]";
-	return $rstData;
-	}
-}
-// ================================================================================================================
-
-
-// ====== CONVERTE VALOR ==========================================================================================
-function ConverteValor($valor_x){
-	$valor_1 = str_replace("R$ ", "", $valor_x); //tira o símbolo
-	$valor_2 = str_replace(".", "", $valor_1); //tira o ponto
-	$valor_3 = str_replace(",", ".", $valor_2); //troca vírgula por ponto
-	return $valor_3;
-}
-// ================================================================================================================
-
 
 // ======= RECEBENDO POST =========================================================================================
 $botao = $_POST["botao"];
@@ -37,11 +15,11 @@ $pagina_mae = $_POST["pagina_mae"];
 $data_hoje = date('Y-m-d', time());
 $data_hoje_br = date('d/m/Y', time());
 $data_inicial_br = $_POST["data_inicial_busca"];
-$data_inicial_busca = ConverteData($_POST["data_inicial_busca"]);
+$data_inicial_busca = Helpers::ConverteData($_POST["data_inicial_busca"]);
 $data_final_br = $_POST["data_final_busca"];
-$data_final_busca = ConverteData($_POST["data_final_busca"]);
+$data_final_busca = Helpers::ConverteData($_POST["data_final_busca"]);
 $total_nf_br = $_POST["total_nf_form"];
-$total_nf_form = ConverteValor($_POST["total_nf_form"]);
+$total_nf_form = Helpers::ConverteValor($_POST["total_nf_form"]);
 $valor_pgto = $_POST["valor_pgto"];
 
 $id_pgto = $_POST["id_pgto"];
@@ -80,9 +58,9 @@ if (empty($data_inicial_br) or empty($data_final_br))
 	$data_final_busca = $data_hoje;}
 else
 	{$data_inicial_br = $_POST["data_inicial_busca"];
-	$data_inicial_busca = ConverteData($_POST["data_inicial_busca"]);
+	$data_inicial_busca = Helpers::ConverteData($_POST["data_inicial_busca"]);
 	$data_final_br = $_POST["data_final_busca"];
-	$data_final_busca = ConverteData($_POST["data_final_busca"]);}
+	$data_final_busca = Helpers::ConverteData($_POST["data_final_busca"]);}
 
 $mysql_filtro_data = "data_pagamento BETWEEN '$data_inicial_busca' AND '$data_final_busca'";
 

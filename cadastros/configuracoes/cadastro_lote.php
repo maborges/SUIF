@@ -2,19 +2,12 @@
 include ("../../includes/config.php"); 
 include ("../../includes/conecta_bd.php");
 include ("../../includes/valida_cookies.php");
+include ("../../helpers.php");
+
 $pagina = "cadastro_lote";
 $titulo = "Cadastro de Lote";	
 $modulo = "cadastros";
 $menu = "config";
-// ================================================================================================================
-
-
-// ====== CONVERTE PESO ==========================================================================================
-function ConvertePeso($peso_x){
-	$peso_1 = str_replace(".", "", $peso_x);
-	$peso_2 = str_replace(",", "", $peso_1);
-	return $peso_2;
-}
 // ================================================================================================================
 
 
@@ -31,7 +24,7 @@ $bloqueio_w = $_POST["bloqueio_w"];
 if ($botao == "EDICAO")
 {$capacidade_max_form = $_POST["capacidade_max_form"];}
 else
-{$capacidade_max_form = ConvertePeso($_POST["capacidade_max_form"]);}
+{$capacidade_max_form = Helpers::ConvertePeso($_POST["capacidade_max_form"], 'N');}
 
 $usuario_cadastro_form = $nome_usuario_print;
 $data_cadastro_form = date('Y-m-d', time());

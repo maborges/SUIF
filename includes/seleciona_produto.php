@@ -1,86 +1,91 @@
 ﻿<?php
 // ======= RECEBENDO POST ===================================================================================
-$numero_romaneio = $_POST["numero_romaneio"];
-$numero_compra = $_POST["numero_compra"];
-$numero_venda = $_POST["numero_venda"];
-$botao = $_POST["botao"];
+$numero_romaneio = $_POST["numero_romaneio"] ?? '';
+$numero_compra = $_POST["numero_compra"] ?? '';
+$numero_venda = $_POST["numero_venda"] ?? '';
+$botao = $_POST["botao"] ?? '';
 
-$pagina_mae = $_POST["pagina_mae"];
-$pagina_filha = $_POST["pagina_filha"];
-$data_inicial_busca = $_POST["data_inicial_busca"];
-$data_final_busca = $_POST["data_final_busca"];
-$fornecedor_busca = $_POST["fornecedor_busca"];
-$cod_produto_busca = $_POST["cod_produto_busca"];
-$cod_seleciona_produto = $_POST["cod_seleciona_produto"];
-$numero_romaneio_busca = $_POST["numero_romaneio_busca"];
-$situacao_romaneio_busca = $_POST["situacao_romaneio_busca"];
-$forma_pesagem_busca = $_POST["forma_pesagem_busca"];
+$pagina_mae = $_POST["pagina_mae"] ?? '';
+$pagina_filha = $_POST["pagina_filha"] ?? '';
+$data_inicial_busca = $_POST["data_inicial_busca"] ?? '';
+$data_final_busca = $_POST["data_final_busca"] ?? '';
+$fornecedor_busca = $_POST["fornecedor_busca"] ?? '';
+$cod_produto_busca = $_POST["cod_produto_busca"] ?? '';
+$cod_seleciona_produto = $_POST["cod_seleciona_produto"] ?? '';
+$numero_romaneio_busca = $_POST["numero_romaneio_busca"] ?? '';
+$situacao_romaneio_busca = $_POST["situacao_romaneio_busca"] ?? '';
+$forma_pesagem_busca = $_POST["forma_pesagem_busca"] ?? '';
 $preco_max_cafe_print = '';
 $preco_max_pimenta_print = '';
 $preco_max_cacau_print = '';
+$mostra_preco = $_POST['mostra_preco'] ?? '';
 
-if ($botao == "ALTERAR_PRODUTO")
-{$pagina_destino = "editar_3_formulario";}
-else
-{$pagina_destino = "cadastro_2_selec_fornecedor";}
+if ($botao == "ALTERAR_PRODUTO") {
+	$pagina_destino = "editar_3_formulario";
+} else {
+	$pagina_destino = "cadastro_2_selec_fornecedor";
+}
 // ==========================================================================================================
-
 
 // ====== MOSTRA PREÇO ======================================================================================
-if ($filial_config[5] == "S" and $mostra_preco != "NAO")
-{$mostra_preco = "SIM";}
-else
-{$mostra_preco = "NAO";}
+if ($filial_config[5] == "S" and $mostra_preco != "NAO") {
+	$mostra_preco = "SIM";
+} else {
+	$mostra_preco = "NAO";
+}
 // ==========================================================================================================
 
 
-include ('../../includes/conecta_bd.php');
+include('../../includes/conecta_bd.php');
 
 
 // ====== BUSCA PREÇO CAFE ===================================================================================
-$busca_cafe = mysqli_query ($conexao, "SELECT codigo, preco_compra_maximo, produto_print FROM cadastro_produto WHERE codigo='2'");
+$busca_cafe = mysqli_query($conexao, "SELECT codigo, preco_compra_maximo, produto_print FROM cadastro_produto WHERE codigo='2'");
 $aux_cafe = mysqli_fetch_row($busca_cafe);
 
 $cod_cafe = $aux_cafe[0];
 $cafe_print = $aux_cafe[2];
 $preco_max_cafe = $aux_cafe[1];
-if ($mostra_preco == "SIM" and $modulo == "compras")
-{$preco_max_cafe_print = "R$ " . number_format($aux_cafe[1],2,",",".");}
-else
-{$preco_max_cafe_print = "";}
+if ($mostra_preco == "SIM" and $modulo == "compras") {
+	$preco_max_cafe_print = "R$ " . number_format($aux_cafe[1], 2, ",", ".");
+} else {
+	$preco_max_cafe_print = "";
+}
 // ======================================================================================================
 
 
 // ====== BUSCA PREÇO PIMENTA ===================================================================================
-$busca_pimenta = mysqli_query ($conexao, "SELECT codigo, preco_compra_maximo, produto_print FROM cadastro_produto WHERE codigo='3'");
+$busca_pimenta = mysqli_query($conexao, "SELECT codigo, preco_compra_maximo, produto_print FROM cadastro_produto WHERE codigo='3'");
 $aux_pimenta = mysqli_fetch_row($busca_pimenta);
 
 $cod_pimenta = $aux_pimenta[0];
 $pimenta_print = $aux_pimenta[2];
 $preco_max_pimenta = $aux_pimenta[1];
-if ($mostra_preco == "SIM" and $modulo == "compras")
-{$preco_max_pimenta_print = "R$ " . number_format($aux_pimenta[1],2,",",".");}
-else
-{$preco_max_pimenta_print = "";}
+if ($mostra_preco == "SIM" and $modulo == "compras") {
+	$preco_max_pimenta_print = "R$ " . number_format($aux_pimenta[1], 2, ",", ".");
+} else {
+	$preco_max_pimenta_print = "";
+}
 // ======================================================================================================
 
 
 // ====== BUSCA PREÇO CACAU ===================================================================================
-$busca_cacau = mysqli_query ($conexao, "SELECT codigo, preco_compra_maximo, produto_print FROM cadastro_produto WHERE codigo='4'");
+$busca_cacau = mysqli_query($conexao, "SELECT codigo, preco_compra_maximo, produto_print FROM cadastro_produto WHERE codigo='4'");
 $aux_cacau = mysqli_fetch_row($busca_cacau);
 
 $cod_cacau = $aux_cacau[0];
 $cacau_print = $aux_cacau[2];
 $preco_max_cacau = $aux_cacau[1];
-if ($mostra_preco == "SIM" and $modulo == "compras")
-{$preco_max_cacau_print = "R$ " . number_format($aux_cacau[1],2,",",".");}
-else
-{$preco_max_cacau_print = "";}
+if ($mostra_preco == "SIM" and $modulo == "compras") {
+	$preco_max_cacau_print = "R$ " . number_format($aux_cacau[1], 2, ",", ".");
+} else {
+	$preco_max_cacau_print = "";
+}
 // ======================================================================================================
 
 
 
-include ("../../includes/desconecta_bd.php");
+include("../../includes/desconecta_bd.php");
 
 
 
@@ -89,7 +94,8 @@ include ("../../includes/desconecta_bd.php");
 
 if ($filial_config[4] == "CAFE")
 // ======================================================================================================
-{echo "
+{
+	echo "
 <div style='height:272px; width:1270px; border:0px solid #0000FF; margin:auto'>
 
     <div style='height:250px; width:495px; border:0px solid #0000FF; float:left'></div>
@@ -126,7 +132,8 @@ if ($filial_config[4] == "CAFE")
     </a>
 
 </div>
-";}
+";
+}
 // ======================================================================================================
 
 
@@ -135,7 +142,8 @@ if ($filial_config[4] == "CAFE")
 
 elseif ($filial_config[4] == "PIMENTA")
 // ======================================================================================================
-{echo "
+{
+	echo "
 <div style='height:272px; width:1270px; border:0px solid #0000FF; margin:auto'>
 
     <div style='height:250px; width:495px; border:0px solid #0000FF; float:left'></div>
@@ -172,7 +180,8 @@ elseif ($filial_config[4] == "PIMENTA")
     </a>
 
 </div>
-";}
+";
+}
 // ======================================================================================================
 
 
@@ -181,7 +190,8 @@ elseif ($filial_config[4] == "PIMENTA")
 
 elseif ($filial_config[4] == "CACAU")
 // ======================================================================================================
-{echo "
+{
+	echo "
 <div style='height:272px; width:1270px; border:0px solid #0000FF; margin:auto'>
 
     <div style='height:250px; width:495px; border:0px solid #0000FF; float:left'></div>
@@ -218,7 +228,8 @@ elseif ($filial_config[4] == "CACAU")
     </a>
 
 </div>
-";}
+";
+}
 // ======================================================================================================
 
 
@@ -227,7 +238,8 @@ elseif ($filial_config[4] == "CACAU")
 
 elseif ($filial_config[4] == "CAFE_PIMENTA")
 // ======================================================================================================
-{echo "
+{
+	echo "
 <div style='height:272px; width:1270px; border:0px solid #0000FF; margin:auto'>
 
     <div style='height:250px; width:330px; border:0px solid #0000FF; float:left'></div>
@@ -296,7 +308,8 @@ elseif ($filial_config[4] == "CAFE_PIMENTA")
  
 
 </div>
-";}
+";
+}
 // ======================================================================================================
 
 
@@ -304,7 +317,8 @@ elseif ($filial_config[4] == "CAFE_PIMENTA")
 
 elseif ($filial_config[4] == "PIMENTA_CACAU")
 // ======================================================================================================
-{echo "
+{
+	echo "
 <div style='height:272px; width:1270px; border:0px solid #0000FF; margin:auto'>
 
     <div style='height:250px; width:330px; border:0px solid #0000FF; float:left'></div>
@@ -373,7 +387,8 @@ elseif ($filial_config[4] == "PIMENTA_CACAU")
  
 
 </div>
-";}
+";
+}
 // ======================================================================================================
 
 
@@ -382,7 +397,8 @@ elseif ($filial_config[4] == "PIMENTA_CACAU")
 
 elseif ($filial_config[4] == "CAFE_PIMENTA_CACAU")
 // ======================================================================================================
-{echo "
+{
+	echo "
 <div style='height:272px; width:1270px; border:0px solid #0000FF; margin:auto'>
 
     <div style='height:250px; width:165px; border:0px solid #0000FF; float:left'></div>
@@ -482,13 +498,14 @@ elseif ($filial_config[4] == "CAFE_PIMENTA_CACAU")
 
 
 </div>
-";}
+";
+}
 // ======================================================================================================
 
 
 
-else
-{}
+else {
+}
 
 ?>
 
@@ -502,7 +519,8 @@ else
 
 if ($filial_config[6] == "S")
 // ======================================================================================================
-{echo "
+{
+	echo "
 <div style='height:36px; width:1270px; border:0px solid #0000FF; margin:auto'>
 
 	<div style='height:36px; width:525px; border:0px solid #000; float:left'></div>
@@ -527,23 +545,19 @@ if ($filial_config[6] == "S")
         onkeydown='if (getKey(event) == 13) return false;' style='width:220px; height:32px; font-size:14px; text-align:center' />
         <option>(Outros Produtos)</option>";
 
-		include ('../../includes/conecta_bd.php');
-        $busca_produto_list = mysqli_query ($conexao, "SELECT codigo, descricao FROM cadastro_produto WHERE estado_registro='ATIVO' ORDER BY descricao");
-        $linhas_produto_list = mysqli_num_rows ($busca_produto_list);
-		include ("../../includes/desconecta_bd.php");
+	include('../../includes/conecta_bd.php');
+	$busca_produto_list = mysqli_query($conexao, "SELECT codigo, descricao FROM cadastro_produto WHERE estado_registro='ATIVO' ORDER BY descricao");
+	$linhas_produto_list = mysqli_num_rows($busca_produto_list);
+	include("../../includes/desconecta_bd.php");
 
-        for ($j=1 ; $j<=$linhas_produto_list ; $j++)
-        {
-			$aux_produto_list = mysqli_fetch_row ($busca_produto_list);	
-			if ($aux_produto_list[0] == $cod_produto_form)
-			{
+	for ($j = 1; $j <= $linhas_produto_list; $j++) {
+		$aux_produto_list = mysqli_fetch_row($busca_produto_list);
+		if ($aux_produto_list[0] == $cod_produto_form) {
 			echo "<option selected='selected' value='$aux_produto_list[0]'>$aux_produto_list[1]</option>";
-			}
-			else
-			{
+		} else {
 			echo "<option value='$aux_produto_list[0]'>$aux_produto_list[1]</option>";
-			}
-        }
+		}
+	}
 
 	echo "
         </select>
@@ -555,7 +569,7 @@ if ($filial_config[6] == "S")
 }
 // ======================================================================================================
 
-else
-{}
+else {
+}
 
 ?>

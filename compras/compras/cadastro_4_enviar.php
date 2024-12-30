@@ -2,62 +2,12 @@
 include ("../../includes/config.php"); 
 include ("../../includes/conecta_bd.php");
 include ("../../includes/valida_cookies.php");
+include_once("../../helpers.php");
 $pagina = "cadastro_4_enviar";
 $titulo = "Nova Compra";
 $modulo = "compras";
 $menu = "compras";
 // ================================================================================================================
-
-
-// ====== CONVERTE DATA ===========================================================================================
-// Função para converter a data de formato nacional para formato americano. Muito útil para inserir data no mysql
-function ConverteData($data_x){
-	if (strstr($data_x, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data_x);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-// ================================================================================================================
-
-// ====== CONVERTE VALOR ==========================================================================================
-function ConverteValor($valor_x){
-	$valor_1 = str_replace("R$ ", "", $valor_x); //tira o símbolo
-	$valor_2 = str_replace(".", "", $valor_1); //tira o ponto
-	$valor_3 = str_replace(",", ".", $valor_2); //troca vírgula por ponto
-	return $valor_3;
-}
-// ================================================================================================================
-
-// ====== CONVERTE PESO ==========================================================================================
-if ($config[30] == "troca(this)")
-{
-	function ConvertePeso($peso_x){
-	$peso_1 = str_replace(",", ".", $peso_x);
-	return $peso_1;}
-}
-else
-{
-	function ConvertePeso($peso_x){
-	$peso_1 = str_replace(".", "", $peso_x);
-	$peso_2 = str_replace(",", "", $peso_1);
-	return $peso_2;}
-}
-// ================================================================================================================
-
-
-// ========== ELIMINA MÁSCARAS CPF E CNPJ ================================================================
-function limpa_cpf_cnpj($limpa){
-	 $limpa = trim($limpa);
-	 $limpa = str_replace(".", "", $limpa);
-	 $limpa = str_replace(",", "", $limpa);
-	 $limpa = str_replace("-", "", $limpa);
-	 $limpa = str_replace("/", "", $limpa);
-	 return $limpa;
-}
-// ========================================================================================================
-
 
 // ====== RETIRA ACENTUAÇÃO ===============================================================================
 $comAcentos = array('à', 'á', 'â', 'ã', 'ä', 'å', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö', 'ù', 'ü', 'ú', 'ÿ', 'À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ù', 'Ü', 'Ú');
@@ -76,9 +26,9 @@ $numero_compra = $_POST["numero_compra"];
 $fornecedor_pesquisa = $_POST["fornecedor_pesquisa"];
 $cod_seleciona_produto = $_POST["cod_seleciona_produto"];
 
-$quantidade_form = ConvertePeso($_POST["quantidade_form"]);
+$quantidade_form = Helpers::ConvertePeso($_POST["quantidade_form"],$config[30]);
 $quantidade_print = $_POST["quantidade_form"];
-$preco_form = ConverteValor($_POST["preco_form"]);
+$preco_form = Helpers::ConverteValor($_POST["preco_form"]);
 $preco_print = $_POST["preco_form"];
 $cod_tipo_produto_form = $_POST["cod_tipo_produto_form"];
 $forma_entrega_form = $_POST["forma_entrega_form"];
@@ -112,7 +62,7 @@ $hora_cadastro = date('G:i:s', time());
 
 
 // ======= ALTERA DATA ==========================================================================================
-$data_pagamento_aux = ConverteData($data_pagamento_form);
+$data_pagamento_aux = Helpers::ConverteData($data_pagamento_form);
 
 if ($data_pagamento_aux == "" or $data_pagamento_aux <= 1900-01-01)
 {$data_pagamento_aux = $data_compra;}
@@ -138,7 +88,7 @@ else
 {$cpf_cnpj = $cnpj_pessoa;}
 
 // ------ INTEGRAÇÃO ROVERETI ---------------------------------------------------------------------------
-$cpf_aux = limpa_cpf_cnpj($cpf_cnpj);
+$cpf_aux = Helpers::limpa_cpf_cnpj($cpf_cnpj);
 $fornecedor_rovereti = str_replace($comAcentos, $semAcentos, $nome_pessoa);
 // ======================================================================================================
 

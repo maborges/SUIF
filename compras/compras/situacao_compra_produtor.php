@@ -10,29 +10,30 @@ $menu = "compras";
 $conta = 0;
 
 // ======= RECEBENDO POST ===========================================================================
-$botao = $_POST["botao"];
-$botao_2 = $_POST["botao_2"];
-$id_w = $_POST["id_w"];
-$pagina_mae = $_POST["pagina_mae"];
+$botao = $_POST["botao"] ?? '';
+$botao_2 = $_POST["botao_2"] ?? '';
+$id_w = $_POST["id_w"] ?? '';
+$pagina_mae = $_POST["pagina_mae"] ?? '';
+$msg = $_POST["msg"] ?? '';
 
-$pesquisar_por_busca = $_POST["pesquisar_por_busca"];
-$pesquisar_situacao  = $_POST["pesquisarSituacao"];
-$nome_busca = $_POST["nome_busca"];
-$cpf_busca = $_POST["cpf_busca"];
-$cnpj_busca = $_POST["cnpj_busca"];
-$fantasia_busca = $_POST["fantasia_busca"];
+$pesquisar_por_busca = $_POST["pesquisar_por_busca"] ?? '';
+$pesquisar_situacao  = $_POST["pesquisarSituacao"] ?? '';
+$nome_busca = $_POST["nome_busca"] ?? '';
+$cpf_busca = $_POST["cpf_busca"] ?? '';
+$cnpj_busca = $_POST["cnpj_busca"] ?? '';
+$fantasia_busca = $_POST["fantasia_busca"] ?? '';
 
-$nome_w = $_POST["nome_w"];
-$cpf_cnpj_w = $_POST["cpf_cnpj_w"];
-$telefone_1_w = $_POST["telefone_1_w"];
-$cidade_w = $_POST["cidade_w"];
+$nome_w = $_POST["nome_w"] ?? '';
+$cpf_cnpj_w = $_POST["cpf_cnpj_w"] ?? '';
+$telefone_1_w = $_POST["telefone_1_w"] ?? '';
+$cidade_w = $_POST["cidade_w"] ?? '';
 
 $usuario_alteracao = $nome_usuario_print;
 $hora_alteracao = date('G:i:s', time());
 $data_alteracao = date('Y-m-d', time());
-$motivo_exclusao = $_POST["motivo_exclusao"];
+$motivo_exclusao = $_POST["motivo_exclusao"] ?? '';
 
-$permite_alterar = $permissao[57] == 'S';
+$permite_alterar = $permissao[147] == 'S';
 
 // Indexa campos da query pessoa
 $fld_id 			= "codigo";
@@ -50,9 +51,7 @@ $fld_situacao      	= "situacao_compra";
 
 
 // ======= MYSQL FILTRO DE BUSCA ==================================================================================
-if ($pesquisar_por_busca == "NOME") {
-	$mysql_busca = "nome LIKE '%$nome_busca%' ORDER BY nome";
-} elseif ($pesquisar_por_busca == "CPF") {
+if ($pesquisar_por_busca == "CPF") {
 	$mysql_busca = "cpf='$cpf_busca' ORDER BY nome";
 } elseif ($pesquisar_por_busca == "CNPJ") {
 	$mysql_busca = "cnpj='$cnpj_busca' ORDER BY nome";
@@ -60,6 +59,7 @@ if ($pesquisar_por_busca == "NOME") {
 	$mysql_busca = "nome_fantasia LIKE '%$fantasia_busca%' ORDER BY nome";
 } else {
 	$pesquisar_por_busca = "NOME";
+	$mysql_busca = "nome LIKE '%$nome_busca%' ORDER BY nome";
 }
 
 if ($pesquisar_situacao != 9) {
@@ -76,6 +76,8 @@ if ($botao == "BUSCAR" and ($nome_busca != "" or $cpf_busca != "" or $cnpj_busca
 			AND $mysql_busca"
 	);
 	$linha_pessoa = mysqli_num_rows($busca_pessoa);
+} else {
+	$linha_pessoa = 0;
 }
 
 include("../../includes/head.php");
@@ -470,12 +472,6 @@ if ($linha_pessoa == 0 and $botao == "BUSCAR") {
 		if (!dialog.showModal) {
 			dialogPolyfill.registerDialog(dialog);
 		}
-
-		var dialog = document.getElementById('dlgAlteraSituacao');
-		if (!dialog.showModal) {
-			dialogPolyfill.registerDialog(dialog);
-		}
-
 	})();
 
 	function fechaHistorico() {

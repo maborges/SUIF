@@ -2,6 +2,8 @@
 include ('../../includes/config.php');
 include ('../../includes/conecta_bd.php');
 include ('../../includes/valida_cookies.php');
+include ("../../helpers.php");
+
 $pagina = 'solicitacao_pagamento';
 $titulo = 'Solicita&ccedil;&atilde;o de Remessa';
 $menu = 'contas_pagar';
@@ -28,32 +30,6 @@ include ('../../includes/head.php');
 
 
 <?php
-// ============================================== CONVERTE DATA ====================================================	
-// Função para converter a data de formato nacional para formato americano. Muito útil para inserir data no mysql
-
-function ConverteData($data){
-
-	if (strstr($data, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-//echo ConverteData($data_emissao);
-// =================================================================================================================
-
-
-// ============================================== CONVERTE VALOR ====================================================	
-function ConverteValor($valor){
-
-	$valor_1 = str_replace(".", "", $valor);
-	$valor_2 = str_replace(",", ".", $valor_1);
-	return $valor_2;
-}
-// =================================================================================================================
-
-
 
 // ==================================================================================================================	
 
@@ -73,9 +49,9 @@ $codigo_pgto_favorecido = $_POST["codigo_pgto_favorecido"];
 
 $codigo_favorecido = $_POST["representante"];
 $forma_pagamento = $_POST["forma_pagamento"];
-$data_pagamento = ConverteData($_POST["data_pagamento"]);
+$data_pagamento = Helpers::ConverteData($_POST["data_pagamento"]);
 $data_pagamento_print = $_POST["data_pagamento"];	
-$valor_pagamento = ConverteValor($_POST["valor_pagamento"]);
+$valor_pagamento = Helpers::ConverteValor($_POST["valor_pagamento"]);
 //ERRO
 //$valor_pagamento_print = number_format($valor_pagamento,2,",",".");
 $valor_pagamento_print = number_format($_POST["valor_pagamento"],2,",",".");

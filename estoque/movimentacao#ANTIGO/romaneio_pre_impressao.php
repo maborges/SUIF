@@ -11,7 +11,7 @@ include ('../../includes/head_impressao.php');
 ?>
 
 
-<!-- ==================================   T Í T U L O   D A   P Á G I N A   ====================================== -->
+<!-- ==================================   T ï¿½ T U L O   D A   P ï¿½ G I N A   ====================================== -->
 <title>
 <?php echo "$titulo"; ?>
 </title>
@@ -24,25 +24,12 @@ include ('../../includes/head_impressao.php');
 </head>
 
 
-<!-- =============================================   I N Í C I O   =============================================== -->
+<!-- =============================================   I N ï¿½ C I O   =============================================== -->
 <body onLoad="imprimir()">
 
 <div id="centro" style="width:745px; border:0px solid #000; float:left">
 
 <?php
-// ============================================== CONVERTE DATA ====================================================	
-// Função para converter a data de formato nacional para formato americano. Muito útil para inserir data no mysql
-
-function ConverteData($data){
-
-	if (strstr($data, "/"))//verifica se tem a barra
-	{
-	$d = explode ("/", $data);//tira a barra
-	$rstData = "$d[2]-$d[1]-$d[0]";//separa as datas $d[2] = ano $d[1] = mes etc...
-	return $rstData;
-	}
-}
-// ==================================================================================================================	
 
 $numero_romaneio = $_POST["numero_romaneio"];
 $numero_compra = $_POST["numero_compra"];
@@ -175,7 +162,7 @@ $observacao_compra = $aux_compra[13];
 	else
 	{$unidade_print = "-";}
 
-// SITUAÇÃO PRINT  ==========================================================================================
+// SITUAï¿½ï¿½O PRINT  ==========================================================================================
 	if ($situacao_romaneio == "PRE_ROMANEIO")
 	{$situacao_print = "Pr&eacute;-Romaneio";}
 	elseif ($situacao_romaneio == "EM_ABERTO")

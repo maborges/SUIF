@@ -1,6 +1,15 @@
 <?php
-$servidor = "";
-$diretorio_servidor = "grancafe/suif";
+
+$servidor = "http://suif.local";
+//$servidor = "https://suif-homolog.grancafe.com.br";
+$diretorio_servidor = "";
+
+// P R O D U Ç Ã O
+//$servidor = "https://suif.grancafe.com.br";
+//$diretorio_servidor = "sis";
+
+$conecta_db_path = $_SERVER['DOCUMENT_ROOT'] . "/$diretorio_servidor/includes/conecta_bd.php";
+$desconecta_db_path = $_SERVER['DOCUMENT_ROOT'] . "/$diretorio_servidor/includes/desconecta_bd.php";
 $nome_fantasia = "Grancaf&eacute;";
 $nome_fantasia_m = "GRANCAF&Eacute;";
 $razao_social_config = "GRANCAF&Eacute; COM. IMP. E EXP. DE CAF&Eacute; LTDA";
