@@ -424,6 +424,11 @@ include ("../../includes/head.php");
 	else
 	{echo "<option value='PREVISAO'>(Previs&atilde;o)</option>";}
 
+	if ($forma_pgto_busca == "A NEGOCIAR") {
+	echo "<option value='A NEGOCIAR' selected='selected'>A Negociar</option>";
+	} else {
+	echo "<option value='A NEGOCIAR'>A Negociar</option>";
+	}
     ?>
     </select>
     </div>

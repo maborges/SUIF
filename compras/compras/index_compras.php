@@ -107,7 +107,8 @@ $busca_compra = mysqli_query(
 	usuario_exclusao,
 	hora_exclusao,
 	data_exclusao,
-	id_pedido_sankhya
+	id_pedido_sankhya,
+	modalidade_frete
 FROM 
 	compras
 WHERE 
@@ -634,7 +635,7 @@ include("../../includes/head.php");
 			$hora_exclusao_w = $aux_compra[23];
 			$data_exclusao_w = $aux_compra[24];
 			$idSankhya_w = $aux_compra[25];
-
+			$modalidadeFrete = $aux_compra[26];
 
 			$data_compra_print = date('d/m/Y', strtotime($data_compra_w));
 			$quantidade_print = number_format($quantidade_w, 2, ",", ".");
@@ -689,6 +690,8 @@ include("../../includes/head.php");
 				<input type='hidden' name='cod_produto_busca' value='$cod_produto_busca'>
 				<input type='hidden' name='cod_tipo_busca' value='$cod_tipo_busca'>
 				<input type='hidden' name='filial_busca' value='$filial_busca'>
+				<input type='hidden' name='modalidadeFrete' value='$modalidadeFrete'>
+
 				<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/buscar.png' height='18px' style='margin-top:3px' />
 				</form>
 				</div>

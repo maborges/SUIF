@@ -10,6 +10,7 @@ $menu = "compras";
 // ======== DADOS PARA BUSCA =========================================================================================
 $filial = $filial_usuario;
 $numero_compra = $_POST["numero_compra"];
+$idPedidoSankhya = $_POST["idPedidoSankhya"];
 
 $pagina_mae = $_POST["pagina_mae"];
 $pagina_filha = $_POST["pagina_filha"];
@@ -23,6 +24,7 @@ $num_compra_aux = $_POST["num_compra_aux"];
 $movimentacao = $_POST["movimentacao"];
 $quantidade_desconto = $_POST["quantidade_desconto"];
 $quant_entregar_aux = $_POST["quant_entregar_aux"];
+$descontoQuantidadeOriginal = $_POST["descontoQuantidadeOriginal"];
 
 $usuario_alteracao = $nome_usuario_print;
 $hora_alteracao = date('G:i:s', time());
@@ -107,6 +109,7 @@ $broca = $aux_compra[11];
 $umidade = $aux_compra[12];
 $situacao = $aux_compra[17];
 $observacao = $aux_compra[13];
+$descontoQuantidadeOriginal = $aux_compra[29];
 
 $total_pago_w = $aux_compra[50];
 $saldo_pagar_w = $aux_compra[51];
@@ -162,7 +165,14 @@ if (!is_numeric($quantidade_desconto))
 		<div id='centro' style='float:left; height:40px; width:925px; color:#F00; text-align:center; border:0px solid #000; font-size:12px'>
 		Quantidade inv&aacute;lida.</div>";
 }
-
+elseif($descontoQuantidadeOriginal <> 0) {
+	echo "<div id='centro' style='float:left; height:20px; width:925px; border:0px solid #000'></div>
+		<div id='centro' style='float:left; height:90px; width:925px; text-align:center; border:0px solid #000'>
+		<img src='$servidor/$diretorio_servidor/imagens/icones/erro.png' border='0' /></div>
+		<div id='centro' style='float:left; height:40px; width:925px; color:#F00; text-align:center; border:0px solid #000; font-size:12px'>
+		Já houve um desconto de $descontoQuantidadeOriginal para esta compra.</div>";
+}
+/*
 elseif ($quantidade_desconto > $quant_entregar_aux)
 {
 		echo "<div id='centro' style='float:left; height:20px; width:925px; border:0px solid #000'></div>
@@ -171,7 +181,7 @@ elseif ($quantidade_desconto > $quant_entregar_aux)
 		<div id='centro' style='float:left; height:40px; width:925px; color:#F00; text-align:center; border:0px solid #000; font-size:12px'>
 		Quantidade de desconto n&atilde;o pode ser maior do que o saldo atual da compra.</div>";
 }
-
+*/
 elseif ($quantidade_desconto <= 0)
 {
 		echo "<div id='centro' style='float:left; height:20px; width:925px; border:0px solid #000'></div>
@@ -216,6 +226,7 @@ else
 		<form action='$servidor/$diretorio_servidor/compras/produtos/acerto_alterar_enviar.php' method='post'>
 		Motivo da altera&ccedil;&atilde;o: <input type='text' name='motivo_alteracao' maxlength='200' onkeydown='if (getKey(event) == 13) return false;' style='color:#0000FF; font-size:12px; width:500px' />
 		<input type='hidden' name='numero_compra' value='$numero_compra'>
+		<input type='hidden' name='idPedidoSankhya' value='$idPedidoSankhya'>
 		<input type='hidden' name='botao' value='botao'>
 		<input type='hidden' name='data_inicial' value='$data_inicial'>
 		<input type='hidden' name='data_final' value='$data_final'>

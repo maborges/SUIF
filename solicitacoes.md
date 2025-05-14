@@ -1,6 +1,6 @@
 # Tarefas do SUIF
 
-06/08/2024 - SAULO  OK
+## 06/08/2024 - SAULO  OK
 -Informações de qualidade dos produtos quando da entrada do romaneio
     Criar estrutura para cadastrar os parâmetros de qualidade 
     Criar tela para informar a qualidade do produto quanto da entrada
@@ -32,16 +32,22 @@
             Mofado: Informar percentual
 
 
-16/08/2024
+## 16/08/2024
     Ok Gerar as sequencias que estão faltando no conta dos favorecidos identificando as contas repetidas.
 
-12/11/20241
+## 12/11/2024
     Criar uma nova tela, cópia de compras, onde os registros filtrados serão "estado_registro = 'FAZENDA'"
     Alterar a API como Sankhya e passar o novo campo AD_ESTATOREGISTROSUIF = 'FAZENDA'
     Esta compra não poderá aparecer nas outras funcionalidades do sistema
 
-## Backoffice
-    05/12/2024 - 06/12/2024
+## 04/02/2024
+    Colocar informações no SUIF no relatório:
+        https://suif.grancafe.com.br/sis/financeiro/compras/compra_impressao.php
+
+        
+
+# Backoffice
+## 05/12/2024 - 06/12/2024
 1. Limite de Compras
    1. Cria no Sankhya tabela de porte do cliente (pequeno, médio ou grande).
    2. Para cada porte cadastrado, será informado a quantidade de limite de compras
@@ -81,15 +87,21 @@
     2.  Colocar a média conforme o filtro
 9.  
 
-10. Alterar Saldo Analitico
-    1.  Cria uma coluna no final e colocar um semaforo conform abaixo
-    2.  https://suif-homolog.grancafe.com.br/sis/compras/relatorios/saldo_armazenado_analitico.php
-    3.  0 a 30 - Verde
-    4.  31 a 60 - Amarelo
-    5.  61 > 99999 - Vermelho
 
+## 04/04/2024 - Rubens
 
+### Compra - Filial Faturamento
+    Alterar tela de compras e demais telas necessários para permitir que o usuário selecione a filial de faturamento do Sankhya.
+    conceituação:
+    No processo, um usuário pode estar logado em uma filial e fazer o faturamento para outra, desta forma é necessário que se crie um novo campo "filial_faturamento" na tabela compras que deverá ser utilizado para ser enviado ao Sankhya.
+    O comprador só poderá selecionar uma das filiais para a qual ele poderá efetuar compras (este cadastro ainda não existe). 
+    - Tarefas
+      - [X] criar campo filial_faturamento na tabela compras
+      - [X] alterar página de inclusão e alteração de compras, assim como os fontes que fazem o envio ao Sankhya
+      - [X] no *Backoffice* , criar nova tela para que seja feita a associação de filial e comprador
 
+Após a criação e quando da implantação desta nova funcionalidade, é necessário que seja atualizado o campo conforme comando de update:
+    update compras set filial_faturamento = filial where filial_faturamento is null
 
 
 

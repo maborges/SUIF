@@ -13,6 +13,7 @@ $botao = $_POST["botao"];
 $pagina_mae = $_POST["pagina_mae"];
 $data_hoje = date('Y-m-d', time());
 $data_hoje_br = date('d/m/Y', time());
+$objDataCorrente = new DateTime();
 $filial = $filial_usuario;
 $aux_filial_dt_compra = "";
 
@@ -467,6 +468,7 @@ else
 <td width='200px'>Produto</td>
 <td width='150px'>Saldo</td>
 <td width='150px'>Data Ultima Compra</td>
+<td width='140px'>Dias em Atraso</td>
 </tr>
 </table>";}
 
@@ -502,12 +504,29 @@ $busca_data_ultima_compra = mysqli_query ($conexao,
     AND $aux_filial_dt_compra
     AND movimentacao     = 'COMPRA'");
 
-$result_data_ultima_compra = mysqli_fetch_row($busca_data_ultima_compra);	
+$result_data_ultima_compra = mysqli_fetch_row($busca_data_ultima_compra);
+$semaforo   = 'badge-transparent';
+$diasAtraso = 0;
+$diasAtraso_w = '';
 
-if (!is_null($result_data_ultima_compra[0]))
-  $data_ultima_compra = date('d/m/Y', strtotime($result_data_ultima_compra[0]));
+if (!is_null($result_data_ultima_compra[0])) {
+  	$data_ultima_compra = date('d/m/Y', strtotime($result_data_ultima_compra[0]));
+
+	if ($saldo_w < 0) {
+		$diasAtraso = $objDataCorrente->diff(new DateTime($result_data_ultima_compra[0]))->days; 
+		$diasAtraso_w = (string) $diasAtraso;
+
+		if ($diasAtraso <= 30) 
+			$semaforo = 'badge-success'; 
+		elseif ($diasAtraso <= 60) 
+			$semaforo = 'badge-warning'; 
+		else 
+			$semaforo = 'badge-danger';
+  	}
+		
+}
 else
-  $data_ultima_compra =  "";
+  	$data_ultima_compra =  "";
   
 include ("../../includes/desconecta_bd.php");
 
@@ -558,7 +577,10 @@ echo "
 <td width='350px' align='left'><div style='height:14px; margin-left:15px; overflow:hidden'>$nome_pessoa_w</div></td>
 <td width='200px' align='left'><div style='height:14px; margin-left:15px; overflow:hidden'>$produto_print_w</div></td>
 <td width='150px' align='right'><div style='margin-right:15px'><b>$saldo_print $unidade_print_w</b></div></td>
-<td width='150px' align='right'><div style='margin-right:15px'><b>$data_ultima_compra</b></div></td>";
+<td width='150px' align='right'><div style='margin-right:15px'><b>$data_ultima_compra</b></div></td>
+<td width='140px' align='center'><div style='margin-right:15px'><span class='badge $semaforo'>$diasAtraso_w</span></div></td>";
+
+
 
 
 echo "</tr>";

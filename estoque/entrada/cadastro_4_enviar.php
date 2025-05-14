@@ -344,7 +344,7 @@ if ($botao == "NOVO_ROMANEIO") {
 		$msg = "<div style='color:#FF0000'>N&uacute;mero de romaneio j&aacute; existente. Romaneio em duplicidade.</div>";
 		$msg_titulo = "<div style='color:#009900'>Novo Romaneio de Entrada</div>";
 		$num_romaneio_print = "<div style='color:#009900'>N&ordm; $numero_romaneio</div>";
-	} else {
+	}  else {
 		$erro = 0;
 		$msg = "";
 		$msg_titulo = "<div style='color:#0000FF'>Romaneio Cadastrado com Sucesso!</div>";
@@ -895,10 +895,6 @@ include('../../includes/head.php');
 					?>
 				</div>
 			</div>
-			<!-- ================================================================================================================ -->
-
-
-
 		</div>
 		<!-- ===========  FIM DO FORMULÁRIO =========== -->
 
@@ -1046,6 +1042,7 @@ include('../../includes/head.php');
 	<input type='hidden' name='numero_romaneio_buscar' value='$numero_romaneio_buscar'>
 	<input type='hidden' name='situacao_romaneio_buscar' value='$situacao_romaneio_buscar'>
 	<input type='hidden' name='forma_pesagem_buscar' value='$forma_pesagem_buscar'>
+
     <button type='submit' class='botao_2' style='margin-left:10px; width:180px'>Voltar</button>
     </form>
     </div>";

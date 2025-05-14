@@ -49,7 +49,7 @@ include("../../includes/conecta_bd.php");
 $busca_romaneio = mysqli_query(
     $conexao,
 
-    "SELECT estoque.codigo, estoque.numero_romaneio, estoque.fornecedor, estoque.data, estoque.produto, estoque.peso_inicial, estoque.peso_final, estoque.desconto_sacaria, estoque.desconto, estoque.quantidade, estoque.unidade, estoque.tipo_sacaria, estoque.movimentacao, estoque.placa_veiculo, estoque.motorista, estoque.observacao, estoque.usuario_cadastro, estoque.hora_cadastro, estoque.data_cadastro, estoque.usuario_alteracao, estoque.hora_alteracao, estoque.data_alteracao, estoque.filial, estoque.estado_registro, estoque.quantidade_prevista, estoque.quantidade_sacaria, estoque.numero_compra, estoque.motorista_cpf, estoque.num_romaneio_manual, estoque.filial_origem, estoque.quant_volume_sacas, estoque.cod_produto, estoque.usuario_exclusao, estoque.hora_exclusao, estoque.data_exclusao, cadastro_pessoa.nome, cadastro_pessoa.tipo, cadastro_pessoa.cpf, cadastro_pessoa.cnpj, cadastro_pessoa.cidade, cadastro_pessoa.estado, cadastro_pessoa.telefone_1, select_tipo_sacaria.descricao, select_tipo_sacaria.peso, estoque.cod_tipo, estoque.quant_quebra_previsto 
+    "SELECT estoque.codigo, estoque.numero_romaneio, estoque.fornecedor, estoque.data, estoque.produto, estoque.peso_inicial, estoque.peso_final, estoque.desconto_sacaria, estoque.desconto, estoque.quantidade, estoque.unidade, estoque.tipo_sacaria, estoque.movimentacao, estoque.placa_veiculo, estoque.motorista, estoque.observacao, estoque.usuario_cadastro, estoque.hora_cadastro, estoque.data_cadastro, estoque.usuario_alteracao, estoque.hora_alteracao, estoque.data_alteracao, estoque.filial, estoque.estado_registro, estoque.quantidade_prevista, estoque.quantidade_sacaria, estoque.numero_compra, estoque.motorista_cpf, estoque.num_romaneio_manual, estoque.filial_origem, estoque.quant_volume_sacas, estoque.cod_produto, estoque.usuario_exclusao, estoque.hora_exclusao, estoque.data_exclusao, cadastro_pessoa.nome, cadastro_pessoa.tipo, cadastro_pessoa.cpf, cadastro_pessoa.cnpj, cadastro_pessoa.cidade, cadastro_pessoa.estado, cadastro_pessoa.telefone_1, select_tipo_sacaria.descricao, select_tipo_sacaria.peso, estoque.cod_tipo, estoque.quant_quebra_previsto
 
 FROM estoque, cadastro_pessoa, select_tipo_sacaria 
 
@@ -628,10 +628,11 @@ include("../../includes/head.php");
 
             <div style="width:1025px; height:3px; border:0px solid #000; float:left; font-size:12px"></div>
 
-            <div style="width:975px; height:22px; border:0px solid #000; float:left; font-size:12px; margin-left:25px; background-color:#EEE">
+            <div style="width:470px; height:22px; border:0px solid #000; float:left; font-size:12px; margin-left:25px; background-color:#EEE">
                 <div style="width:180px; margin-top:3px; margin-left:5px; float:left">Observa&ccedil;&atilde;o:</div>
-                <div style="margin-top:3px; margin-left:5px; width:650px; height:14px; float:left; border:0px solid #000; overflow:hidden"><?php echo "$observacao_w" ?></div>
+                <div style="margin-top:3px; margin-left:5px; float:left"><?php echo "$observacao_w" ?></div>
             </div>
+
             <!-- ================================================================================================================ -->
 
 

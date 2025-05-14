@@ -2,6 +2,7 @@
 include("../../includes/config.php");
 include("../../includes/conecta_bd.php");
 include("../../includes/valida_cookies.php");
+include("../../helpers.php");
 $pagina = "produtos_cadastro";
 $titulo = "Cadastros de Produtos";
 $modulo = "cadastros";
@@ -15,6 +16,8 @@ $codigo_w = $_POST["codigo_w"] ?? '';
 
 $nome_form = $_POST["nome_form"] ?? '';
 $idSankhya_form = $_POST["idSankhya_form"] ?? '';
+$valorDescontoFrete_form = $_POST["valorDescontoFrete_form"] ?? '';
+$qtdeDiaInatividade_form = $_POST["qtdeDiaInatividade_form"] ?? '';
 $cod_unidade_form = $_POST["cod_unidade_form"] ?? '';
 $quant_unidade_form = $_POST["quant_unidade_form"] ?? '';
 $quant_kg_saca_form = $_POST["quant_kg_saca_form"] ?? '';
@@ -31,11 +34,15 @@ $comAcentos = array('à', 'á', 'â', 'ã', 'ä', 'å', 'ç', 'è', 'é', 'ê', 
 $semAcentos = array('a', 'a', 'a', 'a', 'a', 'a', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'n', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'y', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'N', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', '_');
 // =================================================================================================================
 
+$valorDescontoFrete_upd = Helpers::ConverteValor($valorDescontoFrete_form);
 
 // ====== CRIA MENSAGEM ============================================================================================
 if ($botao == "CADASTRAR" and $nome_form == "") {
 	$erro = 1;
 	$msg = "<div style='color:#FF0000'>Informe o nome do produto</div>";
+} elseif (in_array($botao, ["CADASTRAR", "EDITAR"]) and ($valorDescontoFrete_upd < 0 or $valorDescontoFrete_upd == "")) {
+	$erro = 11;
+	$msg = "<div style='color:#FF0000'>Informe um valor de desconto de frete válido</div>";
 } elseif ($botao == "CADASTRAR" and $cod_unidade_form == "") {
 	$erro = 2;
 	$msg = "<div style='color:#FF0000'>Informe a unidade de medida</div>";
@@ -57,6 +64,8 @@ if ($botao == "CADASTRAR" and $nome_form == "") {
 	$quant_kg_saca_form = "";
 	$tipo_form = "";
 	$idSankhya_form = '';
+	$valorDescontoFrete_form = '';
+	$qtdeDiaInatividade_form = '';
 } elseif ($botao == "EDITAR" and $cod_unidade_form == "") {
 	$erro = 6;
 	$msg = "<div style='color:#FF0000'>Informe a unidade de medida</div>";
@@ -66,6 +75,8 @@ if ($botao == "CADASTRAR" and $nome_form == "") {
 	$quant_kg_saca_form = "";
 	$tipo_form = "";
 	$idSankhya_form = '';
+	$valorDescontoFrete_form = '';
+	$qtdeDiaInatividade_form = '';
 } elseif ($botao == "EDITAR" and (!is_numeric($quant_unidade_form) or $quant_unidade_form == "")) {
 	$erro = 7;
 	$msg = "<div style='color:#FF0000'>Informe a quantidade de unidade em Kg</div>";
@@ -75,6 +86,8 @@ if ($botao == "CADASTRAR" and $nome_form == "") {
 	$quant_kg_saca_form = "";
 	$tipo_form = "";
 	$idSankhya_form = '';
+	$valorDescontoFrete_form = '';
+	$qtdeDiaInatividade_form = '';
 } elseif ($botao == "EDITAR" and (!is_numeric($quant_kg_saca_form) or $quant_kg_saca_form == "")) {
 	$erro = 8;
 	$msg = "<div style='color:#FF0000'>Informe a quantidade da saca em Kg</div>";
@@ -84,6 +97,8 @@ if ($botao == "CADASTRAR" and $nome_form == "") {
 	$quant_kg_saca_form = "";
 	$tipo_form = "";
 	$idSankhya_form = '';
+	$valorDescontoFrete_form = '';
+	$qtdeDiaInatividade_form = '';
 } elseif ($botao == "EDITAR" and $idSankhya_form == "") {
 	$erro = 10;
 	$msg = "<div style='color:#FF0000'>Informe o código Sankhya do produto</div>";
@@ -120,13 +135,14 @@ if ($botao == "CADASTRAR" and $erro == 0 and $permissao[7] == "S") {
 	// ======================================================================================================
 
 	// CADASTRO
-
-	$inserir = mysqli_query($conexao, "INSERT INTO cadastro_produto (codigo, descricao, codigo_produto, unidade, usuario_cadastro, hora_cadastro, data_cadastro, estado_registro, apelido, produto_print, quantidade_un, unidade_print, quant_kg_saca, cod_tipo_preferencial, id_sankhya) VALUES ($contador_cod_produto, '$nome_form', '$codigo_produto', '$cod_unidade_form', '$usuario_cadastro_form', '$hora_cadastro_form', '$data_cadastro_form', 'ATIVO', '$produto_apelido', '$produto_print_minu', '$quant_unidade_form', '$un_descricao', '$quant_kg_saca_form', '$tipo_form', '$idSankhya_form')");
+	$inserir = mysqli_query($conexao, "INSERT INTO cadastro_produto (codigo, descricao, codigo_produto, unidade, usuario_cadastro, hora_cadastro, data_cadastro, estado_registro, apelido, produto_print, quantidade_un, unidade_print, quant_kg_saca, cod_tipo_preferencial, id_sankhya, valor_desconto_frete, qtde_dia_inatividade) VALUES ($contador_cod_produto, '$nome_form', '$codigo_produto', '$cod_unidade_form', '$usuario_cadastro_form', '$hora_cadastro_form', '$data_cadastro_form', 'ATIVO', '$produto_apelido', '$produto_print_minu', '$quant_unidade_form', '$un_descricao', '$quant_kg_saca_form', '$tipo_form', '$idSankhya_form','$valorDescontoFrete_upd','$qtdeDiaInatividade_form')");
 
 	// MONTA MENSAGEM
 	$msg = "<div id='oculta' style='color:#0000FF'>Produto cadastrado com sucesso!</div>";
 	$nome_form = "";
 	$idSankhya_form = "";
+	$valorDescontoFrete_form = "";
+	$qtdeDiaInatividade_form = '';
 	$cod_unidade_form = "";
 	$quant_unidade_form = "";
 	$quant_kg_saca_form = "";
@@ -136,6 +152,8 @@ if ($botao == "CADASTRAR" and $erro == 0 and $permissao[7] == "S") {
 	$msg = "<div id='oculta' style='color:#FF0000'>Usu&aacute;rio sem autoriza&ccedil;&atilde;o para cadastrar produto</div>";
 	$nome_form = "";
 	$idSankhya_form = '';
+	$valorDescontoFrete_form = "";
+	$qtdeDiaInatividade_form = '';
 	$cod_unidade_form = "";
 	$quant_unidade_form = "";
 	$quant_kg_saca_form = "";
@@ -161,12 +179,14 @@ if ($botao == "EDITAR" and $erro == 0 and $permissao[7] == "S") {
 	// ======================================================================================================
 
 	// EDIÇÃO
-	$editar = mysqli_query($conexao, "UPDATE cadastro_produto SET descricao='$nome_form', unidade='$cod_unidade_form', usuario_alteracao='$usuario_cadastro_form', hora_alteracao='$hora_cadastro_form', data_alteracao='$data_cadastro_form', apelido='$produto_apelido', produto_print='$produto_print_minu', quantidade_un='$quant_unidade_form', unidade_print='$un_descricao', quant_kg_saca='$quant_kg_saca_form', cod_tipo_preferencial='$tipo_form', id_sankhya='$idSankhya_form' WHERE codigo='$codigo_w'");
+	$editar = mysqli_query($conexao, "UPDATE cadastro_produto SET descricao='$nome_form', unidade='$cod_unidade_form', usuario_alteracao='$usuario_cadastro_form', hora_alteracao='$hora_cadastro_form', data_alteracao='$data_cadastro_form', apelido='$produto_apelido', produto_print='$produto_print_minu', quantidade_un='$quant_unidade_form', unidade_print='$un_descricao', quant_kg_saca='$quant_kg_saca_form', cod_tipo_preferencial='$tipo_form', id_sankhya='$idSankhya_form', valor_desconto_frete='$valorDescontoFrete_upd', qtde_dia_inatividade='$qtdeDiaInatividade_form' WHERE codigo='$codigo_w'");
 
 	// MONTA MENSAGEM
 	$msg = "<div id='oculta' style='color:#0000FF'>Produto editado com sucesso!</div>";
 	$nome_form = "";
 	$idSankhya_form = "";
+	$valorDescontoFrete_form = "";
+	$qtdeDiaInatividade_form = '';
 	$cod_unidade_form = "";
 	$quant_unidade_form = "";
 	$quant_kg_saca_form = "";
@@ -176,6 +196,8 @@ if ($botao == "EDITAR" and $erro == 0 and $permissao[7] == "S") {
 	$msg = "<div id='oculta' style='color:#FF0000'>Usu&aacute;rio sem autoriza&ccedil;&atilde;o para editar produto</div>";
 	$nome_form = "";
 	$idSankhya_form = "";
+	$valorDescontoFrete_form = "";
+	$qtdeDiaInatividade_form = '';
 	$cod_unidade_form = "";
 	$quant_unidade_form = "";
 	$quant_kg_saca_form = "";
@@ -218,6 +240,8 @@ if ($botao == "EXCLUIR" and $permissao[7] == "S") {
 	$msg = "<div id='oculta' style='color:#FF0000'>Usu&aacute;rio sem autoriza&ccedil;&atilde;o para excluir produto</div>";
 	$nome_form = "";
 	$idSankhya_form = "";
+	$valorDescontoFrete_form = "";
+	$qtdeDiaInatividade_form = '';
 	$cod_unidade_form = "";
 	$quant_unidade_form = "";
 	$quant_kg_saca_form = "";
@@ -277,7 +301,6 @@ include("../../includes/head.php");
 		<?php include("../../includes/submenu_cadastro_produtos.php"); ?>
 	</div>
 
-
 	<!-- ====== CENTRO ================================================================================================= -->
 	<div class="ct_auto">
 
@@ -321,144 +344,167 @@ include("../../includes/head.php");
 		<!-- ============================================================================================================= -->
 
 
-		<div class="pqa" style="height:63px">
+		<div class="pqa" style="padding: 5px; height: 90px">
 			<!-- ======================================= FORMULARIO ========================================================== -->
+			<div style="display: flex;">
 
-
-			<!-- ======= ESPAÇAMENTO ============================================================================================ -->
-			<div style="width:30px; height:50px; border:1px solid transparent; margin-top:6px; float:left">
-				<form action="<?php echo "$servidor/$diretorio_servidor"; ?>/cadastros/produtos/produtos_cadastro.php" method="post" />
-				<?php
-				if ($botao == "EDICAO") {
-					echo "
+				<!-- ======= ESPAÇAMENTO ============================================================================================ -->
+				<div style="width:10px; height:50px; border:1px solid transparent; margin-top:6px; float:left">
+					<form action="<?php echo "$servidor/$diretorio_servidor"; ?>/cadastros/produtos/produtos_cadastro.php" method="post" />
+					<?php
+					if ($botao == "EDICAO") {
+						echo "
 						<input type='hidden' name='botao' value='EDITAR' />
 						<input type='hidden' name='codigo_w' value='$codigo_w' />";
-				} elseif ($botao == "EXCLUSAO") {
-					echo "
+					} elseif ($botao == "EXCLUSAO") {
+						echo "
 						<input type='hidden' name='botao' value='EXCLUIR' />
 						<input type='hidden' name='codigo_w' value='$codigo_w' />";
-				} else {
-					echo "<input type='hidden' name='botao' value='CADASTRAR' />";
-				}
-				?>
-			</div>
-			<!-- ================================================================================================================ -->
-
-
-			<!-- ======= NOME PRODUTO =========================================================================================== -->
-			<div style="width:220px; height:50px; border:1px solid transparent; margin-top:6px; float:left">
-				<div class="form_rotulo" style="width:215px; height:17px; border:1px solid transparent; float:left">
-					Nome do Produto:
-				</div>
-
-				<div style="width:215px; height:25px; float:left; border:1px solid transparent">
-					<input type="text" name="nome_form" class="form_input" maxlength="30" id="ok" onBlur='alteraMaiusculo(this)' onkeydown="if (getKey(event) == 13) return false;" style="width:191px; text-align:left; padding-left:5px" value="<?php echo "$nome_form"; ?>" />
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-
-			<!-- ======= UNIDADE MEDIDA ========================================================================================= -->
-			<div style="width:154px; height:50px; border:1px solid transparent; margin-top:6px; float:left">
-				<div class="form_rotulo" style="width:150px; height:17px; border:1px solid transparent; float:left">
-					Unidade de Medida:
-				</div>
-
-				<div style="width:150px; height:25px; float:left; border:1px solid transparent">
-					<select name="cod_unidade_form" class="form_select" onkeydown="if (getKey(event) == 13) return false;" style="width:134px" />
-					<option></option>
-					<?php
-					$busca_un_medida = mysqli_query($conexao, "SELECT * FROM unidade_produto WHERE estado_registro='ATIVO' ORDER BY codigo");
-					$linhas_un_medida = mysqli_num_rows($busca_un_medida);
-
-					for ($u = 1; $u <= $linhas_un_medida; $u++) {
-						$aux_un_medida = mysqli_fetch_row($busca_un_medida);
-
-						if ($aux_un_medida[0] == $cod_unidade_form) {
-							echo "<option selected='selected' value='$aux_un_medida[0]'>$aux_un_medida[2]</option>";
-						} else {
-							echo "<option value='$aux_un_medida[0]'>$aux_un_medida[2]</option>";
-						}
+					} else {
+						echo "<input type='hidden' name='botao' value='CADASTRAR' />";
 					}
 					?>
-					</select>
 				</div>
-			</div>
-			<!-- ================================================================================================================ -->
+				<!-- ================================================================================================================ -->
 
 
-			<!-- ======= QUANTIDADE UNIDADE ===================================================================================== -->
-			<div style="width:154px; height:50px; border:1px solid transparent; margin-top:6px; float:left">
-				<div class="form_rotulo" style="width:150px; height:17px; border:1px solid transparent; float:left">
-					Quantidade Un. (Kg):
+				<!-- ======= NOME PRODUTO =========================================================================================== -->
+				<div style="width:220px; height:50px; border:1px solid transparent; margin-top:6px; float:left">
+					<div class="form_rotulo" style="width:215px; height:17px; border:1px solid transparent; float:left">
+						Nome do Produto:
+					</div>
+
+					<div style="width:215px; height:25px; float:left; border:1px solid transparent">
+						<input type="text" name="nome_form" class="form_input" maxlength="30" id="ok" onBlur='alteraMaiusculo(this)' onkeydown="if (getKey(event) == 13) return false;" style="width:191px; text-align:left; padding-left:5px" value="<?php echo "$nome_form"; ?>" />
+					</div>
 				</div>
-
-				<div style="width:150px; height:25px; float:left; border:1px solid transparent">
-					<input type="text" name="quant_unidade_form" class="form_input" maxlength="4" onkeydown="if (getKey(event) == 13) return false;" style="width:125px; text-align:left; padding-left:5px" value="<?php echo "$quant_unidade_form"; ?>" />
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
+				<!-- ================================================================================================================ -->
 
 
-			<!-- ======= QUANTIDADE SACA ======================================================================================== -->
-			<div style="width:154px; height:50px; border:1px solid transparent; margin-top:6px; float:left">
-				<div class="form_rotulo" style="width:150px; height:17px; border:1px solid transparent; float:left">
-					Quantidade Saca (Kg):
-				</div>
+				<!-- ======= UNIDADE MEDIDA ========================================================================================= -->
+				<div style="width:154px; height:50px; border:1px solid transparent; margin-top:6px; float:left">
+					<div class="form_rotulo" style="width:150px; height:17px; border:1px solid transparent; float:left">
+						Unidade de Medida:
+					</div>
 
-				<div style="width:150px; height:25px; float:left; border:1px solid transparent">
-					<input type="text" name="quant_kg_saca_form" class="form_input" maxlength="4" onkeydown="if (getKey(event) == 13) return false;" style="width:125px; text-align:left; padding-left:5px" value="<?php echo "$quant_kg_saca_form"; ?>" />
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
+					<div style="width:150px; height:25px; float:left; border:1px solid transparent">
+						<select name="cod_unidade_form" class="form_select" onkeydown="if (getKey(event) == 13) return false;" style="width:134px" />
+						<option></option>
+						<?php
+						$busca_un_medida = mysqli_query($conexao, "SELECT * FROM unidade_produto WHERE estado_registro='ATIVO' ORDER BY codigo");
+						$linhas_un_medida = mysqli_num_rows($busca_un_medida);
 
+						for ($u = 1; $u <= $linhas_un_medida; $u++) {
+							$aux_un_medida = mysqli_fetch_row($busca_un_medida);
 
-			<!-- ======= TIPO PREFERENCIAL ====================================================================================== -->
-			<div style="width:200px; height:50px; border:1px solid transparent; margin-top:6px; float:left">
-				<div class="form_rotulo" style="width:196px; height:17px; border:1px solid transparent; float:left">
-					Tipo Preferencial:
-				</div>
-
-				<div style="width:196px; height:25px; float:left; border:1px solid transparent">
-					<select name="tipo_form" class="form_select" onkeydown="if (getKey(event) == 13) return false;" style="width:180px" />
-					<option></option>
-					<?php
-					$busca_tipo_pref = mysqli_query($conexao, "SELECT * FROM select_tipo_produto WHERE estado_registro='ATIVO' ORDER BY produto, codigo");
-					$linhas_tipo_pref = mysqli_num_rows($busca_tipo_pref);
-
-					for ($t = 1; $t <= $linhas_tipo_pref; $t++) {
-						$aux_tipo_pref = mysqli_fetch_row($busca_tipo_pref);
-
-						if ($aux_tipo_pref[0] == $tipo_form) {
-							echo "<option selected='selected' value='$aux_tipo_pref[0]'>$aux_tipo_pref[1] ($aux_tipo_pref[2])</option>";
-						} else {
-							echo "<option value='$aux_tipo_pref[0]'>$aux_tipo_pref[1] ($aux_tipo_pref[2])</option>";
+							if ($aux_un_medida[0] == $cod_unidade_form) {
+								echo "<option selected='selected' value='$aux_un_medida[0]'>$aux_un_medida[2]</option>";
+							} else {
+								echo "<option value='$aux_un_medida[0]'>$aux_un_medida[2]</option>";
+							}
 						}
-					}
-					?>
-					</select>
+						?>
+						</select>
+					</div>
+				</div>
+				<!-- ================================================================================================================ -->
+
+
+				<!-- ======= QUANTIDADE UNIDADE ===================================================================================== -->
+				<div style="width:154px; height:50px; border:1px solid transparent; margin-top:6px; float:left">
+					<div class="form_rotulo" style="width:150px; height:17px; border:1px solid transparent; float:left">
+						Quantidade Un. (Kg):
+					</div>
+
+					<div style="width:150px; height:25px; float:left; border:1px solid transparent">
+						<input type="text" name="quant_unidade_form" class="form_input" maxlength="4" onkeydown="if (getKey(event) == 13) return false;" style="width:125px; text-align:left; padding-left:5px" value="<?php echo "$quant_unidade_form"; ?>" />
+					</div>
+				</div>
+				<!-- ================================================================================================================ -->
+
+
+				<!-- ======= QUANTIDADE SACA ======================================================================================== -->
+				<div style="width:154px; height:50px; border:1px solid transparent; margin-top:6px; float:left">
+					<div class="form_rotulo" style="width:150px; height:17px; border:1px solid transparent; float:left">
+						Quantidade Saca (Kg):
+					</div>
+
+					<div style="width:150px; height:25px; float:left; border:1px solid transparent">
+						<input type="text" name="quant_kg_saca_form" class="form_input" maxlength="4" onkeydown="if (getKey(event) == 13) return false;" style="width:125px; text-align:left; padding-left:5px" value="<?php echo "$quant_kg_saca_form"; ?>" />
+					</div>
+				</div>
+				<!-- ================================================================================================================ -->
+
+
+				<!-- ======= TIPO PREFERENCIAL ====================================================================================== -->
+				<div style="width:200px; height:50px; border:1px solid transparent; margin-top:6px; float:left">
+					<div class="form_rotulo" style="width:196px; height:17px; border:1px solid transparent; float:left">
+						Tipo Preferencial:
+					</div>
+
+					<div style="width:196px; height:25px; float:left; border:1px solid transparent">
+						<select name="tipo_form" class="form_select" onkeydown="if (getKey(event) == 13) return false;" style="width:180px" />
+						<option></option>
+						<?php
+						$busca_tipo_pref = mysqli_query($conexao, "SELECT * FROM select_tipo_produto WHERE estado_registro='ATIVO' ORDER BY produto, codigo");
+						$linhas_tipo_pref = mysqli_num_rows($busca_tipo_pref);
+
+						for ($t = 1; $t <= $linhas_tipo_pref; $t++) {
+							$aux_tipo_pref = mysqli_fetch_row($busca_tipo_pref);
+
+							if ($aux_tipo_pref[0] == $tipo_form) {
+								echo "<option selected='selected' value='$aux_tipo_pref[0]'>$aux_tipo_pref[1] ($aux_tipo_pref[2])</option>";
+							} else {
+								echo "<option value='$aux_tipo_pref[0]'>$aux_tipo_pref[1] ($aux_tipo_pref[2])</option>";
+							}
+						}
+						?>
+						</select>
+					</div>
+				</div>
+				<!-- ================================================================================================================ -->
+
+				<!-- ======= CÓDIGO SANKHYA ======================================================================================== -->
+				<div style="width:119px; height:50px; border:1px solid transparent; margin-top:6px; float:left">
+					<div class="form_rotulo" style="width:115px; height:17px; border:1px solid transparent; float:left">
+						Cod. Sankhya:
+					</div>
+
+					<div style="width:115px; height:25px; float:left; border:1px solid transparent">
+						<input type="number" name="idSankhya_form" class="form_input" maxlength="4" onkeydown="if (getKey(event) == 13) return false;" style="width:90px; text-align:left; padding-left:5px" value="<?= "$idSankhya_form"; ?>" />
+					</div>
+				</div>
+				<!-- ================================================================================================================ -->
+
+				<!-- ======= VALOR DE DESCCONTO DO FRETE QDO FOB POR UNIDADE ======================================================================================== -->
+				<div style="width:154px; height:50px; border:1px solid transparent; margin-top:6px; float:left">
+					<div class="form_rotulo" style="width:150px; height:17px; border:1px solid transparent; float:left">
+						Desc.Frete:
+					</div>
+
+					<div style="width:150px; height:25px; float:left; border:1px solid transparent">
+						<input type="text" name="valorDescontoFrete_form" class="form_input" onkeypress="mascara(this,mvalor)" onkeydown="if (getKey(event) == 13) return false;"
+							style="width:125px; text-align:left; padding-left:5px" value="<?php echo "$valorDescontoFrete_form"; ?>"
+							placeholder="Valor por unidade" />
+					</div>
+				</div>
+
+				<!-- ======= QUANTIDADE DE DIAS SEM MOVIMENTAÇÃO PARA CONSIDERAR UM CLIENTE INATIVO  ================================== -->
+				<div style="width:149px; height:50px; border:1px solid transparent; margin-top:6px; float:left">
+					<div class="form_rotulo" style="width:145px; height:17px; border:1px solid transparent; float:left">
+						Qtde.Dias Inativo:
+					</div>
+
+					<div style="width:145px; height:25px; float:left; border:1px solid transparent">
+						<input type="number" name="qtdeDiaInatividade_form" class="form_input" onkeydown="if (getKey(event) == 13) return false;"
+							style="width:120px; text-align:left; padding-left:5px" value="<?php echo "$qtdeDiaInatividade_form"; ?>" />
+					</div>
 				</div>
 			</div>
-			<!-- ================================================================================================================ -->
-
-			<!-- ======= CÓDIGO sANKHYA ======================================================================================== -->
-			<div style="width:154px; height:50px; border:1px solid transparent; margin-top:6px; float:left">
-				<div class="form_rotulo" style="width:150px; height:17px; border:1px solid transparent; float:left">
-					Código Sankhya:
-				</div>
-
-				<div style="width:150px; height:25px; float:left; border:1px solid transparent">
-					<input type="number" name="idSankhya_form" class="form_input" maxlength="4" onkeydown="if (getKey(event) == 13) return false;" style="width:125px; text-align:left; padding-left:5px" value="<?= "$idSankhya_form"; ?>" />
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
 
 			<!-- ======= BOTAO ================================================================================================== -->
-			<div style="width:100px; height:50px; border:1px solid transparent; margin-top:6px; float:left">
-				<div class="form_rotulo" style="width:95px; height:17px; border:1px solid transparent; float:left">
-					<!-- Botão: -->
-				</div>
+			<div style="width:100px; height:50px; border:1px solid transparent; float:left">
+
 
 				<div style="width:95px; height:25px; float:left; border:1px solid transparent">
 					<?php
@@ -477,10 +523,8 @@ include("../../includes/head.php");
 
 
 			<!-- ======= BOTAO CANCELAR ========================================================================================= -->
-			<div style="width:100px; height:50px; border:1px solid transparent; margin-top:6px; float:left">
-				<div class="form_rotulo" style="width:95px; height:17px; border:1px solid transparent; float:left">
-					<!-- Botão: -->
-				</div>
+			<div style="width:100px; height:50px; border:1px solid transparent; margin-top: 0px; float:left">
+
 
 				<div style="width:95px; height:25px; float:left; border:1px solid transparent">
 					<?php
@@ -557,6 +601,8 @@ include("../../includes/head.php");
 			$tipo_w = $aux_registro[29];
 			$estado_registro_w = $aux_registro[19];
 			$bloqueio_w = $aux_registro[40];
+			$valorDescontoFrete_w = number_format($aux_registro[43], 2, ",", ".");
+			$qtdeDiaInatividade_w = $aux_registro[44];
 
 			$usuario_cadastro_w = $aux_registro[13];
 			if ($usuario_cadastro_w == "") {
@@ -606,11 +652,11 @@ include("../../includes/head.php");
 			// ====== BLOQUEIO PARA ATIVAR ===========================================================================
 			$permite_ativar = "SIM";
 			/*
-if ($bloqueio_w != "SIM")
-{$permite_ativar = "SIM";}
-else
-{$permite_ativar = "NAO";}
-*/
+			if ($bloqueio_w != "SIM")
+			{$permite_ativar = "SIM";}
+			else
+			{$permite_ativar = "NAO";}
+			*/
 			// ========================================================================================================
 
 
@@ -653,6 +699,9 @@ else
 					<input type='hidden' name='cod_unidade_form' value='$cod_unidade_w'>
 					<input type='hidden' name='quant_unidade_form' value='$quant_unidade_w'>
 					<input type='hidden' name='quant_kg_saca_form' value='$quant_saca_w'>
+					<input type='hidden' name='valorDescontoFrete_form' value='$valorDescontoFrete_w'>
+					<input type='hidden' name='qtdeDiaInatividade_form' value='$qtdeDiaInatividade_w'>
+					
 					<input type='hidden' name='tipo_form' value='$tipo_w'>
 					<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/editar.png' height='20px' border='0	' />
 					</form>	
@@ -703,6 +752,9 @@ else
 					<input type='hidden' name='quant_unidade_form' value='$quant_unidade_w'>
 					<input type='hidden' name='quant_kg_saca_form' value='$quant_saca_w'>
 					<input type='hidden' name='tipo_form' value='$tipo_w'>
+					<input type='hidden' name='valorDescontoFrete_form' value='$valorDescontoFrete_w'>
+					<input type='hidden' name='qtdeDiaInatividade_form' value='$qtdeDiaInatividade_w'>
+					
 					<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/excluir.png' height='20px' border='0' />
 					</form>	
 					</td>";

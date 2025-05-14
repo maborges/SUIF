@@ -18,7 +18,9 @@
 
 		<div style="display: flex; justify-content: center; width: 100%; margin: 10px 10px 15px;">
 			<div style="border:0px solid #000; font-size:12px; float:left; align-items:center">
-				<span class='badge badge-report' style='font-size:120%'><?= $tipoCompraText ?></span>
+				<?php if ($tipoCompraText) : ?>
+					<span class='badge badge-report' style='font-size:120%'><?= $tipoCompraText ?></span>
+				<?php endif; ?>
 			</div>
 		</div>
 
@@ -456,7 +458,9 @@
 
 			<div style="display: flex; justify-content: center; width: 100%; margin: 10px 10px 15px;">
 				<div style="border:0px solid #000; font-size:12px; float:left; align-items:center">
-					<span class='badge badge-report' style='font-size:120%'><?= $tipoCompraText ?></span>
+					<?php if ($tipoCompraText) : ?>
+						<span class='badge badge-report' style='font-size:120%'><?= $tipoCompraText ?></span>
+					<?php endif; ?>
 				</div>
 			</div>
 
@@ -622,7 +626,7 @@
 			<div id="tabela_2" style="width:730px; height:12px; border:0px solid #000; font-size:9px; margin-top:10px">
 
 
-				<div style="margin-top:0px; margin-left:5px; width:537px; border:0px solid #000; float:left">Dados do Pagamento:</div>
+				<div style="margin-top:0px; margin-left:5px; width:537px; border:0px solid #000; float:left">Dados do Pagamento6:</div>
 				<div style="margin-top:0px; margin-left:5px; border:0px solid #000; float:left; font-size:11px"></div>
 			</div>
 			<!-- ============================================================================================================ -->

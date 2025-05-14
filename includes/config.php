@@ -1,8 +1,11 @@
 <?php
-
+// L O C A L
 $servidor = "http://suif.local";
-//$servidor = "https://suif-homolog.grancafe.com.br";
 $diretorio_servidor = "";
+
+// H O M O L O G O
+//$servidor = "https://suif-homolog.grancafe.com.br";
+//$diretorio_servidor = "sis";
 
 // P R O D U Ç Ã O
 //$servidor = "https://suif.grancafe.com.br";

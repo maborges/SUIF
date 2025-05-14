@@ -7,7 +7,6 @@ $titulo = "Editar Compra";
 $modulo = "compras";
 $menu = "compras";
 
-
 // ======= RECEBENDO POST =================================================================================
 $numero_compra = $_POST["numero_compra"];
 $numero_compra_aux = $_POST["numero_compra_aux"] ?? '';
@@ -54,6 +53,9 @@ $hora_cadastro = $aux_bc[19];
 $tipo_registro = $aux_bc[16];
 $tipoCompra = $aux_bc[57];
 $tipoCompraText = $tipoCompra == 1 ? "NORMAL" : ($tipoCompra == 2 ? 'ARMAZENAGEM' : '');
+$modalidadeFreteText  = $aux_bc[59] == 'CIF' ? "Frete Posto (CIF)" : ($aux_bc[59] == 'FOB' ? 'Frete Puxar (FOB)' : '');
+$filialFaturamento = $aux_bc[61];
+
 
 // ======================================================================================================
 
@@ -99,11 +101,30 @@ $aux_un_med = mysqli_fetch_row($busca_un_med);
 $un_descricao = $aux_un_med[1];
 $unidade_print = $aux_un_med[2];
 // ======================================================================================================
+$busca_tipo_produto = mysqli_query($conexao, "SELECT * FROM select_tipo_produto WHERE cod_produto='$cod_produto' AND estado_registro='ATIVO' ORDER BY codigo");
+$linhas_tipo_produto = mysqli_num_rows($busca_tipo_produto);
+
+// Popula percentual de umidade, broca e impureza
+$percentualUBI = [];
+$query = "SELECT * 
+			FROM select_porcentagem 
+			WHERE estado_registro='ATIVO' 
+			ORDER BY codigo";
+
+$resultSet = $conexao->prepare($query);
+
+// Executa a consulta
+if ($resultSet->execute()) {
+	$percentualUBI = $resultSet->get_result();
+}
 
 
 // =============================================================================
 include("../../includes/head.php");
 ?>
+
+<link rel="stylesheet" type="text/css" href="<?php echo "$servidor/$diretorio_servidor"; ?>/padrao_bootstrap.css" />
+
 
 <!-- ====== TÍTULO DA PÁGINA ====================================================================================== -->
 <title>
@@ -115,6 +136,7 @@ include("../../includes/head.php");
 <script type="text/javascript">
 	<?php include("../../includes/javascript.php"); ?>
 </script>
+
 </head>
 
 
@@ -138,382 +160,180 @@ include("../../includes/head.php");
 		<?php include("../../includes/submenu_compras_compras.php"); ?>
 	</div>
 
+	<div class="container mt-3" style="padding: 0 120px 0 120px">
+		<form name="compra" action="<?php echo "$servidor/$diretorio_servidor"; ?>/compras/produtos/compra_editar_enviar.php" method="post">
+			<input type="hidden" name="botao" value="compra_editar" />
+			<input type="hidden" name="numero_compra" value="<?= "$numero_compra" ?>" />
+			<input type="hidden" name="pedidoSankhya" value="<?= "$pedidoSankhya" ?>" />
+			<input type="hidden" name="pedidoSankhyaConfirmado" value="<?= "$pedidoSankhyaConfirmado" ?>" />
+			<input type="hidden" name="numero_compra_aux" value="<?= "$numero_compra_aux" ?>" />
+			<input type="hidden" name="pagina_mae" value="<?= "$pagina_mae" ?>" />
+			<input type="hidden" name="data_inicial" value="<?= "$data_inicial" ?>" />
+			<input type="hidden" name="data_final" value="<?= "$data_final" ?>" />
+			<input type="hidden" name="cod_tipo_anterior" value="<?= "$cod_tipo" ?>" />
+			<input type="hidden" name="quantidade" value="<?= "$quantidade" ?>" />
+			<input type="hidden" name="fornecedor" value="<?= "$fornecedor" ?>" />
+			<input type="hidden" name="fornecedor_print" value="<?= "$fornecedor_print" ?>" />
+			<input type="hidden" name="cod_produto" value="<?= "$cod_produto" ?>" />
+			<input type="hidden" name="produto_print" value="<?= "$produto_print" ?>" />
+			<input type="hidden" name="unidade_print" value="<?= "$unidade_print" ?>" />
 
+			<div class="titulo_form_1 font-weight-bold">
+				Edição de Registro
+			</div>
 
+			<div class="d-fex justify-content-start mt-2">
+				<h6><?= "$tipo_registro - $produto_print" ?></h6>
+			</div>
 
-	<!-- =============================================   C E N T R O   =============================================== -->
-	<div id="centro_geral">
-		<div id="centro" style="height:460px; width:950px; border:0px solid #000; margin:auto">
-			<form name="compra" action="<?php echo "$servidor/$diretorio_servidor"; ?>/compras/produtos/compra_editar_enviar.php" method="post">
-				<input type="hidden" name="botao" value="compra_editar" />
-				<input type="hidden" name="numero_compra" value="<?php echo "$numero_compra"; ?>" />
-				<input type="hidden" name="pedidoSankhya" value="<?php echo "$pedidoSankhya"; ?>" />
-				<input type="hidden" name="pedidoSankhyaConfirmado" value="<?php echo "$pedidoSankhyaConfirmado"; ?>" />
-				<input type="hidden" name="numero_compra_aux" value="<?php echo "$numero_compra_aux"; ?>" />
-				<input type="hidden" name="pagina_mae" value="<?php echo "$pagina_mae"; ?>" />
-				<input type="hidden" name="data_inicial" value="<?php echo "$data_inicial"; ?>" />
-				<input type="hidden" name="data_final" value="<?php echo "$data_final"; ?>" />
-				<input type="hidden" name="cod_tipo_anterior" value="<?php echo "$cod_tipo"; ?>" />
-				<input type="hidden" name="quantidade" value="<?php echo "$quantidade"; ?>" />
-				<input type="hidden" name="fornecedor" value="<?php echo "$fornecedor"; ?>" />
-				<input type="hidden" name="fornecedor_print" value="<?php echo "$fornecedor_print"; ?>" />
-				<input type="hidden" name="cod_produto" value="<?php echo "$cod_produto"; ?>" />
-				<input type="hidden" name="produto_print" value="<?php echo "$produto_print"; ?>" />
-				<input type="hidden" name="unidade_print" value="<?php echo "$unidade_print"; ?>" />
+			<div class="form-row">
+				<div class="form-group col-md-3 ml-0">
+					<label class="col-form-label-sm mb-0" for="filialFaturamento">Filial de Faturamento:</label>
+					<input class="form-control form-control-sm font-weight-bold" disabled type="text" name="filialFaturamento" value=<?= $filialFaturamento ?>>
+				</div>
+			</div>
 
-				<div style="width:950px; height:15px; float:left; border:0px solid #000"></div>
-				<!-- ============================================================================================================= -->
-				<div style="width:1080px; height:30px; float:left; border:0px solid #000">
-					<div id="titulo_form_1" style="width:700px; height:30px; float:left; border:0px solid #000; margin-left:140px; font-size:22px; color:#090">
-						<b>Edi&ccedil;&atilde;o de Registro</b>
+			<div class="form-row">
+				<div class="form-group col-md-3 ml-0">
+					<label class="col-form-label-sm mb-0">Número:</label>
+					<input class="form-control form-control-sm" disabled type="text" name="numero_compra_aux" value='<?= $numero_compra ?>'>
+				</div>
+
+				<div class=" form-group col-md-3 ml-0">
+					<label class="col-form-label-sm mb-0">Pedido Sankhya:</label>
+					<input class="form-control form-control-sm font-weight-bold" disabled type="text" name="pedidoSankhya" value='<?= $pedidoSankhya ?>'>
+				</div>
+
+				<div class="form-group col-md-6 ml-0">
+					<label class="col-form-label-sm mb-0">Fornecedor:</label>
+					<input class="form-control form-control-sm font-weight-bold" disabled type=" text" name="fornecedor_print" value='<?= $fornecedor_print ?>'>
+				</div>
+			</div>
+
+			<div class="form-row">
+				<div class="form-group col-md-3 ml-0">
+					<label class="col-form-label-sm mb-0">Quantidade (<?= $unidade_print ?>):</label>
+					<input class="form-control form-control-sm text-center" disabled type="text" name="quantidade" value='<?= $quantidade ?>'>
+				</div>
+
+				<div class="form-group col-md-3 ml-0">
+					<label class="col-form-label-sm mb-0">Preço:</label>
+					<input class="form-control form-control-sm text-center" disabled type="text" name="preco_unitario" value='<?= $preco_unitario ?>'>
+				</div>
+
+				<div class="form-group col-md-3 ml-0">
+					<label class="col-form-label-sm mb-0" for="safra">Safra:</label>
+					<input class="form-control form-control-sm text-center" type="text" name="safra"
+						maxlength="4" onkeypress="mascara(this,numero)" value="<?= $safra ?>">
+				</div>
+
+				<div class="form-group col-3 ml-0">
+					<label for="cod_tipo" class="col-form-label-sm mb-0">Tipo:</label>
+					<select class="form-control form-control-sm form-select" name="cod_tipo" id="cod_tipo">
+						<option></option>
+
+						<?php foreach ($busca_tipo_produto as $produtoItem): ?>
+							<option value="<?= $produtoItem['codigo'] ?>"
+								<?= ($cod_tipo == $produtoItem['codigo']) ? 'selected' : '' ?>>
+								<?= htmlspecialchars($produtoItem['descricao']) ?>
+							</option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="form-row">
+				<div class="form-group col-3 ml-0">
+					<label for="umidade" class="col-form-label-sm mb-0">Umidade:</label>
+					<select class="form-control form-control-sm form-select" name="umidade" id="umidade">
+						<option></option>
+
+						<?php foreach ($percentualUBI as $percentualItem): ?>
+							<option value="<?= $percentualItem['descricao'] ?>"
+								<?= ($umidade == $percentualItem['descricao']) ? 'selected' : '' ?>>
+								<?= htmlspecialchars($percentualItem['descricao']) ?>
+							</option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+
+				<div class="form-group col-3 ml-0">
+					<label for="broca" class="col-form-label-sm mb-0">Broca:</label>
+					<select class="form-control form-control-sm form-select" name="broca" id="broca">
+						<option></option>
+
+						<?php foreach ($percentualUBI as $percentualItem): ?>
+							<option value="<?= $percentualItem['descricao'] ?>"
+								<?= ($broca == $percentualItem['descricao']) ? 'selected' : '' ?>>
+								<?= htmlspecialchars($percentualItem['descricao']) ?>
+							</option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+
+				<div class="form-group col-3 ml-0">
+					<label for="impureza" class="col-form-label-sm mb-0">Impureza:</label>
+					<select class="form-control form-control-sm form-select" name="impureza" id="impureza">
+						<option></option>
+
+						<?php foreach ($percentualUBI as $percentualItem): ?>
+							<option value="<?= $percentualItem['descricao'] ?>"
+								<?= ($impureza == $percentualItem['descricao']) ? 'selected' : '' ?>>
+								<?= htmlspecialchars($percentualItem['descricao']) ?>
+							</option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+
+				<div class="form-group col-md-3 ml-0">
+					<label class="col-form-label-sm mb-0" for="safra">Data Pagamento:</label>
+					<input class="form-control form-control-sm text-center" disabled type="text" name="data_pagamento" value="<?= $data_pagamento ?>">
+				</div>
+			</div>
+
+			<div class="form-row">
+				<div class="form-group col-md-3 ml-0">
+					<label class="col-form-label-sm mb-0" for="safra">Tipo de Compra:</label>
+					<input class="form-control form-control-sm text-center" disabled type="text" name="tipoCompraText" value="<?= $tipoCompraText ?>">
+				</div>
+
+				<div class="form-group col-md-3 ml-0">
+					<label class="col-form-label-sm mb-0" for="safra">Modalidade do Frete:</label>
+					<input class="form-control form-control-sm text-center" disabled type="text" name="modalidadeFreteText" value="<?= $modalidadeFreteText ?>">
+				</div>
+
+				<div class="form-group col-md-6 ml-0">
+					<label class="col-form-label-sm mb-0" for="observacao">Observação:</label>
+					<input class="form-control form-control-sm" type="text" maxlength="150" name="observacao" value="<?= $observacao ?>">
+				</div>
+			</div>
+
+			<div class="row mt-4">
+				<div class="col-12 d-flex justify-content-center">
+					<div class="col-2">
+						<button type="submit" class="btn btn-sm btn-secondary w-100">Salvar</button>
+					</div>
+					<div class="col-2">
+						<button type="button" onclick="history.back()" class="btn btn-sm btn-secondary w-100">Voltar</button>
 					</div>
 				</div>
+			</div>
 
-				<div style="width:1080px; height:10px; float:left; border:0px solid #000"></div>
-				<!-- ============================================================================================================= -->
 
+		</form>
 
-				<!-- ============================================================================================================= -->
-				<div style="width:1080px; height:20px; float:left; border:0px solid #000">
-					<div id="titulo_form_2" style="width:700px; height:20px; float:left; border:0px solid #000; margin-left:140px; font-size:11px; color:#003466">
-						<?php echo "$tipo_registro - $produto_print"; ?>
-					</div>
-				</div>
-
-				<div style="width:1080px; height:10px; float:left; border:0px solid #000"></div>
-				<!-- ============================================================================================================= -->
-
-
-				<!-- ============================================================================================================= -->
-				<div style="width:140px; height:360px; border:0px solid #000; float:left"></div>
-				<div id="tabela_2" style="width:150px; height:19px; border:0px solid #000">
-					<div id="espaco_1" style="width:145px; height:5px; border:0px solid #000"></div>N&uacute;mero:
-				</div>
-
-				<div id="tabela_1" style="width:30px; height:19px; border:0px solid #000"></div>
-				<div id="tabela_2" style="width:150px; height:19px; border:0px solid #000">
-					<div id="espaco_1" style="width:145px; height:5px; border:0px solid #000"></div>Pedido Sankhya:
-				</div>
-
-				<div id="tabela_1" style="width:30px; height:19px; border:0px solid #000"></div>
-				<div id="tabela_2" style="width:450px; height:19px; border:0px solid #000">
-					<div id="espaco_1" style="width:450px; height:5px; border:0px solid #000"></div>Fornecedor:
-				</div>
-
-
-				<!-- =========================================  CODIGO ====================================== -->
-				<div id="tabela_2" style="width:150px; border:0px solid #000">
-					<input type="text" name="numero_compra_aux" onkeydown="if (getKey(event) == 13) return false;" style="color:#0000FF; font-size:12px; width:145px" value="<?php echo "$numero_compra"; ?>" disabled="disabled" />
-				</div>
-
-				<!-- =========================================  SANKHYA ====================================== -->
-				<div id="tabela_1" style="width:30px; border:0px solid #000"></div>
-
-				<div id="tabela_2" style="width:150px; border:0px solid #000">
-					<input type="text" name="pedidoSankhya" onkeydown="if (getKey(event) == 13) return false;" style="color:#0000FF; font-size:12px; font-weight:bold; width:145px" value="<?php echo "$pedidoSankhya"; ?>" disabled="disabled" />
-				</div>
-				<!-- ========================================================================================================== -->
-
-				<!-- =========================================  FORNECEDOR ====================================== -->
-				<div id="tabela_1" style="width:30px; border:0px solid #000"></div>
-
-				<div id="tabela_2" style="width:325x; border:0px solid #000">
-					<!-- ========================================================================================================== -->
-					<input type="text" name="fornecedor_print" onkeydown="if (getKey(event) == 13) return false;" style="color:#0000FF; font-size:12px; font-weight:bold; width:325px" value="<?php echo "$fornecedor_print"; ?>" disabled="disabled" />
-
-				</div>
-				<!-- ========================================================================================================== -->
-
-
-
-				<!-- ====================================================================================== -->
-				<div id="tabela_2" style="width:150px; height:19px; border:0px solid #000">
-					<div id="espaco_1" style="width:145px; height:5px; border:0px solid #000"></div>
-					<?php
-					echo "Quantidade ($unidade_print):";
-					?>
-				</div>
-
-				<div id="tabela_1" style="width:30px; height:19px; border:0px solid #000"></div>
-				<div id="tabela_2" style="width:150px; height:19px; border:0px solid #000">
-					<div id="espaco_1" style="width:145px; height:5px; border:0px solid #000"></div>Pre&ccedil;o:
-				</div>
-
-				<div id="tabela_1" style="width:30px; height:19px; border:0px solid #000"></div>
-				<div id="tabela_2" style="width:150px; height:19px; border:0px solid #000">
-					<div id="espaco_1" style="width:145px; height:5px; border:0px solid #000"></div>Safra:
-				</div>
-
-				<div id="tabela_1" style="width:30px; height:19px; border:0px solid #000"></div>
-				<div id="tabela_2" style="width:240px; height:19px; border:0px solid #000">
-					<div id="espaco_1" style="width:235px; height:5px; border:0px solid #000"></div>Tipo:
-				</div>
-
-				<!-- =========================================  QUANTIDADE ====================================== -->
-				<div id="tabela_2" style="width:150px; border:0px solid #000">
-					<input type="text" name="quantidade" id="ok" maxlength="15" onkeypress="troca(this)" onkeydown="if (getKey(event) == 13) return false;" style="color:#0000FF; width:145px; font-size:12px; text-align:center" value="<?php echo "$quantidade"; ?>" disabled="disabled" />
-				</div>
-
-				<!-- =========================================  PREÇO UNITARIO ====================================== -->
-				<div id="tabela_1" style="width:30px; border:0px solid #000"></div>
-				<div id="tabela_2" style="width:150px; border:0px solid #000">
-					<input type="text" name="preco_unitario" maxlength="15" onkeypress="mascara(this,mvalor)" onkeydown="if (getKey(event) == 13) return false;" style="color:#0000FF; width:145px; font-size:12px; text-align:center" value="<?php echo "$preco_unitario"; ?>" disabled="disabled" />
-				</div>
-
-				<!-- ========================================= SAFRA  ====================================== -->
-				<div id="tabela_1" style="width:30px; border:0px solid #000"></div>
-				<div id="tabela_2" style="width:150px; border:0px solid #000">
-					<input type="text" name="safra" maxlength="4" onkeypress="mascara(this,numero)" onkeydown="if (getKey(event) == 13) return false;" style="color:#0000FF; font-size:12px; width:145px; text-align:center" value="<?php echo "$safra"; ?>" />
-				</div>
-
-				<!-- ========================================= TIPO  ====================================== -->
-				<div id="tabela_1" style="width:30px; border:0px solid #000"></div>
-				<div id="tabela_2" style="width:240px; border:0px solid #000">
-					<select name="cod_tipo" onkeydown="if (getKey(event) == 13) return false;" style="color:#0000FF; width:149px; font-size:12px; text-align:left" />
-					<option></option>
-					<?php
-					$busca_tipo_produto = mysqli_query($conexao, "SELECT * FROM select_tipo_produto WHERE cod_produto='$cod_produto' AND estado_registro='ATIVO' ORDER BY codigo");
-					$linhas_tipo_produto = mysqli_num_rows($busca_tipo_produto);
-
-					for ($t = 1; $t <= $linhas_tipo_produto; $t++) {
-						$aux_tipo_produto = mysqli_fetch_row($busca_tipo_produto);
-
-						if ($aux_tipo_produto[0] == $cod_tipo) {
-							echo "<option selected='selected' value='$aux_tipo_produto[0]'>$aux_tipo_produto[1]</option>";
-						} else {
-							echo "<option value='$aux_tipo_produto[0]'>$aux_tipo_produto[1]</option>";
-						}
-					}
-					?>
-					</select>
-				</div>
-
-
-				<!-- ====================================================================================== -->
-				<div id="tabela_2" style="width:150px; height:19px; border:0px solid #000">
-					<div id="espaco_1" style="width:145px; height:5px; border:0px solid #000"></div>Umidade:
-				</div>
-
-				<div id="tabela_1" style="width:30px; height:19px; border:0px solid #000"></div>
-				<div id="tabela_2" style="width:150px; height:19px; border:0px solid #000">
-					<div id="espaco_1" style="width:145px; height:5px; border:0px solid #000"></div>Broca:
-				</div>
-
-				<div id="tabela_1" style="width:30px; height:19px; border:0px solid #000"></div>
-				<div id="tabela_2" style="width:150px; height:19px; border:0px solid #000">
-					<div id="espaco_1" style="width:145px; height:5px; border:0px solid #000"></div>Impureza:
-				</div>
-
-				<div id="tabela_1" style="width:30px; height:19px; border:0px solid #000"></div>
-				<div id="tabela_2" style="width:240px; height:19px; border:0px solid #000">
-					<div id="espaco_1" style="width:235px; height:5px; border:0px solid #000"></div>Data Pagamento:
-				</div>
-
-				<!-- =========================================  UMIDADE ====================================== -->
-				<div id="tabela_2" style="width:150px; border:0px solid #000">
-					<select name="umidade" onkeydown="if (getKey(event) == 13) return false;" style="color:#0000FF; width:149px; font-size:12px; text-align:left">
-						<option></option>
-						<?php
-						$busca_porcentagem = mysqli_query($conexao, "SELECT * FROM select_porcentagem WHERE estado_registro='ATIVO' ORDER BY codigo");
-						$linhas_porcentagem = mysqli_num_rows($busca_porcentagem);
-
-						for ($t = 1; $t <= $linhas_porcentagem; $t++) {
-							$aux_porcentagem = mysqli_fetch_row($busca_porcentagem);
-							if ($botao == "selecionar") {
-								if ($aux_porcentagem[1] == "") {
-									echo "<option selected='selected' value='$aux_porcentagem[1]'>$aux_porcentagem[1]</option>";
-								} else {
-									echo "<option value='$aux_porcentagem[1]'>$aux_porcentagem[1]</option>";
-								}
-							} else {
-								if ($aux_porcentagem[1] == $umidade) {
-									echo "<option selected='selected' value='$aux_porcentagem[1]'>$aux_porcentagem[1]</option>";
-								} else {
-									echo "<option value='$aux_porcentagem[1]'>$aux_porcentagem[1]</option>";
-								}
-							}
-						}
-						?>
-					</select>
-				</div>
-
-				<!-- =========================================  BROCA  ====================================== -->
-				<div id="tabela_1" style="width:30px; border:0px solid #000"></div>
-				<div id="tabela_2" style="width:150px; border:0px solid #000">
-					<select name="broca" onkeydown="if (getKey(event) == 13) return false;" style="color:#0000FF; width:149px; font-size:12px; text-align:left">
-						<option></option>
-						<?php
-						$busca_porcentagem = mysqli_query($conexao, "SELECT * FROM select_porcentagem WHERE estado_registro='ATIVO' ORDER BY codigo");
-						$linhas_porcentagem = mysqli_num_rows($busca_porcentagem);
-
-						for ($t = 1; $t <= $linhas_porcentagem; $t++) {
-							$aux_porcentagem = mysqli_fetch_row($busca_porcentagem);
-							if ($botao == "selecionar") {
-								if ($aux_porcentagem[1] == "") {
-									echo "<option selected='selected' value='$aux_porcentagem[1]'>$aux_porcentagem[1]</option>";
-								} else {
-									echo "<option value='$aux_porcentagem[1]'>$aux_porcentagem[1]</option>";
-								}
-							} else {
-								if ($aux_porcentagem[1] == $broca) {
-									echo "<option selected='selected' value='$aux_porcentagem[1]'>$aux_porcentagem[1]</option>";
-								} else {
-									echo "<option value='$aux_porcentagem[1]'>$aux_porcentagem[1]</option>";
-								}
-							}
-						}
-						?>
-					</select>
-				</div>
-
-				<!-- ========================================= IMPUREZA  ====================================== -->
-				<div id="tabela_1" style="width:30px; border:0px solid #000"></div>
-				<div id="tabela_2" style="width:150px; border:0px solid #000">
-					<select name="impureza" onkeydown="if (getKey(event) == 13) return false;" style="color:#0000FF; width:149px; font-size:12px; text-align:left">
-						<option></option>
-						<?php
-						$busca_porcentagem = mysqli_query($conexao, "SELECT * FROM select_porcentagem WHERE estado_registro='ATIVO' ORDER BY codigo");
-						$linhas_porcentagem = mysqli_num_rows($busca_porcentagem);
-
-						for ($t = 1; $t <= $linhas_porcentagem; $t++) {
-							$aux_porcentagem = mysqli_fetch_row($busca_porcentagem);
-							if ($botao == "selecionar") {
-								if ($aux_porcentagem[1] == "") {
-									echo "<option selected='selected' value='$aux_porcentagem[1]'>$aux_porcentagem[1]</option>";
-								} else {
-									echo "<option value='$aux_porcentagem[1]'>$aux_porcentagem[1]</option>";
-								}
-							} else {
-								if ($aux_porcentagem[1] == $impureza) {
-									echo "<option selected='selected' value='$aux_porcentagem[1]'>$aux_porcentagem[1]</option>";
-								} else {
-									echo "<option value='$aux_porcentagem[1]'>$aux_porcentagem[1]</option>";
-								}
-							}
-						}
-						?>
-					</select>
-				</div>
-
-				<!-- ========================================= DATA PAGAMENTO  ====================================== -->
-				<div id="tabela_1" style="width:30px; border:0px solid #000"></div>
-				<div id="tabela_2" style="width:240px; border:0px solid #000">
-					<input type="text" name="data_pagamento" maxlength="10" onkeypress="mascara(this,data)" onkeydown="if (getKey(event) == 13) return false;" style="color:#0000FF; font-size:12px; width:145px; text-align:center" value="<?php echo "$data_pagamento"; ?>" disabled="disabled" />
-				</div>
-
-				
-
-				<!-- ============================================================================================  -->
-				<div id="tabela_2" style="width:150px; height:19px; border:0px solid #000">
-					<div id="espaco_1" style="width:145px; height:5px; border:0px solid #000"></div>Tipo de Compra:
-				</div>
-
-				<div id="tabela_1" style="width:30px; height:19px; border:0px solid #000"></div>
-				<div id="tabela_2" style="width:490px; height:19px; border:0px solid #000">
-					<div id="espaco_1" style="width:450px; height:5px; border:0px solid #000"></div>Observação:
-				</div>				
-
-				<!-- =========================================  TIPO COMPRA ====================================== -->
-				<div id="tabela_2" style="width:150px; border:0px solid #000">
-					<input type="text" name="tipoCompraText" style="color:#0000FF; width:145px; font-size:12px; text-align:center" value="<?="$tipoCompraText" ?>" disabled="disabled" />
-				</div>
-				 
-
-				<!-- =========================================  OBSERVAÇÃO ====================================== -->
-				<div id="tabela_1" style="width:30px; border:0px solid #000"></div>
-				<div id="tabela_2" style="width:500px; border:0px solid #000">
-					<input type="text" name="observacao" maxlength="150" onkeydown="if (getKey(event) == 13) return false;" style="color:#0000FF; font-size:12px; width:505px" value="<?php echo "$observacao"; ?>" />
-				</div>
-				<!-- =============================================================================================== -->
-
-
-				<div id="geral" style="width:730px; height:25px; border:0px solid #000; float:left; font-size:11px; color:#006400">
-				</div>
-
-
-				<div id="geral" style="width:730px; text-align:center; border:0px solid #000; float:left; height:30px">
-					<?php
-					echo "
-					<div id='geral' style='width:180px; height:28px; text-align:center; border:0px solid #000; float:left'></div>
-					<div id='geral' style='width:180px; height:28px; text-align:center; border:0px solid #000; float:left'>
-					<button type='submit' class='botao_2' style='margin-left:20px; width:120px'>Salvar</button>
-					</form>
-					</div>
-					<div id='geral' style='width:180px; height:28px; text-align:center; border:0px solid #000; float:left'>";
-
-					if ($pagina_mae == "movimentacao_produtor") {
-						echo "
-						<form action='$servidor/$diretorio_servidor/compras/ficha_produtor/$pagina_mae.php' method='post'>
-						<input type='hidden' name='data_inicial' value='$data_inicial'>
-						<input type='hidden' name='data_final' value='$data_final'>
-						<input type='hidden' name='cod_produto' value='$cod_produto'>
-						<input type='hidden' name='fornecedor' value='$fornecedor'>
-						<input type='hidden' name='pedidoSankhya' value='$pedidoSankhya'>
-						<input type='hidden' name='pedidoSankhyaConfirmado' value='$pedidoSankhyaConfirmado'>
-						<input type='hidden' name='cod_tipo' value='$cod_tipo'>
-						<button type='submit' class='botao_2' style='margin-left:20px; width:120px'>Voltar</button>
-						</form>";
-					} else {
-						echo "
-						<form name='cancelar' action='$servidor/$diretorio_servidor/compras/produtos/$pagina_mae.php' method='post'>
-						<input type='hidden' name='fornecedor' value='$fornecedor' />
-						<input type='hidden' name='pedidoSankhya' value='$pedidoSankhya'>
-						<input type='hidden' name='pedidoSankhyaConfirmado' value='$pedidoSankhyaConfirmado'>
-						<input type='hidden' name='cod_produto' value='$cod_produto' />
-						<input type='hidden' name='cod_tipo' value='$cod_tipo' />
-						<input type='hidden' name='numero_compra' value='$numero_compra'>
-						<input type='hidden' name='numero_compra_aux' value='$numero_compra_aux'>
-						<input type='hidden' name='botao' value='botao'>
-						<input type='hidden' name='data_inicial' value='$data_inicial'>
-						<input type='hidden' name='data_final' value='$data_final'>
-						<input type='hidden' name='produto_list' value='$produto_list'>
-						<input type='hidden' name='representante' value='$produtor_ficha'>
-						<input type='hidden' name='monstra_situacao' value='$monstra_situacao'>
-						<button type='submit' class='botao_2' style='margin-left:20px; width:120px'>Voltar</button>
-						</form>";
-					}
-
-
-					echo
-					"</div> 
-						<div id='geral' style='width:180px; height:28px; text-align:center; border:0px solid #000; float:left'>
-					</div>";
-					?>
-				</div>
-
-				<div id="geral" style="width:730px; height:25px; border:0px solid #000; float:left; font-size:11px; color:#006400">
-				</div>
-
-
-				<div id="geral" style="width:730px; height:25px; border:0px solid #000; float:left; font-size:11px; color:#006400">
-					<?php
-					echo "<div>Valor total: <b>R$ $valor_total</b></div>";
-					?>
-				</div>
-
-				<div id="geral" style="width:730px; height:25px; border:0px solid #000; float:left; font-size:11px; color:#666666">
-					<?php
-					echo "<div>Cadastrado por: $usuario_cadastro $data_cadastro $hora_cadastro</div>";
-					?>
-				</div>
-
-
-				<div id="geral" style="width:730px; height:25px; border:0px solid #000; float:left; font-size:11px; color:#666666">
-
-				</div>
-
-
-
-
-				<div id="geral" style="width:900px; height:20px; border:0px solid #000; float:left; font-size:12px; color:#666666">
-				</div>
-
-
+		<div class="d-fex justify-content-start mt-2">
+			<h6>Valor total:<span>
+					<?= "R$ $valor_total" ?>
+				</span></h6>
 		</div>
+
+		<div class="d-fex justify-content-start mt-2">
+			<?= "Cadastrado por: $usuario_cadastro $data_cadastro $hora_cadastro" ?>
+		</div>
+
+
 	</div>
-
-
-
 
 	<!-- ====== RODAPÉ =============================================================================================== -->
 	<div class="rdp_1">
@@ -524,5 +344,7 @@ include("../../includes/head.php");
 	<!-- ====== FIM ================================================================================================== -->
 	<?php include("../../includes/desconecta_bd.php"); ?>
 </body>
+
+
 
 </html>

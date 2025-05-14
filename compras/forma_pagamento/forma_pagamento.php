@@ -22,6 +22,7 @@ $cod_produto = $_POST["cod_produto"] ?? '';
 
 $pagina_mae = $_POST["pagina_mae"] ?? '';
 $pagina_filha = $_POST["pagina_filha"] ?? '';
+$filialFaturamento = $_POST["filialFaturamento"] ?? '';
 $botao_relatorio = $_POST["botao_relatorio"] ?? '';
 $data_inicial = $_POST["data_inicial"] ?? '';
 $data_final = $_POST["data_final"] ?? '';
@@ -148,15 +149,16 @@ include("../../includes/head.php");
 		$broca = $aux_compra[11];
 		$umidade = $aux_compra[12];
 		$situacao = $aux_compra[17];
-		$tipo_compra  = $aux_compra[57] ?? 0;
+		$tipo_compra = $aux_compra[57] ?? 0;
+		$filialFaturamento = $aux_compra[61] ?? '';
 
 		$tipoCompraText = '';
 		$badge = '';
 
-		if ($tipo_compra==1) {
+		if ($tipo_compra == 1) {
 			$tipoCompraText = 'Normal';
 			$badge = 'badge-secondary';
-		} elseif ($tipo_compra==2) {
+		} elseif ($tipo_compra == 2) {
 			$tipoCompraText = 'Armazenado';
 			$badge = 'badge-warning';
 		}
@@ -169,12 +171,12 @@ include("../../includes/head.php");
 		include("../../includes/desconecta_bd.php");
 		$aux_pessoa = mysqli_fetch_row($busca_pessoa);
 		$fornecedorEmbargado = $aux_pessoa[0];
-		
+
 
 		if ($fornecedorEmbargado == 'S') {
 			$embargadoText = 'Embargado';
 			$embargadoBadge = 'badge-danger';
-		} 
+		}
 
 		$observacao = $aux_compra[13];
 		$motivo_alteracao_quant = $aux_compra[35];
@@ -604,9 +606,9 @@ include("../../includes/head.php");
 
 				if (!$nf_adto) {
 					$observacao = "(N/I)";
-				} else if ($nf_adto == 'NF'){
+				} else if ($nf_adto == 'NF') {
 					$observacao = "Nota Fiscal";
-				} else if ($nf_adto == 'ADTO'){ 
+				} else if ($nf_adto == 'ADTO') {
 					$observacao = "Adiantamento";
 				}
 
@@ -630,7 +632,7 @@ include("../../includes/head.php");
 						$valor_pagamento,
 						$qtdeFaturar,
 						$unidade,
-						$preco_unitario, 
+						$preco_unitario,
 						$observacao
 					);
 
@@ -646,8 +648,16 @@ include("../../includes/head.php");
 					$tipoVendaSankhya = strtoupper($forma_pagamento) == 'A NEGOCIAR' ? 100 : 11;
 
 					// Grava Favorecido na nota no Sankhya
-					$resultCabecalhoNF = Sankhya::alteraCabecalhoNota($pedidoFaturamento, $produtorSankhya, $favorecidoSankya, $data_pagamento_print, 
-																  	  $idCCSankhya, $tipoVendaSankhya, $banco_ted, $numero_cheque);
+					$resultCabecalhoNF = Sankhya::alteraCabecalhoNota(
+						$pedidoFaturamento,
+						$produtorSankhya,
+						$favorecidoSankya,
+						$data_pagamento_print,
+						$idCCSankhya,
+						$tipoVendaSankhya,
+						$banco_ted,
+						$numero_cheque
+					);
 
 					if ($resultCabecalhoNF['errorCode']) {
 						$errorSankhya = $resultCabecalhoNF['errorCode'];
@@ -726,9 +736,11 @@ include("../../includes/head.php");
 			$resultCancela = Sankhya::cancelaDocumento($idPedidoSankhya);
 
 			if ($resultCancela['errorCode']) {
+				$errorSankhya = $resultCancela['errorCode'];
+				$msgSankhya   = $resultCancela['errorMessage'];
 				Sankhya::atualizaDadosPagamentoFavorecido($codigo_pgto_favorecido, $idPedidoSankhya, 'N', $resultCancela['errorMessage']);
 			} else {
-        		Sankhya::atualizaDadosPagamentoFavorecido($codigo_pgto_favorecido, $idPedidoSankhya, 'N', 'Excluido no Sankhya');
+				Sankhya::atualizaDadosPagamentoFavorecido($codigo_pgto_favorecido, $idPedidoSankhya, 'N', 'Excluido no Sankhya');
 			}
 		}
 
@@ -762,10 +774,10 @@ include("../../includes/head.php");
 
 			<div id="centro" style="height:120px; width:1050px; border:0px solid #000; color:#003466; font-size:12px">
 
-				<div id='centro' style='float:left; height:120px; width:1050px; color:#00F; text-align:center; border:0px solid #000'>
+				<div id='centro' style='float:left; height:130px; width:1050px; color:#00F; text-align:center; border:0px solid #000'>
 					<div style='float:left; width:200px; height:115px; color:#00F; text-align:left; border:0px solid #000; font-size:12px'></div>
-					<div style='float:left; width:690px; color:#000066; text-align:left; border:1px solid #999; font-size:10px; line-height:15px'>
-						<div style="margin-left:10px; margin-top:5px; margin-bottom:5px; margin-right: 10px">
+					<div style='float:left; width:690px; color:#000066; text-align:left; border:2px solid #999; font-size:10px; line-height:15px'>
+						<div style="margin-left:10px; margin-top:5px; margin-bottom:10px; margin-right: 10px">
 							<?php echo "
 									<div style='display: flex;justify-content: space-between'>
 										<div>Número da Compra: $numero_compra</div>
@@ -773,6 +785,7 @@ include("../../includes/head.php");
 										<span class='badge $badge' style='font-size:120%'>$tipoCompraText</span>
 										<div>Contrato Sankhya: $idContratoSankhya</div>
 									</div>
+									Filial de Faturamento: <strong>$filialFaturamento</strong></br>
 									Vendedor: $fornecedor_print</br>
 									Produto: $produto_print</br>
 									Quantidade: $quantidade_print $unidade_print</br>
@@ -788,7 +801,7 @@ include("../../includes/head.php");
 
 			<div id="centro" style="height:30px; width:200px; border:0px solid #000; color:#003466; font-size:14px; float:left"></div>
 
-			<div id="centro" style="height:30px; width:690px; border:0px solid #000; color:#003466; font-size:14px; float:left">
+			<div id="centro" style="height:30px; width:690px; border:0px solid #000; color:#003466; font-size:14px; float:left; margin-top: 6px">
 				<b>&#160;&#160;&#8226; Selecione a forma de pagamento e o favorecido:</b>
 			</div>
 
@@ -809,7 +822,7 @@ include("../../includes/head.php");
 				<input type='hidden' name='fornecedor' value='<?php echo "$fornecedor"; ?>'>
 				<input type='hidden' name='monstra_situacao' value='<?php echo "$monstra_situacao"; ?>'>
 				<input type='hidden' name='num_compra_aux' value='<?php echo "$num_compra_aux"; ?>'>
-
+				<input type='hidden' name='pedidoSankhya' value='<?php echo "$idContratoSankhya"; ?>'>
 
 				<div style="width:200px; height:195px; border:0px solid #000; float:left"></div>
 
@@ -1228,6 +1241,7 @@ include("../../includes/head.php");
 							<input type='hidden' name='num_compra_aux' value='$num_compra_aux'>
 							<input type='hidden' name='valor_excluido' value='$aux_favorecido[5]'>
 							<input type='hidden' name='idPedidoSankhya' value='$idPedidoSankhya'>
+							<input type='hidden' name='pedidoSankhya' value='$idContratoSankhya'>
 							<input type='image' src='$servidor/$diretorio_servidor/imagens/icones/excluir.png' height='20px' ></form>
 						</td>";
 			} else {

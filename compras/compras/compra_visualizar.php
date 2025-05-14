@@ -122,7 +122,9 @@ $busca_compra = mysqli_query(
 	cadastro_pessoa.telefone_1,
 	cadastro_pessoa.codigo_pessoa,
 	compras.id_pedido_sankhya,
-	compras.tipo_compra
+	compras.tipo_compra,
+	compras.modalidade_frete,
+	filial_faturamento
 FROM
 	compras, cadastro_pessoa
 WHERE
@@ -161,6 +163,7 @@ $hora_alteracao_w = $aux_compra[16];
 $data_alteracao_w = $aux_compra[17];
 $estado_registro_w = $aux_compra[18];
 $filial_w = $aux_compra[19];
+$filial_faturamento_w = $aux_compra[47];
 $fornecedor_print_w = $aux_compra[20];
 $forma_entrega_w = $aux_compra[21];
 $usuario_exclusao_w = $aux_compra[22];
@@ -186,8 +189,9 @@ $pessoa_estado_w = $aux_compra[41];
 $pessoa_telefone_w = $aux_compra[42];
 $codigo_pessoa_w = $aux_compra[43];
 $idPedidoSankhya_w = $aux_compra[44];
-$tipoCompra =$aux_compra[45];
+$tipoCompra = $aux_compra[45];
 $tipoCompraText = $tipoCompra == 1 ? "NORMAL" : ($tipoCompra == 2 ? 'ARMAZENADO' : '');
+$modalidadeFreteText  = $aux_compra[46] == 'CIF' ? "Frete Posto (CIF)" : ($aux_compra[46] == 'FOB' ? 'Frete Puxar (FOB)' : '');
 
 
 if ($pessoa_tipo_w == "PF" or $pessoa_tipo_w == "pf") {
@@ -270,7 +274,7 @@ include("../../includes/conecta_bd.php");
 
 $busca_pgto = mysqli_query(
 	$conexao,
-			"SELECT 
+	"SELECT 
 			a.codigo,
 			a.codigo_compra,
 			a.codigo_favorecido,
@@ -331,11 +335,8 @@ $linha_pgto = mysqli_num_rows($busca_pgto);
 
 $saldo_a_pagar = $total_geral_w - $soma_pgto[0];
 $total_pago_print = "R$ " . number_format($soma_pgto[0], 2, ",", ".");
-if ($saldo_a_pagar > 0) {
-	$saldo_a_pagar_print = "<font style='color:#F00'>R$ " . number_format($saldo_a_pagar, 2, ",", ".") . "</font>";
-} else {
-	$saldo_a_pagar_print = "R$ " . number_format($saldo_a_pagar, 2, ",", ".");
-}
+
+$saldo_a_pagar_print = "R$ " . number_format($saldo_a_pagar, 2, ",", ".");
 // ======================================================================================================
 
 
@@ -407,6 +408,8 @@ if ($estado_registro_w == "EXCLUIDO") {
 include("../../includes/head.php");
 ?>
 
+<link rel="stylesheet" type="text/css" href="<?php echo "$servidor/$diretorio_servidor"; ?>/padrao_bootstrap.css" />
+
 
 <!-- ====== TÍTULO DA PÁGINA ====================================================================================== -->
 <title>
@@ -441,699 +444,378 @@ include("../../includes/head.php");
 		<?php include("../../includes/submenu_compras_compras.php"); ?>
 	</div>
 
-
-	<!-- ====== CENTRO ================================================================================================= -->
-	<div class="ct_auto">
-
-
-		<!-- ============================================================================================================= -->
-		<div class="espacamento" style="height:15px"></div>
-		<!-- ============================================================================================================= -->
-
-
-		<!-- ============================================================================================================= -->
-		<div class="ct_topo_1" style="width:1030px">
-			<div class="ct_titulo_1" style="width:490px; margin-left:0px">
-				<?php echo $titulo; ?>
+	<div class="container mt-3">
+		<form action="#">
+			<div class="d-flex justify-content-between titulo_form_1">
+				<div><?= $titulo ?></div>
+				<div>N&ordm; <?= $numero_compra ?></div>
 			</div>
 
-			<div class="ct_titulo_2" style="width:490px; margin-right:30px">
-				N&ordm; <?php echo $numero_compra; ?>
-			</div>
-		</div>
-		<!-- ============================================================================================================= -->
-
-
-		<!-- ============================================================================================================= -->
-		<div class="ct_topo_2" style="width:1030px">
-			<div class="ct_subtitulo_left" style="width:490px; margin-left:0px">
-				<?php echo $msg; ?>
-			</div>
-
-			<div class="ct_subtitulo_right" style="width:490px; margin-right:30px">
-				<?php echo $data_compra_print; ?>
-			</div>
-		</div>
-		<!-- ============================================================================================================= -->
-
-		<!-- ===========  INÍCIO DO FORMULÁRIO =========== -->
-		<div style="width:1030px; height:330px; margin:auto; border:1px solid transparent">
-
-			<!-- ================================================================================================================ -->
-			<div class="visualizar">
-				<div class="visualizar_rotulo">
-					Fornecedor
-				</div>
-
-				<div class="visualizar_caixa">
-					<div class="visualizar_campo" style='width:374px'>
-						<div class="visualizar_hidden"><b><?php echo $pessoa_nome_w; ?></b></div>
-					</div>
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-			<!-- ================================================================================================================ -->
-			<div class="visualizar">
-				<div class="visualizar_rotulo">
-					Pedido Sankhya
-				</div>
-
-				<div class="visualizar_caixa">
-					<div class="visualizar_campo" style='width:170px'>
-						<div class="visualizar_hidden"><b><?php echo $idPedidoSankhya_w; ?></b></div>
-					</div>
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-
-
-			<!-- ================================================================================================================ -->
-			<div class="visualizar">
-				<div class="visualizar_rotulo">
-					<?php
-					if ($pessoa_tipo_w == "PJ" or $pessoa_tipo_w == "pj") {
-						echo "CNPJ";
-					} else {
-						echo "CPF";
-					}
-					?>
-				</div>
-
-				<div class="visualizar_caixa">
-					<div class="visualizar_campo" style='width:170px'>
-						<div class="visualizar_hidden"><?php echo $pessoa_cpf_cnpj; ?></div>
-					</div>
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-
-			<!-- ================================================================================================================ -->
-			<div class="visualizar">
-				<div class="visualizar_rotulo">
-					Cidade
-				</div>
-
-				<div class="visualizar_caixa">
-					<div class="visualizar_campo" style='width:170px'><?php echo $cidade_print; ?></div>
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-
-			<!-- ================================================================================================================ -->
-			<div class="visualizar">
-				<div class="visualizar_rotulo">
-					Produto
-				</div>
-
-				<div class="visualizar_caixa">
-					<div class="visualizar_campo" style='width:170px'>
-						<div class="visualizar_hidden"><b><?php echo $produto_print_w; ?></b></div>
-					</div>
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-
-			<!-- ================================================================================================================ -->
-			<div class="visualizar">
-				<div class="visualizar_rotulo">
-					Tipo
-				</div>
-
-				<div class="visualizar_caixa">
-					<div class="visualizar_campo" style='width:170px'>
-						<div class="visualizar_hidden"><?php echo $tipo_w; ?></div>
-					</div>
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-
-			<!-- ================================================================================================================ -->
-			<div class="visualizar">
-				<div class="visualizar_rotulo">
-					Quantidade
-				</div>
-
-				<div class="visualizar_caixa">
-					<div class="visualizar_campo" style='width:170px'>
-						<div class="visualizar_hidden"><?php echo $quantidade_print; ?></div>
-					</div>
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-
-			<!-- ================================================================================================================ -->
-			<div class="visualizar">
-				<div class="visualizar_rotulo">
-					Pre&ccedil;o Unit&aacute;rio
-				</div>
-
-				<div class="visualizar_caixa">
-					<div class="visualizar_campo" style='width:170px'>
-						<div class="visualizar_hidden"><?php echo $preco_unitario_print; ?></div>
-					</div>
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-
-			<!-- ================================================================================================================ -->
-			<div class="visualizar">
-				<div class="visualizar_rotulo">
-					Valor Total
-				</div>
-
-				<div class="visualizar_caixa">
-					<div class="visualizar_campo" style='width:170px'>
-						<div class="visualizar_hidden"><b><?php echo $total_geral_print; ?></b></div>
-					</div>
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-
-			<!-- ================================================================================================================ -->
-			<div class="visualizar">
-				<div class="visualizar_rotulo">
-					Forma de Entrega
-				</div>
-
-				<div class="visualizar_caixa">
-					<div class="visualizar_campo" style='width:170px'>
-						<div class="visualizar_hidden"><?php echo $forma_entrega_w; ?></div>
-					</div>
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-
-			<!-- ================================================================================================================ -->
-			<div class="visualizar">
-				<div class="visualizar_rotulo">
-					Umidade
-				</div>
-
-				<div class="visualizar_caixa">
-					<div class="visualizar_campo" style='width:170px'>
-						<div class="visualizar_hidden"><?php echo $umidade_w; ?></div>
-					</div>
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-
-			<!-- ================================================================================================================ -->
-			<div class="visualizar">
-				<div class="visualizar_rotulo">
-					Broca
-				</div>
-
-				<div class="visualizar_caixa">
-					<div class="visualizar_campo" style='width:170px'>
-						<div class="visualizar_hidden"><?php echo $broca_w; ?></div>
-					</div>
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-
-			<!-- ================================================================================================================ -->
-			<div class="visualizar">
-				<div class="visualizar_rotulo">
-					Impureza
-				</div>
-
-				<div class="visualizar_caixa">
-					<div class="visualizar_campo" style='width:170px'>
-						<div class="visualizar_hidden"><?php echo $impureza_w; ?></div>
-					</div>
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-
-			<!-- ================================================================================================================ -->
-			<div class="visualizar">
-				<div class="visualizar_rotulo">
-					Filial
-				</div>
-
-				<div class="visualizar_caixa">
-					<div class="visualizar_campo" style='width:170px'>
-						<div class="visualizar_hidden"><?= $filial_w; ?></div>
-					</div>
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-			<!-- ================================================================================================================ -->
-			<div class="visualizar">
-				<div class="visualizar_rotulo">
-					Tipo da Compra
-				</div>
-
-				<div class="visualizar_caixa">
-					<div class="visualizar_campo" style='width:170px'>
-						<div class="visualizar_hidden"><?= $tipoCompraText ?></div>
-					</div>
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-
-			<!-- ================================================================================================================ -->
-			<div class="visualizar">
-				<div class="visualizar_rotulo">
-					Observação
-				</div>
-
-				<div class="visualizar_caixa">
-					<div class="visualizar_campo" style='width:580px'>
-						<div class="visualizar_hidden"><?= $observacao_w; ?></div>
-					</div>
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-
-			<!-- ================================================================================================================ -->
-			<div class="visualizar">
-				<div class="visualizar_rotulo">
-				</div>
-
-				<div class="visualizar_caixa" style='width:170px'>
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-
-			<!-- ================================================================================================================ -->
-			<div class="visualizar">
-				<div class="visualizar_rotulo">
-				</div>
-
-				<div class="visualizar_caixa" style='width:170px'>
-				</div>
-			</div>
-			<!-- ================================================================================================================ -->
-
-			<?php
-			if ($desconto_quant_w > 0) {
-				echo "
-					<!-- ================================================================================================================ -->
-					<div class='visualizar'>
-						<div class='visualizar_rotulo' style='color:#FF0000'>
-						Desconto de Quantidade
+			<div class="d-flex justify-content-between mt-2">
+				<div class="d-flex-col-9">
+					<?php if ($msg) : ?>
+						<div>
+							<h6 class="text-danger">
+								<?= $msg ?>
+							</h6>
 						</div>
-						
-						<div class='visualizar_caixa' title='$desconto_em_valor_print'>
-							<div class='visualizar_campo' style='width:170px'><div class='visualizar_hidden'><b>$desconto_quant_print</b></div></div>
-						</div>
+					<?php endif; ?>
+				</div>
+
+				<div class="d-fex justify-content-end">
+					<h6><?= $data_compra_print ?></h6>
+				</div>
+			</div>
+
+			<div class="form-row">
+				<div class="form-group col-md-3 ml-0">
+					<label class="col-form-label-sm mb-0" for="filialFaturamento">Filial de Faturamento:</label>
+					<input class="form-control form-control-sm font-weight-bold" disabled type="text" name="filialFaturamento" value=<?= $filial_faturamento_w ?>>
+				</div>
+			</div>
+
+			<div class="form-row">
+				<div class="form-group col-md-6 ml-0">
+					<label class="col-form-label-sm mb-0">Fornecedor</label>
+					<input class="form-control form-control-sm font-weight-bold" disabled type="text" value='<?= $pessoa_nome_w ?>'>
+				</div>
+
+				<div class="form-group col-md-2 ml-0">
+					<label class="col-form-label-sm mb-0">Pedido Sankhya</label>
+					<input class="form-control form-control-sm font-weight-bold" disabled type="text" value='<?= $idPedidoSankhya_w ?>'>
+				</div>
+
+				<div class="form-group col-md-2 ml-0">
+					<label class="col-form-label-sm mb-0">CPF/CNPJ</label>
+					<input class="form-control form-control-sm" disabled type="text" value='<?= $pessoa_cpf_cnpj ?>'>
+				</div>
+
+				<div class="form-group col-md-2 ml-0">
+					<label class="col-form-label-sm mb-0">Cidade</label>
+					<input class="form-control form-control-sm" disabled type="text" value='<?= $cidade_uf ?>'>
+				</div>
+			</div>
+
+			<div class="form-row">
+				<div class="form-group col-md-4 ml-0">
+					<label class="col-form-label-sm mb-0">Produto</label>
+					<input class="form-control form-control-sm font-weight-bold" disabled type="text" value='<?= $produto_print_w ?>'>
+				</div>
+
+				<div class="form-group col-md-2 ml-0">
+					<label class="col-form-label-sm mb-0">Tipo</label>
+					<input class="form-control form-control-sm" disabled type="text" value='<?= $tipo_w ?>'>
+				</div>
+
+				<div class="form-group col-md-2 ml-0">
+					<label class="col-form-label-sm mb-0">Quantidade</label>
+					<input class="form-control form-control-sm" disabled type="text" value='<?= $quantidade_print ?>'>
+				</div>
+
+				<div class="form-group col-md-2 ml-0">
+					<label class="col-form-label-sm mb-0">Preço Unitário</label>
+					<input class="form-control form-control-sm" disabled type="text" value='<?= $preco_unitario_print ?>'>
+				</div>
+
+				<div class="form-group col-md-2 ml-0">
+					<label class="col-form-label-sm mb-0">Valor Total</label>
+					<input class="form-control form-control-sm font-weight-bold" disabled type="text" value='<?= $total_geral_print ?>'>
+				</div>
+
+			</div>
+
+			<div class="form-row">
+				<div class="form-group col-md-4 ml-0">
+					<label class="col-form-label-sm mb-0">Forma de Entrega</label>
+					<input class="form-control form-control-sm" disabled type="text" value='<?= $forma_entrega_w ?>'>
+				</div>
+
+				<div class="form-group col-md-2 ml-0">
+					<label class="col-form-label-sm mb-0">Umidade</label>
+					<input class="form-control form-control-sm" disabled type="text" value='<?= $umidade_w ?>'>
+				</div>
+
+				<div class="form-group col-md-2 ml-0">
+					<label class="col-form-label-sm mb-0">Broca</label>
+					<input class="form-control form-control-sm" disabled type="text" value='<?= $broca_w ?>'>
+				</div>
+
+				<div class="form-group col-md-2 ml-0">
+					<label class="col-form-label-sm mb-0">Impureza</label>
+					<input class="form-control form-control-sm" disabled type="text" value='<?= $impureza_w ?>'>
+				</div>
+
+				<div class="form-group col-md-2 ml-0">
+					<label class="col-form-label-sm mb-0">Filial</label>
+					<input class="form-control form-control-sm" disabled type="text" value='<?= $filial_w ?>'>
+				</div>
+			</div>
+
+			<div class="form-row">
+				<div class="form-group col-md-2 ml-0">
+					<label class="col-form-label-sm mb-0">Tipo da Compra</label>
+					<input class="form-control form-control-sm" disabled type="text" value='<?= $tipoCompraText ?>'>
+				</div>
+
+				<div class="form-group col-md-2 ml-0">
+					<label class="col-form-label-sm mb-0">Modalidade do Frete</label>
+					<input class="form-control form-control-sm" disabled type="text" value='<?= $modalidadeFreteText ?>'>
+				</div>
+
+				<div class="form-group col-md-8 ml-0">
+					<label class="col-form-label-sm mb-0">Observação</label>
+					<input class="form-control form-control-sm" disabled type="text" value='<?= $observacao_w ?>'>
+				</div>
+			</div>
+
+			<?php if ($desconto_quant_w > 0) : ?>
+				<div class="form-row">
+					<div class="form-group col-md-2 ml-0" title="<?= $desconto_em_valor_print ?>">
+						<label class="col-form-label-sm mb-0 text-danger">Desconto de Quantidade</label>
+						<input class="form-control form-control-sm font-weight-bold" disabled type="text" value='<?= $desconto_quant_print ?>'>
 					</div>
-					<!-- ================================================================================================================ -->
 
-					<!-- ================================================================================================================ -->
-					<div class='visualizar'>
-						<div class='visualizar_rotulo'>
-						Quantidade Original
-						</div>
-						
-						<div class='visualizar_caixa'>
-							<div class='visualizar_campo' style='width:170px'><div class='visualizar_hidden'>$quantidade_original_print</div></div>
-						</div>
+					<div class="form-group col-md-2 ml-0">
+						<label class="col-form-label-sm mb-0">Quantidade Original</label>
+						<input class="form-control form-control-sm" disabled type="text" value='<?= $quantidade_original_print ?>'>
 					</div>
-					<!-- ================================================================================================================ -->
 
-					<!-- ================================================================================================================ -->
-					<div class='visualizar'>
-						<div class='visualizar_rotulo'>
-						Valor Original
-						</div>
-						
-						<div class='visualizar_caixa'>
-							<div class='visualizar_campo' style='width:170px'><div class='visualizar_hidden'>$valor_total_original_print</div></div>
-						</div>
+					<div class="form-group col-md-2 ml-0">
+						<label class="col-form-label-sm mb-0">Valor Original</label>
+						<input class="form-control form-control-sm" disabled type="text" value='<?= $valor_total_original_print ?>'>
 					</div>
-					<!-- ================================================================================================================ -->
 
-					<!-- ================================================================================================================ -->
-					<div class='visualizar'>
-						<div class='visualizar_rotulo'>
-						Motivo
-						</div>
-						<div class='visualizar_caixa' title='$motivo_ateracao_quant_w'>
-							<div class='visualizar_campo' style='width:170px; font-size:10px'><div style='height:22px; margin-left:5px; overflow:hidden'>$motivo_ateracao_quant_w</div></div>
-						</div>
+					<div class="form-group col-md-6 ml-0">
+						<label class="col-form-label-sm mb-0">Motivo</label>
+						<input class="form-control form-control-sm" disabled type="text" value='<?= $motivo_ateracao_quant_w ?>'>
 					</div>
-					<!-- ================================================================================================================ -->
-					";
-			}
-			?>
-
-		</div>
-		<!-- ===========  FIM DO FORMULÁRIO =========== -->
+				</div>
+			<?php endif; ?>
 
 
+		</form>
 
+		<!-- 
+				Botões de navegação da página
+		-->
 
-
-		<!-- ======= BOTÕES ================================================================================================= -->
-		<div style="width:1270px; height:60px; margin:auto; border:1px solid transparent; text-align:center">
-			<div style="width:35px; height:55px; float:left"></div>
-			<?php
-			// ====== BOTAO VOLTAR =========================================================================================================
-			echo "
-				<div style='float:left; height:55px; width:200px; color:#00F; text-align:center; border:0px solid #000'>
-					<form action='$servidor/$diretorio_servidor/$modulo_mae/$menu_mae/$pagina_mae.php' method='post' />
+		<div class="row mt-4">
+			<div class="col-md-2">
+				<form action="<?= "$servidor/$diretorio_servidor/$modulo_mae/$menu_mae/$pagina_mae" ?>.php" method="post">
 					<input type='hidden' name='botao' value='BUSCAR'>
-					<input type='hidden' name='data_inicial_busca' value='$data_inicial_br'>
-					<input type='hidden' name='data_final_busca' value='$data_final_br'>
-					<input type='hidden' name='numero_compra' value='$numero_compra'>
-					<input type='hidden' name='fornecedor_pesquisa' value='$fornecedor_pesquisa'>
-					<input type='hidden' name='nome_fornecedor' value='$nome_fornecedor'>
-					<input type='hidden' name='cod_produto_busca' value='$cod_produto_busca'>
-					<input type='hidden' name='cod_tipo_busca' value='$cod_tipo_busca'>
-					<input type='hidden' name='filial_busca' value='$filial_busca'>
-					<input type='hidden' name='usuario_busca' value='$usuario_busca'>
-					<input type='hidden' name='movimentacao_busca' value='$movimentacao_busca'>
-					<input type='hidden' name='numero_compra_busca' value='$numero_compra_busca'>
-					<input type='hidden' name='status_pgto_busca' value='$status_pgto_busca'>
-					<input type='hidden' name='ordenar_busca' value='$ordenar_busca'>
-					<button type='submit' class='botao_2' style='margin-left:10px; width:180px'>Voltar</button>
-					</form>
-				</div>";
-			// =============================================================================================================================
+					<input type='hidden' name='data_inicial_busca' value='<?= $data_inicial_br ?>'>
+					<input type='hidden' name='data_final_busca' value='<?= $data_final_br ?>'>
+					<input type='hidden' name='numero_compra' value='<?= $numero_compra ?>'>
+					<input type='hidden' name='fornecedor_pesquisa' value='<?= $fornecedor_pesquisa ?>'>
+					<input type='hidden' name='nome_fornecedor' value='<?= $nome_fornecedor ?>'>
+					<input type='hidden' name='cod_produto_busca' value='<?= $cod_produto_busca ?>'>
+					<input type='hidden' name='cod_tipo_busca' value='<?= $cod_tipo_busca ?>'>
+					<input type='hidden' name='filial_busca' value='<?= $filial_busca ?>'>
+					<input type='hidden' name='usuario_busca' value='<?= $usuario_busca ?>'>
+					<input type='hidden' name='movimentacao_busca' value='<?= $movimentacao_busca ?>'>
+					<input type='hidden' name='numero_compra_busca' value='<?= $numero_compra_busca ?>'>
+					<input type='hidden' name='status_pgto_busca' value='<?= $status_pgto_busca ?>'>
+					<input type='hidden' name='ordenar_busca' value='<?= $ordenar_busca ?>'>
+					<button type='submit' class="btn btn-sm btn-secondary w-100">Voltar</button>
+				</form>
+			</div>
+
+			<!-- 
+				Os botões na versão anterior (Editar, Excluir e Pagamento) não estavam funcionais,
+				sempre apareciam disabled, e por isso foram removidos nesta versão
+			-->
+
+			<div class="col-md-2">
+				<form action="<?= "$servidor/$diretorio_servidor" ?>/compras/compras/compra_impressao_1.php" method="post" target='_blank'>
+					<input type='hidden' name='numero_compra' value='<?= $numero_compra ?>'>
+					<button type='submit' class="btn btn-sm btn-secondary w-100" <?= (empty($erro) and $movimentacao_w == "COMPRA") ? "" : "disabled" ?>>Imprimir 1 Via</button>
+				</form>
+			</div>
 
 
-			// ====== BOTAO EDITAR ========================================================================================================
-			if ($permite_editar == "SIM" and empty($erro) and $movimentacao_w == "COMPRA") {
-				echo "
-					<div style='float:left; height:55px; width:200px; color:#00F; text-align:center; border:0px solid #000'>
-					<button type='submit' class='botao_2' style='margin-left:10px; width:180px; color:#BBB'>Editar</button>
-					</div>";
-			} else {
-				echo "
-					<div style='float:left; height:55px; width:200px; color:#00F; text-align:center; border:0px solid #000'>
-					<button type='submit' class='botao_2' style='margin-left:10px; width:180px; color:#BBB'>Editar</button>
-					</div>";
-			}
-			// =============================================================================================================================
+			<div class="col-md-2">
+				<form action="<?= "$servidor/$diretorio_servidor" ?>/compras/compras/compra_impressao_2.php" method="post" target='_blank'>
+					<input type='hidden' name='numero_compra' value='<?= $numero_compra ?>'>
+					<button type='submit' class="btn btn-sm btn-secondary w-100" <?= (empty($erro) and $movimentacao_w == "COMPRA") ? "" : "disabled" ?>>Imprimir 2 Vias</button>
+				</form>
+			</div>
 
-
-			// ====== BOTAO EXCLUIR ========================================================================================================
-			if ($permite_excluir == "SIM" and empty($erro) and $movimentacao_w == "COMPRA") {
-				echo "
-					<div style='float:left; height:55px; width:200px; color:#00F; text-align:center; border:0px solid #000'>
-					<button type='submit' class='botao_2' style='margin-left:10px; width:180px; color:#BBB'>Excluir</button>
-					</div>";
-			} else {
-				echo "
-					<div style='float:left; height:55px; width:200px; color:#00F; text-align:center; border:0px solid #000'>
-					<button type='submit' class='botao_2' style='margin-left:10px; width:180px; color:#BBB'>Excluir</button>
-					</div>";
-			}
-			// =============================================================================================================================
-
-
-
-			// ====== BOTAO PAGAMENTO ======================================================================================================
-			if ($permite_baixar == "SIM" and empty($erro) and $movimentacao_w == "COMPRA") {
-				echo "
-					<div style='float:left; height:55px; width:200px; color:#00F; text-align:center; border:0px solid #000'>
-					<button type='submit' class='botao_2' style='margin-left:10px; width:180px; color:#BBB'>Pagamento</button>
-					</div>";
-			} else {
-				echo "
-					<div style='float:left; height:55px; width:200px; color:#00F; text-align:center; border:0px solid #000'>
-					<button type='submit' class='botao_2' style='margin-left:10px; width:180px; color:#BBB'>Pagamento</button>
-					</div>";
-			}
-			// =============================================================================================================================
-
-
-			// ====== BOTAO IMPRIMIR =======================================================================================================
-			if (empty($erro) and $movimentacao_w == "COMPRA") {
-				echo "
-					<div style='float:left; height:55px; width:200px; color:#00F; text-align:center; border:0px solid #000'>
-						<form action='$servidor/$diretorio_servidor/compras/compras/compra_impressao_1.php' method='post' target='_blank' />
-						<input type='hidden' name='numero_compra' value='$numero_compra'>
-						<button type='submit' class='botao_2' style='margin-left:10px; width:180px'>Imprimir 1 Via</button>
-						</form>
-					</div>";
-			} else {
-				echo "
-					<div style='float:left; height:55px; width:200px; color:#00F; text-align:center; border:0px solid #000'>
-					<button type='submit' class='botao_2' style='margin-left:10px; width:180px; color:#BBB'>Imprimir 1 Via</button>
-					</div>";
-			}
-			// =============================================================================================================================
-
-
-			// ====== BOTAO IMPRIMIR =======================================================================================================
-			if (empty($erro) and $movimentacao_w == "COMPRA") {
-				echo "
-					<div style='float:left; height:55px; width:200px; color:#00F; text-align:center; border:0px solid #000'>
-						<form action='$servidor/$diretorio_servidor/compras/compras/compra_impressao_2.php' method='post' target='_blank' />
-						<input type='hidden' name='numero_compra' value='$numero_compra'>
-						<button type='submit' class='botao_2' style='margin-left:10px; width:180px'>Imprimir 2 Vias</button>
-						</form>
-					</div>";
-			} else {
-				echo "
-					<div style='float:left; height:55px; width:200px; color:#00F; text-align:center; border:0px solid #000'>
-					<button type='submit' class='botao_2' style='margin-left:10px; width:180px; color:#BBB'>Imprimir 2 Vias</button>
-					</div>";
-			}
-			// =============================================================================================================================
-
-
-			?>
 		</div>
-		<!-- ================================================================================================================ -->
+
+		<!-- 
+				Pagamentos
+		-->
+
+		<div class="d-flex justify-content-between mt-4 ">
+			<div class="titulo_form_1">Pagamentos</div>
+			<div>
+				<h6>Total Pago: <?= $total_pago_print ?></h6>
+			</div>
+		</div>
+
+		<div class="d-fex text-right">
+			<h6>Saldo a Pagar:
+				<span class="<?= $saldo_a_pagar <= 0  ? '' : "text-danger" ?>"><?= $saldo_a_pagar_print ?></span>
+			</h6>
+		</div>
+
+		<div class="d-flex mt-4">
+			<table class="table table-hover table-striped table-sm" style="display: flex-row">
+				<thead>
+					<th>Data</th>
+					<th>Favorecido</th>
+					<th>Forma de Pagamento</th>
+					<th>Banco</th>
+					<th>Agência</th>
+					<th>Número</th>
+					<th>Tipo de Conta</th>
+					<th>Valor</th>
+					<th>Sankhya</th>
+				</thead>
+				<tbody>
+					<?php while ($aux_pgto = mysqli_fetch_row($busca_pgto)) : ?>
+
+						<?php
+						$id_z = $aux_pgto[0];
+						$codigo_compra_z = $aux_pgto[1];
+						$codigo_favorecido_z = $aux_pgto[2];
+						$forma_pagamento_z = $aux_pgto[3];
+						$data_pagamento_z = $aux_pgto[4];
+						$valor_z = $aux_pgto[5];
+						$banco_cheque_z = $aux_pgto[6];
+						$observacao_z = $aux_pgto[7];
+						$usuario_cadastro_z = $aux_pgto[8];
+						$hora_cadastro_z = $aux_pgto[9];
+						$data_cadastro_z = $aux_pgto[10];
+						$estado_registro_z = $aux_pgto[11];
+						$situacao_pagamento_z = $aux_pgto[12];
+						$filial_z = $aux_pgto[13];
+						$codigo_pessoa_z = $aux_pgto[14];
+						$numero_cheque_z = $aux_pgto[15];
+						$banco_ted_z = $aux_pgto[16];
+						$origem_pgto_z = $aux_pgto[17];
+						$codigo_fornecedor_z = $aux_pgto[18];
+						$produto_z = $aux_pgto[19];
+						$favorecido_print = $aux_pgto[20];
+						$cod_produto_z = $aux_pgto[21];
+						$agencia_z = $aux_pgto[22];
+						$num_conta_z = $aux_pgto[23];
+						$tipo_conta_z = $aux_pgto[24];
+						$nome_banco_z = $aux_pgto[25];
+						$cpf_cnpj_z = $aux_pgto[26];
+						$idSankhya_z = $aux_pgto[27];
+						$idSankhyaFavorecido = $aux_pgto[28];
 
 
-
-		<!-- ======================================================================================================================= -->
-		<div class="espacamento" style="height:40px"></div>
-		<!-- ======================================================================================================================= -->
+						$data_pgto_print = date('d/m/Y', strtotime($data_pagamento_z));
+						$valor_print = "<b>" . number_format($valor_z, 2, ",", ".") . "</b>";
 
 
+						if ($situacao_pagamento_z == "PAGO") {
+							$situacao_pagamento_print = "BAIXADO";
+						} elseif ($situacao_pagamento_z == "EM_ABERTO") {
+							$situacao_pagamento_print = "EM ABERTO";
+						} else {
+							$situacao_pagamento_print = "";
+						}
 
 
+						if ($tipo_conta_z == "corrente") {
+							$tipo_conta_aux = "C/C";
+						} elseif ($tipo_conta_z == "poupanca") {
+							$tipo_conta_aux = "Poupan&ccedil;a";
+						} else {
+							$tipo_conta_aux = "";
+						}
 
 
-		<!-- ====== INICIO DO RELATORIO DE PAGAMENTOS =============================================================================== -->
-		<?php
-		if ($linha_pgto == 0) {
-			echo "
-				<div style='height:50px'>
-				<div class='espacamento' style='height:10px'></div>";
-		} else {
-			echo "
-				<div class='ct_topo_1' style='width:1160px'>
-					<div class='ct_titulo_1' style='width:490px; margin-left:0px'>
-					Pagamento
-					</div>
-
-					<div class='ct_subtitulo_right' style='width:490px; margin-right:0px'>
-					Total Pago: $total_pago_print
-					</div>
-				</div>
-
-				<div class='ct_topo_2' style='width:1160px'>
-					<div class='ct_subtitulo_left' style='width:490px; margin-left:0px'>
-					</div>
-
-					<div class='ct_subtitulo_right' style='width:490px; margin-right:0px'>
-					Saldo a Pagar: $saldo_a_pagar_print
-					</div>
-				</div>
+						if ($banco_cheque_z == "SICOOB") {
+							$banco_cheque_aux = "Sicoob";
+						} elseif ($banco_cheque_z == "BANCO DO BRASIL") {
+							$banco_cheque_aux = "Banco do Brasil";
+						} elseif ($banco_cheque_z == "BANESTES") {
+							$banco_cheque_aux = "Banestes";
+						} else {
+							$banco_cheque_aux = "";
+						}
 
 
-
-				<div class='ct_relatorio'>
-
-				<table class='tabela_cabecalho'>
-				<tr>
-				<td width='90px'>Data</td>
-				<td width='260px'>Favorecido</td>
-				<td width='140px'>Forma de Pagamento</td>
-				<td width='150px'>Banco</td>
-				<td width='90px'>Ag&ecirc;ncia</td>
-				<td width='100px'>N&uacute;mero</td>
-				<td width='100px'>Tipo de Conta</td>
-				<td width='120px'>Valor</td>
-				<td width='80px'>Sankhya</td>
-				</tr>
-				</table>";
-		}
+						if ($origem_pgto_z == "SOLICITACAO") {
+							$origem_pgto_print = "Solicita&ccedil;&atilde;o de Remessa";
+							$codigo_compra_print = "(Solicita&ccedil;&atilde;o)";
+						} else {
+							$origem_pgto_print = "COMPRA";
+							$codigo_compra_print = $codigo_compra_z;
+						}
 
 
-		echo "<table class='tabela_geral' style='font-size:12px'>";
+						if ($forma_pagamento_z == "TED") {
+							$forma_pagamento_print = "TRANSFER&Ecirc;NCIA";
+							$nome_banco_print = $nome_banco_z;
+							$agencia_print = $agencia_z;
+							$num_conta_print = $num_conta_z;
+							$tipo_conta_print = $tipo_conta_aux;
+						} elseif ($forma_pagamento_z == "CHEQUE") {
+							$forma_pagamento_print = "CHEQUE";
+							$nome_banco_print = $banco_cheque_aux;
+							$agencia_print = "";
+							$num_conta_print = $numero_cheque_z;
+							$tipo_conta_print = "";
+						} else {
+							$forma_pagamento_print = $forma_pagamento_z;
+							$nome_banco_print = "";
+							$agencia_print = "";
+							$num_conta_print = "";
+							$tipo_conta_print = "";
+						}
 
 
-		// ====== FUNÇÃO FOR ===================================================================================
-		for ($z = 1; $z <= $linha_pgto; $z++) {
-			$aux_pgto = mysqli_fetch_row($busca_pgto);
-
-			// ====== DADOS DO CADASTRO ============================================================================
-			$id_z = $aux_pgto[0];
-			$codigo_compra_z = $aux_pgto[1];
-			$codigo_favorecido_z = $aux_pgto[2];
-			$forma_pagamento_z = $aux_pgto[3];
-			$data_pagamento_z = $aux_pgto[4];
-			$valor_z = $aux_pgto[5];
-			$banco_cheque_z = $aux_pgto[6];
-			$observacao_z = $aux_pgto[7];
-			$usuario_cadastro_z = $aux_pgto[8];
-			$hora_cadastro_z = $aux_pgto[9];
-			$data_cadastro_z = $aux_pgto[10];
-			$estado_registro_z = $aux_pgto[11];
-			$situacao_pagamento_z = $aux_pgto[12];
-			$filial_z = $aux_pgto[13];
-			$codigo_pessoa_z = $aux_pgto[14];
-			$numero_cheque_z = $aux_pgto[15];
-			$banco_ted_z = $aux_pgto[16];
-			$origem_pgto_z = $aux_pgto[17];
-			$codigo_fornecedor_z = $aux_pgto[18];
-			$produto_z = $aux_pgto[19];
-			$favorecido_print = $aux_pgto[20];
-			$cod_produto_z = $aux_pgto[21];
-			$agencia_z = $aux_pgto[22];
-			$num_conta_z = $aux_pgto[23];
-			$tipo_conta_z = $aux_pgto[24];
-			$nome_banco_z = $aux_pgto[25];
-			$cpf_cnpj_z = $aux_pgto[26];
-			$idSankhya_z = $aux_pgto[27];
-			$idSankhyaFavorecido = $aux_pgto[28];
+						if (!empty($usuario_cadastro_z)) {
+							$dados_cadastro_z = " &#13; Cadastrado por: " . $usuario_cadastro_z . " " . date('d/m/Y', strtotime($data_cadastro_z)) . " " . $hora_cadastro_z;
+						}
+						// ======================================================================================================
 
 
-			$data_pgto_print = date('d/m/Y', strtotime($data_pagamento_z));
-			$valor_print = "<b>" . number_format($valor_z, 2, ",", ".") . "</b>";
+						// ====== RELATORIO =======================================================================================
+						/*
+							if ($situacao_pagamento_w == "EM_ABERTO") {
+								echo "<tr class='tabela_1' title=' ID: $id_z &#13; C&oacute;digo do Favorecido: $codigo_favorecido_z Sankhya: $idSankhyaFavorecido &#13; CPF/CNPJ: $cpf_cnpj_z &#13; Status do Pagamento: $situacao_pagamento_print &#13; Origem do Pagamento: $origem_pgto_print &#13; Produto: $produto_z &#13; C&oacute;digo do Fornecedor: $codigo_fornecedor_z &#13; Observa&ccedil;&atilde;o: $observacao_z &#13; Filial: $filial_z $dados_cadastro_z'>";
+							} else {
+								echo "<tr class='tabela_2' title=' ID: $id_z &#13; C&oacute;digo do Favorecido: $codigo_favorecido_z Sankhya: $idSankhyaFavorecido &#13; CPF/CNPJ: $cpf_cnpj_z &#13; Status do Pagamento: $situacao_pagamento_print &#13; Origem do Pagamento: $origem_pgto_print &#13; Produto: $produto_z &#13; C&oacute;digo do Fornecedor: $codigo_fornecedor_z &#13; Observa&ccedil;&atilde;o: $observacao_z &#13; Filial: $filial_z $dados_cadastro_z'>";
+							}
+								*/
+
+						$tootip = " ID: $id_z &#13; Código do Favorecido: $codigo_favorecido_z Sankhya: $idSankhyaFavorecido &#13; CPF/CNPJ: $cpf_cnpj_z &#13; Status do Pagamento: $situacao_pagamento_print &#13; Origem do Pagamento: $origem_pgto_print &#13; Produto: $produto_z &#13; C&oacute;digo do Fornecedor: $codigo_fornecedor_z &#13; Observa&ccedil;&atilde;o: $observacao_z &#13; Filial: $filial_z $dados_cadastro_z'>";
+
+						?>
+
+						<tr title="<?= $tootip ?>">
+							<td><?= $data_pgto_print ?></td>
+							<td><?= $favorecido_print ?></td>
+							<td><?= $forma_pagamento_print ?></td>
+							<td><?= $nome_banco_print ?></td>
+							<td class="text-right"><?= $agencia_print ?></td>
+							<td><?= $num_conta_print ?></td>
+							<td><?= $tipo_conta_print ?></td>
+							<td class="text-right"><?= $valor_print ?></td>
+							<td class="text-right"><?= $idSankhya_z ?></td>
+						</tr>
 
 
-			if ($situacao_pagamento_z == "PAGO") {
-				$situacao_pagamento_print = "BAIXADO";
-			} elseif ($situacao_pagamento_z == "EM_ABERTO") {
-				$situacao_pagamento_print = "EM ABERTO";
-			} else {
-				$situacao_pagamento_print = "";
-			}
+					<?php endwhile; ?>
+				</tbody>
 
+				<?php if ($linha_pgto == 0 and $movimentacao_w == "COMPRA") : ?>
+					<tfoot>
+						<th class="text-secondary text-center fs-6 m-5" scope="row" colspan="6">Nenhum registro encontrado</th>
+					</tfoot>
+				<?php endif; ?>
+			</table>
 
-			if ($tipo_conta_z == "corrente") {
-				$tipo_conta_aux = "C/C";
-			} elseif ($tipo_conta_z == "poupanca") {
-				$tipo_conta_aux = "Poupan&ccedil;a";
-			} else {
-				$tipo_conta_aux = "";
-			}
+		</div>
 
-
-			if ($banco_cheque_z == "SICOOB") {
-				$banco_cheque_aux = "Sicoob";
-			} elseif ($banco_cheque_z == "BANCO DO BRASIL") {
-				$banco_cheque_aux = "Banco do Brasil";
-			} elseif ($banco_cheque_z == "BANESTES") {
-				$banco_cheque_aux = "Banestes";
-			} else {
-				$banco_cheque_aux = "";
-			}
-
-
-			if ($origem_pgto_z == "SOLICITACAO") {
-				$origem_pgto_print = "Solicita&ccedil;&atilde;o de Remessa";
-				$codigo_compra_print = "(Solicita&ccedil;&atilde;o)";
-			} else {
-				$origem_pgto_print = "COMPRA";
-				$codigo_compra_print = $codigo_compra_z;
-			}
-
-
-			if ($forma_pagamento_z == "TED") {
-				$forma_pagamento_print = "TRANSFER&Ecirc;NCIA";
-				$nome_banco_print = $nome_banco_z;
-				$agencia_print = $agencia_z;
-				$num_conta_print = $num_conta_z;
-				$tipo_conta_print = $tipo_conta_aux;
-			} elseif ($forma_pagamento_z == "CHEQUE") {
-				$forma_pagamento_print = "CHEQUE";
-				$nome_banco_print = $banco_cheque_aux;
-				$agencia_print = "";
-				$num_conta_print = $numero_cheque_z;
-				$tipo_conta_print = "";
-			} else {
-				$forma_pagamento_print = $forma_pagamento_z;
-				$nome_banco_print = "";
-				$agencia_print = "";
-				$num_conta_print = "";
-				$tipo_conta_print = "";
-			}
-
-
-			if (!empty($usuario_cadastro_z)) {
-				$dados_cadastro_z = " &#13; Cadastrado por: " . $usuario_cadastro_z . " " . date('d/m/Y', strtotime($data_cadastro_z)) . " " . $hora_cadastro_z;
-			}
-			// ======================================================================================================
-
-
-			// ====== RELATORIO =======================================================================================
-			if ($situacao_pagamento_w == "EM_ABERTO") {
-				echo "<tr class='tabela_1' title=' ID: $id_z &#13; C&oacute;digo do Favorecido: $codigo_favorecido_z Sankhya: $idSankhyaFavorecido &#13; CPF/CNPJ: $cpf_cnpj_z &#13; Status do Pagamento: $situacao_pagamento_print &#13; Origem do Pagamento: $origem_pgto_print &#13; Produto: $produto_z &#13; C&oacute;digo do Fornecedor: $codigo_fornecedor_z &#13; Observa&ccedil;&atilde;o: $observacao_z &#13; Filial: $filial_z $dados_cadastro_z'>";
-			} else {
-				echo "<tr class='tabela_2' title=' ID: $id_z &#13; C&oacute;digo do Favorecido: $codigo_favorecido_z Sankhya: $idSankhyaFavorecido &#13; CPF/CNPJ: $cpf_cnpj_z &#13; Status do Pagamento: $situacao_pagamento_print &#13; Origem do Pagamento: $origem_pgto_print &#13; Produto: $produto_z &#13; C&oacute;digo do Fornecedor: $codigo_fornecedor_z &#13; Observa&ccedil;&atilde;o: $observacao_z &#13; Filial: $filial_z $dados_cadastro_z'>";
-			}
-
-
-			// =================================================================================================================
-			echo "
-				<td width='90px' align='center'>$data_pgto_print</td>
-				<td width='260px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$favorecido_print</div></td>
-				<td width='140px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$forma_pagamento_print</div></td>
-				<td width='150px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$nome_banco_print</div></td>
-				<td width='90px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$agencia_print</div></td>
-				<td width='100px' align='left'><div style='height:14px; margin-left:10px; overflow:hidden'>$num_conta_print</div></td>
-				<td width='100px' align='center'>$tipo_conta_print</td>
-				<td width='120px' align='right'><div style='height:14px; margin-right:15px'>$valor_print</div></td>
-				<td width='80px' align='right'><div style='height:14px; margin-right:15px'>$idSankhya_z</div></td>"
-				
-				;
-			// =================================================================================================================
-
-			echo "</tr>";
-		}
-
-		echo "</table>";
-		// =================================================================================================================
-
-
-
-		// =================================================================================================================
-		if ($linha_pgto == 0 and $movimentacao_w == "COMPRA") {
-			echo "
-				<div class='espacamento' style='height:30px'></div>
-				<div style='height:30px; width:880px; border:0px solid #000; color:#999; font-size:14px; margin:auto; text-align:center'>
-				<i>Nenhum pagamento encontrado.</i></div>
-				</div>";
-		}
-		// =================================================================================================================
-		?>
-		<!-- ================== FIM DO RELATORIO PAGAMENTOS ================= -->
-
-
-
-		<!-- ======================================================================================================================= -->
-		<div class="espacamento" style="height:30px"></div>
-		<!-- ======================================================================================================================= -->
 
 	</div>
-	<!-- ====== FIM DIV CT ========================================================================================= -->
 
 
 	<!-- ====== RODAPÉ =============================================================================================== -->

@@ -4,7 +4,7 @@ body
 
 /*  ===========  ATIVO  =========== */
 	{
-	font-family: Verdana, Arial, Helvetica, sans-serif !important;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-style: normal;
 	background-color: #FFF;
 	margin: 0px;
@@ -1553,6 +1553,15 @@ input:read-only {
 .badge-info {
 	color: #ffffff;
 	background-color: #17a2b8;
+}
+
+.badge-attention {
+	color: #dc3545;
+	background-color: #FFFF00;
+}
+
+.badge-transparent {
+	background-color: transparent;;
 }
 
 table.dataTable thead th,

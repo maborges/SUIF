@@ -54,7 +54,7 @@ if ($botao == "selecionar") {
 
 // ===== BUSCA CADASTRO PESSOAS =============================================================================================
 if ($nome_form != "") {
-	$busca_pessoa_geral = mysqli_query($conexao, "SELECT codigo, nome, tipo, cpf, cnpj, cidade, estado, telefone_1, situacao_compra, id_sankhya, cadastro_validado FROM cadastro_pessoa WHERE estado_registro='ATIVO' AND nome LIKE '%$nome_form%' ORDER BY nome");
+	$busca_pessoa_geral = mysqli_query($conexao, "SELECT codigo, nome, tipo, cpf, cnpj, cidade, estado, telefone_1, situacao_compra, id_sankhya, cadastro_validado, categoria FROM cadastro_pessoa WHERE estado_registro='ATIVO' AND nome LIKE '%$nome_form%' ORDER BY nome");
 	$linha_pessoa_geral = mysqli_num_rows($busca_pessoa_geral);
 } else {
 	$busca_pessoa_geral = 0;
@@ -214,6 +214,7 @@ include("../../includes/head.php");
 			$telefone_pessoa_w = $aux_pessoa_geral[7];
 			$idSankhya_pessoa_w = $aux_pessoa_geral[9];
 			$cadastroValidado = $aux_pessoa_geral[10] ?? 'N'; 
+			$categoriaProdutor = $aux_pessoa_geral[11] ?? '';
 			
 			if ($tipo_pessoa_w == "PF" or $tipo_pessoa_w == "pf") {
 				$cpf_cnpj_w = $cpf_pessoa_w;
@@ -298,6 +299,7 @@ include("../../includes/head.php");
 					<input type='hidden' name='nome_fornecedor' value='$nome_pessoa_w' />
 					<input type='hidden' name='cod_produto' value='$cod_produto_form' />
 					<input type='hidden' name='numero_compra' value='$numero_compra' />
+					<input type='hidden' name='categoriaProdutor' value='$categoriaProdutor' />
 					<input class='tabela_1' type='submit' style='width:360px; height:22px; text-align:left; border:0px solid #000; background-color:transparent' value='$nome_pessoa_w'>
 					</form>
 					</div>

@@ -284,6 +284,7 @@ if ($aux_compra[45] == "")
 else
 {$data_altera_quant = date('d/m/Y', strtotime($aux_compra[45]));}
 $hora_altera_quant = $aux_compra[46];
+$idPedidoSankhya = $aux_compra[55];
 
 
 // ======================================================================================================
@@ -350,7 +351,7 @@ $quant_entregar_print = number_format($quant_entregar_aux,2,",",".");
 	<td width='85px' align='right'><div style='margin-right:3px'>$preco_unitario_print</div></td>
 	<td width='95px' align='right'><div style='margin-right:3px'>$valor_total_print</div></td>";
 	
-	if ($soma_pagamentos[0] < $valor_total and $permissao[51] == 'S')
+	if ($permissao[51] == 'S')
 		{
 		echo "
 		<td width='108px' align='center'>
@@ -360,6 +361,7 @@ $quant_entregar_print = number_format($quant_entregar_aux,2,",",".");
 		<input type='hidden' name='botao_relatorio' value='relatorio'>
 		<input type='hidden' name='num_compra_aux' value='$numero_compra'>
 		<input type='hidden' name='quant_entregar_aux' value='$quant_entregar_aux'>
+		<input type='hidden' name='idPedidoSankhya' value='$idPedidoSankhya'>
 		<input type='text' name='quantidade_desconto' maxlength='15' style='color:#0000FF; width:90px; font-size:10px; text-align:center' value='$quant_entregar_aux' onkeypress='troca(this)' />
 		</td>
 		<td width='54px' align='center'>

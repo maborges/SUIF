@@ -11,6 +11,21 @@ require_once('SankhyaKeys.php');
 class Sankhya
 {
 
+    public static function bearerToken()
+    {
+        // Verifica se o token existe e não expirou
+        if (isset($_SESSION['bearer_token']) && isset($_SESSION['token_expiry']) && $_SESSION['token_expiry'] > time()) 
+        {
+            return  array(
+                "rows" => $_SESSION['bearer_token'],
+                "errorCode" => 0,
+                "errorMessage" => "ok"
+            );
+        }
+
+        // Token expirado ou inexistente, faz login
+        return Sankhya::login();
+    }
 
     public static function login(): array
     {
@@ -18,34 +33,39 @@ class Sankhya
         $curl = curl_init();
         curl_setopt_array($curl, $GLOBALS['CurlLogin']);
 
-        try {
-            $result = curl_exec($curl);
-        } catch (Exception $e) {
-            return array(
-                "rows" => null,
-                "errorCode" => 1,
-                "errorMessage" => $e->getMessage()
-            );
-        } finally {
-            curl_close($curl);
-        }
+        $response = curl_exec($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        curl_close($curl);
 
-        if (!$result) {
-            return  array(
-                "rows" => $result,
-                "errorCode" => 1,
-                "errorMessage" => "Erro ao tentar comunicação com o servidor Sankhya.
-                                   Verifique suas credênciais e a disponibilidade do serviço."
-            );
-        }
+        if ($httpCode === 200 && $response) {
+            $data = json_decode($response, true);
 
-        $token = json_decode($result, true)['bearerToken'];
+            if (!empty($data['bearerToken'])) {
+
+                if (session_status() === PHP_SESSION_NONE) {
+                    // Se não estiver iniciada, inicia a sessão
+                    session_start();
+                }
+                
+                // Armazena o token e o tempo de expiração na sessão
+                $_SESSION['bearer_token'] = $data['bearerToken'];
+                $_SESSION['token_expiry'] = time() + TOKEN_EXPIRY_SECONDS;
+
+                return  array(
+                    "rows" => $data['bearerToken'],
+                    "errorCode" => 0,
+                    "errorMessage" => "ok"
+                );                
+                
+            }
+        }
 
         return  array(
-            "rows" => $token,
-            "errorCode" => 0,
-            "errorMessage" => "ok"
+            "rows" => $response,
+            "errorCode" => 1,
+            "errorMessage" => 'Falha ao autenticar do Sankhya: ' . ($response ?: 'Sem resposta')
         );
+
     }
 
     public static function DadosArmazenagem($idNFEntrada)
@@ -102,7 +122,7 @@ class Sankhya
                               on g.tipo_operacao   = 'EARM'
                              and g.produto_sankhya = e.id_sankhya  
                        left join filiais h 
-                              on h.descricao = a.filial 
+                              on h.descricao = b.filial 
                        left join centro_custo_sankhya i
                               on i.filial = h.codigo 
                              and i.produto = e.codigo 
@@ -650,6 +670,7 @@ class Sankhya
         $estadoRegistro     = '';
 
         $filial             = '';
+        $filialFaturamento  = '';
         $empresaIdSankhya   = '';
         $centroCustoSankhya = '';
 
@@ -710,6 +731,7 @@ class Sankhya
                 $produtoSUIF        = $resultSetCompra['rows'][0][39];
                 $estadoRegistro     = $resultSetCompra['rows'][0][24];
                 $filial             = $resultSetCompra['rows'][0][25];
+                $filialFaturamento  = $resultSetCompra['rows'][0][61];
                 $dataCompra         = date('d/m/Y', strtotime($resultSetCompra['rows'][0][4]));
 
                 $quantidade         = $resultSetCompra['rows'][0][5];
@@ -792,7 +814,7 @@ class Sankhya
                           left join centro_custo_sankhya b
                                  on b.filial  = a.codigo
                                 and b.produto = $produtoSUIF
-                     where a.descricao = '$filial'";
+                     where a.descricao = '$filialFaturamento'";
 
             $resultSetFilial = self::queryExecuteDB($sql);
             $rowsCount = 0;
@@ -804,20 +826,20 @@ class Sankhya
                 $rowsCount = Count($resultSetFilial['rows']);
                 if ($rowsCount == 0) {
                     $error = 4;
-                    $msg   = "Código da filial $filial não encontrado no SUIF.";
+                    $msg   = "Código da filial $filialFaturamento não encontrado no SUIF.";
                 } else if ($rowsCount > 1) {
                     $error  = 5;
-                    $msg   = "Existe mais de uma filial cadastada como $filial no SUIF.";
+                    $msg   = "Existe mais de uma filial cadastada como $filialFaturamento no SUIF.";
                 } else {
                     $empresaIdSankhya   = $resultSetFilial['rows'][0][0];
                     $centroCustoSankhya = $resultSetFilial['rows'][0][1];
 
-                    if (!$filial) {
+                    if (!$filialFaturamento) {
                         $error  = 6;
-                        $msg   = "Código Sankhya não cadastrado para a filial $filial.";
+                        $msg   = "Código Sankhya não cadastrado para a filial de faturamento $filialFaturamento.";
                     } elseif (!$centroCustoSankhya) {
                         $error  = 7;
-                        $msg   = "Centro de custo não cadastrado para a Filial/Produto.";
+                        $msg   = "Centro de custo não cadastrado para a Filial de Faturamento/Produto.";
                     }
                 }
             }
@@ -854,7 +876,6 @@ class Sankhya
 
         // Obtém o produto do SUIF
         if (!$error) {
-
             $sql = "select id_sankhya from cadastro_produto where codigo = $produtoSUIF";
             $resultSetProduto = self::queryExecuteDB($sql);
             $rowsCount = 0;
@@ -1068,6 +1089,13 @@ class Sankhya
                 "errorCode" => $resultServiceAPI['errorCode'],
                 "errorMessage" => $resultServiceAPI['errorMessage']
             );
+        } else if ($resultServiceAPI['rows']['resultadoCancelamento']["totalNotasCanceladas"] == 0) {
+            return array(
+                "rows" => [],
+                "effectedRows" => 0,
+                "errorCode" => 1,
+                "errorMessage" => 'Sankhya não cancelou nenhum documento. Verifique se o mesmo já foi cancelado ou se o número está correto.'
+            );
         } else {
             return array(
                 "rows" => $resultServiceAPI['rows'],
@@ -1098,6 +1126,42 @@ class Sankhya
                                 <DTFATUR>$dataNegociacao</DTFATUR>
                                 <CODTIPVENDA>$tipoVenda</CODTIPVENDA>
 
+                            </cabecalho>
+                        </nota>
+                    </requestBody>
+                </serviceRequest>";
+
+
+        $resultServiceAPI = Self::serviceExecuteAPI($GLOBALS['urlApiAlteraCabecalhoNota'], $body, false);
+
+        if ($resultServiceAPI['errorCode']) {
+            return array(
+                "rows" => [],
+                "effectedRows" => 0,
+                "errorCode" => $resultServiceAPI['errorCode'],
+                "errorMessage" => str_replace('"', '', str_replace("'", "", $resultServiceAPI['errorMessage']))
+            );
+        } else {
+            return array(
+                "rows" => $resultServiceAPI['rows'],
+                "effectedRows" => 0,
+                "errorCode" => "",
+                "errorMessage" => ""
+            );
+        }
+    }
+
+
+    public static function alteraValorDesconto($numNota, $valor)
+    {
+
+        $body = "<?xml version='1.0'?>
+                <serviceRequest serviceName='CACSP.incluirAlterarCabecalhoNota'>
+                    <requestBody>
+                        <nota>
+                            <cabecalho>
+                                <NUNOTA>$numNota</NUNOTA>
+                                <AD_DESCONTOSUIF>$valor</AD_DESCONTOSUIF>
                             </cabecalho>
                         </nota>
                     </requestBody>
@@ -1558,7 +1622,7 @@ class Sankhya
 
     public static function queryExecuteAPI($sqlExecute): array
     {
-        $tokenSankhya = Sankhya::login();
+        $tokenSankhya = Sankhya::bearerToken();
 
         // Verifica se a API executou
         if ($tokenSankhya['errorCode']) {
@@ -1622,7 +1686,7 @@ class Sankhya
 
     public static function serviceExecuteAPI($url, $requestBody, $json = true): array
     {
-        $tokenSankhya = Sankhya::login();
+        $tokenSankhya = Sankhya::bearerToken();
 
         // Verifica se a API executou
         if ($tokenSankhya['errorCode']) {
@@ -1893,7 +1957,7 @@ class Sankhya
 
     public static function atualizaSERASASankhya($idParceiro, $validado, $embargado): array
     {
-        $tokenSankhya = Sankhya::login();
+        $tokenSankhya = Sankhya::bearerToken();
 
         // Verifica se a API executou
         if ($tokenSankhya['errorCode']) {

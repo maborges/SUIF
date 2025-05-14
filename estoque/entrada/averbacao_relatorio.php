@@ -105,7 +105,7 @@ function getVeiculos($idFilial, $startDate, $endDate)
                 and c.estado_registro != 'EXCLUIDO'
                 and c.data between '$startDate'
                                and '$endDate'
-                and d.codigo_pessoa = c.cod_produto 
+                and d.codigo = b.codigo_fornecedor 
                 and e.filial = a.codigo 
                 and e.placa  = replace(c.placa_veiculo,' ', '')
                 and e.situacao = 'ATV'

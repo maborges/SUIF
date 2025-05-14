@@ -150,14 +150,14 @@ include_once("../../includes/head.php");
 
                     <div class="form-group col-1">
                         <br>
-                        <button type="submit" name="btnBuscar" class="btn btn-outline-secondary btn-sm">Buscar</button>
+                        <button type="submit" name="btnBuscar" class="btn btn-secondary btn-sm">Buscar</button>
                     </div>
                 </div>
 
             </form>
             <div class="row pr-0">
                 <div class="form-group col-1 ms-0">
-                    <button name="btnIncluir" id="btnIncluir" class="btn btn-outline-secondary btn-sm">Incluir</button>
+                    <button name="btnIncluir" id="btnIncluir" class="btn btn-secondary btn-sm">Incluir</button>
                 </div>
             </div>
         </div>
@@ -282,8 +282,8 @@ include_once("../../includes/head.php");
 
             <div class="row pr-0">
                 <div class="form-group col-3">
-                    <button type="submit" class="btn btn-outline-secondary btn-sm">Salvar</button>
-                    <button type="button" id="btnCancelar" class="btn btn-outline-secondary btn-sm">Cancelar</button>
+                    <button type="submit" class="btn btn-secondary btn-sm">Salvar</button>
+                    <button type="button" id="btnCancelar" class="btn btn-secondary btn-sm">Cancelar</button>
                 </div>
             </div>
 
@@ -508,7 +508,7 @@ include_once("../../includes/head.php");
                     cancelButtonText: 'Cancelar',
                     customClass: {
                         confirmButton: 'btn btn-outline-danger btn-sm m-2',
-                        cancelButton: 'btn btn-outline-secondary btn-sm'
+                        cancelButton: 'btn btn-secondary btn-sm'
                     },
                     buttonsStyling: false
                 }).then((result) => {
@@ -629,7 +629,6 @@ include_once("../../includes/head.php");
 
         // Função para tratar o evento de seleção (select)
         function handleSelectProdutor(event, ui) {
-            console.log(ui.item);
             $(`#produtor`).val(ui.item.codigo);
             $(`#nome`).val(ui.item.nome);
             $(`#email`).val(ui.item.email);

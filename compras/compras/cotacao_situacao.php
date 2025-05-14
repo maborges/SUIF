@@ -70,7 +70,7 @@ include_once("../../includes/head.php");
         <section id="tabela">
             <div class="card mt-4 shadown-sm">
                 <div class="card-header bg-light border p-2 rounded">
-                    <button class="btn btn-outline-secondary btn-sm" id="btnIncluir">Incluir</button>
+                    <button class="btn btn-secondary btn-sm" id="btnIncluir">Incluir</button>
                 </div>
 
                 <div class="card-body">
@@ -109,8 +109,8 @@ include_once("../../includes/head.php");
                                     oninput="this.value = this.value.toUpperCase();">
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-outline-secondary btn-sm">Salvar</button>
-                        <button type="button" class="btn btn-outline-secondary btn-sm" id="btnCancelar">Cancelar</button>
+                        <button type="submit" class="btn btn-secondary btn-sm">Salvar</button>
+                        <button type="button" class="btn btn-secondary btn-sm" id="btnCancelar">Cancelar</button>
                     </div>
             </form>
         </section>
@@ -296,7 +296,7 @@ include_once("../../includes/head.php");
                 cancelButtonText: 'Cancelar',
                 customClass: {
                     confirmButton: 'btn btn-outline-danger btn-sm m-2',
-                    cancelButton: 'btn btn-outline-secondary btn-sm'
+                    cancelButton: 'btn btn-secondary btn-sm'
                 },
                 buttonsStyling: false
             }).then((result) => {

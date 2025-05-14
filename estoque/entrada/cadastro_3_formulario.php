@@ -32,6 +32,7 @@ $motorista_form = $_POST["motorista_form"] ?? '';
 $motorista_cpf_form = $_POST["motorista_cpf_form"] ?? '';
 $placa_veiculo_form = $_POST["placa_veiculo_form"] ?? '';
 $obs_form = $_POST["obs_form"] ?? '';
+$modalidadeFrete = $_POST["modalidadeFrete"] ?? '';
 // ========================================================================================================
 
 
@@ -570,13 +571,13 @@ include('../../includes/head.php');
 
 
             <!-- =======  OBSERVAÇÃO ============================================================================================ -->
-            <div style="width:682px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
-                <div class="form_rotulo" style="width:674px; height:17px; border:1px solid transparent; float:left">
+            <div style="width:1004px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
+                <div class="form_rotulo" style="width:840px; height:17px; border:1px solid transparent; float:left">
                     <?php echo "Observa&ccedil;&atilde;o:"; ?>
                 </div>
 
-                <div style="width:674px; height:25px; float:left; border:1px solid transparent">
-                    <input type="text" name="obs_form" class="form_input" maxlength="150" onkeydown="if (getKey(event) == 13) return false;" style="width:663px; text-align:left" value="<?php echo "$obs_form"; ?>" />
+                <div style="width:1004px; height:25px; float:left; border:1px solid transparent">
+                    <input type="text" name="obs_form" class="form_input" maxlength="150" onkeydown="if (getKey(event) == 13) return false;" style="width:1004px; text-align:left" value="<?php echo "$obs_form"; ?>" />
                 </div>
             </div>
             <!-- ================================================================================================================ -->

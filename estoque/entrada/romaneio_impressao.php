@@ -125,7 +125,7 @@ for ($x = 1; $x <= $linha_romaneio; $x++) {
 
 
 	if (empty($numero_compra_w)) {
-		$num_registro_entrada = "(Romaneio n&atilde;o vinculado a ficha)";
+		$num_registro_entrada = "Romaneio n&atilde;o vinculado";
 	} else {
 		$num_registro_entrada = $numero_compra_w;
 	}
@@ -213,7 +213,7 @@ include('../../includes/head_impressao.php');
 
 		<div style="width:730px; height:80px; border:0px solid #000; margin-left:25px; font-size:17px; float:left">
 			<div style="width:355px; height:80px; border:0px solid #000; font-size:17px; float:left">
-				<img src="<?php echo "$servidor/$diretorio_servidor"; ?>/imagens/logomarca_pb.png" height="80px"/>
+				<img src="<?php echo "$servidor/$diretorio_servidor"; ?>/imagens/logomarca_pb.png" height="80px" />
 			</div>
 			<div style="width:355px; height:50px; border:0px solid #000; font-size:26px; margin-top:20px; float:right">
 				Romaneio de Entrada
@@ -222,14 +222,14 @@ include('../../includes/head_impressao.php');
 
 		<div style="width:730px; height:50px; border:0px solid #000; margin-left:25px; font-size:17px; float:left">
 
-			<div style="width:235px; height:20px; border:0px solid #000; font-size:18px; float:left"><?php echo "$data_print"; ?></div>
+			<div style="width:235px; height:20px; border:0px solid #000; font-size:18px; float:left"><?= $data_print ?></div>
 			<div style="width:235px; height:20px; border:0px solid #000; font-size:18px; float:left">
-				<?php echo $msg_situacao; ?></div>
-			<div style="width:235px; height:40px; border:0px solid #000; font-size:18px; float:right">N&ordm; <?php echo "$numero_romaneio"; ?></div>
+				<?= $msg_situacao ?></div>
+			<div style="width:235px; height:40px; border:0px solid #000; font-size:18px; float:right; text-align: right">N&ordm; <?php echo "$numero_romaneio"; ?></div>
 
 			<div style="width:235px; height:20px; border:0px solid #000; font-size:14px; float:left"><?php // echo"$hora_cadastro"; 
-																													?></div>
-			<div style="width:235px; height:20px; border:0px solid #000; font-size:14px; float:left" >
+																										?></div>
+			<div style="width:235px; height:20px; border:0px solid #000; font-size:14px; float:left">
 				<?php // echo"<b>$produto_print</b>"; 
 				?></div>
 
@@ -372,74 +372,74 @@ include('../../includes/head_impressao.php');
 				<div style="width:725px; height:20px; border:0px solid #000; float:left; font-size:12px"></div>
 
 				<div style="width:330px; height:26px; border-bottom:1px solid #000; float:left; font-size:12px; margin-left:25px">
-					<div style="width:135px; margin-top:7px; margin-left:5px; float:left">Quant. Real em Sacas:</div>
+					<div style="width:170px; margin-top:7px; margin-left:5px; float:left">Quant. Real em Sacas:</div>
 					<div style="margin-top:7px; margin-left:0px; float:left"><?php echo "$quantidade_real_print" ?></div>
 				</div>
 
 				<div style="width:330px; height:26px; border-bottom:1px solid #000; float:left; font-size:12px; margin-left:22px">
-					<div style="width:130px; margin-top:7px; margin-left:5px; float:left">Tipo do Produto:</div>
+					<div style="width:140px; margin-top:7px; margin-left:5px; float:left">Tipo do Produto:</div>
 					<div style="margin-top:7px; margin-left:0px; float:left"><?php echo "$tipo_print_t" ?></div>
 				</div>
 
 
 
 				<div style="width:330px; height:26px; border-bottom:1px solid #000; float:left; font-size:12px; margin-left:25px">
-					<div style="width:135px; margin-top:7px; margin-left:5px; float:left">Quant. Volume Sacas:</div>
+					<div style="width:170px; margin-top:7px; margin-left:5px; float:left">Quant. Volume Sacas:</div>
 					<div style="margin-top:7px; margin-left:0px; float:left"><?php echo "$quant_volume" ?></div>
 				</div>
 
 				<div style="width:330px; height:26px; border-bottom:1px solid #000; float:left; font-size:12px; margin-left:22px">
-					<div style="width:130px; margin-top:7px; margin-left:5px; float:left">N&ordm; Romaneio Manual:</div>
+					<div style="width:140px; margin-top:7px; margin-left:5px; float:left">N&ordm; Romaneio Manual:</div>
 					<div style="margin-top:7px; margin-left:0px; float:left"><?php echo "$num_romaneio_manual_w" ?></div>
 				</div>
 
 
 
 				<div style="width:330px; height:26px; border-bottom:1px solid #000; float:left; font-size:12px; margin-left:25px">
-					<div style="width:135px; margin-top:7px; margin-left:5px; float:left">Tipo Sacaria:</div>
-					<div style="width:185px; height:19px; border:0px solid #000; margin-top:7px; margin-left:0px; float:left; overflow:hidden">
+					<div style="width:170px; margin-top:7px; margin-left:5px; float:left">Tipo Sacaria:</div>
+					<div style="height:19px; border:0px solid #000; margin-top:7px; margin-left:0px; float:left; overflow:hidden">
 						<?php echo "$nome_sacaria_w" ?></div>
 				</div>
 
 				<div style="width:330px; height:26px; border-bottom:1px solid #000; float:left; font-size:12px; margin-left:22px">
-					<div style="width:130px; margin-top:7px; margin-left:5px; float:left">Filial Origem:</div>
+					<div style="width:140px; margin-top:7px; margin-left:5px; float:left">Filial Origem:</div>
 					<div style="margin-top:7px; margin-left:0px; float:left"><?php echo "$filial_origem_w" ?></div>
 				</div>
 
 
 
 				<div style="width:330px; height:26px; border-bottom:1px solid #000; float:left; font-size:12px; margin-left:25px">
-					<div style="width:135px; margin-top:7px; margin-left:5px; float:left">Quantidade Sacaria:</div>
+					<div style="width:170px; margin-top:7px; margin-left:5px; float:left">Quantidade Sacaria:</div>
 					<div style="margin-top:7px; margin-left:0px; float:left"><?php echo "$quantidade_sacaria_print" ?></div>
 				</div>
 
 				<div style="width:330px; height:26px; border-bottom:1px solid #000; float:left; font-size:12px; margin-left:22px">
-					<div style="width:130px; margin-top:7px; margin-left:5px; float:left">Motorista:</div>
-					<div style="width:190px; height:19px; border:0px solid #000; margin-top:7px; margin-left:0px; float:left; overflow:hidden">
+					<div style="width:140px; margin-top:7px; margin-left:5px; float:left">Motorista:</div>
+					<div style="width:185px; height:19px; border:0px solid #000; margin-top:7px; margin-left:0px; float:left; overflow:hidden">
 						<?php echo "$motorista_w" ?></div>
 				</div>
 
 
 
 				<div style="width:330px; height:26px; border-bottom:1px solid #000; float:left; font-size:12px; margin-left:25px">
-					<div style="width:155px; margin-top:7px; margin-left:5px; float:left">Desc. Previsto (Qualidade):</div>
+					<div style="width:170px; margin-top:7px; margin-left:5px; float:left">Desc. Previsto (Qualidade):</div>
 					<div style="margin-top:7px; margin-left:0px; float:left"><?php echo "$quant_quebra_prev_print" ?></div>
 				</div>
 
 				<div style="width:330px; height:26px; border-bottom:1px solid #000; float:left; font-size:12px; margin-left:22px">
-					<div style="width:130px; margin-top:7px; margin-left:5px; float:left">CPF Motorista:</div>
+					<div style="width:140px; margin-top:7px; margin-left:5px; float:left">CPF Motorista:</div>
 					<div style="margin-top:7px; margin-left:0px; float:left"><?php echo "$motorista_cpf_w" ?></div>
 				</div>
 
 
 
 				<div style="width:330px; height:26px; border-bottom:1px solid #000; float:left; font-size:12px; margin-left:25px">
-					<div style="width:135px; margin-top:7px; margin-left:5px; float:left">N&ordm; Registro de Ficha:</div>
+					<div style="width:170px; margin-top:7px; margin-left:5px; float:left">N&ordm; Registro de Ficha:</div>
 					<div style="margin-top:7px; margin-left:0px; float:left"><?php echo "$num_registro_entrada" ?></div>
 				</div>
 
 				<div style="width:330px; height:26px; border-bottom:1px solid #000; float:left; font-size:12px; margin-left:22px">
-					<div style="width:130px; margin-top:7px; margin-left:5px; float:left">Placa do Ve&iacute;culo:</div>
+					<div style="width:140px; margin-top:7px; margin-left:5px; float:left">Placa do Ve&iacute;culo:</div>
 					<div style="margin-top:7px; margin-left:0px; float:left"><?php echo "$placa_veiculo_w" ?></div>
 				</div>
 
@@ -447,7 +447,7 @@ include('../../includes/head_impressao.php');
 
 				<div style="width:682px; height:26px; border-bottom:1px solid #000; float:left; font-size:12px; margin-left:25px">
 					<div style="width:80px; margin-top:7px; margin-left:5px; float:left">Observa&ccedil;&atilde;o:</div>
-					<div style="width:590px; height:19px; border:0px solid #000; margin-top:7px; margin-left:0px; float:left; overflow:hidden">
+					<div style="border:0px solid #000; margin-top:7px; margin-left:0px; float:left; overflow:hidden">
 						<?php echo "$observacao_w" ?></div>
 				</div>
 
@@ -471,7 +471,7 @@ include('../../includes/head_impressao.php');
 
 
 		<!-- ================== INICIO DO RELATORIO ================= -->
-		<div id="tabela_2" style="width:730px; height:210px; border:1px solid #000; color:#000; border-radius:0px; overflow:hidden; margin-left:20px">
+		<div id="tabela_2" style="width:730px; height:auto; border:1px solid #000; color:#000; border-radius:0px; overflow:hidden; margin-left:20px">
 
 			<div style="height:5px; width:725px; border:0px solid #999; margin:auto"></div>
 

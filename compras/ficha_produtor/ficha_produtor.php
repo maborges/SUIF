@@ -1,4 +1,5 @@
 <?php
+
 include("../../includes/config.php");
 include("../../includes/valida_cookies.php");
 include_once("../../helpers.php");
@@ -6,7 +7,7 @@ $pagina = "ficha_produtor";
 $titulo = "Ficha do Produtor";
 $modulo = "compras";
 $menu = "ficha_produtor";
-// ================================================================================================================
+	// ================================================================================================================
 
 
 // ====== BUSCA CONFIGURAÇÕES E PERMISSÕES ========================================================================
@@ -37,6 +38,11 @@ $data_final_busca = Helpers::ConverteData($_POST["data_final_busca"]);
 $novo_tipo = $_POST["novo_tipo"] ?? '';
 $nome_fornecedor = $_POST["nome_fornecedor"] ?? '';
 
+$diasUltimaCompra = 0;
+$comprador = "";
+$situacao = "";
+
+
 if ($botao == "BUSCAR") {
 	$fornecedor_pesquisa = $_POST["fornecedor_pesquisa"];
 	$cod_produto_busca = $_POST["cod_produto_busca"];
@@ -63,8 +69,7 @@ if ($botao == "CONVERTER_TIPO" and $permissao[0] == "S") {
 	$converter = mysqli_query($conexao, "UPDATE compras SET tipo='$tipo_descricao', cod_tipo='$novo_tipo' WHERE fornecedor='$fornecedor_pesquisa' AND cod_produto='$cod_produto_busca' AND filial='$filial_busca'");
 	include("../../includes/desconecta_bd.php");
 }
-// ===============================================================================================================
-
+	// ===============================================================================================================
 
 // ====== BUSCA FORNECEDOR ========================================================================================
 include("../../includes/conecta_bd.php");
@@ -105,8 +110,7 @@ if ($pessoa_tipo == "PF" or $pessoa_tipo == "pf") {
 } else {
 	$pessoa_cpf_cnpj = "CNPJ: " . $pessoa_cnpj;
 }
-// ================================================================================================================
-
+	// ================================================================================================================
 
 // ======= MYSQL FILTRO DE BUSCA ==================================================================================
 if (empty($data_inicial_br) or empty($data_final_br)) {
@@ -161,7 +165,6 @@ if (empty($filial_busca) or $filial_busca == "GERAL") {
 	$filial_busca = $filial_busca;
 }
 
-
 $mysql_status = "compras.estado_registro='ATIVO'";
 // ================================================================================================================
 
@@ -174,65 +177,91 @@ if ($linha_fornecedor == 1) {
 	$busca_compra = mysqli_query(
 		$conexao,
 		"SELECT 
-	codigo,
-	numero_compra,
-	fornecedor,
-	produto,
-	data_compra,
-	quantidade,
-	preco_unitario,
-	valor_total,
-	unidade,
-	tipo,
-	observacao,
-	data_pagamento,
-	movimentacao,
-	usuario_cadastro,
-	hora_cadastro,
-	data_cadastro,
-	usuario_alteracao,
-	hora_alteracao,
-	data_alteracao,
-	estado_registro,
-	filial,
-	fornecedor_print,
-	forma_entrega,
-	usuario_exclusao,
-	hora_exclusao,
-	data_exclusao,
-	numero_romaneio,
-	id_pedido_sankhya
-FROM 
-	compras
-WHERE 
-	$mysql_filtro_data AND
-	$mysql_filial AND
-	$mysql_status AND
-	$mysql_fornecedor AND
-	$mysql_cod_produto AND
-	$mysql_cod_tipo
-ORDER BY 
-	data_compra"
+			codigo,
+			numero_compra,
+			fornecedor,
+			produto,
+			data_compra,
+			quantidade,
+			preco_unitario,
+			valor_total,
+			unidade,
+			tipo,
+			observacao,
+			data_pagamento,
+			movimentacao,
+			usuario_cadastro,
+			hora_cadastro,
+			data_cadastro,
+			usuario_alteracao,
+			hora_alteracao,
+			data_alteracao,
+			estado_registro,
+			filial,
+			fornecedor_print,
+			forma_entrega,
+			usuario_exclusao,
+			hora_exclusao,
+			data_exclusao,
+			numero_romaneio,
+			id_pedido_sankhya
+		FROM 
+			compras
+		WHERE 
+			$mysql_filtro_data AND
+			$mysql_filial AND
+			$mysql_status AND
+			$mysql_fornecedor AND
+			$mysql_cod_produto AND
+			$mysql_cod_tipo
+		ORDER BY 
+			data_compra"
 	);
-
+	
 
 	$busca_tipo_distinct = mysqli_query(
 		$conexao,
 		"SELECT DISTINCT
-	compras.cod_produto,
-	compras.cod_tipo,
-	compras.tipo
-FROM 
-	compras
-WHERE
-	$mysql_filial AND
-	$mysql_status AND
-	$mysql_fornecedor AND
-	$mysql_cod_produto AND
-	$mysql_cod_tipo
-ORDER BY
-	compras.cod_tipo"
+				compras.cod_produto,
+				compras.cod_tipo,
+				compras.tipo
+			FROM 
+				compras
+			WHERE
+				$mysql_filial AND
+				$mysql_status AND
+				$mysql_fornecedor AND
+				$mysql_cod_produto AND
+				$mysql_cod_tipo
+			ORDER BY
+				compras.cod_tipo"
 	);
+
+	$statusProdutor =   "SELECT IFNULL(DateDiff(CURDATE(), max(data_compra)), 0) dias_ultima_compra,
+								IFNULL(c.nome_completo, 'DISPONIVEL') comprador,
+								CASE
+									WHEN DateDiff(CURDATE(), max(a.data_compra)) > d.dias_cliente_ativo then 'INATIVO'
+									ELSE 'ATIVO'
+								END AS situacao
+						   FROM compras a
+								INNER JOIN cadastro_pessoa b 
+										ON a.fornecedor = b.codigo
+								LEFT JOIN usuarios c
+									ON b.comprador = c.username,
+								configuracoes d 
+						  WHERE a.fornecedor = $fornecedor_pesquisa
+							AND a.estado_registro = 'ATIVO'";
+
+	$resultSet = mysqli_query($conexao, $statusProdutor);
+
+	if ($resultSet) {
+		$record = mysqli_fetch_assoc($resultSet);
+		$diasUltimaCompra = $record['dias_ultima_compra'];
+		$comprador = $record['comprador'];
+		$situacao = $record['situacao'];
+	}
+
+
 
 	include("../../includes/desconecta_bd.php");
 }
@@ -453,7 +482,7 @@ include("../../includes/head.php");
 		<!-- ============================================================================================================= -->
 		<div class="ct_topo_2">
 			<div class="ct_subtitulo_left" style="width:900px">
-				<?php echo "<b>$pessoa_nome</b>"; ?>
+				<b><?= $pessoa_nome ?></b>
 			</div>
 		</div>
 		<!-- ============================================================================================================= -->
@@ -461,11 +490,14 @@ include("../../includes/head.php");
 
 		<!-- ============================================================================================================= -->
 		<div class="ct_topo_2">
-			<div class="ct_subtitulo_left" style="width:700px">
+			<div class="ct_subtitulo_left" style="width:500px">
 				<?php echo $pessoa_cpf_cnpj; ?>
 			</div>
 
-			<div class="ct_subtitulo_left" style="width:740px; overflow:hidden">
+			<div class="ct_subtitulo_left" style="width:940px; overflow:hidden">
+				<spam class="badge <?= $situacao == 'ATIVO' ? 'badge-success' : 'badge-warning' ?> badge-warning" style="margin-left:20px; margin-right:40px "><?= $situacao ?></spam>
+				Comprador: <b><?= $comprador ?></b>
+
 			</div>
 		</div>
 		<!-- ============================================================================================================= -->

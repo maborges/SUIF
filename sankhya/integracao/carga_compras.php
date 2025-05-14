@@ -36,8 +36,8 @@ $numeroCompra = $_POST['numeroCompra'] ?? '';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gera Compra no Sankhya</title>
+    <link rel="stylesheet" type="text/css" href="<?php echo "$servidor/$diretorio_servidor"; ?>/padrao_bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="<?php echo "$servidor/$diretorio_servidor"; ?>/padrao.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <link rel="shortcut icon" href="<?php echo "$servidor/$diretorio_servidor"; ?>/imagens/favicon_suif.ico" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href="<?php echo "$servidor/$diretorio_servidor"; ?>/includes/loading/loading.css" />
     <script src=<?= "$servidor/$diretorio_servidor/calendario_jquery/jquery-1.8.2.js" ?>></script>
@@ -170,7 +170,7 @@ $numeroCompra = $_POST['numeroCompra'] ?? '';
     ?>
 
     <!-- Montagem da tela -->
-    <div class="container pt-3">
+    <div class="container-fluid pt-5 pr-5 pl-5">
 
         <form action="#" method="post" id="frmAtualiza" onsubmit="showLoading()">
             <h3>Gera Contrato/Pedido no Sankhya</h3>
@@ -187,7 +187,7 @@ $numeroCompra = $_POST['numeroCompra'] ?? '';
                 <input type="hidden" name="sqlWhere" value="<?= $sqlWhere ?>">
 
                 <div class="form-group col-md-2">
-                    <label for="startDate">Tipo de Documento?</label>
+                    <label for="checkContrato">Tipo de Documento?</label>
 
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="tipoDocumento" id="checkContrato" value=1 <?= $tipoDocumento == 1 ? 'checked' : '' ?>>

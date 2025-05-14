@@ -44,8 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				$msg  = "<div style='color:#FF0000'>Informe um código Sankhya válido</div>";
 			} else {
 				$_POST['tipo_pessoa_form'] = $parceiro['rows'][0][1];
-				$_POST["nome_fantasia_form"] = $parceiro['rows'][0][2];
-				$_POST["nome_form"] = $parceiro['rows'][0][3];
+				$_POST["nome_fantasia_form"] = substr($parceiro['rows'][0][2], 0, 70);
+				$_POST["nome_form"] = substr($parceiro['rows'][0][3], 0, 70);
 
 				if ($_POST['tipo_pessoa_form'] == 'PF') {
 					$_POST["cpf_form"] = Helpers::mask($parceiro['rows'][0][4], '###.###.###-##');

@@ -42,6 +42,7 @@ $email_config = $_POST["email_config"] ?? '';
 $endereco_config = $_POST["endereco_config"] ?? '';
 $cidade_config = $_POST["cidade_config"] ?? '';
 $uf_config = $_POST["uf_config"] ?? '';
+$dias_cliente_ativo = $_POST["dias_cliente_ativo"] ?? '';
 
 $icones_select_produto = $_POST["icones_select_produto"] ?? '';
 $mostrar_preco_produto = $_POST["mostrar_preco_produto"] ?? '';
@@ -68,7 +69,7 @@ $msg = '';
 if ($botao == "SALVAR_CONFIG" and $permissao[131] == "S")
 {
 // EDIÇÃO TABELA CONFIGURACOES
-$editar = mysqli_query ($conexao, "UPDATE configuracoes SET razao_social='$razao_social_w', email_dest_exclusao='$email_dest_exclusao', enviar_email_exclusao='$enviar_email_exclusao', limite_dias_exclusao_reg='$limite_dias_exclusao_reg', versao_impressao_compra='$versao_impressao_compra', limite_dias_exclusao_romaneio='$limite_dias_exclusao_romaneio', limite_dias_exclusao_romaneio='$limite_dias_exclusao_romaneio', limite_dias_edicao_romaneio='$limite_dias_edicao_romaneio', integracao_rovereti='$integracao_rovereti', romaneio_automatico='$romaneio_automatico', romaneio_filial_origem='$romaneio_filial_origem', romaneio_motorista='$romaneio_motorista', romaneio_cpf_motorista='$romaneio_cpf_motorista', romaneio_placa_veiculo='$romaneio_placa_veiculo', limite_dias_exc_venda='$limite_dias_exc_venda', limite_dias_edi_venda='$limite_dias_edi_venda', versao_impressao_venda='$versao_impressao_venda', nome_fantasia='$nome_fantasia_config', nome_fantasia_m='$nome_fantasia_m_config', cpf_cnpj='$cpf_cnpj_config', telefone_1='$telefone_1_config', telefone_2='$telefone_2_config', email='$email_config', endereco='$endereco_config', cidade='$cidade_config', uf='$uf_config' WHERE codigo='1'");
+$editar = mysqli_query ($conexao, "UPDATE configuracoes SET razao_social='$razao_social_w', email_dest_exclusao='$email_dest_exclusao', enviar_email_exclusao='$enviar_email_exclusao', limite_dias_exclusao_reg='$limite_dias_exclusao_reg', versao_impressao_compra='$versao_impressao_compra', limite_dias_exclusao_romaneio='$limite_dias_exclusao_romaneio', limite_dias_exclusao_romaneio='$limite_dias_exclusao_romaneio', limite_dias_edicao_romaneio='$limite_dias_edicao_romaneio', integracao_rovereti='$integracao_rovereti', romaneio_automatico='$romaneio_automatico', romaneio_filial_origem='$romaneio_filial_origem', romaneio_motorista='$romaneio_motorista', romaneio_cpf_motorista='$romaneio_cpf_motorista', romaneio_placa_veiculo='$romaneio_placa_veiculo', limite_dias_exc_venda='$limite_dias_exc_venda', limite_dias_edi_venda='$limite_dias_edi_venda', versao_impressao_venda='$versao_impressao_venda', nome_fantasia='$nome_fantasia_config', nome_fantasia_m='$nome_fantasia_m_config', cpf_cnpj='$cpf_cnpj_config', telefone_1='$telefone_1_config', telefone_2='$telefone_2_config', email='$email_config', endereco='$endereco_config', cidade='$cidade_config', uf='$uf_config', dias_cliente_ativo='$dias_cliente_ativo' WHERE codigo='1'");
 
 // EDIÇÃO TABELA FILIAIS
 $editar = mysqli_query ($conexao, "UPDATE filiais SET icones_select_produto='$icones_select_produto', mostrar_preco_produto='$mostrar_preco_produto', mostrar_outros_produtos='$mostrar_outros_produtos', relat_consol_estoque='$relat_consol_estoque', versao_impressao_compra='$versao_impr_compra_f', romaneio_bal_rodoviaria='$romaneio_bal_rodoviaria', fechamento_romaneio_automatico='$fechamento_romaneio_automatico', nome_fantasia='$nome_fantasia_filial', nome_fantasia_m='$nome_fantasia_m_filial', cpf_cnpj='$cpf_cnpj_filial', telefone_1='$telefone_1_filial', telefone_2='$telefone_2_filial', email='$email_filial', endereco='$endereco_filial', cidade='$cidade_filial', uf='$uf_filial', produtos_relatorio='$produtos_relatorio' WHERE descricao='$filial'");
@@ -120,6 +121,7 @@ $endereco_config = $aux_config[51];
 $cidade_config = $aux_config[52];
 $uf_config = $aux_config[53];
 $db_environment = $aux_config[55];
+$dias_cliente_ativo = $aux_config[56];
 // ======================================================================================================
 
 
@@ -789,7 +791,16 @@ jQuery(function($){
         </div>
 	</div>
 <!-- ================================================================================================================ -->
-
+	<div style="width:169px; height:50px; border:1px solid transparent; margin-top:10px; float:left">
+        <div class="form_rotulo" style="width:167px; height:17px; border:1px solid transparent; float:left">
+		Dias Cliente Ativo:
+        </div>
+        
+        <div style="width:167px; height:25px; float:left; border:1px solid transparent">
+		<input type="text" name="dias_cliente_ativo" class="form_input" maxlength="4" 
+        onkeydown="if (getKey(event) == 13) return false;" style="width:145px; text-align:left; padding-left:5px" value="<?php echo"$dias_cliente_ativo"; ?>" />
+        </div>
+	</div>
 
 
 

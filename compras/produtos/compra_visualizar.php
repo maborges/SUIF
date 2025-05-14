@@ -323,8 +323,8 @@ include('../../includes/head.php');
 				<?php
 				if ($desconto_quantidade_2 > 0) {
 					echo "
-* Acerto de Quantidade: Quantidade original: $quantidade_original $unidade_print | Valor original: R$ $valor_total_original | Motivo: $motivo_alteracao_quant | Desconto: $desconto_quantidade $unidade_print (R$ $desc_em_valor_print) Quant. alterada por: $usuario_altera_quant $data_altera_quant $hora_altera_quant
-";
+						* Acerto de Quantidade: Quantidade original: $quantidade_original $unidade_print | Valor original: R$ $valor_total_original | Motivo: $motivo_alteracao_quant | Desconto: $desconto_quantidade $unidade_print (R$ $desc_em_valor_print) Quant. alterada por: $usuario_altera_quant $data_altera_quant $hora_altera_quant
+						";
 				} else {
 				}
 				?>
@@ -359,24 +359,24 @@ include('../../includes/head.php');
 				echo "<div id='centro' style='height:30px; width:1030px; border:0px solid #999; font-size:12px; color:#FF0000; margin-left:30px'><i>N&atilde;o existe pagamento para esta compra.</i></div>";
 			} else {
 				echo "
-<div id='centro' style='height:auto; width:1030px; border:0px solid #999; margin:auto'>
-<table border='0' align='center' style='color:#FFF; font-size:9px'>
-<tr>
-<td width='90px' align='center' bgcolor='#006699'>Data Pgto</td>
-<td width='300px' align='center' bgcolor='#006699'>Favorecido</td>
-<td width='100px' align='center' bgcolor='#006699'>Forma Pgto</td>
-<td width='270px' align='center' bgcolor='#006699'>Dados Banc&aacute;rios</td>
-<td width='100px' align='center' bgcolor='#006699'>Quantidade Ref.</td>
-<td width='100px' align='center' bgcolor='#006699'>Valor (R$)</td>
-</tr>
-</table>
-</div>
-<div id='centro' style='height:10px; width:1030px; border:0px solid #999; margin:auto'></div>";
-			}
+					<div id='centro' style='height:auto; width:1030px; border:0px solid #999; margin:auto'>
+					<table border='0' align='center' style='color:#FFF; font-size:9px'>
+					<tr>
+					<td width='90px' align='center' bgcolor='#006699'>Data Pgto</td>
+					<td width='300px' align='center' bgcolor='#006699'>Favorecido</td>
+					<td width='100px' align='center' bgcolor='#006699'>Forma Pgto</td>
+					<td width='270px' align='center' bgcolor='#006699'>Dados Banc&aacute;rios</td>
+					<td width='100px' align='center' bgcolor='#006699'>Quantidade Ref.</td>
+					<td width='100px' align='center' bgcolor='#006699'>Valor (R$)</td>
+					</tr>
+					</table>
+					</div>
+					<div id='centro' style='height:10px; width:1030px; border:0px solid #999; margin:auto'></div>";
+								}
 
-			echo "
-<div id='centro' style='height:auto; width:1030px; border:0px solid #999; margin:auto'>
-<table border='0' id='tabela_4' align='center' style='color:#00F; font-size:9px'>";
+								echo "
+					<div id='centro' style='height:auto; width:1030px; border:0px solid #999; margin:auto'>
+					<table border='0' id='tabela_4' align='center' style='color:#00F; font-size:9px'>";
 
 			for ($w = 1; $w <= $linha_favorecidos_pgto; $w++) {
 				$aux_favorecido = mysqli_fetch_row($busca_favorecidos_pgto);
@@ -453,20 +453,20 @@ include('../../includes/head.php');
 
 				// RELATORIO =========================
 				echo "
-	<tr style='color:#00F' title='Observa&ccedil;&atilde;o: $obs_pgto'>
-	<td width='90px' align='left'>&#160;&#160;$data_pagamento_print_2</td>
-	<td width='300px' align='left'>&#160;&#160;$nome_favorecido_2 ($aux_favorecido[2])</td>
-	<td width='100px' align='left'>&#160;&#160;$forma_pagamento_2</td>
-	<td width='270px' align='left'>&#160;&#160;$dados_bancarios_2</td>
-	<td width='100px' align='center'>$quant_ref_print $unidade</td>
-	<td width='100px' align='right'>$valor_pagamento_print_2&#160;&#160;</td>
-	</tr>";
+					<tr style='color:#00F' title='Observa&ccedil;&atilde;o: $obs_pgto'>
+					<td width='90px' align='left'>&#160;&#160;$data_pagamento_print_2</td>
+					<td width='300px' align='left'>&#160;&#160;$nome_favorecido_2 ($aux_favorecido[2])</td>
+					<td width='100px' align='left'>&#160;&#160;$forma_pagamento_2</td>
+					<td width='270px' align='left'>&#160;&#160;$dados_bancarios_2</td>
+					<td width='100px' align='center'>$quant_ref_print $unidade</td>
+					<td width='100px' align='right'>$valor_pagamento_print_2&#160;&#160;</td>
+					</tr>";
 			}
 			echo "
-</table>
-</div>
-<div id='centro' style='height:15px; width:1030px; border:0px solid #999; margin:auto'></div>
-";
+				</table>
+				</div>
+				<div id='centro' style='height:15px; width:1030px; border:0px solid #999; margin:auto'></div>
+				";
 
 
 			?>
@@ -485,67 +485,67 @@ include('../../includes/head.php');
 
 			if ($pagina_filha == "movimentacao") {
 				echo "
-		<div id='centro' style='float:left; height:55px; width:185px; color:#00F; text-align:center; border:0px solid #000'>
-		<form action='$servidor/$diretorio_servidor/compras/ficha_produtor/$pagina_mae.php' method='post'>
-		<input type='hidden' name='numero_compra' value='$numero_compra'>
-		<input type='hidden' name='numero_compra_aux' value='$numero_compra_aux'>
-		<input type='hidden' name='botao' value='botao'>
-		<input type='hidden' name='data_inicial' value='$data_inicial'>
-		<input type='hidden' name='data_final' value='$data_final'>
-		<input type='hidden' name='cod_produto' value='$cod_produto_aux'>
-		<input type='hidden' name='cod_tipo' value='$cod_tipo'>
-		<input type='hidden' name='produto_list' value='$produto_list'>
-		<input type='hidden' name='representante' value='$fornecedor'>
-		<input type='hidden' name='fornecedor' value='$fornecedor'>
-		<input type='hidden' name='monstra_situacao' value='$monstra_situacao'>
-		<button type='submit' class='botao_1' style='margin-left:0px; width:160px'>Voltar</button>
-		<!--<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/voltar_2.jpg' border='0' />-->
-		</form>
-		</div>";
+					<div id='centro' style='float:left; height:55px; width:185px; color:#00F; text-align:center; border:0px solid #000'>
+					<form action='$servidor/$diretorio_servidor/compras/ficha_produtor/$pagina_mae.php' method='post'>
+					<input type='hidden' name='numero_compra' value='$numero_compra'>
+					<input type='hidden' name='numero_compra_aux' value='$numero_compra_aux'>
+					<input type='hidden' name='botao' value='botao'>
+					<input type='hidden' name='data_inicial' value='$data_inicial'>
+					<input type='hidden' name='data_final' value='$data_final'>
+					<input type='hidden' name='cod_produto' value='$cod_produto_aux'>
+					<input type='hidden' name='cod_tipo' value='$cod_tipo'>
+					<input type='hidden' name='produto_list' value='$produto_list'>
+					<input type='hidden' name='representante' value='$fornecedor'>
+					<input type='hidden' name='fornecedor' value='$fornecedor'>
+					<input type='hidden' name='monstra_situacao' value='$monstra_situacao'>
+					<button type='submit' class='botao_1' style='margin-left:0px; width:160px'>Voltar</button>
+					<!--<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/voltar_2.jpg' border='0' />-->
+					</form>
+					</div>";
 			} else {
 				echo "
-		<div id='centro' style='float:left; height:55px; width:185px; color:#00F; text-align:center; border:0px solid #000'>
-		<form action='$servidor/$diretorio_servidor/compras/produtos/$pagina_mae.php' method='post'>
-		<input type='hidden' name='numero_compra' value='$numero_compra'>
-		<input type='hidden' name='numero_compra_aux' value='$numero_compra_aux'>
-		<input type='hidden' name='botao' value='botao'>
-		<input type='hidden' name='data_inicial' value='$data_inicial'>
-		<input type='hidden' name='data_final' value='$data_final'>
-		<input type='hidden' name='cod_produto' value='$cod_produto_aux'>
-		<input type='hidden' name='cod_tipo' value='$cod_tipo'>
-		<input type='hidden' name='produto_list' value='$produto_list'>
-		<input type='hidden' name='representante' value='$fornecedor'>
-		<input type='hidden' name='fornecedor' value='$fornecedor'>
-		<input type='hidden' name='monstra_situacao' value='$monstra_situacao'>
-		<button type='submit' class='botao_1' style='margin-left:0px; width:160px'>Voltar</button>
-		<!--<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/voltar_2.jpg' border='0' />-->
-		</form>
-		</div>";
+					<div id='centro' style='float:left; height:55px; width:185px; color:#00F; text-align:center; border:0px solid #000'>
+					<form action='$servidor/$diretorio_servidor/compras/produtos/$pagina_mae.php' method='post'>
+					<input type='hidden' name='numero_compra' value='$numero_compra'>
+					<input type='hidden' name='numero_compra_aux' value='$numero_compra_aux'>
+					<input type='hidden' name='botao' value='botao'>
+					<input type='hidden' name='data_inicial' value='$data_inicial'>
+					<input type='hidden' name='data_final' value='$data_final'>
+					<input type='hidden' name='cod_produto' value='$cod_produto_aux'>
+					<input type='hidden' name='cod_tipo' value='$cod_tipo'>
+					<input type='hidden' name='produto_list' value='$produto_list'>
+					<input type='hidden' name='representante' value='$fornecedor'>
+					<input type='hidden' name='fornecedor' value='$fornecedor'>
+					<input type='hidden' name='monstra_situacao' value='$monstra_situacao'>
+					<button type='submit' class='botao_1' style='margin-left:0px; width:160px'>Voltar</button>
+					<!--<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/voltar_2.jpg' border='0' />-->
+					</form>
+					</div>";
 			}
 
 
 
 
 			echo "
-		<div id='centro' style='float:left; height:55px; width:185px; color:#00F; text-align:center; border:0px solid #000'>
-		<form action='$servidor/$diretorio_servidor/compras/produtos/compra_impressao.php' method='post' target='_blank'>
-		<input type='hidden' name='numero_compra' value='$numero_compra'>
-		<button type='submit' class='botao_1' style='margin-left:0px; width:160px'>Imprimir Compra</button>
-		<!--<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/imprimir_compra.jpg' border='0' />-->
-		</form>
-		</div>";
+				<div id='centro' style='float:left; height:55px; width:185px; color:#00F; text-align:center; border:0px solid #000'>
+				<form action='$servidor/$diretorio_servidor/compras/produtos/compra_impressao.php' method='post' target='_blank'>
+				<input type='hidden' name='numero_compra' value='$numero_compra'>
+				<button type='submit' class='botao_1' style='margin-left:0px; width:160px'>Imprimir Compra</button>
+				<!--<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/imprimir_compra.jpg' border='0' />-->
+				</form>
+				</div>";
 
 
 			if ($diretorio_servidor == "sis") {
 
 				echo "
-	<div id='centro' style='float:right; height:55px; width:170px; color:#00F; text-align:center; border:0px solid #000'>
-	<form action='$servidor/$diretorio_servidor/compras/produtos/compra_rovereti_reenviar.php' target='_blank' method='post'>
-	<input type='hidden' name='botao' value='ROVERETI'>
-	<input type='hidden' name='numero_compra' value='$numero_compra'>
-	<button type='submit' class='botao_1' style='margin-left:0px; width:160px'>Reenviar ao Rovereti</button>
-	</form>
-	</div>";
+				<div id='centro' style='float:right; height:55px; width:170px; color:#00F; text-align:center; border:0px solid #000'>
+				<form action='$servidor/$diretorio_servidor/compras/produtos/compra_rovereti_reenviar.php' target='_blank' method='post'>
+				<input type='hidden' name='botao' value='ROVERETI'>
+				<input type='hidden' name='numero_compra' value='$numero_compra'>
+				<button type='submit' class='botao_1' style='margin-left:0px; width:160px'>Reenviar ao Rovereti</button>
+				</form>
+				</div>";
 			}
 			?>
 		</div>

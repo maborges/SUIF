@@ -3,7 +3,7 @@
 include('../../includes/config.php');
 include('../../includes/conecta_bd.php');
 include('../../includes/valida_cookies.php');
-include ("../../helpers.php");
+include("../../helpers.php");
 
 $pagina = 'editar_4_enviar';
 $titulo = 'Editar Romaneio de Entrada';
@@ -27,7 +27,7 @@ $peso_final_form = Helpers::ConvertePeso($_POST["peso_final_form"], $config[30])
 $cod_sacaria_form = $_POST["cod_sacaria_form"];
 $quant_sacaria_form = Helpers::ConvertePeso($_POST["quant_sacaria_form"], $config[30]);
 $desconto_form = Helpers::ConvertePeso($_POST["desconto_form"], $config[30]);
-$quant_volume_form = Helpers::ConvertePeso($_POST["quant_volume_form"] ?? '', $config[30] );
+$quant_volume_form = Helpers::ConvertePeso($_POST["quant_volume_form"] ?? '', $config[30]);
 $cod_tipo_produto_form = $_POST["cod_tipo_produto_form"] ?? '';
 $romaneio_manual_form = $_POST["romaneio_manual_form"] ?? '';
 $filial_origem_form = $_POST["filial_origem_form"] ?? '';
@@ -352,7 +352,14 @@ if ($botao == "EDITAR_ROMANEIO") {
 		$msg_titulo = "<div style='color:#0000FF'>Romaneio editado com Sucesso!</div>";
 		$num_romaneio_print = "<div style='color:#0000FF'>N&ordm; $numero_romaneio</div>";
 
-		$editar = mysqli_query($conexao, "UPDATE estoque SET fornecedor='$fornecedor_form', produto='$produto_print', tipo='$tipo_print', peso_inicial='$peso_inicial', peso_final='$peso_final', desconto_sacaria='$desconto_sacaria', desconto='$desconto', quantidade='$quantidade', tipo_sacaria='$cod_sacaria_form', placa_veiculo='$placa_veiculo_form', motorista='$motorista_form', observacao='$obs_form', usuario_alteracao='$usuario_alteracao', hora_alteracao='$hora_alteracao', data_alteracao='$data_alteracao', quantidade_sacaria='$quant_sacaria', motorista_cpf='$motorista_cpf_form', num_romaneio_manual='$romaneio_manual_form', filial_origem='$filial_origem_form', quant_volume_sacas='$quant_volume', cod_produto='$cod_produto_form', cod_tipo='$cod_tipo_produto_form', fornecedor_print='$fornecedor_print' WHERE numero_romaneio='$numero_romaneio'");
+		$editar = mysqli_query($conexao, "UPDATE estoque SET fornecedor='$fornecedor_form', produto='$produto_print', tipo='$tipo_print', peso_inicial='$peso_inicial', 
+											                 peso_final='$peso_final', desconto_sacaria='$desconto_sacaria', desconto='$desconto', quantidade='$quantidade', 
+															 tipo_sacaria='$cod_sacaria_form', placa_veiculo='$placa_veiculo_form', motorista='$motorista_form', 
+															 observacao='$obs_form', usuario_alteracao='$usuario_alteracao', hora_alteracao='$hora_alteracao', 
+															 data_alteracao='$data_alteracao', quantidade_sacaria='$quant_sacaria', motorista_cpf='$motorista_cpf_form', 
+															 num_romaneio_manual='$romaneio_manual_form', filial_origem='$filial_origem_form', quant_volume_sacas='$quant_volume', 
+															 cod_produto='$cod_produto_form', cod_tipo='$cod_tipo_produto_form', fornecedor_print='$fornecedor_print'
+											WHERE numero_romaneio='$numero_romaneio'");
 
 		//	$editar = mysqli_query ($conexao, "UPDATE estoque SET fornecedor='$fornecedor_form', produto='$produto_print', tipo='$tipo_print', peso_inicial='$peso_inicial', peso_final='$peso_final', desconto_sacaria='$desconto_sacaria', desconto='$desconto', quantidade='$quantidade', tipo_sacaria='$cod_sacaria_form', placa_veiculo='$placa_veiculo_form', motorista='$motorista_form', observacao='$obs_form', usuario_alteracao='$usuario_alteracao', hora_alteracao='$hora_alteracao', data_alteracao='$data_alteracao', quantidade_sacaria='$quant_sacaria', motorista_cpf='$motorista_cpf_form', num_romaneio_manual='$romaneio_manual_form', filial_origem='$filial_origem_form', quant_volume_sacas='$quant_volume', cod_produto='$cod_produto_form', cod_tipo='$cod_tipo_produto_form', fornecedor_print='$fornecedor_print' WHERE numero_romaneio='$numero_romaneio'");
 

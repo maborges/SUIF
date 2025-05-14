@@ -70,7 +70,8 @@ $busca_compra = mysqli_query ($conexao,
 					usuario_exclusao,
 					hora_exclusao,
 					data_exclusao,
-					id_pedido_sankhya
+					id_pedido_sankhya,
+					filial_faturamento
 				FROM 
 					compras
 				WHERE 
@@ -284,6 +285,7 @@ for ($x=1 ; $x<=$linha_compra ; $x++)
 	$hora_exclusao_w = $aux_compra[23];
 	$data_exclusao_w = $aux_compra[24];
 	$pedidoSankhya_w = $aux_compra[25];
+	$filialFaturamento_w = $aux_compra[26];
 
 
 	if (!empty($usuario_cadastro_w)) {
@@ -337,6 +339,7 @@ for ($x=1 ; $x<=$linha_compra ; $x++)
 		<input type='hidden' name='cod_tipo_busca' value='$cod_tipo_busca'>
 		<input type='hidden' name='filial_busca' value='$filial_busca'>
 		<input type='hidden' name='numero_compra_busca' value='$numero_compra_busca'>
+		<input type='hidden' name='filialFaturamento' value='$filialFaturamento_w'>
 		<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/buscar.png' height='18px' style='margin-top:3px' />
 		</form>
 		</div>
@@ -367,6 +370,7 @@ for ($x=1 ; $x<=$linha_compra ; $x++)
 		<input type='hidden' name='cod_seleciona_produto' value='$cod_seleciona_produto'>
 		<input type='hidden' name='numero_venda_busca' value='$numero_compra_busca'>
 		<input type='hidden' name='filial_busca' value='$filial_busca'>
+		<input type='hidden' name='filialFaturamento' value='$filialFaturamento_w'>
 		<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/editar.png' height='18px' style='margin-top:3px' />
 		</form>
 		</div>
@@ -396,6 +400,7 @@ for ($x=1 ; $x<=$linha_compra ; $x++)
 		<input type='hidden' name='cod_seleciona_produto' value='$cod_seleciona_produto'>
 		<input type='hidden' name='numero_compra_busca' value='$numero_compra_busca'>
 		<input type='hidden' name='filial_busca' value='$filial_busca'>
+		<input type='hidden' name='filialFaturamento' value='$filialFaturamento_w'>
 		<input type='image' src='$servidor/$diretorio_servidor/imagens/botoes/financeiro_2.png' height='18px' style='margin-top:3px' />
 		</form>
 		</div>

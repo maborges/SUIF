@@ -114,7 +114,7 @@ include("../../includes/head.php");
 					<input type='hidden' name='cod_produto' value='$cod_produto'>
 					<input type='hidden' name='fornecedor' value='$fornecedor'>
 					<input type='hidden' name='cod_tipo' value='$cod_tipo'>
-					<button type='submit' class='botao_2' style='margin-left:20px; width:120px'>Voltar</button>
+					<button type='button' class='botao_2' onclick='history.back()' style='margin-left:20px; width:120px'>Voltar</button>
 					</form>";
 
 				echo "</div>";
@@ -187,7 +187,7 @@ include("../../includes/head.php");
 					<input type='hidden' name='cod_produto' value='$cod_produto'>
 					<input type='hidden' name='fornecedor' value='$fornecedor'>
 					<input type='hidden' name='cod_tipo' value='$cod_tipo'>
-					<button type='submit' class='botao_2' style='margin-left:20px; width:120px'>Voltar</button>
+					<button type='button' onclick='history.go(-2)'class='botao_2' style='margin-left:20px; width:120px'>Voltar</button>
 					</form>";
 				} else {
 					echo "
@@ -199,7 +199,7 @@ include("../../includes/head.php");
 					<input type='hidden' name='cod_produto' value='$cod_produto'>
 					<input type='hidden' name='fornecedor' value='$fornecedor'>
 					<input type='hidden' name='cod_tipo' value='$cod_tipo'>
-					<button type='submit' class='botao_2' style='margin-left:20px; width:120px'>Voltar</button>
+					<button type='button' onclick='history.go(-2)' class='botao_2' style='margin-left:20px; width:120px'>Voltar</button>
 					</form>";
 				}
 

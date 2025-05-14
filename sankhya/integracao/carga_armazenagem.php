@@ -39,8 +39,9 @@ $Atualizando  = false;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cria Compra no Sankhya</title>
+
+    <link rel="stylesheet" type="text/css" href="<?php echo "$servidor/$diretorio_servidor"; ?>/padrao_bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="<?php echo "$servidor/$diretorio_servidor"; ?>/padrao.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <link rel="shortcut icon" href="<?php echo "$servidor/$diretorio_servidor"; ?>/imagens/favicon_suif.ico" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href="<?php echo "$servidor/$diretorio_servidor"; ?>/includes/loading/loading.css" />
     <script src=<?= "$servidor/$diretorio_servidor/calendario_jquery/jquery-1.8.2.js" ?>></script>
@@ -114,6 +115,7 @@ $Atualizando  = false;
     $sqlArmazenameto = "select b.codigo, 
                                a.data, 
                                b.codigo_romaneio, 
+                               a.filial,
                                b.id_pedido_sankhya, 
                                b.fornecedor_print, 
                                a.produto, 
@@ -152,8 +154,7 @@ $Atualizando  = false;
     <!-- 
         Montagem da tela
     -->
-    <div class="container-xl pt-3">
-
+    <div class="container-fluid pt-5 pr-5 pl-5">
         <form action="#" method="post" id="frmAtualiza" onsubmit="showLoading()">
             <h3>Cria Pedido de Armazenamento no Sankhya</h3>
             <br>
@@ -165,7 +166,7 @@ $Atualizando  = false;
                 <?= $msgEr ?>
             </div>
 
-            <div class="form-row">
+            <div class="form-row mb-2">
                 <input type="hidden" name="sqlWhere" value="<?= $sqlWhere ?>">
 
                 <div class="form-group col-md-2">
@@ -193,7 +194,7 @@ $Atualizando  = false;
                 </div>
             </div>
 
-            <div class="form-row">
+            <div class="form-row mb-2 ml-3">
                 <input type="hidden" name="naoEnviadoSankhya" value="<?= $naoEnviadoSankhya ?>" />
                 <input type="hidden" name="enviadoSankhya" value="<?= $enviadoSankhya ?>" />
 
@@ -218,16 +219,17 @@ $Atualizando  = false;
                 </div>
             </div>
 
-            <div class="form-row">
+            <div class="form-row mt-3">
                 <button type="submit" form="frmAtualiza" value="submit" name="btnBuscar" class="btn btn-outline-secondary btn-sm mr-3">Buscar</button>
                 <button type="submit" form="frmAtualiza" value="submit" name="btnPedido" class="btn btn-outline-secondary btn-sm mr-3" <?= $hidden ?>>Gera Pedidos</button>
             </div>
-            <br>
-            <table class="table table-hover table-striped table-sm" display: flex; width=900px>
+            
+            <table class="table table-hover table-striped table-sm mt-3" display: flex; width=900px>
                 <thead>
                     <th>Código</th>
                     <th>Data</th>
                     <th>Romaneio</th>
+                    <th>Filial</th>
                     <th>Contrato</th>
                     <th>Fatura</th>
                     <th>Produtor</th>
@@ -243,37 +245,38 @@ $Atualizando  = false;
                             <td><?= date('d/m/Y', strtotime($record[1]))  ?></td>
                             <td><?= $record[2] ?></td>
                             <td><?= $record[3] ?></td>
-                            <td><?= $record[9] ?></td>
                             <td><?= $record[4] ?></td>
+                            <td><?= $record[10] ?></td>
                             <td><?= $record[5] ?></td>
                             <td><?= $record[6] ?></td>
-                            <td style="text-align:right"><?= number_format($record[7], 2, ",", ".") ?></td>
+                            <td><?= $record[7] ?></td>
+                            <td style="text-align:right"><?= number_format($record[8], 2, ",", ".") ?></td>
 
                             <?php if (!$record[3]) : ?>
                                 <td style="text-align:center">
                                     <span class="badge badge-warning">Contrato</span>
                                 </td>
-                            <?php elseif ($record[3] and $record[8] == 'X') : ?>
+                            <?php elseif ($record[4] and $record[9] == 'X') : ?>
                                 <td style="text-align:center">
                                     <span class="badge badge-danger">Verificar</span>
                                 </td>
-                            <?php elseif (!$record[9]) : ?>
+                            <?php elseif (!$record[10]) : ?>
                                 <td style="text-align:center">
                                     <span class="badge badge-warning">Fatura</span>
                                 </td>
-                            <?php elseif ($record[9] and $record[10] == 'X') : ?>
+                            <?php elseif ($record[10] and $record[10] == 'X') : ?>
                                 <td style="text-align:center">
                                     <span class="badge badge-danger">Verificar</span>
                                 </td>
-                            <?php elseif ($record[10] == 'S') : ?>
+                            <?php elseif ($record[11] == 'S') : ?>
                                 <td style="text-align:center">
                                     <span class="badge badge-light">Ok</span>
                                 </td>
-                            <?php elseif ($record[10] == 'N' && !$record[9]) : ?>
+                            <?php elseif ($record[11] == 'N' && !$record[10]) : ?>
                                 <td style="text-align:center">
                                     <span class="badge badge-secondary">Enviar</span>
                                 </td>
-                            <?php elseif ($record[10] == 'N' && $record[9]) : ?>
+                            <?php elseif ($record[11] == 'N' && $record[10]) : ?>
                                 <td style="text-align:center">
                                     <span class="badge badge-primary">Confirmar</span>
                                 </td>

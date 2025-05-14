@@ -2,6 +2,8 @@
 $msgErroSankhya = '';
 $erroCodeSankhya = 0;
 
+const TOKEN_EXPIRY_SECONDS = 1740; // 29 minutos (pode ser ajustado conforme INATSESSTIMEOUT)
+
 static $urlApiLogin             = 'https://api.sankhya.com.br/login';
 
 static $urlApiQuery             = 'https://api.sankhya.com.br/gateway/v1/mge/service.sbr?serviceName=DbExplorerSP.executeQuery&outputType=json';
